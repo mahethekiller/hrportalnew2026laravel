@@ -103,7 +103,8 @@ class EmployeePortalController extends Controller
     public function payslips(): View
     {
         $employeeId = $this->getEmployeeId();
-        $payslips = MakePayment::where('employee_id', $employeeId)->orderBy('make_payment_id', 'desc')->paginate(10);
+        $keyName = (new MakePayment)->getKeyName();
+        $payslips = MakePayment::where('employee_id', $employeeId)->orderBy($keyName, 'desc')->paginate(10);
 
         return view('my_portal.payslips', compact('payslips'));
     }

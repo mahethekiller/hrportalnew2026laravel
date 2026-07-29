@@ -4,23 +4,36 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Schema;
 
 class MakePayment extends Model
 {
     use HasFactory;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'make_payments';
+    protected $table = 'xin_make_payment';
+    protected $primaryKey = 'make_payment_id';
+    public $timestamps = false;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    public function getTable()
+    {
+        if (Schema::hasTable('xin_make_payment')) {
+            return 'xin_make_payment';
+        }
+        if (Schema::hasTable('make_payments')) {
+            return 'make_payments';
+        }
+        return parent::getTable();
+    }
+
+    public function getKeyName()
+    {
+        $table = $this->getTable();
+        if (Schema::hasColumn($table, 'make_payment_id')) {
+            return 'make_payment_id';
+        }
+        return 'id';
+    }
+
     protected $fillable = [
         'employee_id',
         'department_id',
