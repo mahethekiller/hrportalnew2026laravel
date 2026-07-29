@@ -122,7 +122,7 @@
                                     </thead>
                                     <tbody>
                                         @php
-                                            $availableResources = ['employees', 'organization', 'leave', 'attendance', 'payroll', 'performance', 'assets', 'recruitment', 'training', 'support_tickets', 'hr_tickets', 'admin_tickets', 'settings', 'api_control', 'reports'];
+                                            $availableResources = ['employees', 'organization', 'leave', 'attendance', 'payroll', 'performance', 'assets', 'recruitment', 'training', 'support_tickets', 'hr_tickets', 'admin_tickets', 'announcements', 'settings', 'api_control', 'reports'];
                                             $currentRes = $rl->resource_list;
                                         @endphp
                                         @foreach($availableResources as $resKey)
@@ -191,7 +191,7 @@
                                 </thead>
                                 <tbody>
                                     @php
-                                        $availableResources = ['employees', 'organization', 'leave', 'attendance', 'payroll', 'performance', 'assets', 'recruitment', 'training', 'support_tickets', 'hr_tickets', 'admin_tickets', 'settings', 'api_control', 'reports'];
+                                        $availableResources = ['employees', 'organization', 'leave', 'attendance', 'payroll', 'performance', 'assets', 'recruitment', 'training', 'support_tickets', 'hr_tickets', 'admin_tickets', 'announcements', 'settings', 'api_control', 'reports'];
                                     @endphp
                                     @foreach($availableResources as $resKey)
                                         <tr>

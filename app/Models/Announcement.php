@@ -14,7 +14,21 @@ class Announcement extends Model
      *
      * @var string
      */
-    protected $table = 'announcements';
+    protected $table = 'xin_announcements';
+
+    /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'announcement_id';
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
 
     /**
      * The attributes that are mass assignable.
@@ -33,7 +47,8 @@ class Announcement extends Model
         'summary',
         'description',
         'image',
-        'is_active'
+        'is_active',
+        'created_at'
     ];
 
     public function company()

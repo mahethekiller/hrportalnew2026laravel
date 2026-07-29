@@ -68,6 +68,15 @@ class NavigationMenuSeeder extends Seeder
             'sort_order' => 5,
         ]);
 
+        NavigationMenu::create([
+            'parent_id' => $directoryRoot->menu_id,
+            'title' => 'Announcements',
+            'icon' => 'fa-solid fa-circle bullet-dot',
+            'route_name' => 'announcements.index',
+            'resource_key' => 'announcements',
+            'sort_order' => 6,
+        ]);
+
         // 2. Operations & Finance Category
         $opsRoot = NavigationMenu::create([
             'title' => 'Operations & Finance',
@@ -265,7 +274,7 @@ class NavigationMenuSeeder extends Seeder
         if ($adminRole) {
             $adminRole->update([
                 'role_access' => 'all',
-                'role_resources' => implode(',', ['employees', 'organization', 'leave', 'attendance', 'payroll', 'performance', 'assets', 'recruitment', 'training', 'support_tickets', 'hr_tickets', 'admin_tickets', 'settings', 'api_control', 'reports'])
+                'role_resources' => implode(',', ['employees', 'organization', 'leave', 'attendance', 'payroll', 'performance', 'assets', 'recruitment', 'training', 'support_tickets', 'hr_tickets', 'admin_tickets', 'announcements', 'settings', 'api_control', 'reports'])
             ]);
         }
     }

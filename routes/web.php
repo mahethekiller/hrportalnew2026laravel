@@ -133,6 +133,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('admin-tickets', \App\Http\Controllers\AdminTicketController::class);
     Route::post('/admin-tickets/{admin_ticket}/status', [\App\Http\Controllers\AdminTicketController::class, 'updateStatus'])->name('admin-tickets.status');
 
+    // Announcement Routes
+    Route::resource('announcements', \App\Http\Controllers\AnnouncementController::class);
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
