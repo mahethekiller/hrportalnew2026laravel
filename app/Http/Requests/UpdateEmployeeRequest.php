@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateEmployeeRequest extends FormRequest
 {
@@ -15,14 +16,15 @@ class UpdateEmployeeRequest extends FormRequest
 
     public function rules(): array
     {
-        $employeeId = $this->route('employee')?->id ?? $this->route('employee');
+        $employee = $this->route('employee');
+        $employeeId = is_object($employee) ? ($employee->user_id ?? $employee->id) : $employee;
 
         return [
             // Security & Account
-            'employee_id' => ['required', 'string', 'max:50', 'unique:xin_employees,employee_id,' . $employeeId . ',user_id'],
+            'employee_id' => ['required', 'string', 'max:50', Rule::unique('xin_employees', 'employee_id')->ignore($employeeId, 'user_id')],
             'card_no' => ['nullable', 'string', 'max:50'],
-            'username' => ['nullable', 'string', 'max:50', 'unique:xin_employees,username,' . $employeeId . ',user_id'],
-            'email' => ['required', 'email', 'max:150', 'unique:xin_employees,email,' . $employeeId . ',user_id'],
+            'username' => ['nullable', 'string', 'max:50', Rule::unique('xin_employees', 'username')->ignore($employeeId, 'user_id')],
+            'email' => ['required', 'email', 'max:150', Rule::unique('xin_employees', 'email')->ignore($employeeId, 'user_id')],
             'password' => ['nullable', 'string', 'min:6'],
 
             // Personal & Demographics
@@ -38,34 +40,34 @@ class UpdateEmployeeRequest extends FormRequest
             'aadhar_no' => ['nullable', 'string', 'max:30'],
 
             // Job & Organizational
-            'department_id' => ['nullable', 'integer'],
-            'sub_department' => ['nullable', 'integer'],
-            'designation_id' => ['nullable', 'integer'],
-            'manager_id' => ['nullable', 'integer'],
-            'company_id' => ['nullable', 'integer'],
-            'office_shift_id' => ['nullable', 'integer'],
-            'date_of_joining' => ['nullable', 'date'],
+            'department_id' => ['nullable'],
+            'sub_department' => ['nullable'],
+            'designation_id' => ['nullable'],
+            'manager_id' => ['nullable'],
+            'company_id' => ['nullable'],
+            'office_shift_id' => ['nullable'],
+            'date_of_joining' => ['nullable'],
             'employment_type' => ['nullable', 'string', 'max:50'],
-            'probation_status' => ['nullable', 'integer'],
-            'probation_end_date' => ['nullable', 'date'],
+            'probation_status' => ['nullable'],
+            'probation_end_date' => ['nullable'],
             'reporting_location' => ['nullable', 'string', 'max:150'],
             'employee_source' => ['nullable', 'string', 'max:50'],
 
             // Financials & Compensation
             'salary' => ['nullable', 'numeric'],
-            'salary_template' => ['nullable', 'integer'],
-            'hourly_grade_id' => ['nullable', 'integer'],
-            'monthly_grade_id' => ['nullable', 'integer'],
-            'earned_leave' => ['nullable', 'integer'],
-            'casual_leave' => ['nullable', 'integer'],
+            'salary_template' => ['nullable'],
+            'hourly_grade_id' => ['nullable'],
+            'monthly_grade_id' => ['nullable'],
+            'earned_leave' => ['nullable'],
+            'casual_leave' => ['nullable'],
             'corporate_bank_account' => ['nullable', 'string', 'max:100'],
-            'pf_opted' => ['nullable', 'boolean'],
-            'health_ins_opted' => ['nullable', 'boolean'],
+            'pf_opted' => ['nullable'],
+            'health_ins_opted' => ['nullable'],
 
             // Contact & Social
             'contact_no' => ['nullable', 'string', 'max:30'],
             'official_contact_no' => ['nullable', 'string', 'max:30'],
-            'email_personal' => ['nullable', 'email', 'max:150'],
+            'email_personal' => ['nullable'],
             'address' => ['nullable', 'string', 'max:500'],
             'city' => ['nullable', 'string', 'max:100'],
             'state' => ['nullable', 'string', 'max:100'],
@@ -77,7 +79,7 @@ class UpdateEmployeeRequest extends FormRequest
 
             // Photo Upload
             'profile_picture' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
-            'is_active' => ['nullable', 'integer', 'in:0,1,2,3,4,5'],
+            'is_active' => ['nullable'],
         ];
     }
 }

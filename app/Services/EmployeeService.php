@@ -203,10 +203,24 @@ class EmployeeService
                 unset($data['password']);
             }
 
-            if (isset($data['first_name']) || isset($data['last_name'])) {
-                $name = trim(($data['first_name'] ?? $employee->first_name) . ' ' . ($data['last_name'] ?? $employee->last_name));
-                if ($employee->user) {
-                    $employee->user->update(['name' => $name]);
+            if ($employee->user) {
+                $userUpdates = [];
+                if (isset($data['first_name'])) $userUpdates['first_name'] = $data['first_name'];
+                if (isset($data['last_name'])) $userUpdates['last_name'] = $data['last_name'];
+                if (isset($data['first_name']) || isset($data['last_name'])) {
+                    $userUpdates['name'] = trim(($data['first_name'] ?? $employee->first_name) . ' ' . ($data['last_name'] ?? $employee->last_name));
+                }
+                if (isset($data['email'])) $userUpdates['email'] = $data['email'];
+                if (isset($data['username'])) $userUpdates['username'] = $data['username'];
+                if (isset($data['contact_no'])) $userUpdates['contact_number'] = $data['contact_no'];
+                if (isset($data['gender'])) $userUpdates['gender'] = $data['gender'];
+                if (isset($data['department_id'])) $userUpdates['department_id'] = $data['department_id'];
+                if (isset($data['designation_id'])) $userUpdates['designation_id'] = $data['designation_id'];
+                if (isset($data['company_id'])) $userUpdates['company_id'] = $data['company_id'];
+                if (isset($data['is_active'])) $userUpdates['is_active'] = $data['is_active'];
+
+                if (!empty($userUpdates)) {
+                    $employee->user->update($userUpdates);
                 }
             }
 
