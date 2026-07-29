@@ -125,6 +125,14 @@ Route::middleware('auth')->group(function () {
     Route::post('/support-tickets/{support_ticket}/attachments', [\App\Http\Controllers\SupportTicketController::class, 'uploadAttachment'])->name('support-tickets.attachments');
     Route::post('/support-tickets/{support_ticket}/status', [\App\Http\Controllers\SupportTicketController::class, 'updateStatus'])->name('support-tickets.status');
 
+    // HR Ticket Routes
+    Route::resource('hr-tickets', \App\Http\Controllers\HrTicketController::class);
+    Route::post('/hr-tickets/{hr_ticket}/status', [\App\Http\Controllers\HrTicketController::class, 'updateStatus'])->name('hr-tickets.status');
+
+    // Admin Ticket Routes
+    Route::resource('admin-tickets', \App\Http\Controllers\AdminTicketController::class);
+    Route::post('/admin-tickets/{admin_ticket}/status', [\App\Http\Controllers\AdminTicketController::class, 'updateStatus'])->name('admin-tickets.status');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

@@ -45,6 +45,7 @@ class AdminTicket extends Model
         'remarks',
         'ticket_status',
         'created_by',
+        'created_at',
         'updated_date',
         'show_status',
         'updated_by'

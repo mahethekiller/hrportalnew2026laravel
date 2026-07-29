@@ -59,6 +59,15 @@ class NavigationMenuSeeder extends Seeder
             'sort_order' => 4,
         ]);
 
+        NavigationMenu::create([
+            'parent_id' => $directoryRoot->menu_id,
+            'title' => 'HR Tickets',
+            'icon' => 'fa-solid fa-circle bullet-dot',
+            'route_name' => 'hr-tickets.index',
+            'resource_key' => 'hr_tickets',
+            'sort_order' => 5,
+        ]);
+
         // 2. Operations & Finance Category
         $opsRoot = NavigationMenu::create([
             'title' => 'Operations & Finance',
@@ -242,12 +251,21 @@ class NavigationMenuSeeder extends Seeder
             'sort_order' => 7,
         ]);
 
+        NavigationMenu::create([
+            'parent_id' => $adminRoot->menu_id,
+            'title' => 'Admin Tickets',
+            'icon' => 'fa-solid fa-circle bullet-dot',
+            'route_name' => 'admin-tickets.index',
+            'resource_key' => 'admin_tickets',
+            'sort_order' => 8,
+        ]);
+
         // 5. Grant Role ID 1 (All Access)
         $adminRole = UserRole::find(1);
         if ($adminRole) {
             $adminRole->update([
                 'role_access' => 'all',
-                'role_resources' => implode(',', ['employees', 'organization', 'leave', 'attendance', 'payroll', 'performance', 'assets', 'recruitment', 'training', 'settings', 'api_control', 'reports'])
+                'role_resources' => implode(',', ['employees', 'organization', 'leave', 'attendance', 'payroll', 'performance', 'assets', 'recruitment', 'training', 'support_tickets', 'hr_tickets', 'admin_tickets', 'settings', 'api_control', 'reports'])
             ]);
         }
     }
