@@ -186,7 +186,19 @@ class EmployeePortalController extends Controller
      */
     public function benefits(): View
     {
-        $documents = Document::where('company_id', $this->getCompanyId())->latest()->get();
+        $table = (new Document)->getTable();
+        $keyName = (new Document)->getKeyName();
+
+        $query = Document::where('company_id', $this->getCompanyId());
+        if (Schema::hasColumn($table, 'created_at')) {
+            $query->orderBy('created_at', 'desc');
+        } elseif (Schema::hasColumn($table, 'added_date')) {
+            $query->orderBy('added_date', 'desc');
+        } else {
+            $query->orderBy($keyName, 'desc');
+        }
+
+        $documents = $query->get();
         return view('my_portal.benefits', compact('documents'));
     }
 

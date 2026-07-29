@@ -4,37 +4,39 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Schema;
 
 class Document extends Model
 {
     use HasFactory;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
     protected $table = 'xin_documents';
-
-    /**
-     * The primary key associated with the table.
-     *
-     * @var string
-     */
     protected $primaryKey = 'file_id';
-
-    /**
-     * Indicates if the model should be timestamped.
-     *
-     * @var bool
-     */
     public $timestamps = false;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    public function getTable()
+    {
+        if (Schema::hasTable('xin_documents')) {
+            return 'xin_documents';
+        }
+        if (Schema::hasTable('documents')) {
+            return 'documents';
+        }
+        return parent::getTable();
+    }
+
+    public function getKeyName()
+    {
+        $table = $this->getTable();
+        if (Schema::hasColumn($table, 'file_id')) {
+            return 'file_id';
+        }
+        if (Schema::hasColumn($table, 'document_id')) {
+            return 'document_id';
+        }
+        return 'id';
+    }
+
     protected $fillable = [
         'company_id',
         'file_type',
