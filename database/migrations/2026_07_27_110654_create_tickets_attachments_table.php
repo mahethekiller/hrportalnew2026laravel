@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tickets_attachments', function (Blueprint $table) {
-            $table->id();
+        Schema::create('xin_tickets_attachment', function (Blueprint $table) {
+            $table->id('ticket_attachment_id');
             $table->foreignId('ticket_id');
             $table->integer('upload_by');
             $table->string('file_title');
             $table->text('file_description');
             $table->text('attachment_file');
+            $table->string('created_at');
         });
     }
 
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tickets_attachments');
+        Schema::dropIfExists('xin_tickets_attachment');
     }
 };

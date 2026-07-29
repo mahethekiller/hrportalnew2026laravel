@@ -14,7 +14,21 @@ class SupportTicket extends Model
      *
      * @var string
      */
-    protected $table = 'support_tickets';
+    protected $table = 'xin_support_tickets';
+
+    /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'ticket_id';
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
 
     /**
      * The attributes that are mass assignable.
@@ -33,7 +47,8 @@ class SupportTicket extends Model
         'description',
         'ticket_remarks',
         'ticket_status',
-        'ticket_note'
+        'ticket_note',
+        'created_at'
     ];
 
     public function company()
@@ -43,11 +58,21 @@ class SupportTicket extends Model
 
     public function employee()
     {
-        return $this->belongsTo(Employee::class, 'employee_id');
+        return $this->belongsTo(Employee::class, 'employee_id', 'user_id');
     }
 
     public function department()
     {
         return $this->belongsTo(Department::class, 'department_id');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(TicketComment::class, 'ticket_id', 'ticket_id');
+    }
+
+    public function attachments()
+    {
+        return $this->hasMany(TicketAttachment::class, 'ticket_id', 'ticket_id');
     }
 }

@@ -102,6 +102,15 @@ class NavigationMenuSeeder extends Seeder
             'sort_order' => 4,
         ]);
 
+        NavigationMenu::create([
+            'parent_id' => $opsRoot->menu_id,
+            'title' => 'Support Tickets',
+            'icon' => 'fa-solid fa-circle bullet-dot',
+            'route_name' => 'support-tickets.index',
+            'resource_key' => 'support_tickets',
+            'sort_order' => 5,
+        ]);
+
         // 3. Talent & Development Category
         $talentRoot = NavigationMenu::create([
             'title' => 'Talent & Development',

@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tickets_comments', function (Blueprint $table) {
-            $table->id();
+        Schema::create('xin_tickets_comments', function (Blueprint $table) {
+            $table->id('comment_id');
             $table->foreignId('ticket_id');
             $table->foreignId('user_id');
             $table->text('ticket_comments');
+            $table->string('created_at');
             $table->foreign('user_id')->references('user_id')->on('employees')->onDelete('cascade');
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tickets_comments');
+        Schema::dropIfExists('xin_tickets_comments');
     }
 };

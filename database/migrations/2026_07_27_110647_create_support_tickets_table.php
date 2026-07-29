@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('support_tickets', function (Blueprint $table) {
-            $table->id();
+        Schema::create('xin_support_tickets', function (Blueprint $table) {
+            $table->id('ticket_id');
             $table->foreignId('company_id');
             $table->string('ticket_code');
             $table->string('subject');
@@ -25,6 +25,7 @@ return new class extends Migration
             $table->text('ticket_remarks');
             $table->string('ticket_status');
             $table->text('ticket_note');
+            $table->string('created_at');
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
             $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
@@ -36,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('support_tickets');
+        Schema::dropIfExists('xin_support_tickets');
     }
 };

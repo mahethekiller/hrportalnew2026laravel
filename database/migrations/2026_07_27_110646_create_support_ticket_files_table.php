@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('support_ticket_files', function (Blueprint $table) {
-            $table->id();
+        Schema::create('xin_support_ticket_files', function (Blueprint $table) {
+            $table->id('ticket_file_id');
             $table->foreignId('ticket_id');
             $table->foreignId('employee_id');
             $table->string('ticket_files');
             $table->string('file_size');
+            $table->string('created_at');
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('support_ticket_files');
+        Schema::dropIfExists('xin_support_ticket_files');
     }
 };

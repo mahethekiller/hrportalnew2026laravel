@@ -14,7 +14,21 @@ class TicketAttachment extends Model
      *
      * @var string
      */
-    protected $table = 'tickets_attachments';
+    protected $table = 'xin_tickets_attachment';
+
+    /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'ticket_attachment_id';
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
 
     /**
      * The attributes that are mass assignable.
@@ -26,6 +40,7 @@ class TicketAttachment extends Model
         'upload_by',
         'file_title',
         'file_description',
-        'attachment_file'
+        'attachment_file',
+        'created_at'
     ];
 }

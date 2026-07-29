@@ -119,6 +119,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/employee-experiences', [EmployeeWorkExperienceController::class, 'store'])->name('employee-experiences.store');
     Route::delete('/employee-experiences/{experience}', [EmployeeWorkExperienceController::class, 'destroy'])->name('employee-experiences.destroy');
 
+    // Support Ticket Routes
+    Route::resource('support-tickets', \App\Http\Controllers\SupportTicketController::class);
+    Route::post('/support-tickets/{support_ticket}/comments', [\App\Http\Controllers\SupportTicketController::class, 'addComment'])->name('support-tickets.comments');
+    Route::post('/support-tickets/{support_ticket}/attachments', [\App\Http\Controllers\SupportTicketController::class, 'uploadAttachment'])->name('support-tickets.attachments');
+    Route::post('/support-tickets/{support_ticket}/status', [\App\Http\Controllers\SupportTicketController::class, 'updateStatus'])->name('support-tickets.status');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

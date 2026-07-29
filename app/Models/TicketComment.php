@@ -14,7 +14,21 @@ class TicketComment extends Model
      *
      * @var string
      */
-    protected $table = 'tickets_comments';
+    protected $table = 'xin_tickets_comments';
+
+    /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'comment_id';
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
 
     /**
      * The attributes that are mass assignable.
@@ -24,7 +38,8 @@ class TicketComment extends Model
     protected $fillable = [
         'ticket_id',
         'user_id',
-        'ticket_comments'
+        'ticket_comments',
+        'created_at'
     ];
 
     public function user()
