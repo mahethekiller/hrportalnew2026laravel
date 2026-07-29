@@ -30,15 +30,7 @@
                         </div>
                     </div>
                     <div>
-                        @php
-                            $pBadge = match(strtolower($adminTicket->ticket_priority)) {
-                                'critical' => 'bg-danger text-white',
-                                'high' => 'bg-warning text-dark',
-                                'medium' => 'bg-info text-dark',
-                                default => 'bg-secondary text-white'
-                            };
-                        @endphp
-                        <span class="badge {{ $pBadge }} text-capitalize px-2 py-1 fs-9">{{ $adminTicket->ticket_priority }} Priority</span>
+                        {!! $adminTicket->priority_badge !!}
                     </div>
                 </div>
             </div>

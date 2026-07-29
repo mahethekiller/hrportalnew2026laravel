@@ -31,15 +31,7 @@
                         </div>
                     </div>
                     <div>
-                        @php
-                            $pBadge = match(strtolower($supportTicket->ticket_priority)) {
-                                'critical' => 'bg-danger text-white',
-                                'high' => 'bg-warning text-dark',
-                                'medium' => 'bg-info text-dark',
-                                default => 'bg-secondary text-white'
-                            };
-                        @endphp
-                        <span class="badge {{ $pBadge }} text-capitalize px-2 py-1 fs-9">{{ $supportTicket->ticket_priority }} Priority</span>
+                        {!! $supportTicket->priority_badge !!}
                     </div>
                 </div>
             </div>

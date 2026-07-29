@@ -47,6 +47,30 @@ class SupportTicket extends Model
         'created_at'
     ];
 
+    public function getPriorityLabelAttribute(): string
+    {
+        $priority = strtolower((string)$this->ticket_priority);
+        return match ($priority) {
+            '1', 'low' => 'Low',
+            '2', 'medium' => 'Medium',
+            '3', 'high' => 'High',
+            '4', 'critical' => 'Critical',
+            default => !empty($priority) ? ucfirst($priority) : 'Normal',
+        };
+    }
+
+    public function getPriorityBadgeAttribute(): string
+    {
+        $priority = strtolower((string)$this->ticket_priority);
+        return match ($priority) {
+            '1', 'low' => '<span class="badge bg-info-subtle text-info">Low</span>',
+            '2', 'medium' => '<span class="badge bg-warning-subtle text-warning">Medium</span>',
+            '3', 'high' => '<span class="badge bg-danger-subtle text-danger">High</span>',
+            '4', 'critical' => '<span class="badge bg-danger text-white">Critical</span>',
+            default => '<span class="badge bg-secondary-subtle text-secondary">' . e($this->priority_label) . '</span>',
+        };
+    }
+
     public function company()
     {
         return $this->belongsTo(Company::class, 'company_id');

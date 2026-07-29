@@ -34,7 +34,19 @@ class SupportTicketController extends Controller
             $query->where('ticket_status', $request->status);
         }
         if ($request->filled('priority')) {
-            $query->where('ticket_priority', $request->priority);
+            $p = strtolower((string)$request->priority);
+            $pMap = [
+                'low' => ['1', 'low'],
+                '1' => ['1', 'low'],
+                'medium' => ['2', 'medium'],
+                '2' => ['2', 'medium'],
+                'high' => ['3', 'high'],
+                '3' => ['3', 'high'],
+                'critical' => ['4', 'critical'],
+                '4' => ['4', 'critical'],
+            ];
+            $values = $pMap[$p] ?? [$request->priority];
+            $query->whereIn('ticket_priority', $values);
         }
 
         $keyName = (new \App\Models\SupportTicket)->getKeyName();

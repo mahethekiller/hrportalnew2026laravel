@@ -61,17 +61,7 @@
                             </td>
                             <td>{{ $tk->employee ? $tk->employee->first_name . ' ' . $tk->employee->last_name : 'System' }}</td>
                             <td>{{ $tk->company ? $tk->company->name : '--' }}</td>
-                            <td>
-                                @php
-                                    $pBadge = match(strtolower($tk->ticket_priority)) {
-                                        'critical' => 'bg-danger text-white',
-                                        'high' => 'bg-warning text-dark',
-                                        'medium' => 'bg-info text-dark',
-                                        default => 'bg-secondary text-white'
-                                    };
-                                @endphp
-                                <span class="badge {{ $pBadge }} text-capitalize px-2 py-1 fs-9">{{ $tk->ticket_priority }}</span>
-                            </td>
+                            <td>{!! $tk->priority_badge !!}</td>
                             <td>
                                 @php
                                     $sBadge = match(strval($tk->ticket_status)) {
