@@ -13,7 +13,7 @@ class ManagerPortalController extends Controller
 {
     protected function getManagerId(): int
     {
-        return auth()->user()?->employee_id ?? auth()->id() ?? 1;
+        return (int) (auth()->user()?->employee_id ?? auth()->id() ?? 1);
     }
 
     /**

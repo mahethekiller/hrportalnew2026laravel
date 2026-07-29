@@ -23,12 +23,12 @@ class EmployeePortalController extends Controller
 {
     protected function getEmployeeId(): int
     {
-        return auth()->user()?->employee_id ?? auth()->id() ?? 1;
+        return (int) (auth()->user()?->employee_id ?? auth()->id() ?? 1);
     }
 
     protected function getCompanyId(): int
     {
-        return auth()->user()?->company_id ?? 1;
+        return (int) (auth()->user()?->company_id ?? 1);
     }
 
     /**
