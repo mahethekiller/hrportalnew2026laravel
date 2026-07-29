@@ -29,9 +29,31 @@
                     @forelse($attendanceLogs as $log)
                         <tr>
                             <td class="ps-4 fw-bold text-gray-900">{{ $log->card_no }}</td>
-                            <td><span class="badge bg-light text-dark border">{{ $log->punch_date }}</span></td>
-                            <td class="text-success fw-semibold"><i class="fa-solid fa-arrow-right-to-bracket me-1"></i> {{ $log->check_in_time ?? $log->check_in_datetime ?? 'N/A' }}</td>
-                            <td class="text-danger fw-semibold"><i class="fa-solid fa-arrow-right-from-bracket me-1"></i> {{ $log->check_out_time ?? $log->check_out_datetime ?? 'N/A' }}</td>
+                            <td>
+                                @if($log->punch_date)
+                                    <span class="badge bg-light text-dark border"><i class="fa-regular fa-calendar me-1"></i> {{ date('d M Y, D', strtotime($log->punch_date)) }}</span>
+                                @else
+                                    <span class="text-muted">N/A</span>
+                                @endif
+                            </td>
+                            <td class="text-success fw-semibold">
+                                @if($log->check_in_time)
+                                    <i class="fa-solid fa-arrow-right-to-bracket me-1"></i> {{ date('h:i A', strtotime($log->check_in_time)) }}
+                                @elseif($log->check_in_datetime)
+                                    <i class="fa-solid fa-arrow-right-to-bracket me-1"></i> {{ date('h:i A', strtotime($log->check_in_datetime)) }}
+                                @else
+                                    <span class="text-muted">N/A</span>
+                                @endif
+                            </td>
+                            <td class="text-danger fw-semibold">
+                                @if($log->check_out_time)
+                                    <i class="fa-solid fa-arrow-right-from-bracket me-1"></i> {{ date('h:i A', strtotime($log->check_out_time)) }}
+                                @elseif($log->check_out_datetime)
+                                    <i class="fa-solid fa-arrow-right-from-bracket me-1"></i> {{ date('h:i A', strtotime($log->check_out_datetime)) }}
+                                @else
+                                    <span class="text-muted">N/A</span>
+                                @endif
+                            </td>
                             <td>{{ $log->badgenumber ?? 'N/A' }}</td>
                             <td>
                                 @if($log->check_in_time || $log->check_in_datetime)
