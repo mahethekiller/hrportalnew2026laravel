@@ -13,12 +13,6 @@
     </div>
 </div>
 
-@if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show fs-8" role="alert">
-        <i class="fa-solid fa-circle-check me-2"></i> {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-@endif
 
 <div class="row g-4">
     <!-- Left Column: Message Thread -->

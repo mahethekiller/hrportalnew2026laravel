@@ -13,13 +13,6 @@
     </div>
 </div>
 
-@if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show fs-8" role="alert">
-        <i class="fa-solid fa-circle-check me-2"></i> {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-@endif
-
 <div class="card border-0 shadow-sm rounded-3 mb-4">
     <div class="card-header border-0 pt-3 bg-white">
         <h5 class="fw-bold text-gray-900 fs-6 mb-0"><i class="fa-solid fa-list me-2 text-primary"></i> My Submitted Referrals</h5>
