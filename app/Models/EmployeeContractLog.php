@@ -14,7 +14,14 @@ class EmployeeContractLog extends Model
      *
      * @var string
      */
-    protected $table = 'employee_contract_logs';
+    protected $table = 'xin_employee_contract_log';
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
 
     /**
      * The attributes that are mass assignable.

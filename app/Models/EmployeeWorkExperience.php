@@ -16,6 +16,13 @@ class EmployeeWorkExperience extends Model
      */
     protected $table = 'xin_employee_work_experience';
 
+    /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'work_experience_id';
+
     public $timestamps = false;
 
     /**

@@ -14,7 +14,21 @@ class ContractType extends Model
      *
      * @var string
      */
-    protected $table = 'contract_types';
+    protected $table = 'xin_contract_type';
+
+    /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'contract_type_id';
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
 
     /**
      * The attributes that are mass assignable.

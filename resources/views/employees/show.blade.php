@@ -167,7 +167,7 @@
                                     <td>{{ $doc->date_of_expiry ? date('M d, Y', strtotime($doc->date_of_expiry)) : 'N/A' }}</td>
                                     <td>{{ $doc->notification_email ?? 'N/A' }}</td>
                                     <td class="text-end">
-                                        <form method="POST" action="{{ route('employee-documents.destroy', $doc->id) }}" class="d-inline" onsubmit="return confirm('Remove this document?');">
+                                        <form method="POST" action="{{ route('employee-documents.destroy', $doc->getKey()) }}" class="d-inline" onsubmit="return confirm('Remove this document?');">
                                             @csrf @method('DELETE')
                                             <button type="submit" class="btn btn-light-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
                                         </form>
@@ -215,7 +215,7 @@
                                         @if($contact->is_dependent)<span class="badge badge-light-info">Dependent</span>@endif
                                     </td>
                                     <td class="text-end">
-                                        <form method="POST" action="{{ route('employee-contacts.destroy', $contact->id) }}" class="d-inline" onsubmit="return confirm('Remove contact?');">
+                                        <form method="POST" action="{{ route('employee-contacts.destroy', $contact->getKey()) }}" class="d-inline" onsubmit="return confirm('Remove contact?');">
                                             @csrf @method('DELETE')
                                             <button type="submit" class="btn btn-light-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
                                         </form>
@@ -260,7 +260,7 @@
                                     <td><code class="text-primary fw-bold">{{ $bank->account_number }}</code></td>
                                     <td>{{ $bank->bank_branch ?? 'N/A' }} ({{ $bank->bank_code ?? 'N/A' }})</td>
                                     <td class="text-end">
-                                        <form method="POST" action="{{ route('employee-bankaccounts.destroy', $bank->id) }}" class="d-inline" onsubmit="return confirm('Remove bank account?');">
+                                        <form method="POST" action="{{ route('employee-bankaccounts.destroy', $bank->getKey()) }}" class="d-inline" onsubmit="return confirm('Remove bank account?');">
                                             @csrf @method('DELETE')
                                             <button type="submit" class="btn btn-light-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
                                         </form>
@@ -303,7 +303,7 @@
                                     <td>{{ $qual->specialization ?? 'General' }}</td>
                                     <td>{{ $qual->from_year ?? 'N/A' }} - {{ $qual->to_year ?? 'N/A' }}</td>
                                     <td class="text-end">
-                                        <form method="POST" action="{{ route('employee-qualifications.destroy', $qual->id) }}" class="d-inline" onsubmit="return confirm('Remove qualification?');">
+                                        <form method="POST" action="{{ route('employee-qualifications.destroy', $qual->getKey()) }}" class="d-inline" onsubmit="return confirm('Remove qualification?');">
                                             @csrf @method('DELETE')
                                             <button type="submit" class="btn btn-light-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
                                         </form>
@@ -348,7 +348,7 @@
                                     <td>{{ date('M d, Y', strtotime($exp->from_date)) }}</td>
                                     <td>{{ $exp->to_date ? date('M d, Y', strtotime($exp->to_date)) : 'Present' }}</td>
                                     <td class="text-end">
-                                        <form method="POST" action="{{ route('employee-experiences.destroy', $exp->id) }}" class="d-inline" onsubmit="return confirm('Remove experience?');">
+                                        <form method="POST" action="{{ route('employee-experiences.destroy', $exp->getKey()) }}" class="d-inline" onsubmit="return confirm('Remove experience?');">
                                             @csrf @method('DELETE')
                                             <button type="submit" class="btn btn-light-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
                                         </form>

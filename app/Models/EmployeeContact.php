@@ -16,6 +16,13 @@ class EmployeeContact extends Model
      */
     protected $table = 'xin_employee_contacts';
 
+    /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'contact_id';
+
     public $timestamps = false;
 
     /**

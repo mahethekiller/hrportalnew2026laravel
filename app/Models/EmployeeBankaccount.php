@@ -16,6 +16,13 @@ class EmployeeBankaccount extends Model
      */
     protected $table = 'xin_employee_bankaccount';
 
+    /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'bankaccount_id';
+
     public $timestamps = false;
 
     /**

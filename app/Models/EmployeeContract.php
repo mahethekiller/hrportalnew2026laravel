@@ -14,7 +14,14 @@ class EmployeeContract extends Model
      *
      * @var string
      */
-    protected $table = 'employee_contracts';
+    protected $table = 'xin_employee_contract';
+
+    /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'contract_id';
 
     public $timestamps = false;
 

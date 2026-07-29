@@ -16,6 +16,13 @@ class EmployeeQualification extends Model
      */
     protected $table = 'xin_employee_qualification';
 
+    /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'qualification_id';
+
     public $timestamps = false;
 
     /**
