@@ -96,19 +96,26 @@ class EmployeePortalController extends Controller
      */
     public function attendance(): View
     {
-        $employee = Employee::where('user_id', auth()->id())
-            ->orWhere('employee_id', $this->getEmployeeId())
-            ->first();
+        $user = auth()->user();
+        $employee = null;
 
-        $cardNo = $employee?->card_no ?? auth()->user()?->card_no;
+        if ($user) {
+            $employee = Employee::where('user_id', $user->id)
+                ->orWhere('employee_id', $this->getEmployeeId())
+                ->orWhere('email', $user->email ?? '')
+                ->first();
+        }
 
-        $attendanceLogs = collect();
+        $cardNo = $employee?->card_no ?? $user?->card_no;
+
         if ($cardNo) {
             $attendanceLogs = EmpTodayAttendance::where('card_no', $cardNo)
                 ->orderBy('id', 'desc')
                 ->paginate(15);
         } else {
-            $attendanceLogs = EmpTodayAttendance::orderBy('id', 'desc')->paginate(15);
+            $attendanceLogs = EmpTodayAttendance::where('card_no', '___NO_CARD___')
+                ->orderBy('id', 'desc')
+                ->paginate(15);
         }
 
         return view('my_portal.attendance', compact('attendanceLogs', 'employee'));
