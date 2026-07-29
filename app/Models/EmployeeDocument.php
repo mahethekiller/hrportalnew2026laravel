@@ -16,6 +16,13 @@ class EmployeeDocument extends Model
      */
     protected $table = 'xin_employee_documents';
 
+    /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'document_id';
+
     public $timestamps = false;
 
     /**
