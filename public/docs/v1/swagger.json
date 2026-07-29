@@ -1,0 +1,109 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Antigravity HR Portal V1 REST API",
+    "description": "Comprehensive enterprise API documentation for Employee Management Module",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000/api/v1",
+      "description": "Local Development Server"
+    }
+  ],
+  "paths": {
+    "/employees": {
+      "get": {
+        "summary": "Get paginated list of employees",
+        "parameters": [
+          { "name": "search", "in": "query", "description": "Filter by name, email, employee_id, username", "schema": { "type": "string" } },
+          { "name": "department_id", "in": "query", "description": "Filter by department ID", "schema": { "type": "integer" } },
+          { "name": "status", "in": "query", "description": "Filter by active/inactive status", "schema": { "type": "string" } },
+          { "name": "page", "in": "query", "description": "Page number", "schema": { "type": "integer" } },
+          { "name": "per_page", "in": "query", "description": "Items per page", "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Successful operation" }
+        }
+      },
+      "post": {
+        "summary": "Create a new employee record",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["first_name", "last_name", "employee_id", "email", "password"],
+                "properties": {
+                  "first_name": { "type": "string", "example": "John" },
+                  "last_name": { "type": "string", "example": "Doe" },
+                  "employee_id": { "type": "string", "example": "EMP-2026-001" },
+                  "username": { "type": "string", "example": "johndoe" },
+                  "email": { "type": "string", "example": "john.doe@example.com" },
+                  "password": { "type": "string", "example": "password123" },
+                  "department_id": { "type": "integer", "example": 1 },
+                  "designation_id": { "type": "integer", "example": 1 },
+                  "salary": { "type": "number", "example": 6500.00 }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Employee created successfully" },
+          "422": { "description": "Validation error" }
+        }
+      }
+    },
+    "/employees/{id}": {
+      "get": {
+        "summary": "Get specific employee profile details",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Successful operation" },
+          "404": { "description": "Employee not found" }
+        }
+      },
+      "put": {
+        "summary": "Update an existing employee record",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "first_name": { "type": "string" },
+                  "last_name": { "type": "string" },
+                  "email": { "type": "string" },
+                  "department_id": { "type": "integer" },
+                  "salary": { "type": "number" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Employee updated successfully" },
+          "404": { "description": "Employee not found" }
+        }
+      },
+      "delete": {
+        "summary": "Delete an employee record",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Employee deleted successfully" },
+          "404": { "description": "Employee not found" }
+        }
+      }
+    }
+  }
+}

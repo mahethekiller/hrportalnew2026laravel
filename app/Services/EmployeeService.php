@@ -1,0 +1,224 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Services;
+
+use App\Models\Employee;
+use App\Models\User;
+use App\Repositories\EmployeeRepository;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+
+class EmployeeService
+{
+    public function __construct(
+        protected EmployeeRepository $repository
+    ) {}
+
+    /**
+     * Get paginated employee list.
+     */
+    public function getEmployees(array $filters = [], int $perPage = 15): LengthAwarePaginator
+    {
+        return $this->repository->getPaginated($filters, $perPage);
+    }
+
+    /**
+     * Get employee details by ID.
+     */
+    public function getEmployeeById(int $id): ?Employee
+    {
+        return $this->repository->findById($id);
+    }
+
+    /**
+     * Create new employee record with linked User account.
+     */
+    public function createEmployee(array $data): Employee
+    {
+        return DB::transaction(function () use ($data) {
+            // Handle profile picture upload
+            if (isset($data['profile_picture']) && $data['profile_picture'] instanceof \Illuminate\Http\UploadedFile) {
+                $file = $data['profile_picture'];
+                $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('uploads/profile'), $filename);
+                $data['profile_picture'] = $filename;
+            }
+
+            $empCode = (!empty($data['employee_id']) && $data['employee_id'] !== '0')
+                ? $data['employee_id']
+                : (!empty($data['username']) ? $data['username'] : 'EMP-' . sprintf('%04d', rand(100, 9999)));
+
+            // 1. Create or resolve root User
+            $user = User::create([
+                'name' => trim(($data['first_name'] ?? '') . ' ' . ($data['last_name'] ?? '')),
+                'first_name' => $data['first_name'] ?? 'Admin',
+                'last_name' => $data['last_name'] ?? 'User',
+                'username' => $data['username'] ?? $empCode,
+                'employee_id' => $empCode,
+                'user_role_id' => $data['user_role_id'] ?? 1,
+                'user_type' => 'employee',
+                'company_name' => $data['company_name'] ?? 'Antigravity Corp',
+                'company_logo' => 'logo.png',
+                'profile_photo' => 'photo.jpg',
+                'profile_background' => 'bg.jpg',
+                'contact_number' => $data['contact_no'] ?? '1234567890',
+                'gender' => $data['gender'] ?? 'Male',
+                'address_1' => $data['address'] ?? '123 Main St',
+                'address_2' => '',
+                'city' => 'Anytown',
+                'state' => 'State',
+                'zipcode' => '12345',
+                'country' => 1,
+                'last_login_date' => now()->toDateTimeString(),
+                'last_login_ip' => '127.0.0.1',
+                'is_logged_in' => 0,
+                'is_active' => 1,
+                'user_role' => 'Employee',
+                'company_id' => $data['company_id'] ?? 1,
+                'designation_id' => $data['designation_id'] ?? 1,
+                'department_id' => $data['department_id'] ?? 1,
+                'email' => $data['email'],
+                'password' => Hash::make($data['password'] ?? '12345678'),
+            ]);
+
+            // Update empCode with user id if generated
+            if (empty($data['employee_id']) || $data['employee_id'] === '0') {
+                $empCode = 'EMP-' . sprintf('%04d', $user->id);
+                $user->update(['employee_id' => $empCode]);
+            }
+
+            // 2. Hash employee password for legacy auth fields
+            $data['user_id'] = $user->id;
+            $data['employee_id'] = $empCode;
+            $data['card_no'] = $data['card_no'] ?? $empCode;
+            $data['username'] = $data['username'] ?? $empCode;
+            $data['office_shift_id'] = $data['office_shift_id'] ?? 1;
+            $data['user_role_id'] = $data['user_role_id'] ?? 1;
+            $data['department_id'] = $data['department_id'] ?? 1;
+            $data['designation_id'] = $data['designation_id'] ?? 1;
+            $data['company_id'] = $data['company_id'] ?? 1;
+            $data['date_of_birth'] = $data['date_of_birth'] ?? '1990-01-01';
+            $data['date_of_joining'] = $data['date_of_joining'] ?? date('Y-m-d');
+            $data['gender'] = $data['gender'] ?? 'Male';
+            $data['e_status'] = $data['e_status'] ?? 'Full Time';
+            $data['marital_status'] = $data['marital_status'] ?? 'Single';
+            $data['contact_no'] = $data['contact_no'] ?? '0000000000';
+            $data['salary'] = $data['salary'] ?? 0;
+            $data['manager_id'] = $data['manager_id'] ?? 0;
+            $data['sub_manager_id'] = $data['sub_manager_id'] ?? 0;
+            $data['sub_department'] = $data['sub_department'] ?? 0;
+            $data['salary_template'] = $data['salary_template'] ?? 0;
+            $data['hourly_grade_id'] = $data['hourly_grade_id'] ?? 0;
+            $data['monthly_grade_id'] = $data['monthly_grade_id'] ?? 0;
+            $data['address'] = $data['address'] ?? '';
+            $data['profile_picture'] = $data['profile_picture'] ?? 'default.jpg';
+            $data['profile_background'] = $data['profile_background'] ?? 'default.jpg';
+            $data['resume'] = $data['resume'] ?? '';
+            $data['reporting_location'] = $data['reporting_location'] ?? 1;
+            $data['employee_source'] = $data['employee_source'] ?? 'Direct';
+            $data['ref_emp_id'] = $data['ref_emp_id'] ?? 0;
+            $data['rejoin_emp_id'] = $data['rejoin_emp_id'] ?? 0;
+            $data['has_rejoined'] = $data['has_rejoined'] ?? 0;
+            $data['created_by'] = $data['created_by'] ?? 1;
+            $data['mother_tongue'] = $data['mother_tongue'] ?? 'English';
+            $data['age'] = $data['age'] ?? 30;
+            $data['place_of_birth'] = $data['place_of_birth'] ?? '';
+            $data['blood_group'] = $data['blood_group'] ?? 'O+';
+            $data['pan_number'] = $data['pan_number'] ?? '';
+            $data['aadhar_no'] = $data['aadhar_no'] ?? '';
+            $data['category'] = $data['category'] ?? 1;
+            $data['employment_type'] = $data['employment_type'] ?? 'Full Time';
+            $data['date_of_leaving'] = $data['date_of_leaving'] ?? '';
+            $data['skype_id'] = $data['skype_id'] ?? '';
+            $data['facebook_link'] = $data['facebook_link'] ?? '';
+            $data['twitter_link'] = $data['twitter_link'] ?? '';
+            $data['blogger_link'] = $data['blogger_link'] ?? '';
+            $data['linkdedin_link'] = $data['linkdedin_link'] ?? '';
+            $data['google_plus_link'] = $data['google_plus_link'] ?? '';
+            $data['instagram_link'] = $data['instagram_link'] ?? '';
+            $data['pinterest_link'] = $data['pinterest_link'] ?? '';
+            $data['youtube_link'] = $data['youtube_link'] ?? '';
+            $data['probation_status'] = $data['probation_status'] ?? 0;
+            $data['probation_end_date'] = $data['probation_end_date'] ?? '';
+            $data['resign_date'] = $data['resign_date'] ?? '';
+            $data['confirmation_date'] = $data['confirmation_date'] ?? '';
+            $data['last_login_date'] = $data['last_login_date'] ?? '';
+            $data['last_logout_date'] = $data['last_logout_date'] ?? '';
+            $data['last_login_ip'] = $data['last_login_ip'] ?? '';
+            $data['is_logged_in'] = $data['is_logged_in'] ?? 0;
+            $data['online_status'] = $data['online_status'] ?? 0;
+            $data['email_personal'] = $data['email_personal'] ?? '';
+            $data['date_of_birth_doc'] = $data['date_of_birth_doc'] ?? '';
+            $data['address_com'] = $data['address_com'] ?? '';
+            $data['earned_leave'] = $data['earned_leave'] ?? 0;
+            $data['casual_leave'] = $data['casual_leave'] ?? 0;
+            $data['other_leaves_taken_days'] = $data['other_leaves_taken_days'] ?? 0;
+            $data['paytm_no'] = $data['paytm_no'] ?? '';
+            $data['vehicle_no'] = $data['vehicle_no'] ?? '';
+            $data['pf_opted'] = $data['pf_opted'] ?? 0;
+            $data['health_ins_opted'] = $data['health_ins_opted'] ?? 0;
+            $data['official_contact_no'] = $data['official_contact_no'] ?? '';
+            $data['vehicle_type'] = $data['vehicle_type'] ?? '';
+            $data['city_temp'] = $data['city_temp'] ?? '';
+            $data['city'] = $data['city'] ?? '';
+            $data['state_temp'] = $data['state_temp'] ?? '';
+            $data['state'] = $data['state'] ?? '';
+            $data['pin_temp'] = $data['pin_temp'] ?? '';
+            $data['pincode'] = $data['pincode'] ?? '';
+            $data['corporate_bank_account'] = $data['corporate_bank_account'] ?? '';
+            $data['prob_mail_status'] = $data['prob_mail_status'] ?? 0;
+            $data['experience'] = $data['experience'] ?? '';
+            $data['kra_doc'] = $data['kra_doc'] ?? '';
+            $data['kpi_doc'] = $data['kpi_doc'] ?? '';
+            $data['notice_period'] = $data['notice_period'] ?? '';
+            $data['password'] = Hash::make($data['password'] ?? '12345678');
+            $data['is_active'] = $data['is_active'] ?? 1;
+
+            return $this->repository->create($data);
+        });
+    }
+
+    /**
+     * Update employee details.
+     */
+    public function updateEmployee(Employee $employee, array $data): bool
+    {
+        return DB::transaction(function () use ($employee, $data) {
+            // Handle profile picture upload
+            if (isset($data['profile_picture']) && $data['profile_picture'] instanceof \Illuminate\Http\UploadedFile) {
+                $file = $data['profile_picture'];
+                $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('uploads/profile'), $filename);
+                $data['profile_picture'] = $filename;
+            }
+            if (!empty($data['password'])) {
+                $data['password'] = Hash::make($data['password']);
+                if ($employee->user) {
+                    $employee->user->update(['password' => $data['password']]);
+                }
+            } else {
+                unset($data['password']);
+            }
+
+            if (isset($data['first_name']) || isset($data['last_name'])) {
+                $name = trim(($data['first_name'] ?? $employee->first_name) . ' ' . ($data['last_name'] ?? $employee->last_name));
+                if ($employee->user) {
+                    $employee->user->update(['name' => $name]);
+                }
+            }
+
+            return $this->repository->update($employee, $data);
+        });
+    }
+
+    /**
+     * Delete employee record.
+     */
+    public function deleteEmployee(Employee $employee): bool
+    {
+        return $this->repository->delete($employee);
+    }
+}
