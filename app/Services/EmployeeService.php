@@ -224,6 +224,36 @@ class EmployeeService
                 }
             }
 
+            // Prevent setting NOT NULL database columns to null
+            $notNullDefaults = [
+                'salary' => 0.00,
+                'earned_leave' => 0,
+                'casual_leave' => 0,
+                'manager_id' => 0,
+                'sub_manager_id' => 0,
+                'sub_department' => 0,
+                'salary_template' => 0,
+                'hourly_grade_id' => 0,
+                'monthly_grade_id' => 0,
+                'pf_opted' => 0,
+                'health_ins_opted' => 0,
+                'probation_status' => 0,
+                'is_active' => 1,
+            ];
+
+            foreach ($notNullDefaults as $key => $defaultValue) {
+                if (array_key_exists($key, $data) && is_null($data[$key])) {
+                    $data[$key] = $employee->$key ?? $defaultValue;
+                }
+            }
+
+            // Clean up any remaining null values if column was previously set or has a default
+            foreach ($data as $key => $val) {
+                if (is_null($val) && isset($employee->$key) && !is_null($employee->$key)) {
+                    $data[$key] = $employee->$key;
+                }
+            }
+
             return $this->repository->update($employee, $data);
         });
     }
