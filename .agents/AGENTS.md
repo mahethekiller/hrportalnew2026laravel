@@ -1,7 +1,6 @@
-# Project Rules for Antigravity HR Portal
+# Workspace Agent Guidelines
 
-## 1. Live Deployment Script Synchronization Rule (`run_live_setup.php`)
-- **MANDATORY**: Whenever you make any database schema alteration, add a new table, add a Spatie permission, create a new upload folder, or introduce a configuration step:
-  - You **MUST** immediately update [run_live_setup.php](file:///d:/SOFTWARES/xampp82new/hri2k2new/antigravity_portal/run_live_setup.php).
-  - Ensure all database operations in `run_live_setup.php` remain non-destructive (e.g., using `CREATE TABLE IF NOT EXISTS`, checking `INFORMATION_SCHEMA.COLUMNS` before column modifications, using `firstOrCreate` for seeders).
-  - Never execute `DROP TABLE`, `TRUNCATE`, or `DELETE` in `run_live_setup.php`.
+## Theme & Dark/Light Mode Compliance
+- Always ensure all Blade views, components, tables, forms, badges, and cards are 100% compatible with both Light Mode and Dark Mode (`data-bs-theme="dark"`).
+- Never use hardcoded light backgrounds (e.g. `bg-white`, `bg-light`, `#F1F5F9`) or hardcoded dark text colors (`color: #0F172A`, `text-gray-900`) without corresponding `[data-bs-theme="dark"]` override rules or theme variables (`bg-body`, `bg-body-tertiary`, `text-body-emphasis`, `text-body-secondary`).
+- Ensure all `.table`, `.table th`, `.table td`, and `.card` elements maintain high-contrast legibility in both Light and Dark modes.
