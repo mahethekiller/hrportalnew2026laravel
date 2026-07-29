@@ -83,7 +83,7 @@
         @endforelse
 
         <!-- Post a Reply -->
-        @if(strtolower($supportTicket->ticket_status) !== 'closed')
+        @if(strval($supportTicket->ticket_status) !== '2')
             <div class="card border-0 shadow-sm rounded-3 mt-4">
                 <div class="card-header bg-white border-0 pt-4">
                     <h6 class="mb-0 fw-bold text-gray-900"><i class="fa-solid fa-reply me-1"></i> Post a Reply</h6>
@@ -123,13 +123,18 @@
                     <li class="list-group-item d-flex justify-content-between px-0">
                         <span class="text-muted">Current Status:</span>
                         @php
-                            $sBadge = match(strtolower($supportTicket->ticket_status)) {
-                                'resolved' => 'bg-success text-white',
-                                'closed' => 'bg-light text-dark border',
-                                default => 'bg-primary text-white'
+                            $sBadge = match(strval($supportTicket->ticket_status)) {
+                                '2' => 'bg-success text-white',
+                                '3' => 'bg-warning text-dark',
+                                default => 'bg-danger text-white'
+                            };
+                            $statusName = match(strval($supportTicket->ticket_status)) {
+                                '2' => 'Closed',
+                                '3' => 'On Hold',
+                                default => 'Open'
                             };
                         @endphp
-                        <span class="badge {{ $sBadge }} text-capitalize fs-9">{{ $supportTicket->ticket_status }}</span>
+                        <span class="badge {{ $sBadge }} text-capitalize fs-9">{{ $statusName }}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between px-0">
                         <span class="text-muted">Assigned To:</span>
@@ -147,9 +152,9 @@
                         <div class="mb-2">
                             <label class="form-label fs-9 fw-semibold text-muted">Update Status</label>
                             <select name="ticket_status" class="form-select form-select-sm fs-8" required>
-                                <option value="open" {{ $supportTicket->ticket_status === 'open' ? 'selected' : '' }}>Open</option>
-                                <option value="resolved" {{ $supportTicket->ticket_status === 'resolved' ? 'selected' : '' }}>Resolved</option>
-                                <option value="closed" {{ $supportTicket->ticket_status === 'closed' ? 'selected' : '' }}>Closed</option>
+                                <option value="1" {{ strval($supportTicket->ticket_status) === '1' ? 'selected' : '' }}>Open</option>
+                                <option value="2" {{ strval($supportTicket->ticket_status) === '2' ? 'selected' : '' }}>Closed</option>
+                                <option value="3" {{ strval($supportTicket->ticket_status) === '3' ? 'selected' : '' }}>On Hold</option>
                             </select>
                         </div>
                         <div class="mb-2">
@@ -193,7 +198,7 @@
                     @endforelse
                 </ul>
 
-                @if(strtolower($supportTicket->ticket_status) !== 'closed')
+                @if(strval($supportTicket->ticket_status) !== '2')
                     <hr>
                     <form method="POST" action="{{ route('support-tickets.attachments', $supportTicket->ticket_id) }}" enctype="multipart/form-data">
                         @csrf

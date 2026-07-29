@@ -14,7 +14,21 @@ class AdminTicket extends Model
      *
      * @var string
      */
-    protected $table = 'admin_tickets';
+    protected $table = 'xin_admin_tickets';
+
+    /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'ticket_id';
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
 
     /**
      * The attributes that are mass assignable.

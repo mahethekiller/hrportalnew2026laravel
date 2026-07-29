@@ -26,9 +26,9 @@
             <div class="col-md-3 col-6">
                 <select name="status" class="form-select form-select-sm fs-8" onchange="this.form.submit()">
                     <option value="">All Statuses</option>
-                    <option value="open" {{ request('status') === 'open' ? 'selected' : '' }}>Open</option>
-                    <option value="resolved" {{ request('status') === 'resolved' ? 'selected' : '' }}>Resolved</option>
-                    <option value="closed" {{ request('status') === 'closed' ? 'selected' : '' }}>Closed</option>
+                    <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>Open</option>
+                    <option value="2" {{ request('status') === '2' ? 'selected' : '' }}>Closed</option>
+                    <option value="3" {{ request('status') === '3' ? 'selected' : '' }}>On Hold</option>
                 </select>
             </div>
             <div class="col-md-3 col-6">
@@ -80,13 +80,18 @@
                             </td>
                             <td>
                                 @php
-                                    $sBadge = match(strtolower($tk->ticket_status)) {
-                                        'resolved' => 'bg-success text-white',
-                                        'closed' => 'bg-light text-dark border',
-                                        default => 'bg-primary text-white'
+                                    $sBadge = match(strval($tk->ticket_status)) {
+                                        '2' => 'bg-success text-white', // Closed
+                                        '3' => 'bg-warning text-dark', // On Hold
+                                        default => 'bg-danger text-white' // Open / "1"
+                                    };
+                                    $statusName = match(strval($tk->ticket_status)) {
+                                        '2' => 'Closed',
+                                        '3' => 'On Hold',
+                                        default => 'Open'
                                     };
                                 @endphp
-                                <span class="badge {{ $sBadge }} text-capitalize px-2 py-1 fs-9">{{ $tk->ticket_status }}</span>
+                                <span class="badge {{ $sBadge }} text-capitalize px-2 py-1 fs-9">{{ $statusName }}</span>
                             </td>
                             <td>{{ $tk->created_at }}</td>
                             <td class="text-end pe-4">

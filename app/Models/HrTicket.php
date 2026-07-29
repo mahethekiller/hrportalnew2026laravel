@@ -14,7 +14,21 @@ class HrTicket extends Model
      *
      * @var string
      */
-    protected $table = 'hr_tickets';
+    protected $table = 'xin_hr_tickets';
+
+    /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'ticket_id';
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
 
     /**
      * The attributes that are mass assignable.

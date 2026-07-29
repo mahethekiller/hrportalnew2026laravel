@@ -99,7 +99,7 @@ class SupportTicketManagementTest extends TestCase
             'message' => 'Detail message',
             'description' => 'Detail message',
             'ticket_remarks' => '',
-            'ticket_status' => 'open',
+            'ticket_status' => '1',
             'ticket_note' => '',
             'created_at' => date('d-m-Y H:i:s'),
         ]);
@@ -144,20 +144,20 @@ class SupportTicketManagementTest extends TestCase
             'message' => 'Detail message',
             'description' => 'Detail message',
             'ticket_remarks' => '',
-            'ticket_status' => 'open',
+            'ticket_status' => '1',
             'ticket_note' => '',
             'created_at' => date('d-m-Y H:i:s'),
         ]);
 
         $response = $this->actingAs($adminUser)->post(route('support-tickets.status', $ticket->ticket_id), [
-            'ticket_status' => 'resolved',
+            'ticket_status' => '2',
             'ticket_remarks' => 'Completed the wifi access point installation.',
         ]);
 
         $response->assertRedirect(route('support-tickets.show', $ticket->ticket_id));
         $this->assertDatabaseHas('xin_support_tickets', [
             'ticket_id' => $ticket->ticket_id,
-            'ticket_status' => 'resolved',
+            'ticket_status' => '2',
             'ticket_remarks' => 'Completed the wifi access point installation.',
         ]);
     }

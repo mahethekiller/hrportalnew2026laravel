@@ -79,7 +79,7 @@ class SupportTicketController extends Controller
             'message' => $request->description,
             'description' => $request->description,
             'ticket_remarks' => '',
-            'ticket_status' => 'open',
+            'ticket_status' => '1',
             'ticket_note' => '',
             'created_at' => date('d-m-Y H:i:s'),
         ]);
@@ -92,9 +92,9 @@ class SupportTicketController extends Controller
 
             TicketAttachment::create([
                 'ticket_id' => $ticket->ticket_id,
-                'upload_by' => $employeeId,
-                'file_title' => $file->getClientOriginalName(),
-                'file_description' => 'Ticket submission attachment',
+                'upload_by' => auth()->id(),
+                'file_title' => 'Original Attachment',
+                'file_description' => 'Attached during ticket submission',
                 'attachment_file' => 'uploads/tickets/' . $fileName,
                 'created_at' => date('d-m-Y H:i:s'),
             ]);
@@ -180,13 +180,12 @@ class SupportTicketController extends Controller
      */
     public function updateStatus(Request $request, SupportTicket $supportTicket): RedirectResponse
     {
-        // Only HR/Admin can update ticket status/assignee
-        if (!Gate::allows('edit.support_tickets')) {
-            abort(403, 'Unauthorized operation.');
+        if (Gate::denies('edit.support_tickets')) {
+            abort(403);
         }
 
         $request->validate([
-            'ticket_status' => 'required|string|in:open,closed,resolved',
+            'ticket_status' => 'required|string|in:1,2,3',
             'assigned_to' => 'nullable|integer',
             'ticket_remarks' => 'nullable|string',
         ]);
