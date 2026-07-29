@@ -86,6 +86,9 @@ Route::middleware('auth')->group(function () {
 
     // Dynamic Navigation Manager Routes
     Route::get('/settings/navigation', [\App\Http\Controllers\NavigationMenuController::class, 'index'])->name('settings.navigation.index');
+    Route::post('/settings/navigation', [\App\Http\Controllers\NavigationMenuController::class, 'store'])->name('settings.navigation.store');
+    Route::put('/settings/navigation/{navigation}', [\App\Http\Controllers\NavigationMenuController::class, 'update'])->name('settings.navigation.update');
+    Route::delete('/settings/navigation/{navigation}', [\App\Http\Controllers\NavigationMenuController::class, 'destroy'])->name('settings.navigation.destroy');
     Route::post('/settings/navigation/reorder', [\App\Http\Controllers\NavigationMenuController::class, 'reorder'])->name('settings.navigation.reorder');
 
     // Super Admin API Control Routes

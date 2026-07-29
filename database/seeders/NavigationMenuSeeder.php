@@ -16,11 +16,20 @@ class NavigationMenuSeeder extends Seeder
         // Clear existing menus
         NavigationMenu::truncate();
 
+        // 0. Standalone Top-Level Items
+        NavigationMenu::create([
+            'title' => 'Dashboard',
+            'icon' => 'fa-solid fa-gauge',
+            'route_name' => 'dashboard',
+            'resource_key' => null,
+            'sort_order' => 1,
+        ]);
+
         // 1. Core HR Directories Category
         $directoryRoot = NavigationMenu::create([
             'title' => 'Core HR Directories',
             'icon' => 'fa-solid fa-users',
-            'sort_order' => 1,
+            'sort_order' => 2,
         ]);
 
         NavigationMenu::create([

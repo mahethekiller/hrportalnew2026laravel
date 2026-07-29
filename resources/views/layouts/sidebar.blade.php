@@ -13,77 +13,91 @@
         </button>
     </div>
     
-    <!-- Sidebar Navigation Menu (Accordion Supported) -->
+    <!-- Sidebar Navigation Menu (100% Database Driven) -->
     <div class="nav nav-pills flex-column flex-nowrap mb-auto overflow-y-auto py-2 px-2" id="sidebarMenu">
         
-        <!-- MAIN MENU -->
-        <div class="px-3 pt-2 pb-1 text-uppercase label-sm text-muted fw-bold" style="font-size: 0.65rem; letter-spacing: 0.08em;">Main</div>
-        
-        <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
-            <i class="fa-solid fa-gauge menu-icon"></i>
-            <span>Dashboard</span>
-        </a>
-
-        <a href="{{ route('employees.index') }}" class="nav-link {{ request()->routeIs('employees.*') ? 'active' : '' }}">
-            <i class="fa-solid fa-users menu-icon"></i>
-            <span>Employees</span>
-        </a>
-
-        <!-- DYNAMIC DATABASE MENUS -->
         @foreach($dynamicMenus as $root)
             @php
-                $childRouteNames = $root->children->pluck('route_name')->filter()->toArray();
-                $isRootActive = false;
-                foreach($childRouteNames as $rn) {
-                    if (request()->routeIs($rn . '*')) {
-                        $isRootActive = true;
-                        break;
-                    }
+                $userRole = Auth::user()?->roleRelation;
+                $hasRootAccess = true;
+                if ($userRole && $userRole->role_access !== 'all' && $root->resource_key) {
+                    $hasRootAccess = in_array("view." . $root->resource_key, $userRole->resource_list);
                 }
-                $collapseId = 'menuNode' . $root->menu_id;
             @endphp
-            <div class="menu-item py-1">
-                <a class="nav-link w-100 justify-content-between {{ $isRootActive ? '' : 'collapsed' }}" 
-                   data-bs-toggle="collapse" 
-                   href="#{{ $collapseId }}" 
-                   role="button" 
-                   aria-expanded="{{ $isRootActive ? 'true' : 'false' }}" 
-                   aria-controls="{{ $collapseId }}">
-                    <div class="d-flex align-items-center">
-                        <i class="{{ $root->icon ?? 'fa-solid fa-folder' }} menu-icon"></i>
-                        <span>{{ $root->title }}</span>
-                    </div>
-                    <i class="fa-solid fa-chevron-right menu-arrow"></i>
-                </a>
 
-                <div class="collapse nav-sub-menu {{ $isRootActive ? 'show' : '' }}" id="{{ $collapseId }}" data-bs-parent="#sidebarMenu">
-                    @foreach($root->children as $child)
-                        @php
-                            $userRole = Auth::user()?->roleRelation;
-                            $hasAccess = true;
-                            if ($userRole && $userRole->role_access !== 'all' && $child->resource_key) {
-                                $hasAccess = in_array("view." . $child->resource_key, $userRole->resource_list);
+            @if($hasRootAccess)
+                @if($root->children->isEmpty())
+                    <!-- Standalone Top-Level Menu Link (e.g. Dashboard) -->
+                    @php
+                        $rootUrl = '#';
+                        if ($root->route_name) {
+                            try {
+                                $rootUrl = route($root->route_name);
+                            } catch (\Throwable $e) {
+                                $rootUrl = '#';
                             }
-                        @endphp
-                        @if($hasAccess)
-                            @php
-                                $routeUrl = '#';
-                                if ($child->route_name) {
-                                    try {
-                                        $routeUrl = route($child->route_name);
-                                    } catch (\Throwable $e) {
-                                        $routeUrl = '#';
+                        }
+                    @endphp
+                    <a href="{{ $rootUrl }}" class="nav-link mb-1 {{ ($root->route_name && request()->routeIs($root->route_name . '*')) ? 'active' : '' }}">
+                        <i class="{{ $root->icon ?? 'fa-solid fa-link' }} menu-icon"></i>
+                        <span>{{ $root->title }}</span>
+                    </a>
+                @else
+                    <!-- Collapsible Category Accordion Parent -->
+                    @php
+                        $childRouteNames = $root->children->pluck('route_name')->filter()->toArray();
+                        $isRootActive = false;
+                        foreach($childRouteNames as $rn) {
+                            if (request()->routeIs($rn . '*')) {
+                                $isRootActive = true;
+                                break;
+                            }
+                        }
+                        $collapseId = 'menuNode' . $root->menu_id;
+                    @endphp
+                    <div class="menu-item py-1">
+                        <a class="nav-link w-100 justify-content-between {{ $isRootActive ? '' : 'collapsed' }}" 
+                           data-bs-toggle="collapse" 
+                           href="#{{ $collapseId }}" 
+                           role="button" 
+                           aria-expanded="{{ $isRootActive ? 'true' : 'false' }}" 
+                           aria-controls="{{ $collapseId }}">
+                            <div class="d-flex align-items-center">
+                                <i class="{{ $root->icon ?? 'fa-solid fa-folder' }} menu-icon"></i>
+                                <span>{{ $root->title }}</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-right menu-arrow"></i>
+                        </a>
+
+                        <div class="collapse nav-sub-menu {{ $isRootActive ? 'show' : '' }}" id="{{ $collapseId }}" data-bs-parent="#sidebarMenu">
+                            @foreach($root->children as $child)
+                                @php
+                                    $hasChildAccess = true;
+                                    if ($userRole && $userRole->role_access !== 'all' && $child->resource_key) {
+                                        $hasChildAccess = in_array("view." . $child->resource_key, $userRole->resource_list);
                                     }
-                                }
-                            @endphp
-                            <a href="{{ $routeUrl }}" class="nav-sub-link {{ ($child->route_name && request()->routeIs($child->route_name . '*')) ? 'active' : '' }}">
-                                <i class="fa-solid fa-circle bullet-dot"></i>
-                                <span>{{ $child->title }}</span>
-                            </a>
-                        @endif
-                    @endforeach
-                </div>
-            </div>
+                                @endphp
+                                @if($hasChildAccess)
+                                    @php
+                                        $childUrl = '#';
+                                        if ($child->route_name) {
+                                            try {
+                                                $childUrl = route($child->route_name);
+                                            } catch (\Throwable $e) {
+                                                $childUrl = '#';
+                                            }
+                                        }
+                                    @endphp
+                                    <a href="{{ $childUrl }}" class="nav-sub-link {{ ($child->route_name && request()->routeIs($child->route_name . '*')) ? 'active' : '' }}">
+                                        <i class="fa-solid fa-circle bullet-dot"></i>
+                                        <span>{{ $child->title }}</span>
+                                    </a>
+                                @endif
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+            @endif
         @endforeach
     </div>
 
@@ -93,8 +107,8 @@
             <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle text-body-emphasis" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fa-solid fa-circle-user fs-3 me-2 text-primary"></i>
                 <div class="d-flex flex-column text-start me-auto overflow-hidden">
-                    <strong class="text-truncate fs-7">{{ Auth::user()->first_name ?? Auth::user()->name ?? 'Administrator' }}</strong>
-                    <span class="fs-9 text-muted text-truncate">{{ Auth::user()->email ?? 'admin@example.com' }}</span>
+                    <strong class="text-truncate fs-7">{{ Auth::user()?->first_name ?? Auth::user()?->name ?? 'Administrator' }}</strong>
+                    <span class="fs-9 text-muted text-truncate">{{ Auth::user()?->email ?? 'admin@example.com' }}</span>
                 </div>
             </a>
             <ul class="dropdown-menu dropdown-menu-end shadow border-0">
