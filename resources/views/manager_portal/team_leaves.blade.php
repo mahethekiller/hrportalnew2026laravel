@@ -3,8 +3,8 @@
 @section('content')
 <div class="row mb-4 align-items-center">
     <div class="col-sm-6">
-        <h4 class="mb-0 text-gray-900 fw-bold"><i class="fa-solid fa-calendar-check me-2 text-warning"></i> Team Leave Approvals</h4>
-        <p class="text-muted fs-8 mb-0">Review, approve, or reject time-off requests submitted by your team members.</p>
+        <h4 class="mb-0 text-body-emphasis fw-bold"><i class="fa-solid fa-calendar-check me-2 text-warning"></i> Team Leave Approvals</h4>
+        <p class="text-body-secondary fs-8 mb-0">Review, approve, or reject time-off requests submitted by your team members.</p>
     </div>
 </div>
 
@@ -12,7 +12,7 @@
     <div class="card-body p-0">
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0 fs-8">
-                <thead class="bg-light">
+                <thead class="bg-body-tertiary">
                     <tr>
                         <th class="ps-4">Employee</th>
                         <th>Dates</th>
@@ -24,18 +24,18 @@
                 <tbody>
                     @forelse($leaves as $leave)
                         <tr>
-                            <td class="ps-4 fw-bold text-gray-900">
+                            <td class="ps-4 fw-bold text-body-emphasis">
                                 {{ $leave->employee ? $leave->employee->first_name . ' ' . $leave->employee->last_name : 'Employee #' . $leave->employee_id }}
                             </td>
                             <td>{{ $leave->from_date }} to {{ $leave->to_date }}</td>
                             <td>{{ Str::limit($leave->reason, 40) }}</td>
                             <td>
                                 @if($leave->status == 2)
-                                    <span class="badge bg-soft-success text-success">Approved</span>
+                                    <span class="badge bg-success-subtle text-success">Approved</span>
                                 @elseif($leave->status == 3)
-                                    <span class="badge bg-soft-danger text-danger">Rejected</span>
+                                    <span class="badge bg-danger-subtle text-danger">Rejected</span>
                                 @else
-                                    <span class="badge bg-soft-warning text-warning">Pending Approval</span>
+                                    <span class="badge bg-warning-subtle text-warning">Pending Approval</span>
                                 @endif
                             </td>
                             <td class="text-end pe-4">
@@ -51,13 +51,13 @@
                                         <button type="submit" class="btn btn-outline-danger btn-sm py-1 px-2 fs-9 fw-bold">Reject</button>
                                     </form>
                                 @else
-                                    <span class="text-muted fs-9">Processed</span>
+                                    <span class="text-body-secondary fs-9">Processed</span>
                                 @endif
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="text-center py-4 text-muted">No team leave applications found.</td>
+                            <td colspan="5" class="text-center py-4 text-body-secondary">No team leave applications found.</td>
                         </tr>
                     @endforelse
                 </tbody>

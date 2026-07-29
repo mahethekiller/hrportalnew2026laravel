@@ -291,8 +291,8 @@ h3, .headline-md {
 /* Metronic Modern High-Contrast Tables */
 .table {
     --bs-table-bg: transparent;
-    --bs-table-color: #1E293B;
-    color: #1E293B !important;
+    --bs-table-color: var(--text-main);
+    color: var(--text-main) !important;
     font-size: 0.85rem;
 }
 
@@ -320,6 +320,33 @@ h3, .headline-md {
 
 .table-hover tbody tr:hover {
     background-color: rgba(27, 132, 255, 0.04) !important;
+}
+
+[data-bs-theme="dark"] .table {
+    --bs-table-color: #E2E8F0;
+    --bs-table-bg: transparent;
+    color: #E2E8F0 !important;
+}
+
+[data-bs-theme="dark"] .table th, 
+[data-bs-theme="dark"] .table-light th {
+    color: #F8FAFC !important;
+    background-color: #1E293B !important;
+    border-bottom: 2px solid #334155 !important;
+}
+
+[data-bs-theme="dark"] .table td {
+    border-bottom: 1px solid #334155 !important;
+    color: #CBD5E1 !important;
+}
+
+[data-bs-theme="dark"] .table td .text-muted,
+[data-bs-theme="dark"] .table td .text-body-secondary {
+    color: #94A3B8 !important;
+}
+
+[data-bs-theme="dark"] .table-hover tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.04) !important;
 }
 
 /* Compact Forms & Inputs */

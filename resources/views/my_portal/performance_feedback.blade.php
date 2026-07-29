@@ -3,8 +3,8 @@
 @section('content')
 <div class="row mb-4 align-items-center">
     <div class="col-sm-6">
-        <h4 class="mb-0 text-gray-900 fw-bold"><i class="fa-solid fa-star me-2 text-warning"></i> Performance Self-Rating & Feedback</h4>
-        <p class="text-muted fs-8 mb-0">Evaluate your performance, rate core competencies, and submit feedback.</p>
+        <h4 class="mb-0 text-body-emphasis fw-bold"><i class="fa-solid fa-star me-2 text-warning"></i> Performance Self-Rating & Feedback</h4>
+        <p class="text-body-secondary fs-8 mb-0">Evaluate your performance, rate core competencies, and submit feedback.</p>
     </div>
 </div>
 
@@ -14,8 +14,8 @@
             @csrf
             
             <div class="mb-4 pb-3 border-bottom">
-                <h5 class="fw-bold text-gray-900 mb-1">Annual Employee Self-Evaluation</h5>
-                <p class="text-muted fs-8 mb-0">Rate your performance across key indicators (1 = Needs Improvement, 5 = Exceptional).</p>
+                <h5 class="fw-bold text-body-emphasis mb-1">Annual Employee Self-Evaluation</h5>
+                <p class="text-body-secondary fs-8 mb-0">Rate your performance across key indicators (1 = Needs Improvement, 5 = Exceptional).</p>
             </div>
 
             @php
@@ -32,12 +32,12 @@
                 @php
                     $existing = $myAnswers[$qId] ?? null;
                 @endphp
-                <div class="card border mb-3 p-3 bg-light">
-                    <label class="form-label fs-8 fw-bold text-gray-900">{{ $loop->iteration }}. {{ $qText }}</label>
+                <div class="card border mb-3 p-3 bg-body-tertiary">
+                    <label class="form-label fs-8 fw-bold text-body-emphasis">{{ $loop->iteration }}. {{ $qText }}</label>
                     
                     <div class="row g-2 align-items-center mb-2">
                         <div class="col-sm-4">
-                            <label class="form-label fs-9 text-muted mb-0">Self Rating (1-5)</label>
+                            <label class="form-label fs-9 text-body-secondary mb-0">Self Rating (1-5)</label>
                             <select name="ratings[{{ $qId }}]" class="form-select form-select-sm" required>
                                 <option value="5" {{ ($existing && $existing->rating == 5) ? 'selected' : '' }}>5 - Exceptional</option>
                                 <option value="4" {{ ($existing && $existing->rating == 4) ? 'selected' : '' }}>4 - Exceeds Expectations</option>
