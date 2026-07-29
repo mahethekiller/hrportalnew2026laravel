@@ -11,17 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('xin_employee_contract', function (Blueprint $table) {
-            $table->id('contract_id');
-            $table->foreignId('employee_id');
-            $table->foreignId('contract_type_id');
-            $table->string('from_date');
-            $table->foreignId('designation_id');
-            $table->string('title');
-            $table->string('to_date');
-            $table->text('description');
-            $table->string('created_at')->nullable();
-        });
+        if (!Schema::hasTable('xin_employee_contract')) {
+            Schema::create('xin_employee_contract', function (Blueprint $table) {
+                $table->id('contract_id');
+                $table->foreignId('employee_id');
+                $table->foreignId('contract_type_id');
+                $table->string('from_date');
+                $table->foreignId('designation_id');
+                $table->string('title');
+                $table->string('to_date');
+                $table->text('description');
+                $table->string('created_at')->nullable();
+            });
+        }
     }
 
     /**

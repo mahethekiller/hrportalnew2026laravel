@@ -12,14 +12,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('portal_roles', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedInteger('company_id')->default(1);
-            $table->string('role_name');
-            $table->string('role_access');
-            $table->text('role_resources')->nullable();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('portal_roles')) {
+            Schema::create('portal_roles', function (Blueprint $table) {
+                $table->id();
+                $table->unsignedInteger('company_id')->default(1);
+                $table->string('role_name');
+                $table->string('role_access');
+                $table->text('role_resources')->nullable();
+                $table->timestamps();
+            });
+        }
 
         // Copy existing roles from xin_user_roles
         if (Schema::hasTable('xin_user_roles')) {

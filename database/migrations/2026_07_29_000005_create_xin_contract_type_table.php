@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('xin_contract_type', function (Blueprint $table) {
-            $table->id('contract_type_id');
-            $table->foreignId('company_id');
-            $table->string('name');
-            $table->string('created_at')->nullable();
-        });
+        if (!Schema::hasTable('xin_contract_type')) {
+            Schema::create('xin_contract_type', function (Blueprint $table) {
+                $table->id('contract_type_id');
+                $table->foreignId('company_id');
+                $table->string('name');
+                $table->string('created_at')->nullable();
+            });
+        }
     }
 
     /**
