@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Schema;
 
 class Meeting extends Model
 {
@@ -15,10 +16,19 @@ class Meeting extends Model
 
     public function getTable()
     {
-        if (\Illuminate\Support\Facades\Schema::hasTable('meetings')) {
+        if (Schema::hasTable('meetings')) {
             return 'meetings';
         }
         return parent::getTable();
+    }
+
+    public function getKeyName()
+    {
+        $table = $this->getTable();
+        if (Schema::hasColumn($table, 'id')) {
+            return 'id';
+        }
+        return parent::getKeyName();
     }
 
     protected $fillable = [

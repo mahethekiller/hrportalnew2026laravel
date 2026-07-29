@@ -43,7 +43,8 @@ class EmployeePortalController extends Controller
         $leaves = EmployeeLeave::where('employee_id', $employeeId)->latest()->take(5)->get();
         $payslips = MakePayment::where('employee_id', $employeeId)->latest()->take(3)->get();
         $announcements = Announcement::orderBy('announcement_id', 'desc')->take(3)->get();
-        $meetings = Meeting::where('employee_id', $employeeId)->orderBy('meeting_id', 'desc')->take(3)->get();
+        $meetingKey = (new Meeting)->getKeyName();
+        $meetings = Meeting::where('employee_id', $employeeId)->orderBy($meetingKey, 'desc')->take(3)->get();
 
         return view('my_portal.index', compact('leaves', 'payslips', 'announcements', 'meetings'));
     }
@@ -335,7 +336,8 @@ class EmployeePortalController extends Controller
      */
     public function meetings(): View
     {
-        $meetings = Meeting::where('company_id', $this->getCompanyId())->orderBy('meeting_id', 'desc')->get();
+        $meetingKey = (new Meeting)->getKeyName();
+        $meetings = Meeting::where('company_id', $this->getCompanyId())->orderBy($meetingKey, 'desc')->get();
         return view('my_portal.meetings', compact('meetings'));
     }
 
