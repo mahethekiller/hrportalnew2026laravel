@@ -21,6 +21,15 @@ class FeedbackAnswer extends Model
         return parent::getTable();
     }
 
+    public function getKeyName()
+    {
+        $table = $this->getTable();
+        if (\Illuminate\Support\Facades\Schema::hasColumn($table, 'answer_id')) {
+            return 'answer_id';
+        }
+        return 'id';
+    }
+
     protected $fillable = [
         'form_id',
         'question_id',
