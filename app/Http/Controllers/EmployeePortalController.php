@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Announcement;
 use App\Models\Document;
+use App\Models\EmpTodayAttendance;
+use App\Models\Employee;
 use App\Models\EmployeeLeave;
 use App\Models\EmployeeResignation;
 use App\Models\EmployeeTravel;
@@ -94,7 +96,22 @@ class EmployeePortalController extends Controller
      */
     public function attendance(): View
     {
-        return view('my_portal.attendance');
+        $employee = Employee::where('user_id', auth()->id())
+            ->orWhere('employee_id', $this->getEmployeeId())
+            ->first();
+
+        $cardNo = $employee?->card_no ?? auth()->user()?->card_no;
+
+        $attendanceLogs = collect();
+        if ($cardNo) {
+            $attendanceLogs = EmpTodayAttendance::where('card_no', $cardNo)
+                ->orderBy('id', 'desc')
+                ->paginate(15);
+        } else {
+            $attendanceLogs = EmpTodayAttendance::orderBy('id', 'desc')->paginate(15);
+        }
+
+        return view('my_portal.attendance', compact('attendanceLogs', 'employee'));
     }
 
     /**

@@ -4,23 +4,26 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Schema;
 
 class EmpTodayAttendance extends Model
 {
     use HasFactory;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'emp_today_attendances';
+    protected $table = 'xin_emp_today_attendance';
+    public $timestamps = false;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    public function getTable()
+    {
+        if (Schema::hasTable('xin_emp_today_attendance')) {
+            return 'xin_emp_today_attendance';
+        }
+        if (Schema::hasTable('emp_today_attendances')) {
+            return 'emp_today_attendances';
+        }
+        return parent::getTable();
+    }
+
     protected $fillable = [
         'card_no',
         'punch_date',
