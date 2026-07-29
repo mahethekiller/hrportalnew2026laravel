@@ -27,7 +27,8 @@ class AnnouncementController extends Controller
             $query->where('company_id', $request->company_id);
         }
 
-        $announcements = $query->orderBy('announcement_id', 'desc')->paginate(12);
+        $keyName = (new Announcement)->getKeyName();
+        $announcements = $query->orderBy($keyName, 'desc')->paginate(12);
         $companies = Company::orderBy('name', 'asc')->get();
 
         return view('announcements.index', compact('announcements', 'companies'));
@@ -77,7 +78,8 @@ class AnnouncementController extends Controller
             $imagePath = 'uploads/announcements/' . $fileName;
         }
 
-        Announcement::create([
+        $table = (new Announcement)->getTable();
+        $data = [
             'title' => $request->title,
             'announcement_type' => $request->announcement_type,
             'acceptance_message' => $request->acceptance_message ?? '',
@@ -90,8 +92,12 @@ class AnnouncementController extends Controller
             'description' => $request->description,
             'image' => $imagePath,
             'is_active' => 1,
-            'created_at' => date('d-m-Y H:i:s'),
-        ]);
+        ];
+        if (\Illuminate\Support\Facades\Schema::hasColumn($table, 'created_at')) {
+            $data['created_at'] = date('d-m-Y H:i:s');
+        }
+
+        Announcement::create($data);
 
         return redirect()->route('announcements.index')
             ->with('success', 'Announcement published successfully.');

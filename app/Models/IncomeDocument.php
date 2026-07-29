@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Schema;
 
 class IncomeDocument extends Model
 {
@@ -15,10 +16,19 @@ class IncomeDocument extends Model
 
     public function getTable()
     {
-        if (\Illuminate\Support\Facades\Schema::hasTable('income_documents')) {
+        if (Schema::hasTable('income_documents')) {
             return 'income_documents';
         }
         return parent::getTable();
+    }
+
+    public function getKeyName()
+    {
+        $table = $this->getTable();
+        if (Schema::hasColumn($table, 'id')) {
+            return 'id';
+        }
+        return parent::getKeyName();
     }
 
     protected $fillable = [

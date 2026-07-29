@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Schema;
 
 class EmployeeTravel extends Model
 {
@@ -15,10 +16,19 @@ class EmployeeTravel extends Model
 
     public function getTable()
     {
-        if (\Illuminate\Support\Facades\Schema::hasTable('employee_travels')) {
+        if (Schema::hasTable('employee_travels')) {
             return 'employee_travels';
         }
         return parent::getTable();
+    }
+
+    public function getKeyName()
+    {
+        $table = $this->getTable();
+        if (Schema::hasColumn($table, 'id')) {
+            return 'id';
+        }
+        return parent::getKeyName();
     }
 
     protected $fillable = [

@@ -8,6 +8,7 @@ use App\Models\Company;
 use App\Models\Department;
 use App\Models\UserRole;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
 class AnnouncementManagementTest extends TestCase
@@ -97,7 +98,7 @@ class AnnouncementManagementTest extends TestCase
         ]);
 
         $response->assertRedirect(route('announcements.index'));
-        $this->assertDatabaseHas('xin_announcements', [
+        $this->assertDatabaseHas((new Announcement)->getTable(), [
             'title' => 'Annual Strategy Meeting 2026',
             'announcement_type' => 'Event',
         ]);
@@ -105,7 +106,8 @@ class AnnouncementManagementTest extends TestCase
 
     public function test_announcement_detail_can_be_viewed(): void
     {
-        $announcement = Announcement::create([
+        $table = (new Announcement)->getTable();
+        $data = [
             'title' => 'Office Policy Update',
             'announcement_type' => 'Policy',
             'acceptance_message' => '',
@@ -116,11 +118,16 @@ class AnnouncementManagementTest extends TestCase
             'published_by' => 'HR Admin',
             'summary' => 'Updated remote work guidelines.',
             'description' => 'Full details regarding new remote work policies.',
+            'image' => '',
             'is_active' => 1,
-            'created_at' => date('d-m-Y H:i:s'),
-        ]);
+        ];
+        if (Schema::hasColumn($table, 'created_at')) {
+            $data['created_at'] = date('d-m-Y H:i:s');
+        }
 
-        $response = $this->actingAs($this->employee)->get(route('announcements.show', $announcement->announcement_id));
+        $announcement = Announcement::create($data);
+
+        $response = $this->actingAs($this->employee)->get(route('announcements.show', $announcement->getKey()));
         $response->assertStatus(200);
         $response->assertSee('Office Policy Update');
     }

@@ -42,7 +42,8 @@ class EmployeePortalController extends Controller
 
         $leaves = EmployeeLeave::where('employee_id', $employeeId)->latest()->take(5)->get();
         $payslips = MakePayment::where('employee_id', $employeeId)->latest()->take(3)->get();
-        $announcements = Announcement::orderBy('announcement_id', 'desc')->take(3)->get();
+        $announcementKey = (new Announcement)->getKeyName();
+        $announcements = Announcement::orderBy($announcementKey, 'desc')->take(3)->get();
         $meetingKey = (new Meeting)->getKeyName();
         $meetings = Meeting::where('employee_id', $employeeId)->orderBy($meetingKey, 'desc')->take(3)->get();
 
@@ -284,7 +285,8 @@ class EmployeePortalController extends Controller
     public function referrals(): View
     {
         $employeeId = $this->getEmployeeId();
-        $referrals = Referral::where('employee_id', $employeeId)->orderBy('referral_id', 'desc')->get();
+        $refKey = (new Referral)->getKeyName();
+        $referrals = Referral::where('employee_id', $employeeId)->orderBy($refKey, 'desc')->get();
         $openJobs = JobPost::latest()->get();
 
         return view('my_portal.referrals', compact('referrals', 'openJobs'));
@@ -374,7 +376,8 @@ class EmployeePortalController extends Controller
      */
     public function conveyance(): View
     {
-        $claims = EmployeeTravel::where('employee_id', $this->getEmployeeId())->orderBy('travel_id', 'desc')->get();
+        $travelKey = (new EmployeeTravel)->getKeyName();
+        $claims = EmployeeTravel::where('employee_id', $this->getEmployeeId())->orderBy($travelKey, 'desc')->get();
         return view('my_portal.conveyance', compact('claims'));
     }
 
@@ -420,7 +423,21 @@ class EmployeePortalController extends Controller
      */
     public function taxDocuments(): View
     {
-        $docs = IncomeDocument::where('employee_id', $this->getEmployeeId())->orderBy('document_id', 'desc')->get();
+        $doc = new IncomeDocument;
+        $table = $doc->getTable();
+        $keyName = $doc->getKeyName();
+
+        $query = IncomeDocument::query();
+
+        if (Schema::hasColumn($table, 'employee_id')) {
+            $query->where('employee_id', $this->getEmployeeId());
+        } elseif (Schema::hasColumn($table, 'added_by')) {
+            $query->where('added_by', $this->getEmployeeId());
+        } elseif (Schema::hasColumn($table, 'user_id')) {
+            $query->where('user_id', auth()->id());
+        }
+
+        $docs = $query->orderBy($keyName, 'desc')->get();
         return view('my_portal.tax_documents', compact('docs'));
     }
 

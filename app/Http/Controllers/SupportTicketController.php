@@ -37,7 +37,8 @@ class SupportTicketController extends Controller
             $query->where('ticket_priority', $request->priority);
         }
 
-        $tickets = $query->orderBy('ticket_id', 'desc')->paginate(10);
+        $keyName = (new \App\Models\SupportTicket)->getKeyName();
+        $tickets = $query->orderBy($keyName, 'desc')->paginate(10);
 
         return view('support_tickets.index', compact('tickets'));
     }

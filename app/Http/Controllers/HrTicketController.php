@@ -32,7 +32,8 @@ class HrTicketController extends Controller
             $query->where('ticket_priority', $request->priority);
         }
 
-        $tickets = $query->orderBy('ticket_id', 'desc')->paginate(15);
+        $keyName = (new \App\Models\SupportTicket)->getKeyName();
+        $tickets = $query->orderBy($keyName, 'desc')->paginate(15);
 
         return view('hr_tickets.index', compact('tickets'));
     }
