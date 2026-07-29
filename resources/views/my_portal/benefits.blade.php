@@ -8,35 +8,6 @@
     </div>
 </div>
 
-<div class="row g-4 mb-4">
-    <div class="col-md-4">
-        <div class="card border-0 shadow-sm rounded-3 p-4 bg-white h-100">
-            <div class="text-success mb-3"><i class="fa-solid fa-heart-pulse fa-2x"></i></div>
-            <h5 class="fw-bold text-gray-900">Health Insurance</h5>
-            <p class="text-muted fs-8 mb-3">Group medical coverage up to $50,000 for employees and dependents.</p>
-            <span class="badge bg-light-success text-success fs-9 w-fit">Enrolled</span>
-        </div>
-    </div>
-
-    <div class="col-md-4">
-        <div class="card border-0 shadow-sm rounded-3 p-4 bg-white h-100">
-            <div class="text-primary mb-3"><i class="fa-solid fa-piggy-bank fa-2x"></i></div>
-            <h5 class="fw-bold text-gray-900">Provident Fund (PF)</h5>
-            <p class="text-muted fs-8 mb-3">12% employer matching contribution to your retirement fund account.</p>
-            <span class="badge bg-light-primary text-primary fs-9 w-fit">Active Contribution</span>
-        </div>
-    </div>
-
-    <div class="col-md-4">
-        <div class="card border-0 shadow-sm rounded-3 p-4 bg-white h-100">
-            <div class="text-warning mb-3"><i class="fa-solid fa-dumbbell fa-2x"></i></div>
-            <h5 class="fw-bold text-gray-900">Wellness Allowance</h5>
-            <p class="text-muted fs-8 mb-3">Monthly gym membership & fitness reimbursement allowance.</p>
-            <span class="badge bg-light-warning text-warning fs-9 w-fit">Eligible</span>
-        </div>
-    </div>
-</div>
-
 <div class="card border-0 shadow-sm rounded-3">
     <div class="card-header border-0 pt-3 bg-white">
         <h5 class="fw-bold text-gray-900 fs-6 mb-0"><i class="fa-solid fa-file-pdf me-2 text-danger"></i> Corporate Policy Handbooks & Guides</h5>
