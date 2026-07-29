@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('advance_salaries', function (Blueprint $table) {
+        if (!Schema::hasTable('advance_salaries')) {
+            Schema::create('advance_salaries', function (Blueprint $table) {
             $table->id();
             $table->foreignId('company_id');
             $table->foreignId('employee_id');
@@ -26,6 +27,7 @@ return new class extends Migration
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
         });
+        }
     }
 
     /**

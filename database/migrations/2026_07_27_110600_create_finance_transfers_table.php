@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('finance_transfers', function (Blueprint $table) {
+        if (!Schema::hasTable('finance_transfers')) {
+            Schema::create('finance_transfers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('from_account_id');
             $table->foreignId('to_account_id');
@@ -21,6 +22,7 @@ return new class extends Migration
             $table->string('transfer_reference');
             $table->text('description');
         });
+        }
     }
 
     /**

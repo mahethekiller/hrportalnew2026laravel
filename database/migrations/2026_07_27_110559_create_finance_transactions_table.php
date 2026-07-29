@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('finance_transactions', function (Blueprint $table) {
+        if (!Schema::hasTable('finance_transactions')) {
+            Schema::create('finance_transactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('account_type_id');
             $table->foreignId('deposit_id');
@@ -24,6 +25,7 @@ return new class extends Migration
             $table->string('transaction_date');
             $table->foreign('expense_id')->references('id')->on('expenses')->onDelete('cascade');
         });
+        }
     }
 
     /**

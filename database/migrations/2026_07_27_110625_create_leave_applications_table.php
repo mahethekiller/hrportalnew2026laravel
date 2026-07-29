@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('leave_applications', function (Blueprint $table) {
+        if (!Schema::hasTable('leave_applications')) {
+            Schema::create('leave_applications', function (Blueprint $table) {
             $table->id();
             $table->foreignId('company_id');
             $table->foreignId('employee_id');
@@ -31,6 +32,7 @@ return new class extends Migration
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
             $table->foreign('leave_type_id')->references('id')->on('leave_types')->onDelete('cascade');
         });
+        }
     }
 
     /**

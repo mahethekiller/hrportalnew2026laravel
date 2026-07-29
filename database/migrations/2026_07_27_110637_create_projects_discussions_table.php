@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('projects_discussions', function (Blueprint $table) {
+        if (!Schema::hasTable('projects_discussions')) {
+            Schema::create('projects_discussions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('project_id');
             $table->foreignId('user_id');
@@ -22,6 +23,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('user_id')->on('employees')->onDelete('cascade');
             $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
         });
+        }
     }
 
     /**

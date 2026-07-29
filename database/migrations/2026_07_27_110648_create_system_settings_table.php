@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('system_settings', function (Blueprint $table) {
+        if (!Schema::hasTable('system_settings')) {
+            Schema::create('system_settings', function (Blueprint $table) {
             $table->id();
             $table->text('application_name');
             $table->text('default_currency');
@@ -103,6 +104,7 @@ return new class extends Migration
             $table->text('income_dec_file_ixcheck');
             $table->text('income_dec_file_xtra');
         });
+        }
     }
 
     /**

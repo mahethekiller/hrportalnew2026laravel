@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('hr_tickets', function (Blueprint $table) {
+        if (!Schema::hasTable('hr_tickets')) {
+            Schema::create('hr_tickets', function (Blueprint $table) {
             $table->id();
             $table->string('ticket_code');
             $table->string('ticket_priority');
@@ -28,6 +29,7 @@ return new class extends Migration
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
         });
+        }
     }
 
     /**

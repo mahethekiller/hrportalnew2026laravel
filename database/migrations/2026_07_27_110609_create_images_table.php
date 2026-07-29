@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('images', function (Blueprint $table) {
+        if (!Schema::hasTable('images')) {
+            Schema::create('images', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->foreignId('album_id');
@@ -19,6 +20,7 @@ return new class extends Migration
             $table->integer('isActive')->default(1);
             $table->foreign('album_id')->references('id')->on('albums')->onDelete('cascade');
         });
+        }
     }
 
     /**

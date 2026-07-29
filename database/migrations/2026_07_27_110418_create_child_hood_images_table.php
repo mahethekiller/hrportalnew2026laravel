@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('child_hood_images', function (Blueprint $table) {
+        if (!Schema::hasTable('child_hood_images')) {
+            Schema::create('child_hood_images', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->string('filename');
@@ -20,6 +21,7 @@ return new class extends Migration
             $table->integer('show_status')->default(1);
             $table->foreign('user_id')->references('user_id')->on('employees')->onDelete('cascade');
         });
+        }
     }
 
     /**

@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('internal_job_posts', function (Blueprint $table) {
+        if (!Schema::hasTable('internal_job_posts')) {
+            Schema::create('internal_job_posts', function (Blueprint $table) {
             $table->id();
             $table->string('post_name');
             $table->integer('vacancies');
@@ -21,6 +22,7 @@ return new class extends Migration
             $table->integer('show_status')->default(1);
             $table->integer('added_by');
         });
+        }
     }
 
     /**

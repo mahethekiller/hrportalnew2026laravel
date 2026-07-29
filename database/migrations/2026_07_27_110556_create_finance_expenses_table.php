@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('finance_expenses', function (Blueprint $table) {
+        if (!Schema::hasTable('finance_expenses')) {
+            Schema::create('finance_expenses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('expense_id');
             $table->foreignId('account_type_id');
@@ -25,6 +26,7 @@ return new class extends Migration
             $table->text('description');
             $table->foreign('expense_id')->references('id')->on('expenses')->onDelete('cascade');
         });
+        }
     }
 
     /**

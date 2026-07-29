@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payroll_custom_fields', function (Blueprint $table) {
+        if (!Schema::hasTable('payroll_custom_fields')) {
+            Schema::create('payroll_custom_fields', function (Blueprint $table) {
             $table->id();
             $table->string('allow_custom_1');
             $table->integer('is_active_allow_1');
@@ -34,6 +35,7 @@ return new class extends Migration
             $table->string('deduct_custom_5');
             $table->integer('is_active_deduct_5');
         });
+        }
     }
 
     /**

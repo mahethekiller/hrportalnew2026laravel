@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('finance_deposits', function (Blueprint $table) {
+        if (!Schema::hasTable('finance_deposits')) {
+            Schema::create('finance_deposits', function (Blueprint $table) {
             $table->id();
             $table->foreignId('account_type_id');
             $table->string('amount');
@@ -23,6 +24,7 @@ return new class extends Migration
             $table->string('deposit_file');
             $table->text('description');
         });
+        }
     }
 
     /**

@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('xin_tickets_attachment', function (Blueprint $table) {
+        if (!Schema::hasTable('xin_tickets_attachment')) {
+            Schema::create('xin_tickets_attachment', function (Blueprint $table) {
             $table->id('ticket_attachment_id');
             $table->foreignId('ticket_id');
             $table->integer('upload_by');
@@ -20,6 +21,7 @@ return new class extends Migration
             $table->text('attachment_file');
             $table->string('created_at');
         });
+        }
     }
 
     /**

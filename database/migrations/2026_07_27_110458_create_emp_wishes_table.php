@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('emp_wishes', function (Blueprint $table) {
+        if (!Schema::hasTable('emp_wishes')) {
+            Schema::create('emp_wishes', function (Blueprint $table) {
             $table->id();
             $table->integer('recieving_emp');
             $table->integer('wished_by');
@@ -19,6 +20,7 @@ return new class extends Migration
             $table->date('date');
             $table->string('wish_type');
         });
+        }
     }
 
     /**

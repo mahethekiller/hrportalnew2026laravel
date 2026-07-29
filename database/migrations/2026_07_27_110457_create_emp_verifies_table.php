@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('emp_verifies', function (Blueprint $table) {
+        if (!Schema::hasTable('emp_verifies')) {
+            Schema::create('emp_verifies', function (Blueprint $table) {
             $table->id();
             $table->integer('userid');
             $table->string('emp_code');
@@ -53,6 +54,7 @@ return new class extends Migration
             $table->string('added_by');
             $table->integer('show_status')->default(1);
         });
+        }
     }
 
     /**

@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('holidays', function (Blueprint $table) {
+        if (!Schema::hasTable('holidays')) {
+            Schema::create('holidays', function (Blueprint $table) {
             $table->id();
             $table->foreignId('company_id');
             $table->string('event_name');
@@ -21,6 +22,7 @@ return new class extends Migration
             $table->boolean('is_publish');
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
+        }
     }
 
     /**

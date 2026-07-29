@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('emp_certificate_claims', function (Blueprint $table) {
+        if (!Schema::hasTable('emp_certificate_claims')) {
+            Schema::create('emp_certificate_claims', function (Blueprint $table) {
             $table->id();
             $table->integer('userid');
             $table->string('certificate_name');
@@ -29,6 +30,7 @@ return new class extends Migration
             $table->integer('updated_by');
             $table->integer('show_status')->default(1);
         });
+        }
     }
 
     /**

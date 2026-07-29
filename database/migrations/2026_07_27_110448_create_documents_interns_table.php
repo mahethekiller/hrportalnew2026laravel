@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('documents_interns', function (Blueprint $table) {
+        if (!Schema::hasTable('documents_interns')) {
+            Schema::create('documents_interns', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->string('file_desc');
@@ -21,6 +22,7 @@ return new class extends Migration
             $table->integer('active')->default(1);
             $table->foreign('user_id')->references('user_id')->on('employees')->onDelete('cascade');
         });
+        }
     }
 
     /**

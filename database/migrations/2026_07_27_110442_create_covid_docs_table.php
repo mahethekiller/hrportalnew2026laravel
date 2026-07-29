@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('covid_docs', function (Blueprint $table) {
+        if (!Schema::hasTable('covid_docs')) {
+            Schema::create('covid_docs', function (Blueprint $table) {
             $table->id();
             $table->integer('userid');
             $table->string('infection_status');
@@ -30,6 +31,7 @@ return new class extends Migration
             $table->string('dose2_doc');
             $table->string('updated_date')->nullable();
         });
+        }
     }
 
     /**

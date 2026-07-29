@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('finance_payers', function (Blueprint $table) {
+        if (!Schema::hasTable('finance_payers')) {
+            Schema::create('finance_payers', function (Blueprint $table) {
             $table->id();
             $table->string('payer_name');
             $table->string('contact_number');
         });
+        }
     }
 
     /**

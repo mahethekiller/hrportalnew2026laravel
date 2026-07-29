@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('password_reset_reqs', function (Blueprint $table) {
+        if (!Schema::hasTable('password_reset_reqs')) {
+            Schema::create('password_reset_reqs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employee_id');
             $table->string('last_pass');
             $table->string('req_date');
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
         });
+        }
     }
 
     /**

@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('recruitment_subpages', function (Blueprint $table) {
+        if (!Schema::hasTable('recruitment_subpages')) {
+            Schema::create('recruitment_subpages', function (Blueprint $table) {
             $table->id();
             $table->foreignId('page_id');
             $table->string('sub_page_title');
             $table->text('sub_page_details');
             $table->integer('status');
         });
+        }
     }
 
     /**

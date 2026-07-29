@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('assets_categories', function (Blueprint $table) {
+        if (!Schema::hasTable('assets_categories')) {
+            Schema::create('assets_categories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('company_id');
             $table->string('category_name');
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
+        }
     }
 
     /**

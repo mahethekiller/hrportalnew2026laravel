@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('languages', function (Blueprint $table) {
+        if (!Schema::hasTable('languages')) {
+            Schema::create('languages', function (Blueprint $table) {
             $table->id();
             $table->string('language_name');
             $table->string('language_code');
             $table->string('language_flag');
             $table->integer('is_active');
         });
+        }
     }
 
     /**

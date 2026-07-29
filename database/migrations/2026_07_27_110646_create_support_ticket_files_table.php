@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('xin_support_ticket_files', function (Blueprint $table) {
+        if (!Schema::hasTable('xin_support_ticket_files')) {
+            Schema::create('xin_support_ticket_files', function (Blueprint $table) {
             $table->id('ticket_file_id');
             $table->foreignId('ticket_id');
             $table->foreignId('employee_id');
@@ -20,6 +21,7 @@ return new class extends Migration
             $table->string('created_at');
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
         });
+        }
     }
 
     /**

@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pip_employees', function (Blueprint $table) {
+        if (!Schema::hasTable('pip_employees')) {
+            Schema::create('pip_employees', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employee_id');
             $table->integer('pip_status')->default(0);
             $table->integer('added_by');
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
         });
+        }
     }
 
     /**

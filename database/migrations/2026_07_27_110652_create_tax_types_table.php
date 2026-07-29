@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tax_types', function (Blueprint $table) {
+        if (!Schema::hasTable('tax_types')) {
+            Schema::create('tax_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('rate');
             $table->string('type');
             $table->text('description');
         });
+        }
     }
 
     /**

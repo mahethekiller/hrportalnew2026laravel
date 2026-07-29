@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('xin_employee_contacts', function (Blueprint $table) {
+        if (!Schema::hasTable('xin_employee_contacts')) {
+            Schema::create('xin_employee_contacts', function (Blueprint $table) {
             $table->id('contact_id');
             $table->foreignId('employee_id');
             $table->string('relation');
@@ -35,6 +36,7 @@ return new class extends Migration
             $table->string('qualification')->nullable();
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
         });
+        }
     }
 
     /**

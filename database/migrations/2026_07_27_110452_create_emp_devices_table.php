@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('emp_devices', function (Blueprint $table) {
+        if (!Schema::hasTable('emp_devices')) {
+            Schema::create('emp_devices', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
             $table->string('device');
@@ -26,6 +27,7 @@ return new class extends Migration
             $table->string('last_updated_date')->nullable();
             $table->foreign('user_id')->references('user_id')->on('employees')->onDelete('cascade');
         });
+        }
     }
 
     /**

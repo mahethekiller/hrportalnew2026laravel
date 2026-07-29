@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('warning_types', function (Blueprint $table) {
+        if (!Schema::hasTable('warning_types')) {
+            Schema::create('warning_types', function (Blueprint $table) {
             $table->id();
             $table->foreignId('company_id');
             $table->string('type');
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
+        }
     }
 
     /**

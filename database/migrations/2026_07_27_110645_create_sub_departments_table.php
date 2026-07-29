@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sub_departments', function (Blueprint $table) {
+        if (!Schema::hasTable('sub_departments')) {
+            Schema::create('sub_departments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('company_id');
             $table->string('department_name');
@@ -19,6 +20,7 @@ return new class extends Migration
             $table->integer('added_by');
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
+        }
     }
 
     /**

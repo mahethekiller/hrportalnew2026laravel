@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('conference_room_bookings', function (Blueprint $table) {
+        if (!Schema::hasTable('conference_room_bookings')) {
+            Schema::create('conference_room_bookings', function (Blueprint $table) {
             $table->id();
             $table->string('room_name');
             $table->string('start_time');
@@ -21,6 +22,7 @@ return new class extends Migration
             $table->text('purpose')->nullable();
             $table->integer('show_status')->default(1);
         });
+        }
     }
 
     /**

@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payment_methods', function (Blueprint $table) {
+        if (!Schema::hasTable('payment_methods')) {
+            Schema::create('payment_methods', function (Blueprint $table) {
             $table->id();
             $table->foreignId('company_id');
             $table->string('method_name');
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
+        }
     }
 
     /**

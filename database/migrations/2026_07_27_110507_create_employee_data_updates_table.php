@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('employee_data_updates', function (Blueprint $table) {
+        if (!Schema::hasTable('employee_data_updates')) {
+            Schema::create('employee_data_updates', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
             $table->text('first_name');
@@ -129,6 +130,7 @@ return new class extends Migration
             $table->integer('emp_updated_dets')->default(0);
             $table->foreign('user_id')->references('user_id')->on('employees')->onDelete('cascade');
         });
+        }
     }
 
     /**

@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('database_backups', function (Blueprint $table) {
+        if (!Schema::hasTable('database_backups')) {
+            Schema::create('database_backups', function (Blueprint $table) {
             $table->id();
             $table->string('backup_file');
         });
+        }
     }
 
     /**

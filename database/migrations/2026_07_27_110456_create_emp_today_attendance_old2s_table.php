@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('emp_today_attendance_old2s', function (Blueprint $table) {
+        if (!Schema::hasTable('emp_today_attendance_old2s')) {
+            Schema::create('emp_today_attendance_old2s', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('card_no');
             $table->date('punch_date');
@@ -22,6 +23,7 @@ return new class extends Migration
             $table->string('check_out_time');
             $table->integer('show_status')->default(1);
         });
+        }
     }
 
     /**

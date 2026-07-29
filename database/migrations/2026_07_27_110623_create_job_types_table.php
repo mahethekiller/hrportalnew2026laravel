@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('job_types', function (Blueprint $table) {
+        if (!Schema::hasTable('job_types')) {
+            Schema::create('job_types', function (Blueprint $table) {
             $table->id();
             $table->foreignId('company_id');
             $table->string('type');
             $table->string('type_url');
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
+        }
     }
 
     /**

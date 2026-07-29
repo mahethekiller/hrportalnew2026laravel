@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('projects_attachments', function (Blueprint $table) {
+        if (!Schema::hasTable('projects_attachments')) {
+            Schema::create('projects_attachments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('project_id');
             $table->integer('upload_by');
@@ -20,6 +21,7 @@ return new class extends Migration
             $table->text('attachment_file');
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
         });
+        }
     }
 
     /**

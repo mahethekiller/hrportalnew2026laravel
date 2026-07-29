@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('clockings', function (Blueprint $table) {
+        if (!Schema::hasTable('clockings')) {
+            Schema::create('clockings', function (Blueprint $table) {
             $table->id();
             $table->integer('userid');
             $table->string('clock_in');
@@ -19,6 +20,7 @@ return new class extends Migration
             $table->text('description');
             $table->integer('show_status')->default(1);
         });
+        }
     }
 
     /**

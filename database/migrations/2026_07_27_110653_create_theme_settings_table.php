@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('theme_settings', function (Blueprint $table) {
+        if (!Schema::hasTable('theme_settings')) {
+            Schema::create('theme_settings', function (Blueprint $table) {
             $table->id();
             $table->string('fixed_layout');
             $table->string('fixed_footer');
@@ -37,6 +38,7 @@ return new class extends Migration
             $table->string('org_chart_zoom');
             $table->string('org_chart_pan');
         });
+        }
     }
 
     /**

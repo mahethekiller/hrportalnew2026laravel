@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('albums', function (Blueprint $table) {
+        if (!Schema::hasTable('albums')) {
+            Schema::create('albums', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('description');
@@ -19,6 +20,7 @@ return new class extends Migration
             $table->string('google_drive_link')->nullable();
             $table->integer('added_by');
         });
+        }
     }
 
     /**

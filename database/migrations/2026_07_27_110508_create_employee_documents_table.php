@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('xin_employee_documents', function (Blueprint $table) {
+        if (!Schema::hasTable('xin_employee_documents')) {
+            Schema::create('xin_employee_documents', function (Blueprint $table) {
             $table->id('document_id');
             $table->foreignId('employee_id');
             $table->foreignId('document_type_id');
@@ -25,6 +26,7 @@ return new class extends Migration
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
             $table->foreign('document_type_id')->references('id')->on('document_types')->onDelete('cascade');
         });
+        }
     }
 
     /**

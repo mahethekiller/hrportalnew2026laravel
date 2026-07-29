@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('goal_tracking_types', function (Blueprint $table) {
+        if (!Schema::hasTable('goal_tracking_types')) {
+            Schema::create('goal_tracking_types', function (Blueprint $table) {
             $table->id();
             $table->foreignId('company_id');
             $table->string('type_name');
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
+        }
     }
 
     /**

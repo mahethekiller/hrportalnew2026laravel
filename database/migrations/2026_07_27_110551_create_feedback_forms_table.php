@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('feedback_forms', function (Blueprint $table) {
+        if (!Schema::hasTable('feedback_forms')) {
+            Schema::create('feedback_forms', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->text('description');
@@ -19,6 +20,7 @@ return new class extends Migration
             $table->string('added_by');
             $table->string('show_until');
         });
+        }
     }
 
     /**

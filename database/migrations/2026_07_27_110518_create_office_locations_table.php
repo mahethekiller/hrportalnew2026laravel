@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('xin_office_location', function (Blueprint $table) {
+        if (!Schema::hasTable('xin_office_location')) {
+            Schema::create('xin_office_location', function (Blueprint $table) {
             $table->id('location_id');
             $table->foreignId('company_id');
             $table->integer('location_head');
@@ -30,6 +31,7 @@ return new class extends Migration
             $table->boolean('status')->default(1);
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
+        }
     }
 
     /**

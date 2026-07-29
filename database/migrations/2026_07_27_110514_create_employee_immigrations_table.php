@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('employee_immigrations', function (Blueprint $table) {
+        if (!Schema::hasTable('employee_immigrations')) {
+            Schema::create('employee_immigrations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employee_id');
             $table->foreignId('document_type_id');
@@ -26,6 +27,7 @@ return new class extends Migration
             $table->foreign('document_type_id')->references('id')->on('document_types')->onDelete('cascade');
             $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
         });
+        }
     }
 
     /**

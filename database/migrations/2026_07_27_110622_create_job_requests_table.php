@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('job_requests', function (Blueprint $table) {
+        if (!Schema::hasTable('job_requests')) {
+            Schema::create('job_requests', function (Blueprint $table) {
             $table->id();
             $table->string('post_name');
             $table->integer('vacancies');
@@ -49,6 +50,7 @@ return new class extends Migration
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
         });
+        }
     }
 
     /**

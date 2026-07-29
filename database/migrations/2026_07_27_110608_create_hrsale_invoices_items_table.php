@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('hrsale_invoices_items', function (Blueprint $table) {
+        if (!Schema::hasTable('hrsale_invoices_items')) {
+            Schema::create('hrsale_invoices_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('invoice_id');
             $table->foreignId('project_id');
@@ -29,6 +30,7 @@ return new class extends Migration
             $table->string('grand_total');
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
         });
+        }
     }
 
     /**

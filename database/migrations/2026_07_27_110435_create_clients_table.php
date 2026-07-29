@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('clients', function (Blueprint $table) {
+        if (!Schema::hasTable('clients')) {
+            Schema::create('clients', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('email');
@@ -34,6 +35,7 @@ return new class extends Migration
             $table->string('last_login_ip');
             $table->integer('is_logged_in');
         });
+        }
     }
 
     /**

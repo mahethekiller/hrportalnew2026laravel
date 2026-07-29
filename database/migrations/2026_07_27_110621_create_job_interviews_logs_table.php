@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('job_interviews_logs', function (Blueprint $table) {
+        if (!Schema::hasTable('job_interviews_logs')) {
+            Schema::create('job_interviews_logs', function (Blueprint $table) {
             $table->foreignId('job_interview_id');
             $table->id();
             $table->foreignId('job_id');
@@ -41,6 +42,7 @@ return new class extends Migration
             $table->foreign('salary_template_id')->references('id')->on('salary_templates')->onDelete('cascade');
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
         });
+        }
     }
 
     /**

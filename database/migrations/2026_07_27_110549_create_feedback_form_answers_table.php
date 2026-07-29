@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('feedback_form_answers', function (Blueprint $table) {
+        if (!Schema::hasTable('feedback_form_answers')) {
+            Schema::create('feedback_form_answers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
             $table->foreignId('form_id');
@@ -22,6 +23,7 @@ return new class extends Migration
             $table->integer('show_status')->default(1);
             $table->foreign('user_id')->references('user_id')->on('employees')->onDelete('cascade');
         });
+        }
     }
 
     /**

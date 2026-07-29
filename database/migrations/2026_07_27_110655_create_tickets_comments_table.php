@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('xin_tickets_comments', function (Blueprint $table) {
+        if (!Schema::hasTable('xin_tickets_comments')) {
+            Schema::create('xin_tickets_comments', function (Blueprint $table) {
             $table->id('comment_id');
             $table->foreignId('ticket_id');
             $table->foreignId('user_id');
@@ -19,6 +20,7 @@ return new class extends Migration
             $table->string('created_at');
             $table->foreign('user_id')->references('user_id')->on('employees')->onDelete('cascade');
         });
+        }
     }
 
     /**

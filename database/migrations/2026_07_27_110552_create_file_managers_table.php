@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('file_managers', function (Blueprint $table) {
+        if (!Schema::hasTable('file_managers')) {
+            Schema::create('file_managers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
             $table->foreignId('department_id');
@@ -21,6 +22,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('user_id')->on('employees')->onDelete('cascade');
             $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
         });
+        }
     }
 
     /**

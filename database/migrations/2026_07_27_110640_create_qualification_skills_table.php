@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('qualification_skills', function (Blueprint $table) {
+        if (!Schema::hasTable('qualification_skills')) {
+            Schema::create('qualification_skills', function (Blueprint $table) {
             $table->id();
             $table->foreignId('company_id');
             $table->string('name');
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
+        }
     }
 
     /**

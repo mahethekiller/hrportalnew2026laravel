@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('file_manager_settings', function (Blueprint $table) {
+        if (!Schema::hasTable('file_manager_settings')) {
+            Schema::create('file_manager_settings', function (Blueprint $table) {
             $table->id();
             $table->text('allowed_extensions');
             $table->string('maximum_file_size');
             $table->string('is_enable_all_files');
         });
+        }
     }
 
     /**

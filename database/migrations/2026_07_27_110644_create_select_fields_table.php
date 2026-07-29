@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('select_fields', function (Blueprint $table) {
+        if (!Schema::hasTable('select_fields')) {
+            Schema::create('select_fields', function (Blueprint $table) {
             $table->id();
             $table->string('select_name');
             $table->string('title');
             $table->string('value');
             $table->integer('show_status')->default(1);
         });
+        }
     }
 
     /**

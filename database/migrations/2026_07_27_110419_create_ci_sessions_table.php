@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ci_sessions', function (Blueprint $table) {
+        if (!Schema::hasTable('ci_sessions')) {
+            Schema::create('ci_sessions', function (Blueprint $table) {
             $table->bigInteger('id');
             $table->string('ip_address');
             $table->integer('timestamp')->default(0);
             $table->string('data');
         });
+        }
     }
 
     /**

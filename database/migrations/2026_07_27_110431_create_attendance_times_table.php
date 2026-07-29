@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('attendance_times', function (Blueprint $table) {
+        if (!Schema::hasTable('attendance_times')) {
+            Schema::create('attendance_times', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employee_id');
             $table->string('attendance_date');
@@ -28,6 +29,7 @@ return new class extends Migration
             $table->string('attendance_status');
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
         });
+        }
     }
 
     /**

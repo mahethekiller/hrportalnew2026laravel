@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('company_infos', function (Blueprint $table) {
+        if (!Schema::hasTable('company_infos')) {
+            Schema::create('company_infos', function (Blueprint $table) {
             $table->id();
             $table->string('logo');
             $table->string('logo_second');
@@ -32,6 +33,7 @@ return new class extends Migration
             $table->string('zipcode');
             $table->integer('country');
         });
+        }
     }
 
     /**

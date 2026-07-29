@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('finance_bankcashes', function (Blueprint $table) {
+        if (!Schema::hasTable('finance_bankcashes')) {
+            Schema::create('finance_bankcashes', function (Blueprint $table) {
             $table->id();
             $table->string('account_name');
             $table->string('account_balance');
@@ -19,6 +20,7 @@ return new class extends Migration
             $table->string('branch_code');
             $table->text('bank_branch');
         });
+        }
     }
 
     /**

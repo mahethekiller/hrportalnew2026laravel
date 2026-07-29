@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('goal_trackings', function (Blueprint $table) {
+        if (!Schema::hasTable('goal_trackings')) {
+            Schema::create('goal_trackings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('company_id');
             $table->foreignId('tracking_type_id');
@@ -24,6 +25,7 @@ return new class extends Migration
             $table->integer('goal_status')->default(0);
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
+        }
     }
 
     /**

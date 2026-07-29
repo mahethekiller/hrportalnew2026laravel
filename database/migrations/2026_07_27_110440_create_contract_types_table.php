@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('contract_types', function (Blueprint $table) {
+        if (!Schema::hasTable('contract_types')) {
+            Schema::create('contract_types', function (Blueprint $table) {
             $table->id();
             $table->foreignId('company_id');
             $table->string('name');
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
+        }
     }
 
     /**

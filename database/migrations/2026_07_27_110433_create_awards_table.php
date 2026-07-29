@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('awards', function (Blueprint $table) {
+        if (!Schema::hasTable('awards')) {
+            Schema::create('awards', function (Blueprint $table) {
             $table->id();
             $table->foreignId('company_id');
             $table->foreignId('employee_id');
@@ -26,6 +27,7 @@ return new class extends Migration
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
             $table->foreign('award_type_id')->references('id')->on('award_types')->onDelete('cascade');
         });
+        }
     }
 
     /**

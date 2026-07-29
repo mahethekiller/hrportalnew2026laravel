@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('referrals', function (Blueprint $table) {
+        if (!Schema::hasTable('referrals')) {
+            Schema::create('referrals', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('email');
@@ -24,6 +25,7 @@ return new class extends Migration
             $table->text('remarks');
             $table->integer('show_status')->default(1);
         });
+        }
     }
 
     /**

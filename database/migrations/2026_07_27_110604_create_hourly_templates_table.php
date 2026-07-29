@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('hourly_templates', function (Blueprint $table) {
+        if (!Schema::hasTable('hourly_templates')) {
+            Schema::create('hourly_templates', function (Blueprint $table) {
             $table->id();
             $table->foreignId('company_id');
             $table->string('hourly_grade');
@@ -19,6 +20,7 @@ return new class extends Migration
             $table->integer('added_by');
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
+        }
     }
 
     /**

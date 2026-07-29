@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('feedback_form_questions', function (Blueprint $table) {
+        if (!Schema::hasTable('feedback_form_questions')) {
+            Schema::create('feedback_form_questions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('form_id');
             $table->text('question');
@@ -24,6 +25,7 @@ return new class extends Migration
             $table->integer('added_by');
             $table->integer('show_status')->default(1);
         });
+        }
     }
 
     /**

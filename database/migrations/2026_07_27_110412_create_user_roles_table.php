@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_roles', function (Blueprint $table) {
+        if (!Schema::hasTable('user_roles')) {
+            Schema::create('user_roles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('company_id');
             $table->string('role_name');
@@ -19,6 +20,7 @@ return new class extends Migration
             $table->text('role_resources');
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
+        }
     }
 
     /**

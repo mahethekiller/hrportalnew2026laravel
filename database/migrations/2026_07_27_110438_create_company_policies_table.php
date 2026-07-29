@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('company_policies', function (Blueprint $table) {
+        if (!Schema::hasTable('company_policies')) {
+            Schema::create('company_policies', function (Blueprint $table) {
             $table->id();
             $table->foreignId('company_id');
             $table->string('title');
@@ -19,6 +20,7 @@ return new class extends Migration
             $table->integer('added_by');
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
+        }
     }
 
     /**

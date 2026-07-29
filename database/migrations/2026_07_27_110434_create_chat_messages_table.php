@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('chat_messages', function (Blueprint $table) {
+        if (!Schema::hasTable('chat_messages')) {
+            Schema::create('chat_messages', function (Blueprint $table) {
             $table->id();
             $table->string('from_id')->default('');
             $table->string('to_id')->default('');
@@ -22,6 +23,7 @@ return new class extends Migration
             $table->boolean('recd')->default(0);
             $table->string('message_type')->default('');
         });
+        }
     }
 
     /**

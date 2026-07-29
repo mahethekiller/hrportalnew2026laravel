@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('rejoin_emp_data', function (Blueprint $table) {
+        if (!Schema::hasTable('rejoin_emp_data')) {
+            Schema::create('rejoin_emp_data', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employee_id');
             $table->text('old_data');
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
         });
+        }
     }
 
     /**

@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('employee_leave_logs', function (Blueprint $table) {
+        if (!Schema::hasTable('employee_leave_logs')) {
+            Schema::create('employee_leave_logs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('leave_id');
             $table->foreignId('employee_id');
@@ -22,6 +23,7 @@ return new class extends Migration
             $table->string('updated_date');
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
         });
+        }
     }
 
     /**

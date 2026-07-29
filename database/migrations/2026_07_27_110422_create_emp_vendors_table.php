@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('emp_vendors', function (Blueprint $table) {
+        if (!Schema::hasTable('emp_vendors')) {
+            Schema::create('emp_vendors', function (Blueprint $table) {
             $table->id();
             $table->string('vendor_name');
             $table->integer('show_status')->default(1);
         });
+        }
     }
 
     /**

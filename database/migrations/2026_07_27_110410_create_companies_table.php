@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('xin_companies', function (Blueprint $table) {
+        if (!Schema::hasTable('xin_companies')) {
+            Schema::create('xin_companies', function (Blueprint $table) {
             $table->id('company_id');
             $table->foreignId('type_id');
             $table->string('name');
@@ -33,6 +34,7 @@ return new class extends Migration
             $table->integer('is_active');
             $table->integer('added_by');
         });
+        }
     }
 
     /**

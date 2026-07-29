@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('recruitment_pages', function (Blueprint $table) {
+        if (!Schema::hasTable('recruitment_pages')) {
+            Schema::create('recruitment_pages', function (Blueprint $table) {
             $table->id();
             $table->string('page_title');
             $table->text('page_details');
             $table->integer('status');
         });
+        }
     }
 
     /**

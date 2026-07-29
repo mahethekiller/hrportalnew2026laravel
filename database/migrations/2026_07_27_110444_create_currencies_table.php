@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('currencies', function (Blueprint $table) {
+        if (!Schema::hasTable('currencies')) {
+            Schema::create('currencies', function (Blueprint $table) {
             $table->id();
             $table->foreignId('company_id');
             $table->string('name');
@@ -19,6 +20,7 @@ return new class extends Migration
             $table->string('symbol');
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
+        }
     }
 
     /**

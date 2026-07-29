@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('employee_bankaccount_logs', function (Blueprint $table) {
+        if (!Schema::hasTable('employee_bankaccount_logs')) {
+            Schema::create('employee_bankaccount_logs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('bankaccount_id');
             $table->foreignId('employee_id');
@@ -25,6 +26,7 @@ return new class extends Migration
             $table->string('updated_date');
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
         });
+        }
     }
 
     /**

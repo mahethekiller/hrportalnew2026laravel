@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('covidresources', function (Blueprint $table) {
+        if (!Schema::hasTable('covidresources')) {
+            Schema::create('covidresources', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('contact_no');
@@ -25,6 +26,7 @@ return new class extends Migration
             $table->string('location')->nullable();
             $table->integer('show_status')->default(1);
         });
+        }
     }
 
     /**

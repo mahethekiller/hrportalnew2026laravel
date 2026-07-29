@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('employee_salaries', function (Blueprint $table) {
+        if (!Schema::hasTable('employee_salaries')) {
+            Schema::create('employee_salaries', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employee_id');
             $table->string('old_salary');
@@ -21,6 +22,7 @@ return new class extends Migration
             $table->integer('show_status')->default(1);
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
         });
+        }
     }
 
     /**

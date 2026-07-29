@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('api_access_tokens', function (Blueprint $table) {
+        if (!Schema::hasTable('api_access_tokens')) {
+            Schema::create('api_access_tokens', function (Blueprint $table) {
             $table->id();
             $table->string('username')->nullable();
             $table->string('accessToken');
             $table->integer('status')->default(1);
         });
+        }
     }
 
     /**

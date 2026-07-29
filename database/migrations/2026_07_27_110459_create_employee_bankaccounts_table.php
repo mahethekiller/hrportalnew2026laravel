@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('xin_employee_bankaccount', function (Blueprint $table) {
+        if (!Schema::hasTable('xin_employee_bankaccount')) {
+            Schema::create('xin_employee_bankaccount', function (Blueprint $table) {
             $table->id('bankaccount_id');
             $table->foreignId('employee_id');
             $table->integer('is_primary');
@@ -22,6 +23,7 @@ return new class extends Migration
             $table->text('bank_branch');
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
         });
+        }
     }
 
     /**

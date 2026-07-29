@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('email_histories', function (Blueprint $table) {
+        if (!Schema::hasTable('email_histories')) {
+            Schema::create('email_histories', function (Blueprint $table) {
             $table->id();
             $table->string('subject');
             $table->text('message');
@@ -24,6 +25,7 @@ return new class extends Migration
             $table->integer('show_status')->default(1);
             $table->foreign('user_id')->references('user_id')->on('employees')->onDelete('cascade');
         });
+        }
     }
 
     /**

@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('income_documents', function (Blueprint $table) {
+        if (!Schema::hasTable('income_documents')) {
+            Schema::create('income_documents', function (Blueprint $table) {
             $table->id();
             $table->string('doc_type');
             $table->string('file');
@@ -19,6 +20,7 @@ return new class extends Migration
             $table->integer('added_by');
             $table->integer('show_status')->default(1);
         });
+        }
     }
 
     /**

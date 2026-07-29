@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('employee_pre_data', function (Blueprint $table) {
+        if (!Schema::hasTable('employee_pre_data')) {
+            Schema::create('employee_pre_data', function (Blueprint $table) {
             $table->id();
             $table->foreignId('interview_id')->nullable();
             $table->text('first_name');
@@ -128,6 +129,7 @@ return new class extends Migration
             $table->integer('acceptance_spouse')->default(0);
             $table->integer('data_update_status')->default(0);
         });
+        }
     }
 
     /**
