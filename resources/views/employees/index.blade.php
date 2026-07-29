@@ -80,6 +80,7 @@
                         <tr>
                             <td>
                                 <span class="fw-bold text-primary">{{ (!empty($emp->employee_id) && $emp->employee_id !== '0') ? $emp->employee_id : 'EMP-' . sprintf('%04d', $emp->id) }}</span>
+                                <div class="small text-body-secondary"><i class="fa-solid fa-id-card me-1"></i>Card: {{ $emp->card_no ?? 'N/A' }}</div>
                             </td>
                             <td>
                                 <div class="d-flex align-items-center gap-3">

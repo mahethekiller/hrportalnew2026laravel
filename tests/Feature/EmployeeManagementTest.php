@@ -91,6 +91,7 @@ class EmployeeManagementTest extends TestCase
             'first_name' => 'UpdatedAdmin',
             'last_name' => 'UpdatedUser',
             'employee_id' => $this->employee->employee_id,
+            'card_no' => 'CARD-9988',
             'email' => $this->employee->email,
         ]);
 
@@ -98,6 +99,7 @@ class EmployeeManagementTest extends TestCase
         $this->assertDatabaseHas('xin_employees', [
             'user_id' => $this->employee->user_id,
             'first_name' => 'UpdatedAdmin',
+            'card_no' => 'CARD-9988',
         ]);
     }
 
