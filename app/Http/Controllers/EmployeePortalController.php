@@ -52,9 +52,41 @@ class EmployeePortalController extends Controller
     public function leaves(): View
     {
         $employeeId = $this->getEmployeeId();
-        $leaves = EmployeeLeave::where('employee_id', $employeeId)->orderBy('leave_id', 'desc')->paginate(10);
+        $keyName = (new EmployeeLeave)->getKeyName();
+        $leaves = EmployeeLeave::where('employee_id', $employeeId)->orderBy($keyName, 'desc')->paginate(10);
 
         return view('my_portal.leaves', compact('leaves'));
+    }
+
+    public function storeLeave(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'leave_type_id' => 'required|integer',
+            'from_date' => 'required|string',
+            'to_date' => 'required|string',
+            'reason' => 'required|string',
+        ]);
+
+        $table = (new EmployeeLeave)->getTable();
+        $data = [
+            'company_id' => $this->getCompanyId(),
+            'employee_id' => $this->getEmployeeId(),
+            'reason' => $request->reason,
+            'status' => 1,
+        ];
+
+        if (Schema::hasColumn($table, 'leave_type_id')) $data['leave_type_id'] = $request->leave_type_id;
+        if (Schema::hasColumn($table, 'from_date')) $data['from_date'] = $request->from_date;
+        if (Schema::hasColumn($table, 'to_date')) $data['to_date'] = $request->to_date;
+        if (Schema::hasColumn($table, 'start_date')) $data['start_date'] = $request->from_date;
+        if (Schema::hasColumn($table, 'end_date')) $data['end_date'] = $request->to_date;
+        if (Schema::hasColumn($table, 'applied_on')) $data['applied_on'] = date('Y-m-d H:i:s');
+        if (Schema::hasColumn($table, 'manager_id')) $data['manager_id'] = auth()->user()?->manager_id ?? 1;
+        if (Schema::hasColumn($table, 'created_at')) $data['created_at'] = date('Y-m-d H:i:s');
+
+        EmployeeLeave::create($data);
+
+        return redirect()->back()->with('success', 'Leave application submitted successfully!');
     }
 
     /**

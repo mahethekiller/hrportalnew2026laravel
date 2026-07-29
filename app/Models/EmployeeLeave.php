@@ -4,25 +4,55 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Schema;
 
 class EmployeeLeave extends Model
 {
     use HasFactory;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'employee_leaves';
+    protected $table = 'xin_leave_applications';
+    protected $primaryKey = 'leave_id';
+    public $timestamps = false;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    public function getTable()
+    {
+        if (Schema::hasTable('xin_leave_applications')) {
+            return 'xin_leave_applications';
+        }
+        if (Schema::hasTable('leave_applications')) {
+            return 'leave_applications';
+        }
+        if (Schema::hasTable('employee_leaves')) {
+            return 'employee_leaves';
+        }
+        return parent::getTable();
+    }
+
+    public function getKeyName()
+    {
+        $table = $this->getTable();
+        if (Schema::hasColumn($table, 'leave_id')) {
+            return 'leave_id';
+        }
+        return 'id';
+    }
+
     protected $fillable = [
+        'company_id',
         'employee_id',
+        'manager_id',
+        'leave_type_id',
+        'start_duration',
+        'from_date',
+        'to_date',
+        'end_duration',
+        'applied_on',
+        'casual_deducted',
+        'earned_deducted',
+        'reason',
+        'remarks',
+        'status',
+        'created_at',
         'contract_id',
         'casual_leave',
         'medical_leave'

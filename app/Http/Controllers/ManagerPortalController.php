@@ -50,7 +50,8 @@ class ManagerPortalController extends Controller
         $managerId = $this->getManagerId();
         $teamIds = Employee::where('manager_id', $managerId)->orWhere('department_id', auth()->user()?->department_id)->pluck('employee_id')->toArray();
 
-        $leaves = EmployeeLeave::with('employee')->whereIn('employee_id', $teamIds)->orderBy('leave_id', 'desc')->paginate(15);
+        $keyName = (new EmployeeLeave)->getKeyName();
+        $leaves = EmployeeLeave::with('employee')->whereIn('employee_id', $teamIds)->orderBy($keyName, 'desc')->paginate(15);
 
         return view('manager_portal.team_leaves', compact('leaves'));
     }

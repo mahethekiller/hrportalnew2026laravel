@@ -140,6 +140,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('my-portal')->name('my-portal.')->group(function () {
         Route::get('/', [\App\Http\Controllers\EmployeePortalController::class, 'index'])->name('index');
         Route::get('/leaves', [\App\Http\Controllers\EmployeePortalController::class, 'leaves'])->name('leaves');
+        Route::post('/leaves', [\App\Http\Controllers\EmployeePortalController::class, 'storeLeave'])->name('leaves.store');
         Route::get('/attendance', [\App\Http\Controllers\EmployeePortalController::class, 'attendance'])->name('attendance');
         Route::get('/payslips', [\App\Http\Controllers\EmployeePortalController::class, 'payslips'])->name('payslips');
         Route::get('/performance-feedback', [\App\Http\Controllers\EmployeePortalController::class, 'performanceFeedback'])->name('performance_feedback');
