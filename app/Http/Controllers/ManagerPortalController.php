@@ -83,7 +83,8 @@ class ManagerPortalController extends Controller
         $managerId = $this->getManagerId();
         $teamIds = Employee::where('manager_id', $managerId)->orWhere('department_id', auth()->user()?->department_id)->pluck('employee_id')->toArray();
 
-        $appraisals = PerformanceAppraisal::with('employee')->whereIn('employee_id', $teamIds)->orderBy('appraisal_id', 'desc')->get();
+        $keyName = (new PerformanceAppraisal)->getKeyName();
+        $appraisals = PerformanceAppraisal::with('employee')->whereIn('employee_id', $teamIds)->orderBy($keyName, 'desc')->get();
 
         return view('manager_portal.team_performance', compact('appraisals'));
     }
