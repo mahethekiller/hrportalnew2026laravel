@@ -114,10 +114,19 @@ class EmployeePortalController extends Controller
     public function performanceFeedback(): View
     {
         $forms = FeedbackForm::with('questions')->get();
-        $myAnswers = FeedbackAnswer::where('employee_id', $this->getEmployeeId())
-            ->orWhere('user_id', auth()->id())
-            ->get()
-            ->keyBy('question_id');
+        $table = (new FeedbackAnswer)->getTable();
+        $userId = auth()->id() ?? $this->getEmployeeId();
+
+        $query = FeedbackAnswer::query();
+        if (Schema::hasColumn($table, 'employee_id') && Schema::hasColumn($table, 'user_id')) {
+            $query->where('employee_id', $this->getEmployeeId())->orWhere('user_id', $userId);
+        } elseif (Schema::hasColumn($table, 'employee_id')) {
+            $query->where('employee_id', $this->getEmployeeId());
+        } elseif (Schema::hasColumn($table, 'user_id')) {
+            $query->where('user_id', $userId);
+        }
+
+        $myAnswers = $query->get()->keyBy('question_id');
 
         return view('my_portal.performance_feedback', compact('forms', 'myAnswers'));
     }
