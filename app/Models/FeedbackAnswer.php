@@ -29,6 +29,8 @@ class FeedbackAnswer extends Model
         'answer',
         'feedback',
         'rating',
+        'added_date',
+        'show_status',
         'created_at'
     ];
 

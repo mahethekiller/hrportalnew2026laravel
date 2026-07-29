@@ -161,6 +161,12 @@ class EmployeePortalController extends Controller
             if (Schema::hasColumn($table, 'created_at')) {
                 $payload['created_at'] = date('d-m-Y H:i:s');
             }
+            if (Schema::hasColumn($table, 'added_date')) {
+                $payload['added_date'] = date('Y-m-d H:i:s');
+            }
+            if (Schema::hasColumn($table, 'show_status')) {
+                $payload['show_status'] = 1;
+            }
 
             $lookup = ['question_id' => $questionId];
             if (Schema::hasColumn($table, 'employee_id')) {
