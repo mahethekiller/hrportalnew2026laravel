@@ -190,6 +190,11 @@ class EmployeePortalController extends Controller
         $keyName = (new Document)->getKeyName();
 
         $query = Document::where('company_id', $this->getCompanyId());
+
+        if (Schema::hasColumn($table, 'active')) {
+            $query->where('active', 1);
+        }
+
         if (Schema::hasColumn($table, 'created_at')) {
             $query->orderBy('created_at', 'desc');
         } elseif (Schema::hasColumn($table, 'added_date')) {
