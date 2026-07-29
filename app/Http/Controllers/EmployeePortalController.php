@@ -161,7 +161,7 @@ class EmployeePortalController extends Controller
             }
         }
 
-        $attendanceLogs = $query->orderBy('id', 'desc')->paginate(15)->appends($request->all());
+        $attendanceLogs = $query->orderBy('punch_date', 'desc')->orderBy('id', 'desc')->paginate(15)->appends($request->all());
 
         return view('my_portal.attendance', compact('attendanceLogs', 'employee'));
     }
