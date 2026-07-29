@@ -349,6 +349,27 @@ h3, .headline-md {
     background-color: rgba(255, 255, 255, 0.04) !important;
 }
 
+[data-bs-theme="dark"] .list-group-item {
+    background-color: #1E293B !important;
+    border-color: #334155 !important;
+    color: #F8FAFC !important;
+}
+
+[data-bs-theme="dark"] .nested-sortable-list {
+    background-color: #0F172A !important;
+    border-color: #334155 !important;
+}
+
+[data-bs-theme="dark"] .bg-white {
+    background-color: #1E293B !important;
+    color: #F8FAFC !important;
+}
+
+[data-bs-theme="dark"] .bg-light {
+    background-color: #1E293B !important;
+    color: #F8FAFC !important;
+}
+
 /* Compact Forms & Inputs */
 .form-control, .form-select, .input-group-text {
     background-color: var(--input-bg) !important;

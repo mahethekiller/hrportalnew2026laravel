@@ -7,10 +7,10 @@
     <!-- Header Banner -->
     <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4">
         <div>
-            <h1 class="h3 mb-1 fw-bold text-gray-900">
+            <h1 class="h3 mb-1 fw-bold text-body-emphasis">
                 <i class="fa-solid fa-sitemap me-2 text-primary"></i> Navigation Menu Manager
             </h1>
-            <p class="text-muted fs-7 mb-0">Drag and drop navigation links, discover application routes, and manage sidebar hierarchy in real-time.</p>
+            <p class="text-body-secondary fs-7 mb-0">Drag and drop navigation links, discover application routes, and manage sidebar hierarchy in real-time.</p>
         </div>
         <div>
             <button class="btn btn-primary btn-sm fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#menuModal" onclick="prepareAddModal()">
@@ -22,8 +22,8 @@
 
     <!-- Drag & Drop Container -->
     <div class="card border-0 shadow-sm rounded-3">
-        <div class="card-header border-0 pt-3 bg-light bg-opacity-50 d-flex align-items-center justify-content-between">
-            <h3 class="card-title fw-bold text-gray-900 fs-6 mb-0">
+        <div class="card-header border-0 pt-3 bg-body-tertiary d-flex align-items-center justify-content-between">
+            <h3 class="card-title fw-bold text-body-emphasis fs-6 mb-0">
                 <i class="fa-solid fa-up-down-left-right text-primary me-2"></i> Interactive Menu Workstation
             </h3>
             <span class="badge bg-light-primary text-primary fs-8 fw-semibold">
@@ -34,19 +34,19 @@
         <div class="card-body p-4">
             <div id="dragMenuContainer" class="list-group col">
                 @foreach($menus as $root)
-                    <div class="list-group-item border rounded-3 mb-3 p-3 {{ $root->is_active ? 'bg-light' : 'bg-light-danger opacity-75' }}" data-id="{{ $root->menu_id }}">
+                    <div class="list-group-item border rounded-3 mb-3 p-3 bg-body-tertiary" data-id="{{ $root->menu_id }}">
                         <div class="d-flex align-items-center justify-content-between cursor-move">
                             <div class="d-flex align-items-center gap-2">
-                                <i class="fa-solid fa-bars-staggered text-muted drag-handle fs-6"></i>
+                                <i class="fa-solid fa-bars-staggered text-body-secondary drag-handle fs-6"></i>
                                 <i class="{{ $root->icon ?? 'fa-solid fa-folder' }} text-primary fs-5"></i>
-                                <span class="fw-bold text-gray-900 fs-6">{{ $root->title }}</span>
+                                <span class="fw-bold text-body-emphasis fs-6">{{ $root->title }}</span>
                                 @if(!$root->is_active)
                                     <span class="badge bg-danger text-white fs-9 ms-2">Hidden</span>
                                 @endif
                             </div>
                             <div class="d-flex align-items-center gap-2">
                                 @if($root->route_name)
-                                    <span class="badge bg-white text-dark border fs-9 font-monospace"><i class="fa-solid fa-link me-1 text-info"></i>{{ $root->route_name }}</span>
+                                    <span class="badge bg-body-secondary text-body-emphasis border fs-9 font-monospace"><i class="fa-solid fa-link me-1 text-info"></i>{{ $root->route_name }}</span>
                                 @else
                                     <span class="badge bg-light-primary text-primary fs-9">Root Category</span>
                                 @endif
@@ -67,13 +67,13 @@
                         </div>
                         
                         <!-- Nested Sub-Items Dropzone -->
-                        <div class="nested-sortable-list mt-3 min-h-50px p-2 bg-white rounded border border-dashed" style="min-height: 50px;" data-parent-id="{{ $root->menu_id }}">
+                        <div class="nested-sortable-list mt-3 min-h-50px p-2 bg-body rounded border border-dashed" style="min-height: 50px;" data-parent-id="{{ $root->menu_id }}">
                             @foreach($root->children as $child)
-                                <div class="list-group-item border rounded p-2 mb-2 bg-white d-flex align-items-center justify-content-between cursor-move" data-id="{{ $child->menu_id }}">
+                                <div class="list-group-item border rounded p-2 mb-2 bg-body-secondary d-flex align-items-center justify-content-between cursor-move" data-id="{{ $child->menu_id }}">
                                     <div class="d-flex align-items-center gap-2">
-                                        <i class="fa-solid fa-grip-vertical text-muted drag-handle fs-7"></i>
+                                        <i class="fa-solid fa-grip-vertical text-body-secondary drag-handle fs-7"></i>
                                         <i class="{{ $child->icon ?? 'fa-solid fa-circle bullet-dot' }} text-success fs-7"></i>
-                                        <span class="fw-semibold text-gray-800 fs-7">{{ $child->title }}</span>
+                                        <span class="fw-semibold text-body-emphasis fs-7">{{ $child->title }}</span>
                                         @if(!$child->is_active)
                                             <span class="badge bg-danger text-white fs-9">Hidden</span>
                                         @endif
@@ -116,19 +116,19 @@
                 <div id="methodContainer"></div>
 
                 <div class="modal-header border-0 pb-0">
-                    <h5 class="modal-title fw-bold text-gray-900" id="modalTitle">Add Navigation Menu Node</h5>
+                    <h5 class="modal-title fw-bold text-body-emphasis" id="modalTitle">Add Navigation Menu Node</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body p-4">
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label class="form-label fs-8 fw-semibold">Menu Title <span class="text-danger">*</span></label>
+                            <label class="form-label fs-8 fw-semibold text-body-emphasis">Menu Title <span class="text-danger">*</span></label>
                             <input type="text" name="title" id="menu_title" class="form-control form-control-sm" required placeholder="e.g. Employee Directory">
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label fs-8 fw-semibold">Parent Section (Optional)</label>
+                            <label class="form-label fs-8 fw-semibold text-body-emphasis">Parent Section (Optional)</label>
                             <select name="parent_id" id="menu_parent_id" class="form-select form-select-sm">
                                 <option value="0">Top-Level (Root Section)</option>
                                 @foreach($menus as $root)
@@ -139,7 +139,7 @@
 
                         <!-- Dynamic Laravel Route Selector -->
                         <div class="col-md-6">
-                            <label class="form-label fs-8 fw-semibold">Target Application Route (DB Auto-Discovered)</label>
+                            <label class="form-label fs-8 fw-semibold text-body-emphasis">Target Application Route (DB Auto-Discovered)</label>
                             <select name="route_name" id="menu_route_name" class="form-select form-select-sm">
                                 <option value="">None (Category Container)</option>
                                 @foreach($availableRoutes as $rName)
@@ -150,7 +150,7 @@
 
                         <!-- Permission Resource Key -->
                         <div class="col-md-6">
-                            <label class="form-label fs-8 fw-semibold">Security Permission Key</label>
+                            <label class="form-label fs-8 fw-semibold text-body-emphasis">Security Permission Key</label>
                             <select name="resource_key" id="menu_resource_key" class="form-select form-select-sm">
                                 <option value="">Public (Always Visible)</option>
                                 @foreach($availableResources as $res)
@@ -161,20 +161,20 @@
 
                         <!-- Searchable Visual Icon Picker -->
                         <div class="col-md-12">
-                            <label class="form-label fs-8 fw-semibold d-flex justify-content-between align-items-center">
+                            <label class="form-label fs-8 fw-semibold text-body-emphasis d-flex justify-content-between align-items-center">
                                 <span>Menu Icon <span class="text-danger">*</span></span>
-                                <span class="fs-9 text-muted">Preview: <i id="iconPreview" class="fa-solid fa-circle text-primary fs-6 ms-1"></i></span>
+                                <span class="fs-9 text-body-secondary">Preview: <i id="iconPreview" class="fa-solid fa-circle text-primary fs-6 ms-1"></i></span>
                             </label>
 
                             <input type="hidden" name="icon" id="menu_icon" value="fa-solid fa-circle bullet-dot">
 
-                            <div class="card border rounded-3 p-3 bg-light">
-                                <div class="input-group input-group-sm mb-3">
-                                    <span class="input-group-text bg-white"><i class="fa-solid fa-magnifying-glass"></i></span>
+                            <div class="card border rounded-3 p-3 bg-body-tertiary">
+                                <div class="input-group input-group-text-sm mb-3">
+                                    <span class="input-group-text bg-body-secondary"><i class="fa-solid fa-magnifying-glass"></i></span>
                                     <input type="text" id="iconSearchInput" class="form-control" placeholder="Search icon (e.g. user, ticket, chart, building, settings)..." onkeyup="filterIcons()">
                                 </div>
 
-                                <div class="d-flex flex-wrap gap-2 overflow-y-auto p-2 bg-white rounded border" id="iconGrid" style="max-height: 160px;">
+                                <div class="d-flex flex-wrap gap-2 overflow-y-auto p-2 bg-body rounded border" id="iconGrid" style="max-height: 160px;">
                                     @php
                                         $icons = [
                                             'fa-solid fa-gauge', 'fa-solid fa-users', 'fa-solid fa-building', 'fa-solid fa-sitemap',
@@ -186,7 +186,7 @@
                                         ];
                                     @endphp
                                     @foreach($icons as $ic)
-                                        <button type="button" class="btn btn-light btn-sm d-flex align-items-center gap-1 icon-select-btn px-2 py-1 fs-9" data-icon="{{ $ic }}" onclick="selectIcon('{{ $ic }}')">
+                                        <button type="button" class="btn btn-light-secondary btn-sm d-flex align-items-center gap-1 icon-select-btn px-2 py-1 fs-9" data-icon="{{ $ic }}" onclick="selectIcon('{{ $ic }}')">
                                             <i class="{{ $ic }} text-primary"></i> <span>{{ str_replace(['fa-solid ', 'fa-regular '], '', $ic) }}</span>
                                         </button>
                                     @endforeach
@@ -197,14 +197,14 @@
                         <div class="col-md-12">
                             <div class="form-check form-switch pt-2">
                                 <input class="form-check-input" type="checkbox" name="is_active" id="menu_is_active" value="1" checked>
-                                <label class="form-check-label fs-8 fw-semibold" for="menu_is_active">Visible in Sidebar Navigation</label>
+                                <label class="form-check-label fs-8 fw-semibold text-body-emphasis" for="menu_is_active">Visible in Sidebar Navigation</label>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="modal-footer border-0 pt-0">
-                    <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-light-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary btn-sm fw-bold px-4">Save Navigation Node</button>
                 </div>
             </form>
