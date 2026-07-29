@@ -8,6 +8,40 @@
     </div>
 </div>
 
+<!-- Filters Bar -->
+<div class="card border-0 shadow-sm rounded-3 mb-4">
+    <div class="card-body p-3">
+        <form method="GET" action="{{ route('my-portal.attendance') }}" class="row g-2 align-items-end">
+            <div class="col-md-3">
+                <label class="form-label fs-8 fw-bold text-gray-700 mb-1">From Date</label>
+                <input type="date" name="from_date" class="form-control form-control-sm fs-8" value="{{ request('from_date') }}">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fs-8 fw-bold text-gray-700 mb-1">To Date</label>
+                <input type="date" name="to_date" class="form-control form-control-sm fs-8" value="{{ request('to_date') }}">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fs-8 fw-bold text-gray-700 mb-1">Attendance Status</label>
+                <select name="status" class="form-select form-select-sm fs-8">
+                    <option value="">All Statuses</option>
+                    <option value="present" {{ request('status') == 'present' ? 'selected' : '' }}>Present</option>
+                    <option value="absent" {{ request('status') == 'absent' ? 'selected' : '' }}>Absent</option>
+                </select>
+            </div>
+            <div class="col-md-3 d-flex gap-2">
+                <button type="submit" class="btn btn-primary btn-sm fs-8 fw-bold flex-fill">
+                    <i class="fa-solid fa-filter me-1"></i> Apply Filter
+                </button>
+                @if(request()->hasAny(['from_date', 'to_date', 'status']))
+                    <a href="{{ route('my-portal.attendance') }}" class="btn btn-light btn-sm fs-8 fw-bold">
+                        <i class="fa-solid fa-xmark me-1"></i> Reset
+                    </a>
+                @endif
+            </div>
+        </form>
+    </div>
+</div>
+
 <div class="card border-0 shadow-sm rounded-3">
     <div class="card-header border-0 pt-3 bg-white">
         <h5 class="fw-bold text-gray-900 fs-6 mb-0"><i class="fa-solid fa-list me-2 text-primary"></i> Attendance Punch Records</h5>
@@ -65,7 +99,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="text-center py-4 text-muted">No attendance logs found for your card number.</td>
+                            <td colspan="6" class="text-center py-4 text-muted">No attendance logs match your selected filter criteria.</td>
                         </tr>
                     @endforelse
                 </tbody>

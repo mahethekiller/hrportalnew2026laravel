@@ -94,7 +94,7 @@ class EmployeePortalController extends Controller
     /**
      * My Attendance & Clock Logs
      */
-    public function attendance(): View
+    public function attendance(Request $request): View
     {
         $user = auth()->user();
         $employee = null;
@@ -140,7 +140,28 @@ class EmployeePortalController extends Controller
             }
         });
 
-        $attendanceLogs = $query->orderBy('id', 'desc')->paginate(15);
+        // Apply Date Range Filters
+        if ($request->filled('from_date')) {
+            $query->where('punch_date', '>=', $request->from_date);
+        }
+        if ($request->filled('to_date')) {
+            $query->where('punch_date', '<=', $request->to_date);
+        }
+
+        // Apply Status Filter
+        if ($request->filled('status')) {
+            if ($request->status === 'present') {
+                $query->where(function ($sq) {
+                    $sq->whereNotNull('check_in_time')
+                       ->orWhereNotNull('check_in_datetime');
+                });
+            } elseif ($request->status === 'absent') {
+                $query->whereNull('check_in_time')
+                      ->whereNull('check_in_datetime');
+            }
+        }
+
+        $attendanceLogs = $query->orderBy('id', 'desc')->paginate(15)->appends($request->all());
 
         return view('my_portal.attendance', compact('attendanceLogs', 'employee'));
     }
