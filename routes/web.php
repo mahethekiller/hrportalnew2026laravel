@@ -136,6 +136,36 @@ Route::middleware('auth')->group(function () {
     Route::resource('admin-tickets', \App\Http\Controllers\AdminTicketController::class);
     Route::post('/admin-tickets/{admin_ticket}/status', [\App\Http\Controllers\AdminTicketController::class, 'updateStatus'])->name('admin-tickets.status');
 
+    // Employee Self-Service (ESS) Portal Routes
+    Route::prefix('my-portal')->name('my-portal.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\EmployeePortalController::class, 'index'])->name('index');
+        Route::get('/leaves', [\App\Http\Controllers\EmployeePortalController::class, 'leaves'])->name('leaves');
+        Route::get('/attendance', [\App\Http\Controllers\EmployeePortalController::class, 'attendance'])->name('attendance');
+        Route::get('/payslips', [\App\Http\Controllers\EmployeePortalController::class, 'payslips'])->name('payslips');
+        Route::get('/performance-feedback', [\App\Http\Controllers\EmployeePortalController::class, 'performanceFeedback'])->name('performance_feedback');
+        Route::post('/performance-feedback', [\App\Http\Controllers\EmployeePortalController::class, 'storePerformanceFeedback'])->name('performance_feedback.store');
+        Route::get('/benefits', [\App\Http\Controllers\EmployeePortalController::class, 'benefits'])->name('benefits');
+        Route::get('/referrals', [\App\Http\Controllers\EmployeePortalController::class, 'referrals'])->name('referrals');
+        Route::post('/referrals', [\App\Http\Controllers\EmployeePortalController::class, 'storeReferral'])->name('referrals.store');
+        Route::get('/meetings', [\App\Http\Controllers\EmployeePortalController::class, 'meetings'])->name('meetings');
+        Route::post('/meetings', [\App\Http\Controllers\EmployeePortalController::class, 'storeMeeting'])->name('meetings.store');
+        Route::get('/conveyance', [\App\Http\Controllers\EmployeePortalController::class, 'conveyance'])->name('conveyance');
+        Route::post('/conveyance', [\App\Http\Controllers\EmployeePortalController::class, 'storeConveyance'])->name('conveyance.store');
+        Route::get('/tax-documents', [\App\Http\Controllers\EmployeePortalController::class, 'taxDocuments'])->name('tax_documents');
+        Route::post('/tax-documents', [\App\Http\Controllers\EmployeePortalController::class, 'storeTaxDocument'])->name('tax_documents.store');
+        Route::get('/resignation', [\App\Http\Controllers\EmployeePortalController::class, 'resignation'])->name('resignation');
+        Route::post('/resignation', [\App\Http\Controllers\EmployeePortalController::class, 'storeResignation'])->name('resignation.store');
+    });
+
+    // Manager Team Hub Routes
+    Route::prefix('manager-portal')->name('manager-portal.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\ManagerPortalController::class, 'index'])->name('index');
+        Route::get('/team-attendance', [\App\Http\Controllers\ManagerPortalController::class, 'teamAttendance'])->name('team_attendance');
+        Route::get('/team-leaves', [\App\Http\Controllers\ManagerPortalController::class, 'teamLeaves'])->name('team_leaves');
+        Route::post('/team-leaves/{leave}/status', [\App\Http\Controllers\ManagerPortalController::class, 'updateLeaveStatus'])->name('team_leaves.status');
+        Route::get('/team-performance', [\App\Http\Controllers\ManagerPortalController::class, 'teamPerformance'])->name('team_performance');
+    });
+
     // Announcement Routes
     Route::resource('announcements', \App\Http\Controllers\AnnouncementController::class);
 

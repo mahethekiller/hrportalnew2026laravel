@@ -278,6 +278,37 @@ class NavigationMenuSeeder extends Seeder
             'sort_order' => 8,
         ]);
 
+        // 5. My Self-Service Hub Category
+        $essRoot = NavigationMenu::create([
+            'title' => 'My Self-Service Hub',
+            'icon' => 'fa-solid fa-user-gear',
+            'sort_order' => 5,
+        ]);
+
+        NavigationMenu::create(['parent_id' => $essRoot->menu_id, 'title' => 'My ESS Dashboard', 'icon' => 'fa-solid fa-circle bullet-dot', 'route_name' => 'my-portal.index', 'resource_key' => null, 'sort_order' => 1]);
+        NavigationMenu::create(['parent_id' => $essRoot->menu_id, 'title' => 'My Leaves', 'icon' => 'fa-solid fa-circle bullet-dot', 'route_name' => 'my-portal.leaves', 'resource_key' => null, 'sort_order' => 2]);
+        NavigationMenu::create(['parent_id' => $essRoot->menu_id, 'title' => 'My Attendance', 'icon' => 'fa-solid fa-circle bullet-dot', 'route_name' => 'my-portal.attendance', 'resource_key' => null, 'sort_order' => 3]);
+        NavigationMenu::create(['parent_id' => $essRoot->menu_id, 'title' => 'My Payslips', 'icon' => 'fa-solid fa-circle bullet-dot', 'route_name' => 'my-portal.payslips', 'resource_key' => null, 'sort_order' => 4]);
+        NavigationMenu::create(['parent_id' => $essRoot->menu_id, 'title' => 'Performance Self-Rating', 'icon' => 'fa-solid fa-circle bullet-dot', 'route_name' => 'my-portal.performance_feedback', 'resource_key' => null, 'sort_order' => 5]);
+        NavigationMenu::create(['parent_id' => $essRoot->menu_id, 'title' => 'Corporate Benefits', 'icon' => 'fa-solid fa-circle bullet-dot', 'route_name' => 'my-portal.benefits', 'resource_key' => null, 'sort_order' => 6]);
+        NavigationMenu::create(['parent_id' => $essRoot->menu_id, 'title' => 'Refer a Candidate', 'icon' => 'fa-solid fa-circle bullet-dot', 'route_name' => 'my-portal.referrals', 'resource_key' => null, 'sort_order' => 7]);
+        NavigationMenu::create(['parent_id' => $essRoot->menu_id, 'title' => 'Book Conference Room', 'icon' => 'fa-solid fa-circle bullet-dot', 'route_name' => 'my-portal.meetings', 'resource_key' => null, 'sort_order' => 8]);
+        NavigationMenu::create(['parent_id' => $essRoot->menu_id, 'title' => 'Conveyance Claims', 'icon' => 'fa-solid fa-circle bullet-dot', 'route_name' => 'my-portal.conveyance', 'resource_key' => null, 'sort_order' => 9]);
+        NavigationMenu::create(['parent_id' => $essRoot->menu_id, 'title' => 'Tax Document Uploads', 'icon' => 'fa-solid fa-circle bullet-dot', 'route_name' => 'my-portal.tax_documents', 'resource_key' => null, 'sort_order' => 10]);
+        NavigationMenu::create(['parent_id' => $essRoot->menu_id, 'title' => 'Resignation Notice', 'icon' => 'fa-solid fa-circle bullet-dot', 'route_name' => 'my-portal.resignation', 'resource_key' => null, 'sort_order' => 11]);
+
+        // 6. Manager Team Hub Category
+        $managerRoot = NavigationMenu::create([
+            'title' => 'Manager Team Hub',
+            'icon' => 'fa-solid fa-users-gear',
+            'sort_order' => 6,
+        ]);
+
+        NavigationMenu::create(['parent_id' => $managerRoot->menu_id, 'title' => 'Team Workstation', 'icon' => 'fa-solid fa-circle bullet-dot', 'route_name' => 'manager-portal.index', 'resource_key' => 'organization', 'sort_order' => 1]);
+        NavigationMenu::create(['parent_id' => $managerRoot->menu_id, 'title' => 'Team Attendance', 'icon' => 'fa-solid fa-circle bullet-dot', 'route_name' => 'manager-portal.team_attendance', 'resource_key' => 'attendance', 'sort_order' => 2]);
+        NavigationMenu::create(['parent_id' => $managerRoot->menu_id, 'title' => 'Team Leave Approvals', 'icon' => 'fa-solid fa-circle bullet-dot', 'route_name' => 'manager-portal.team_leaves', 'resource_key' => 'leave', 'sort_order' => 3]);
+        NavigationMenu::create(['parent_id' => $managerRoot->menu_id, 'title' => 'Team Performance', 'icon' => 'fa-solid fa-circle bullet-dot', 'route_name' => 'manager-portal.team_performance', 'resource_key' => 'performance', 'sort_order' => 4]);
+
         // 5. Grant Role ID 1 (All Access)
         $adminRole = UserRole::find(1);
         if ($adminRole) {

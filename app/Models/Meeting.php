@@ -9,31 +9,29 @@ class Meeting extends Model
 {
     use HasFactory;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'meetings';
+    protected $table = 'xin_meetings';
+    protected $primaryKey = 'meeting_id';
+    public $timestamps = false;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    public function getTable()
+    {
+        if (\Illuminate\Support\Facades\Schema::hasTable('meetings')) {
+            return 'meetings';
+        }
+        return parent::getTable();
+    }
+
     protected $fillable = [
         'company_id',
         'employee_id',
         'meeting_title',
         'meeting_date',
         'meeting_time',
-        'meeting_note'
+        'room_name',
+        'note',
+        'meeting_note',
+        'created_at'
     ];
-
-    public function company()
-    {
-        return $this->belongsTo(Company::class, 'company_id');
-    }
 
     public function employee()
     {

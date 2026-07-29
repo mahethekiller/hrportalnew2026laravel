@@ -42,7 +42,12 @@ class PerformanceAppraisalRepository
     public function create(array $data): PerformanceAppraisal
     {
         $data['show_status'] = 1;
-        $data['created_at'] = date('Y-m-d H:i:s');
+        $data['company_id'] = $data['company_id'] ?? auth()->user()?->company_id ?? 1;
+        $data['added_by'] = $data['added_by'] ?? auth()->id() ?? 1;
+        $data['remarks'] = $data['remarks'] ?? '';
+        if (\Illuminate\Support\Facades\Schema::hasColumn((new PerformanceAppraisal)->getTable(), 'created_at')) {
+            $data['created_at'] = date('Y-m-d H:i:s');
+        }
 
         return PerformanceAppraisal::create($data);
     }

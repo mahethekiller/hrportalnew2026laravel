@@ -9,20 +9,18 @@ class EmployeeResignation extends Model
 {
     use HasFactory;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'employee_resignations';
-
+    protected $table = 'xin_employee_resignations';
+    protected $primaryKey = 'resignation_id';
     public $timestamps = false;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    public function getTable()
+    {
+        if (\Illuminate\Support\Facades\Schema::hasTable('employee_resignations')) {
+            return 'employee_resignations';
+        }
+        return parent::getTable();
+    }
+
     protected $fillable = [
         'company_id',
         'employee_id',
@@ -30,40 +28,26 @@ class EmployeeResignation extends Model
         'notice_date',
         'resignation_date',
         'requested_notice',
+        'reason',
         'manager_comment',
-        'manager_status',
         'it_comment',
-        'it_status',
-        'account_status',
         'account_comment',
         'hr_comment',
-        'hr_status',
-        'head_status',
+        'coo_comment',
+        'sage_comment',
+        'login_comment',
         'it_person',
         'account_per',
         'hr_person',
         'manager_person',
         'sage_person',
         'login_person',
-        'coo_status',
-        'coo_comment',
-        'sage_status',
-        'sage_comment',
         'employee_accept',
-        'reason',
-        'exit_form',
+        'comments',
         'added_by',
         'status',
-        'comments',
-        'show_status',
-        'login_status',
-        'login_comment'
+        'created_at'
     ];
-
-    public function company()
-    {
-        return $this->belongsTo(Company::class, 'company_id');
-    }
 
     public function employee()
     {

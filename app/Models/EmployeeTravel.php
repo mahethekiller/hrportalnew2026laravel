@@ -9,45 +9,37 @@ class EmployeeTravel extends Model
 {
     use HasFactory;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'employee_travels';
+    protected $table = 'xin_employee_travels';
+    protected $primaryKey = 'travel_id';
+    public $timestamps = false;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    public function getTable()
+    {
+        if (\Illuminate\Support\Facades\Schema::hasTable('employee_travels')) {
+            return 'employee_travels';
+        }
+        return parent::getTable();
+    }
+
     protected $fillable = [
         'company_id',
         'employee_id',
-        'start_date',
-        'end_date',
+        'travel_type',
         'visit_purpose',
         'visit_place',
-        'travel_mode',
-        'arrangement_type',
+        'start_date',
+        'end_date',
         'expected_budget',
         'actual_budget',
-        'date',
-        'from_p',
-        'to_p',
-        'from_reading',
-        'to_reading',
-        'distance',
+        'travel_mode',
+        'arrangement_type',
         'cost',
+        'date',
         'description',
         'status',
-        'added_by'
+        'added_by',
+        'created_at'
     ];
-
-    public function company()
-    {
-        return $this->belongsTo(Company::class, 'company_id');
-    }
 
     public function employee()
     {

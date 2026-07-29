@@ -9,28 +9,42 @@ class Referral extends Model
 {
     use HasFactory;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'referrals';
+    protected $table = 'xin_referrals';
+    protected $primaryKey = 'referral_id';
+    public $timestamps = false;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    public function getTable()
+    {
+        if (\Illuminate\Support\Facades\Schema::hasTable('referrals')) {
+            return 'referrals';
+        }
+        return parent::getTable();
+    }
+
     protected $fillable = [
+        'company_id',
+        'employee_id',
+        'job_id',
         'name',
         'email',
-        'resume',
+        'contact_number',
         'contact_no',
+        'resume',
         'assigned_to',
         'added_by',
         'description',
-        'status',
         'remarks',
-        'show_status'
+        'status',
+        'created_at'
     ];
+
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class, 'employee_id');
+    }
+
+    public function job()
+    {
+        return $this->belongsTo(JobPost::class, 'job_id');
+    }
 }

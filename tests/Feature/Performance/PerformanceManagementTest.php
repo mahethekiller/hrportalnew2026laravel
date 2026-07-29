@@ -129,7 +129,7 @@ class PerformanceManagementTest extends TestCase
         ]);
 
         $response->assertRedirect(route('performance-appraisals.index'));
-        $this->assertDatabaseHas('xin_performance_appraisal', [
+        $this->assertDatabaseHas((new \App\Models\PerformanceAppraisal)->getTable(), [
             'employee_id' => 1,
             'quality_of_work' => 5,
         ]);
@@ -146,7 +146,7 @@ class PerformanceManagementTest extends TestCase
             'show_status' => 1,
         ]);
 
-        $response = $this->actingAs($user)->get(route('performance-appraisals.show', $appraisal->performance_appraisal_id));
+        $response = $this->actingAs($user)->get(route('performance-appraisals.show', $appraisal->getKey()));
 
         $response->assertStatus(200);
         $response->assertSee('Performance Review Report Card');

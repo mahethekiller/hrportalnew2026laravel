@@ -19,6 +19,29 @@ class PerformanceAppraisal extends Model
     protected $table = 'xin_performance_appraisal';
 
     /**
+     * Bootstrap model event listeners for defaults.
+     */
+    protected static function booted(): void
+    {
+        static::creating(function ($model) {
+            $model->company_id = $model->company_id ?? auth()->user()?->company_id ?? 1;
+            $model->added_by = $model->added_by ?? auth()->id() ?? 1;
+            $model->remarks = $model->remarks ?? '';
+        });
+    }
+
+    /**
+     * Get table name dynamically depending on database schema.
+     */
+    public function getTable()
+    {
+        if (\Illuminate\Support\Facades\Schema::hasTable('performance_appraisals')) {
+            return 'performance_appraisals';
+        }
+        return parent::getTable();
+    }
+
+    /**
      * Primary key column name.
      *
      * @var string
@@ -31,6 +54,17 @@ class PerformanceAppraisal extends Model
      * @var bool
      */
     public $timestamps = false;
+
+    /**
+     * Primary key column name dynamic resolver.
+     */
+    public function getKeyName()
+    {
+        if (\Illuminate\Support\Facades\Schema::hasTable('performance_appraisals')) {
+            return 'id';
+        }
+        return 'performance_appraisal_id';
+    }
 
     /**
      * Primary Key Accessor.

@@ -9,23 +9,27 @@ class FeedbackForm extends Model
 {
     use HasFactory;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'feedback_forms';
+    protected $table = 'xin_feedback_forms';
+    protected $primaryKey = 'form_id';
+    public $timestamps = false;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    public function getTable()
+    {
+        if (\Illuminate\Support\Facades\Schema::hasTable('feedback_forms')) {
+            return 'feedback_forms';
+        }
+        return parent::getTable();
+    }
+
     protected $fillable = [
+        'company_id',
         'title',
         'description',
-        'show_status',
-        'added_by',
-        'show_until'
+        'created_at'
     ];
+
+    public function questions()
+    {
+        return $this->hasMany(FeedbackQuestion::class, 'form_id');
+    }
 }
