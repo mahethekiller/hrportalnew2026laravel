@@ -55,11 +55,11 @@
                 <tbody>
                     @forelse($documents as $doc)
                         <tr>
-                            <td class="ps-4 fw-bold text-gray-900">{{ $doc->file_name }}</td>
-                            <td><span class="badge bg-light text-dark border">{{ $doc->file_type }}</span></td>
-                            <td>{{ $doc->file_size }}</td>
+                            <td class="ps-4 fw-bold text-gray-900">{{ $doc->file_desc ?? $doc->file_name }}</td>
+                            <td><span class="badge bg-light text-dark border">{{ $doc->file_type ?? 'Policy' }}</span></td>
+                            <td>{{ $doc->file_size ?? 'N/A' }}</td>
                             <td class="text-end pe-4">
-                                <a href="{{ asset($doc->file_name) }}" class="btn btn-light-primary btn-sm py-1 px-3 fs-9 fw-bold" target="_blank">
+                                <a href="{{ Str::startsWith($doc->file_name, 'uploads/') ? asset($doc->file_name) : asset('uploads/documents/' . $doc->file_name) }}" class="btn btn-light-primary btn-sm py-1 px-3 fs-9 fw-bold" target="_blank">
                                     <i class="fa-solid fa-download me-1"></i> Download
                                 </a>
                             </td>
