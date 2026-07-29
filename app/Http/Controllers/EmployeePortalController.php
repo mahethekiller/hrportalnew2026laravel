@@ -101,22 +101,46 @@ class EmployeePortalController extends Controller
 
         if ($user) {
             $employee = Employee::where('user_id', $user->id)
-                ->orWhere('employee_id', $this->getEmployeeId())
+                ->orWhere('employee_id', $user->employee_id ?? '')
                 ->orWhere('email', $user->email ?? '')
                 ->first();
         }
 
         $cardNo = $employee?->card_no ?? $user?->card_no;
+        $employeeCode = $employee?->employee_id ?? $user?->employee_id;
+        $userId = $employee?->user_id ?? $user?->id;
 
-        if ($cardNo) {
-            $attendanceLogs = EmpTodayAttendance::where('card_no', $cardNo)
-                ->orderBy('id', 'desc')
-                ->paginate(15);
-        } else {
-            $attendanceLogs = EmpTodayAttendance::where('card_no', '___NO_CARD___')
-                ->orderBy('id', 'desc')
-                ->paginate(15);
-        }
+        $query = EmpTodayAttendance::query();
+
+        $query->where(function ($q) use ($cardNo, $employeeCode, $userId) {
+            $matched = false;
+
+            if (!empty($cardNo) && $cardNo !== '0') {
+                $q->orWhere('card_no', $cardNo)->orWhere('badgenumber', $cardNo);
+                $matched = true;
+            }
+
+            if (!empty($employeeCode) && $employeeCode !== '0') {
+                $q->orWhere('card_no', $employeeCode)->orWhere('badgenumber', $employeeCode);
+                $digits = preg_replace('/[^0-9]/', '', (string)$employeeCode);
+                if (!empty($digits)) {
+                    $q->orWhere('card_no', $digits)->orWhere('badgenumber', $digits);
+                    $q->orWhere('card_no', 'like', '%' . $digits)->orWhere('badgenumber', 'like', '%' . $digits);
+                }
+                $matched = true;
+            }
+
+            if (!empty($userId)) {
+                $q->orWhere('card_no', $userId)->orWhere('badgenumber', $userId);
+                $matched = true;
+            }
+
+            if (!$matched) {
+                $q->where('card_no', '___NO_CARD___');
+            }
+        });
+
+        $attendanceLogs = $query->orderBy('id', 'desc')->paginate(15);
 
         return view('my_portal.attendance', compact('attendanceLogs', 'employee'));
     }
