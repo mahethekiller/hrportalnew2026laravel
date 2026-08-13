@@ -29,6 +29,8 @@ use App\Http\Controllers\TekkenShowdownController;
 
 Route::get('/tekken-showdown', [TekkenShowdownController::class, 'index'])->name('tekken.index');
 Route::get('/tekken-showdown/admin', [TekkenShowdownController::class, 'admin'])->name('tekken.admin');
+Route::post('/tekken-showdown/admin/login', [TekkenShowdownController::class, 'verifyAdminPin'])->name('tekken.admin.login');
+Route::post('/tekken-showdown/admin/logout', [TekkenShowdownController::class, 'logoutAdmin'])->name('tekken.admin.logout');
 Route::post('/tekken-showdown/register', [TekkenShowdownController::class, 'store'])->name('tekken.store');
 Route::patch('/tekken-showdown/status/{id}', [TekkenShowdownController::class, 'updateStatus'])->name('tekken.status');
 Route::delete('/tekken-showdown/{id}', [TekkenShowdownController::class, 'destroy'])->name('tekken.destroy');

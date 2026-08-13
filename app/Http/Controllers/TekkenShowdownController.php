@@ -27,10 +27,14 @@ class TekkenShowdownController extends Controller
     }
 
     /**
-     * Display the separate admin management page with delete permissions.
+     * Display the separate admin management page with delete permissions (Password Protected: 254032).
      */
-    public function admin()
+    public function admin(Request $request)
     {
+        if (!session('tekken_admin_auth')) {
+            return view('tekken.admin_login');
+        }
+
         $registrations = TekkenRegistration::orderBy('created_at', 'asc')->get();
 
         $stats = [
@@ -42,6 +46,32 @@ class TekkenShowdownController extends Controller
         ];
 
         return view('tekken.admin', compact('registrations', 'stats'));
+    }
+
+    /**
+     * Verify Admin Security PIN Code (254032).
+     */
+    public function verifyAdminPin(Request $request)
+    {
+        $request->validate([
+            'pin' => 'required|string',
+        ]);
+
+        if (trim($request->input('pin')) === '254032') {
+            session(['tekken_admin_auth' => true]);
+            return redirect()->route('tekken.admin')->with('success', 'ACCESS GRANTED! Welcome Admin.');
+        }
+
+        return redirect()->route('tekken.admin')->with('error', 'ACCESS DENIED! Invalid Security Code.');
+    }
+
+    /**
+     * Lock/Logout Admin session.
+     */
+    public function logoutAdmin()
+    {
+        session()->forget('tekken_admin_auth');
+        return redirect()->route('tekken.admin')->with('success', 'Admin session locked.');
     }
 
     /**

@@ -40,6 +40,13 @@
           <i class="fa-solid fa-house"></i> Public View
         </a>
 
+        <form action="{{ route('tekken.admin.logout') }}" method="POST" style="display: inline;">
+          @csrf
+          <button type="submit" class="btn-secondary" style="font-size: 0.9rem; color: var(--neon-red); border-color: rgba(255, 42, 84, 0.4);">
+            <i class="fa-solid fa-lock"></i> Lock Panel
+          </button>
+        </form>
+
         <button class="audio-btn" id="audioToggleBtn" title="Toggle Arcade Sound Effects">
           <i class="fa-solid fa-volume-high"></i>
         </button>
