@@ -127,7 +127,7 @@
         </div>
       </div>
 
-      <!-- Live Player Records Data Table (WITH DELETE PERMISSION) -->
+      <!-- Live Player Records Data Table (WITH DELETE PERMISSION & ANTI-FRAUD TRACKING) -->
       <div class="table-responsive">
         <table class="records-table">
           <thead>
@@ -137,6 +137,7 @@
               <th>Department</th>
               <th>Festive Green</th>
               <th>Transaction ID / UTR</th>
+              <th>Computer / Device Info</th>
               <th>Status (Click to toggle)</th>
               <th style="color: var(--neon-red);">Action</th>
             </tr>
@@ -154,6 +155,8 @@
                     'completed' => 'fa-circle-check',
                     default => 'fa-hourglass-half',
                 };
+                $hasIpDuplicate = isset($ipCounts[$reg->ip_address]) && $ipCounts[$reg->ip_address] > 1;
+                $hasHostDuplicate = isset($hostnameCounts[$reg->device_name]) && $hostnameCounts[$reg->device_name] > 1;
               @endphp
               <tr id="row-{{ $reg->id }}" data-status="{{ $reg->status }}" data-green="{{ $reg->festive_green ? 'true' : 'false' }}">
                 <td><div class="queue-num">#{{ $index + 1 }}</div></td>
@@ -175,6 +178,21 @@
                   </span>
                 </td>
                 <td>
+                  <div style="font-family: monospace; font-size: 0.82rem; color: var(--neon-gold); font-weight: bold;">
+                    <i class="fa-solid fa-desktop" style="margin-right: 4px;"></i>{{ $reg->device_name ?: 'N/A' }}
+                  </div>
+                  <small style="color: var(--text-muted); font-size: 0.72rem; display: block;">
+                    IP: {{ $reg->ip_address ?: '127.0.0.1' }} &bull; MAC: {{ $reg->mac_address ?: 'LOCAL' }}
+                  </small>
+                  @if($hasIpDuplicate || $hasHostDuplicate)
+                    <div style="margin-top: 3px;">
+                      <span style="background: rgba(255, 42, 84, 0.2); color: #ff6685; border: 1px solid var(--neon-red); font-size: 0.68rem; padding: 2px 6px; border-radius: 4px; font-weight: bold; display: inline-block;">
+                        <i class="fa-solid fa-triangle-exclamation"></i> {{ max($ipCounts[$reg->ip_address] ?? 1, $hostnameCounts[$reg->device_name] ?? 1) }} Entries from Device
+                      </span>
+                    </div>
+                  @endif
+                </td>
+                <td>
                   <span class="status-pill {{ $statusClass }}" onclick="window.cycleStatus({{ $reg->id }})" id="status-pill-{{ $reg->id }}">
                     <i class="fa-solid {{ $statusIcon }}"></i> {{ $reg->status_label }}
                   </span>
@@ -187,7 +205,7 @@
               </tr>
             @empty
               <tr>
-                <td colspan="7">
+                <td colspan="8">
                   <div class="empty-state">
                     <i class="fa-solid fa-gamepad"></i>
                     <h3>No Players Found</h3>

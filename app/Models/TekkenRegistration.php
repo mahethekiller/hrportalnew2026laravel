@@ -19,6 +19,11 @@ class TekkenRegistration extends Model
         'fee_paid',
         'utr_number',
         'status',
+        'ip_address',
+        'mac_address',
+        'device_name',
+        'device_hash',
+        'user_agent',
     ];
 
     protected $casts = [

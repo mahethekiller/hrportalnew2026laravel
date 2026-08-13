@@ -230,12 +230,22 @@
       submitBtn.disabled = true;
       submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Registering...';
 
+      function getOrCreateDeviceGuid() {
+        let guid = localStorage.getItem('tekken_device_guid');
+        if (!guid) {
+          guid = 'DEV-' + Math.random().toString(36).substring(2, 10) + '-' + Date.now();
+          localStorage.setItem('tekken_device_guid', guid);
+        }
+        return guid;
+      }
+
       const formData = new FormData();
       formData.append('full_name', fullName);
       formData.append('department', department);
       formData.append('festive_green', festiveGreenVal);
       formData.append('matches', matches);
       formData.append('utr_number', utr);
+      formData.append('device_hash', getOrCreateDeviceGuid());
 
       const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
 
