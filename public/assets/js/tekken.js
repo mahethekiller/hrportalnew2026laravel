@@ -122,12 +122,10 @@
 
   // Dynamic Fee Calculation
   function calculateFee() {
-    const greenOutfitRadio = document.querySelector('input[name="greenOutfit"]:checked');
     const matchCountSelect = document.getElementById('matchCount');
     
     if (!matchCountSelect) return;
 
-    const isGreen = greenOutfitRadio ? greenOutfitRadio.value === 'yes' : true;
     const ratePerMatch = 30; // Flat ₹30 per match
     const matchCount = parseInt(matchCountSelect.value, 10) || 1;
     const totalFee = ratePerMatch * matchCount;
@@ -198,13 +196,6 @@
     const form = document.getElementById('registrationForm');
     if (!form) return;
 
-    document.querySelectorAll('input[name="greenOutfit"]').forEach(r => {
-      r.addEventListener('change', () => {
-        playSound('click');
-        calculateFee();
-      });
-    });
-
     const matchSelect = document.getElementById('matchCount');
     if (matchSelect) {
       matchSelect.addEventListener('change', () => {
@@ -220,7 +211,8 @@
 
       const fullName = document.getElementById('fullName').value.trim();
       const department = document.getElementById('department').value.trim();
-      const greenRadio = document.querySelector('input[name="greenOutfit"]:checked');
+      const festiveGreenInput = document.querySelector('input[name="festive_green"]');
+      const festiveGreenVal = festiveGreenInput ? festiveGreenInput.value : 0;
       const matches = parseInt(document.getElementById('matchCount').value, 10);
       const utr = document.getElementById('utrNumber').value.trim();
 
@@ -241,7 +233,7 @@
       const formData = new FormData();
       formData.append('full_name', fullName);
       formData.append('department', department);
-      formData.append('festive_green', greenRadio ? (greenRadio.value === 'yes' ? 1 : 0) : 0);
+      formData.append('festive_green', festiveGreenVal);
       formData.append('matches', matches);
       formData.append('utr_number', utr);
 
@@ -269,8 +261,6 @@
           recalculateStatsFromDOM();
 
           form.reset();
-          const defaultGreen = document.getElementById('greenYes');
-          if (defaultGreen) defaultGreen.checked = true;
           calculateFee();
 
           // Switch to Queue View tab

@@ -104,29 +104,8 @@
               </datalist>
             </div>
 
-            <!-- 3. Wearing Festive Green? (Radio Options) -->
-            <div class="form-group">
-              <label class="form-label">Wearing Festive Green Outfit?</label>
-              <div class="radio-cards">
-                
-                <label class="radio-card">
-                  <input type="radio" name="greenOutfit" value="yes" id="greenYes" checked>
-                  <div class="radio-content">
-                    <span class="radio-badge">💚 Yes - ₹30 Fee</span>
-                    <span class="radio-desc">Festive Green / Traditional</span>
-                  </div>
-                </label>
-
-                <label class="radio-card no-green">
-                  <input type="radio" name="greenOutfit" value="no" id="greenNo">
-                  <div class="radio-content">
-                    <span class="radio-badge">👕 No - ₹30 Fee</span>
-                    <span class="radio-desc">Regular / Casual Office Attire</span>
-                  </div>
-                </label>
-
-              </div>
-            </div>
+            <!-- Default Outfit Selection (No by default) -->
+            <input type="hidden" name="festive_green" value="0">
 
             <!-- 4. Number of Matches / Retries -->
             <div class="form-group">
