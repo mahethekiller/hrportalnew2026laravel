@@ -175,7 +175,7 @@
             </p>
 
             <div class="upi-id-pill">
-              <span>UPI: <strong>teejtekken@upi</strong></span>
+              <span>UPI: <strong>mahethekiller@okhdfcbank</strong></span>
               <button type="button" class="copy-btn" id="copyUpiBtn" title="Copy UPI ID">
                 <i class="fa-regular fa-copy"></i>
               </button>

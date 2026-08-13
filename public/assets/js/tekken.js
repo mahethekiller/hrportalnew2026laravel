@@ -146,7 +146,7 @@
       discountSavedTag.textContent = `⚡ Entry Rate: ₹30 / match`;
     }
 
-    const upiUri = `upi://pay?pa=teejtekken@upi&pn=Tekken%20Showdown&am=${totalFee}&cu=INR`;
+    const upiUri = `upi://pay?pa=mahethekiller@okhdfcbank&pn=Tekken%20Showdown&am=${totalFee}&cu=INR`;
     drawQRCode(upiUri, 'qrCanvas');
   }
 
@@ -478,9 +478,9 @@
 
     if (copyUpiBtn) {
       copyUpiBtn.addEventListener('click', () => {
-        navigator.clipboard.writeText('teejtekken@upi');
+        navigator.clipboard.writeText('mahethekiller@okhdfcbank');
         playSound('click');
-        showToast('Copied UPI ID: teejtekken@upi', 'fa-regular fa-clipboard');
+        showToast('Copied UPI ID: mahethekiller@okhdfcbank', 'fa-regular fa-clipboard');
       });
     }
   }
