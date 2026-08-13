@@ -51,6 +51,16 @@
       </div>
     </nav>
 
+    <!-- Glowing Ticker / Celebrity Impostor Announcement Banner -->
+    <div style="background: linear-gradient(90deg, rgba(255, 42, 84, 0.15), rgba(255, 215, 0, 0.15), rgba(255, 42, 84, 0.15)); border-bottom: 1px solid rgba(255, 42, 84, 0.4); padding: 10px 20px; overflow: hidden; display: flex; align-items: center; gap: 12px; font-size: 0.9rem; color: #ffffff; z-index: 10; relative;">
+      <span style="background: var(--neon-red); color: #fff; padding: 4px 10px; border-radius: 4px; font-family: var(--font-heading); font-size: 0.75rem; white-space: nowrap; font-weight: bold; box-shadow: 0 0 10px var(--neon-red-glow);">
+        <i class="fa-solid fa-bullhorn"></i> EVENT ANNOUNCEMENT
+      </span>
+      <marquee behavior="scroll" direction="left" scrollamount="6" style="vertical-align: middle;">
+        🚨 <strong>IMPORTANT EVENT UPDATE:</strong> Apparently, <strong>Samay Raina, Sourav Joshi & his wife, Bhai Jaan (Salman Khan), Rocky Bhai (Yash) & BeerBiceps</strong> are all fighting in our Tekken bracket tomorrow! 🗿 Quick reminder: <strong>IP & Device Logging is active.</strong> Stop trolling the portal or your real computer name will be posted right next to your fake celebrity crush! 🤡 ⚡ <strong>ENTRY FEE: ₹30/match</strong> ⚡
+      </marquee>
+    </div>
+
     <!-- ==========================================================================
          PAGE 1: REGISTRATION & PAYMENT FORM VIEW
          ========================================================================== -->
