@@ -166,8 +166,8 @@
 
           <!-- Embedded UPI Payment QR Code Section -->
           <div class="qr-container">
-            <div class="qr-box">
-              <canvas id="qrCanvas"></canvas>
+            <div class="qr-box" style="width: 210px; height: 210px; padding: 6px;">
+              <img src="{{ asset('assets/images/upi_qr.jpg') }}" alt="UPI Payment QR Code" style="width: 100%; height: 100%; object-fit: contain; border-radius: 8px;">
             </div>
 
             <p class="qr-instructions">
