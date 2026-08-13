@@ -322,7 +322,6 @@
       </td>
       <td><span class="dept-tag">${escapeHtml(item.department || item.dept)}</span></td>
       <td>${outfitBadge}</td>
-      <td><span class="fee-amount">₹${item.fee_paid || item.fee}</span></td>
       <td>
         <span class="utr-code" title="Click to copy UTR" onclick="window.copyUTR('${item.utr_number || item.utr}')">
           <i class="fa-regular fa-copy" style="margin-right: 4px;"></i>${escapeHtml(item.utr_number || item.utr)}
@@ -415,26 +414,21 @@
   function recalculateStatsFromDOM() {
     const rows = document.querySelectorAll('#queueTableBody tr:not(:has(.empty-state))');
     let totalPlayers = rows.length;
-    let totalRevenue = 0;
     let playingCount = 0;
     let waitingCount = 0;
 
     rows.forEach(r => {
       const st = r.getAttribute('data-status');
-      const feeText = r.querySelector('.fee-amount')?.textContent.replace('₹', '').trim() || '0';
-      totalRevenue += parseFloat(feeText) || 0;
 
       if (st === 'playing' || st === 'Playing Now') playingCount++;
       else if (st === 'in_queue' || st === 'In Queue') waitingCount++;
     });
 
     const totalEl = document.getElementById('statTotalPlayers');
-    const revEl = document.getElementById('statTotalRevenue');
     const playEl = document.getElementById('statPlayingCount');
     const waitEl = document.getElementById('statWaitingCount');
 
     if (totalEl) totalEl.textContent = totalPlayers;
-    if (revEl) revEl.textContent = `₹${totalRevenue.toFixed(0)}`;
     if (playEl) playEl.textContent = playingCount;
     if (waitEl) waitEl.textContent = waitingCount;
   }

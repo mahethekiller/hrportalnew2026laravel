@@ -72,16 +72,6 @@
         </div>
 
         <div class="stat-card">
-          <div class="stat-icon gold">
-            <i class="fa-solid fa-indian-rupee-sign"></i>
-          </div>
-          <div class="stat-info">
-            <div class="stat-value" id="statTotalRevenue">₹{{ number_format($stats['total_fees'], 0) }}</div>
-            <div class="stat-label">Revenue Collected</div>
-          </div>
-        </div>
-
-        <div class="stat-card">
           <div class="stat-icon cyan">
             <i class="fa-solid fa-fire"></i>
           </div>
@@ -139,7 +129,6 @@
               <th>Player Name</th>
               <th>Department</th>
               <th>Festive Green</th>
-              <th>Fee Paid</th>
               <th>Transaction ID / UTR</th>
               <th>Status (Click to toggle)</th>
               <th style="color: var(--neon-red);">Action</th>
@@ -173,7 +162,6 @@
                     <span class="outfit-badge regular"><i class="fa-solid fa-user-ninja"></i> Regular (₹30)</span>
                   @endif
                 </td>
-                <td><span class="fee-amount">₹{{ number_format($reg->fee_paid, 0) }}</span></td>
                 <td>
                   <span class="utr-code" title="Click to copy UTR" onclick="window.copyUTR('{{ $reg->utr_number }}')">
                     <i class="fa-regular fa-copy" style="margin-right: 4px;"></i>{{ $reg->utr_number }}
@@ -192,7 +180,7 @@
               </tr>
             @empty
               <tr>
-                <td colspan="8">
+                <td colspan="7">
                   <div class="empty-state">
                     <i class="fa-solid fa-gamepad"></i>
                     <h3>No Players Found</h3>
