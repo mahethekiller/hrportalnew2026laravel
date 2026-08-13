@@ -72,7 +72,10 @@ class EmployeeController extends Controller
             'employeeBankaccounts',
             'employeeQualifications',
             'employeeWorkExperiences',
-            'employeeContracts',
+            'employeeContracts.contractType',
+            'employeeContracts.designation',
+            'manager',
+            'subManager',
         ]);
 
         return view('employees.show', compact('employee'));

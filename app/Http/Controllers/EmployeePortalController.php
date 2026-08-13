@@ -6,6 +6,7 @@ use App\Models\Announcement;
 use App\Models\Document;
 use App\Models\EmpTodayAttendance;
 use App\Models\Employee;
+use App\Models\EmployeeDataUpdate;
 use App\Models\EmployeeLeave;
 use App\Models\EmployeeResignation;
 use App\Models\EmployeeTravel;
@@ -528,5 +529,257 @@ class EmployeePortalController extends Controller
         );
 
         return redirect()->back()->with('success', 'Resignation notice submitted successfully.');
+    }
+
+    /**
+     * ESS profile edit form
+     */
+    public function editProfile(): View
+    {
+        $employee = Employee::where('user_id', auth()->id())->firstOrFail();
+        $pendingUpdate = EmployeeDataUpdate::where('user_id', auth()->id())->where('acceptance', 0)->first();
+        return view('my_portal.profile_update', compact('employee', 'pendingUpdate'));
+    }
+
+    /**
+     * Store/update ESS profile update request
+     */
+    public function updateProfile(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'first_name' => 'nullable|string|max:255',
+            'last_name' => 'nullable|string|max:255',
+            'email_personal' => 'nullable|email|max:255',
+            'contact_no' => 'nullable|string|max:20',
+            'date_of_birth' => 'nullable|date',
+            'gender' => 'nullable|string|max:20',
+            'mother_tongue' => 'nullable|string|max:100',
+            'place_of_birth' => 'nullable|string|max:255',
+            'blood_group' => 'nullable|string|max:10',
+            'marital_status' => 'nullable|string|max:20',
+            'pan_number' => 'nullable|string|max:20',
+            'aadhar_no' => 'nullable|string|max:30',
+            'address' => 'nullable|string',
+            'address_com' => 'nullable|string',
+            // family
+            'father_name' => 'nullable|string|max:255',
+            'father_mobile' => 'nullable|string|max:20',
+            'father_gender' => 'nullable|string|max:10',
+            'father_occupation' => 'nullable|string|max:255',
+            'father_address' => 'nullable|string',
+            'mother_name' => 'nullable|string|max:255',
+            'mother_mobile' => 'nullable|string|max:20',
+            'mother_gender' => 'nullable|string|max:10',
+            'mother_occupation' => 'nullable|string|max:255',
+            'mother_address' => 'nullable|string',
+            'brother_name' => 'nullable|string|max:255',
+            'brother_mobile' => 'nullable|string|max:20',
+            'brother_gender' => 'nullable|string|max:10',
+            'brother_occupation' => 'nullable|string|max:255',
+            'brother_address' => 'nullable|string',
+            'sister_name' => 'nullable|string|max:255',
+            'sister_mobile' => 'nullable|string|max:20',
+            'sister_gender' => 'nullable|string|max:10',
+            'sister_occupation' => 'nullable|string|max:255',
+            'sister_address' => 'nullable|string',
+            'spouse_name' => 'nullable|string|max:255',
+            'spouse_mobile' => 'nullable|string|max:20',
+            'spouse_gender' => 'nullable|string|max:10',
+            'spouse_occupation' => 'nullable|string|max:255',
+            'spouse_address' => 'nullable|string',
+            'child1_name' => 'nullable|string|max:255',
+            'child1_mobile' => 'nullable|string|max:20',
+            'child1_gender' => 'nullable|string|max:10',
+            'child1_occupation' => 'nullable|string|max:255',
+            'child1_address' => 'nullable|string',
+            'child2_name' => 'nullable|string|max:255',
+            'child2_mobile' => 'nullable|string|max:20',
+            'child2_gender' => 'nullable|string|max:10',
+            'child2_occupation' => 'nullable|string|max:255',
+            'child2_address' => 'nullable|string',
+            // emergency
+            'emergency_contact_relation' => 'nullable|string|max:100',
+            'emergency_contact_name' => 'nullable|string|max:255',
+            'emergency_contact_gender' => 'nullable|string|max:10',
+            'emergency_contact_mobile' => 'nullable|string|max:20',
+            'emergency_contact_occupation' => 'nullable|string|max:255',
+            'emergency_contact_address' => 'nullable|string',
+            // other info
+            'official_contact_no' => 'nullable|string|max:20',
+            'vehicle_type' => 'nullable|string|max:50',
+            'vehicle_no' => 'nullable|string|max:50',
+            'paytm_no' => 'nullable|string|max:20',
+            'skype_id' => 'nullable|string|max:100',
+            'health_ins_opted' => 'nullable|string|max:10',
+            'pf_opted' => 'nullable|string|max:10',
+            'city' => 'nullable|string|max:100',
+            'state' => 'nullable|string|max:100',
+            'pincode' => 'nullable|string|max:20',
+        ]);
+
+        $validated['user_id'] = auth()->id();
+        $validated['email'] = auth()->user()->email;
+        $validated['added_by'] = auth()->id();
+        $validated['updated_by'] = auth()->id();
+        $validated['added_date'] = date('Y-m-d H:i:s');
+        $validated['updated_date'] = date('Y-m-d H:i:s');
+        $validated['acceptance'] = 0;
+        $validated['emp_updated_dets'] = 0;
+
+        // Generate safe defaults dynamically from the model's fillable attributes to avoid MySQL constraint errors
+        $fillable = (new EmployeeDataUpdate)->getFillable();
+        $defaults = [];
+        foreach ($fillable as $field) {
+            if (in_array($field, ['user_id', 'added_by', 'updated_by', 'acceptance', 'emp_updated_dets', 'acceptance_basic', 'acceptance_father', 'acceptance_mother', 'acceptance_emer', 'acceptance_bro', 'acceptance_sis', 'acceptance_c1', 'acceptance_c2', 'acceptance_social', 'acceptance_spouse'])) {
+                $defaults[$field] = 0;
+            } elseif ($field === 'date_of_birth' || $field === 'date_of_birth_doc') {
+                $defaults[$field] = '1970-01-01';
+            } elseif ($field === 'added_date' || $field === 'updated_date' || $field === 'acceptance_date') {
+                $defaults[$field] = date('Y-m-d H:i:s');
+            } else {
+                $defaults[$field] = '';
+            }
+        }
+
+        $saveData = array_merge($defaults, array_filter($validated, function($val) {
+            return $val !== null;
+        }));
+
+        EmployeeDataUpdate::updateOrCreate(
+            ['user_id' => auth()->id(), 'acceptance' => 0],
+            $saveData
+        );
+
+        return redirect()->route('my-portal.profile-update')->with('success', 'Profile update request submitted successfully. Awaiting HR approval.');
+    }
+
+    /**
+     * Public onboarding form for new hires
+     */
+    public function onboardingForm($token): View
+    {
+        $employee = Employee::whereRaw('MD5(user_id) = ?', [$token])->first();
+        if (!$employee) {
+            abort(404, 'Invalid onboarding token link.');
+        }
+        $pendingUpdate = EmployeeDataUpdate::where('user_id', $employee->user_id)->where('acceptance', 0)->first();
+        return view('my_portal.onboarding', compact('employee', 'pendingUpdate', 'token'));
+    }
+
+    /**
+     * Store public onboarding details
+     */
+    public function storeOnboarding(Request $request, $token): RedirectResponse
+    {
+        $employee = Employee::whereRaw('MD5(user_id) = ?', [$token])->first();
+        if (!$employee) {
+            abort(404, 'Invalid onboarding token link.');
+        }
+
+        $validated = $request->validate([
+            'first_name' => 'nullable|string|max:255',
+            'last_name' => 'nullable|string|max:255',
+            'email_personal' => 'nullable|email|max:255',
+            'contact_no' => 'nullable|string|max:20',
+            'date_of_birth' => 'nullable|date',
+            'gender' => 'nullable|string|max:20',
+            'mother_tongue' => 'nullable|string|max:100',
+            'place_of_birth' => 'nullable|string|max:255',
+            'blood_group' => 'nullable|string|max:10',
+            'marital_status' => 'nullable|string|max:20',
+            'pan_number' => 'nullable|string|max:20',
+            'aadhar_no' => 'nullable|string|max:30',
+            'address' => 'nullable|string',
+            'address_com' => 'nullable|string',
+            // family
+            'father_name' => 'nullable|string|max:255',
+            'father_mobile' => 'nullable|string|max:20',
+            'father_gender' => 'nullable|string|max:10',
+            'father_occupation' => 'nullable|string|max:255',
+            'father_address' => 'nullable|string',
+            'mother_name' => 'nullable|string|max:255',
+            'mother_mobile' => 'nullable|string|max:20',
+            'mother_gender' => 'nullable|string|max:10',
+            'mother_occupation' => 'nullable|string|max:255',
+            'mother_address' => 'nullable|string',
+            'brother_name' => 'nullable|string|max:255',
+            'brother_mobile' => 'nullable|string|max:20',
+            'brother_gender' => 'nullable|string|max:10',
+            'brother_occupation' => 'nullable|string|max:255',
+            'brother_address' => 'nullable|string',
+            'sister_name' => 'nullable|string|max:255',
+            'sister_mobile' => 'nullable|string|max:20',
+            'sister_gender' => 'nullable|string|max:10',
+            'sister_occupation' => 'nullable|string|max:255',
+            'sister_address' => 'nullable|string',
+            'spouse_name' => 'nullable|string|max:255',
+            'spouse_mobile' => 'nullable|string|max:20',
+            'spouse_gender' => 'nullable|string|max:10',
+            'spouse_occupation' => 'nullable|string|max:255',
+            'spouse_address' => 'nullable|string',
+            'child1_name' => 'nullable|string|max:255',
+            'child1_mobile' => 'nullable|string|max:20',
+            'child1_gender' => 'nullable|string|max:10',
+            'child1_occupation' => 'nullable|string|max:255',
+            'child1_address' => 'nullable|string',
+            'child2_name' => 'nullable|string|max:255',
+            'child2_mobile' => 'nullable|string|max:20',
+            'child2_gender' => 'nullable|string|max:10',
+            'child2_occupation' => 'nullable|string|max:255',
+            'child2_address' => 'nullable|string',
+            // emergency
+            'emergency_contact_relation' => 'nullable|string|max:100',
+            'emergency_contact_name' => 'nullable|string|max:255',
+            'emergency_contact_gender' => 'nullable|string|max:10',
+            'emergency_contact_mobile' => 'nullable|string|max:20',
+            'emergency_contact_occupation' => 'nullable|string|max:255',
+            'emergency_contact_address' => 'nullable|string',
+            // other info
+            'official_contact_no' => 'nullable|string|max:20',
+            'vehicle_type' => 'nullable|string|max:50',
+            'vehicle_no' => 'nullable|string|max:50',
+            'paytm_no' => 'nullable|string|max:20',
+            'skype_id' => 'nullable|string|max:100',
+            'health_ins_opted' => 'nullable|string|max:10',
+            'pf_opted' => 'nullable|string|max:10',
+            'city' => 'nullable|string|max:100',
+            'state' => 'nullable|string|max:100',
+            'pincode' => 'nullable|string|max:20',
+        ]);
+
+        $validated['user_id'] = $employee->user_id;
+        $validated['email'] = $employee->email;
+        $validated['added_by'] = $employee->user_id;
+        $validated['updated_by'] = $employee->user_id;
+        $validated['added_date'] = date('Y-m-d H:i:s');
+        $validated['updated_date'] = date('Y-m-d H:i:s');
+        $validated['acceptance'] = 0;
+        $validated['emp_updated_dets'] = 0;
+
+        // Generate safe defaults dynamically from the model's fillable attributes to avoid MySQL constraint errors
+        $fillable = (new EmployeeDataUpdate)->getFillable();
+        $defaults = [];
+        foreach ($fillable as $field) {
+            if (in_array($field, ['user_id', 'added_by', 'updated_by', 'acceptance', 'emp_updated_dets', 'acceptance_basic', 'acceptance_father', 'acceptance_mother', 'acceptance_emer', 'acceptance_bro', 'acceptance_sis', 'acceptance_c1', 'acceptance_c2', 'acceptance_social', 'acceptance_spouse'])) {
+                $defaults[$field] = 0;
+            } elseif ($field === 'date_of_birth' || $field === 'date_of_birth_doc') {
+                $defaults[$field] = '1970-01-01';
+            } elseif ($field === 'added_date' || $field === 'updated_date' || $field === 'acceptance_date') {
+                $defaults[$field] = date('Y-m-d H:i:s');
+            } else {
+                $defaults[$field] = '';
+            }
+        }
+
+        $saveData = array_merge($defaults, array_filter($validated, function($val) {
+            return $val !== null;
+        }));
+
+        EmployeeDataUpdate::updateOrCreate(
+            ['user_id' => $employee->user_id, 'acceptance' => 0],
+            $saveData
+        );
+
+        return redirect()->back()->with('success', 'Onboarding details submitted successfully. HR will review and activate your profile.');
     }
 }

@@ -95,6 +95,11 @@
             </div>
             <div class="card-body p-3">
                 <div class="d-grid gap-2">
+                    @can('edit.employees')
+                    <a href="{{ route('manager-portal.profile_approvals.index') }}" class="btn btn-light-info text-start fs-8 fw-semibold py-2">
+                        <i class="fa-solid fa-user-check me-2"></i> HR Profile Update Approvals
+                    </a>
+                    @endcan
                     <a href="{{ route('manager-portal.team_leaves') }}" class="btn btn-light-warning text-start fs-8 fw-semibold py-2">
                         <i class="fa-solid fa-calendar-check me-2"></i> Review Team Leave Requests
                     </a>

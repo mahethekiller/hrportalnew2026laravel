@@ -4,7 +4,7 @@
         <a href="{{ route('dashboard') }}" class="d-flex align-items-center text-decoration-none text-body-emphasis gap-2">
             <i class="fa-solid fa-layer-group text-primary fs-3"></i>
             <div class="d-flex flex-column">
-                <span class="fs-6 fw-bold text-gray-900 leading-none">Antigravity HR</span>
+                <span class="fs-6 fw-bold text-gray-900 leading-none">{{ $systemSetting->application_name ?? 'Antigravity HR' }}</span>
                 <span class="fs-9 text-gray-500 fw-semibold">Enterprise Portal</span>
             </div>
         </a>

@@ -131,6 +131,9 @@
                                 @endswitch
                             </td>
                             <td class="text-end">
+                                <button class="btn btn-light-info btn-sm me-1" onclick="navigator.clipboard.writeText('{{ route('onboarding', md5((string)$emp->user_id)) }}'); toastr.success('Onboarding link copied to clipboard!');" title="Copy Onboarding Link">
+                                    <i class="fa-solid fa-link"></i>
+                                </button>
                                 <a href="{{ route('employees.show', $emp->id) }}" class="btn btn-light-primary btn-sm me-1" title="View Profile">
                                     <i class="fa-solid fa-eye"></i>
                                 </a>

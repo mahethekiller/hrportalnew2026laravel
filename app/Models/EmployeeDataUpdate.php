@@ -14,7 +14,12 @@ class EmployeeDataUpdate extends Model
      *
      * @var string
      */
-    protected $table = 'employee_data_updates';
+    protected $table = 'xin_employee_data_updates';
+
+    /**
+     * Disable Eloquent timestamps.
+     */
+    public $timestamps = false;
 
     /**
      * The attributes that are mass assignable.
@@ -43,6 +48,7 @@ class EmployeeDataUpdate extends Model
         'address_com',
         'added_by',
         'updated_by',
+        'added_date',
         'updated_date',
         'facebook_link',
         'twitter_link',

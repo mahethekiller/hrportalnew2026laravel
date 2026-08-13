@@ -578,4 +578,14 @@ class Employee extends Authenticatable
     {
         return $this->hasMany(Training::class, 'employee_id');
     }
+
+    public function manager()
+    {
+        return $this->belongsTo(Employee::class, 'manager_id', 'user_id');
+    }
+
+    public function subManager()
+    {
+        return $this->belongsTo(Employee::class, 'sub_manager_id', 'user_id');
+    }
 }

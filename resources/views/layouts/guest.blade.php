@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', 'HR Portal') - Antigravity</title>
+    <title>@yield('title', 'HR Portal') - {{ $systemSetting->application_name ?? 'Antigravity HR' }}</title>
 
     <!-- Local Vendor CSS Assets -->
     <link href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -41,7 +41,7 @@
         <div class="text-center mb-4">
             <a href="/" class="d-flex align-items-center justify-content-center text-decoration-none text-body gap-2">
                 <i class="fa-solid fa-plane-departure text-primary fs-2"></i>
-                <span class="fs-3 fw-bold">Antigravity HR</span>
+                <span class="fs-3 fw-bold">{{ $systemSetting->application_name ?? 'Antigravity HR' }}</span>
             </a>
         </div>
         

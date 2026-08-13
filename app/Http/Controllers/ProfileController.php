@@ -11,14 +11,27 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
     public function edit(Request $request): View
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
+        $employee = $request->user();
+        $employee->load([
+            'user',
+            'department',
+            'designation',
+            'company',
+            'officeShift',
+            'documents',
+            'employeeContacts',
+            'employeeBankaccounts',
+            'employeeQualifications',
+            'employeeWorkExperiences',
+            'employeeContracts.contractType',
+            'employeeContracts.designation',
+            'manager',
+            'subManager',
         ]);
+
+        return view('employees.show', compact('employee'));
     }
 
     /**

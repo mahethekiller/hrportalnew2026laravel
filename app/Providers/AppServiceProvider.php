@@ -49,5 +49,14 @@ class AppServiceProvider extends ServiceProvider
                 ->get();
             $view->with('dynamicMenus', $menus);
         });
+
+        // Share global system settings across all layouts
+        try {
+            if (\Illuminate\Support\Facades\Schema::hasTable('xin_system_setting')) {
+                view()->share('systemSetting', \App\Models\SystemSetting::first());
+            }
+        } catch (\Throwable $e) {
+            // Ignore during DB migrations or CLI boot
+        }
     }
 }

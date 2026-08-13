@@ -19,9 +19,19 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/onboarding/{token}', [\App\Http\Controllers\EmployeePortalController::class, 'onboardingForm'])->name('onboarding');
+Route::post('/onboarding/{token}', [\App\Http\Controllers\EmployeePortalController::class, 'storeOnboarding'])->name('onboarding.store');
+
+// TEKKEN 7: TEEJ SPECIAL SHOWDOWN Public Standalone Routes (No Login Required)
+use App\Http\Controllers\TekkenShowdownController;
+
+Route::get('/tekken-showdown', [TekkenShowdownController::class, 'index'])->name('tekken.index');
+Route::post('/tekken-showdown/register', [TekkenShowdownController::class, 'store'])->name('tekken.store');
+Route::patch('/tekken-showdown/status/{id}', [TekkenShowdownController::class, 'updateStatus'])->name('tekken.status');
+Route::delete('/tekken-showdown/{id}', [TekkenShowdownController::class, 'destroy'])->name('tekken.destroy');
+Route::get('/tekken-showdown/export', [TekkenShowdownController::class, 'export'])->name('tekken.export');
 
 Route::middleware('auth')->group(function () {
     Route::get('/ui-components', function () {
@@ -156,6 +166,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/tax-documents', [\App\Http\Controllers\EmployeePortalController::class, 'storeTaxDocument'])->name('tax_documents.store');
         Route::get('/resignation', [\App\Http\Controllers\EmployeePortalController::class, 'resignation'])->name('resignation');
         Route::post('/resignation', [\App\Http\Controllers\EmployeePortalController::class, 'storeResignation'])->name('resignation.store');
+        Route::get('/profile-update', [\App\Http\Controllers\EmployeePortalController::class, 'editProfile'])->name('profile-update');
+        Route::post('/profile-update', [\App\Http\Controllers\EmployeePortalController::class, 'updateProfile'])->name('profile-update.store');
     });
 
     // Manager Team Hub Routes
@@ -165,6 +177,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/team-leaves', [\App\Http\Controllers\ManagerPortalController::class, 'teamLeaves'])->name('team_leaves');
         Route::post('/team-leaves/{leave}/status', [\App\Http\Controllers\ManagerPortalController::class, 'updateLeaveStatus'])->name('team_leaves.status');
         Route::get('/team-performance', [\App\Http\Controllers\ManagerPortalController::class, 'teamPerformance'])->name('team_performance');
+        Route::get('/profile-approvals', [\App\Http\Controllers\ManagerPortalController::class, 'pendingProfileUpdates'])->name('profile_approvals.index');
+        Route::get('/profile-approvals/{update}', [\App\Http\Controllers\ManagerPortalController::class, 'viewProfileUpdate'])->name('profile_approvals.show');
+        Route::post('/profile-approvals/{update}/approve', [\App\Http\Controllers\ManagerPortalController::class, 'approveProfileUpdate'])->name('profile_approvals.approve');
     });
 
     // Announcement Routes

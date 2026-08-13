@@ -14,7 +14,7 @@ class Holiday extends Model
      *
      * @var string
      */
-    protected $table = 'holidays';
+    protected $table = 'xin_holidays';
 
     /**
      * The attributes that are mass assignable.

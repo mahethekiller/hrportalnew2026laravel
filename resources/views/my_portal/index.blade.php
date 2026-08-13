@@ -93,6 +93,9 @@
             </div>
             <div class="card-body p-3">
                 <div class="d-grid gap-2">
+                    <a href="{{ route('my-portal.profile-update') }}" class="btn btn-light-primary text-start fs-8 fw-semibold py-2">
+                        <i class="fa-solid fa-user-pen me-2"></i> Update Profile & Family Info
+                    </a>
                     <a href="{{ route('my-portal.performance_feedback') }}" class="btn btn-light-primary text-start fs-8 fw-semibold py-2">
                         <i class="fa-solid fa-star me-2"></i> Performance Self-Rating
                     </a>
