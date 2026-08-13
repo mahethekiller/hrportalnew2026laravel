@@ -59,7 +59,7 @@
         <i class="fa-solid fa-bullhorn"></i> ANNOUNCEMENT
       </span>
       <marquee behavior="scroll" direction="left" scrollamount="6" style="vertical-align: middle;">
-        🚨 <strong>IMPORTANT EVENT UPDATE:</strong> Apparently, <strong>Samay Raina, Sourav Joshi & his wife, Bhai Jaan (Salman Khan), Rocky Bhai (Yash) & BeerBiceps</strong> are all fighting in our Tekken bracket tomorrow! 🗿 Quick reminder: <strong>IP & Device Logging is active.</strong> Stop trolling the portal or your real computer name will be posted right next to your fake celebrity crush! 🤡 ⚡ <strong>ADMIN CONTROL ACTIVE</strong> ⚡
+        🚨 <strong>IMPORTANT EVENT UPDATE:</strong> Apparently, <strong>Samay Raina, Sourav Joshi & his wife, Bhai Jaan (Salman Khan), Rocky Bhai (Yash) & BeerBiceps</strong> are all fighting in our Tekken bracket tomorrow! 🗿 Quick reminder: <strong>IP & Device Logging is active — IP will be matched directly with your HR Portal IP login history!</strong> Stop trolling the portal or your real name & employee record will be posted right next to your fake celebrity crush! 🤡 ⚡ <strong>ADMIN CONTROL ACTIVE</strong> ⚡
       </marquee>
     </div>
 
