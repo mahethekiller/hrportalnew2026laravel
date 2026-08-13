@@ -27,6 +27,24 @@ class TekkenShowdownController extends Controller
     }
 
     /**
+     * Display the separate admin management page with delete permissions.
+     */
+    public function admin()
+    {
+        $registrations = TekkenRegistration::orderBy('created_at', 'asc')->get();
+
+        $stats = [
+            'total_players' => $registrations->count(),
+            'in_queue' => $registrations->where('status', 'in_queue')->count(),
+            'playing' => $registrations->where('status', 'playing')->count(),
+            'completed' => $registrations->where('status', 'completed')->count(),
+            'total_fees' => $registrations->sum('fee_paid'),
+        ];
+
+        return view('tekken.admin', compact('registrations', 'stats'));
+    }
+
+    /**
      * Handle public registration submission.
      */
     public function store(Request $request)
@@ -40,7 +58,7 @@ class TekkenShowdownController extends Controller
         ]);
 
         $matches = (int) $validated['matches'];
-        $feePaid = $matches * 20.00;
+        $feePaid = $matches * 30.00;
         $festiveGreen = filter_var($request->input('festive_green', false), FILTER_VALIDATE_BOOLEAN);
 
         $registration = TekkenRegistration::create([

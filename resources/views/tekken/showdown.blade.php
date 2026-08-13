@@ -61,20 +61,9 @@
         <div class="event-tag">
           <i class="fa-solid fa-bolt-lightning"></i> Office Esports Event • King of the Hill
         </div>
-        <h1 class="main-title">TEKKEN 7: <span>TEEJ SPECIAL SHOWDOWN</span></h1>
+        <h1 class="main-title">TEKKEN 7: <span>SHOWDOWN</span></h1>
         <p class="subtitle">Winner Stays On • <strong>King of the Hill</strong></p>
       </header>
-
-      <!-- Teej Special Discount Highlight Box -->
-      <div class="highlight-box">
-        <div class="highlight-icon">
-          💚
-        </div>
-        <div class="highlight-content">
-          <h4>TEEJ SPECIAL DISCOUNT ENABLED</h4>
-          <p>Special Teej Offer: Entry fee is <strong>₹20</strong> per match for all participants!</p>
-        </div>
-      </div>
 
       <!-- Registration Form & Dynamic Calculator Grid -->
       <div class="form-grid">
@@ -123,7 +112,7 @@
                 <label class="radio-card">
                   <input type="radio" name="greenOutfit" value="yes" id="greenYes" checked>
                   <div class="radio-content">
-                    <span class="radio-badge">💚 Yes - ₹20 Fee</span>
+                    <span class="radio-badge">💚 Yes - ₹30 Fee</span>
                     <span class="radio-desc">Festive Green / Traditional</span>
                   </div>
                 </label>
@@ -131,7 +120,7 @@
                 <label class="radio-card no-green">
                   <input type="radio" name="greenOutfit" value="no" id="greenNo">
                   <div class="radio-content">
-                    <span class="radio-badge">👕 No - ₹20 Fee</span>
+                    <span class="radio-badge">👕 No - ₹30 Fee</span>
                     <span class="radio-desc">Regular / Casual Office Attire</span>
                   </div>
                 </label>
@@ -184,7 +173,7 @@
           <div class="fee-summary-card">
             <div class="summary-row">
               <span>Rate Per Match:</span>
-              <strong id="ratePerMatchDisplay" style="color: var(--neon-gold);">₹20</strong>
+              <strong id="ratePerMatchDisplay" style="color: var(--neon-gold);">₹30</strong>
             </div>
             <div class="summary-row">
               <span>Match Count:</span>
@@ -192,10 +181,7 @@
             </div>
             <div class="summary-row total">
               <span>Total Amount Due:</span>
-              <span class="total-amount" id="totalFeeDisplay">₹20</span>
-            </div>
-            <div style="margin-top: 8px; text-align: right;">
-              <span class="discount-saved-tag" id="discountSavedTag">🎉 Festive Green Outfit</span>
+              <span class="total-amount" id="totalFeeDisplay">₹30</span>
             </div>
           </div>
 
@@ -206,7 +192,7 @@
             </div>
 
             <p class="qr-instructions">
-              Scan UPI QR Code & Pay <strong id="qrAmountDisplay">20</strong> via GPay / PhonePe / Paytm
+              Scan UPI QR Code & Pay <strong id="qrAmountDisplay">30</strong> via GPay / PhonePe / Paytm
             </p>
 
             <div class="upi-id-pill">
@@ -300,8 +286,8 @@
 
           <select id="filterOutfit" class="filter-select">
             <option value="all">All Outfits</option>
-            <option value="green">Green Outfit (₹20)</option>
-            <option value="regular">Regular Outfit (₹20)</option>
+            <option value="green">Green Outfit (₹30)</option>
+            <option value="regular">Regular Outfit (₹30)</option>
           </select>
 
           <a href="{{ route('tekken.export') }}" class="btn-secondary" id="exportCsvBtn" title="Export queue records to CSV">
@@ -310,7 +296,7 @@
         </div>
       </div>
 
-      <!-- Live Player Records Data Table -->
+      <!-- Live Player Records Data Table (Public Read-Only Queue) -->
       <div class="table-responsive">
         <table class="records-table">
           <thead>
@@ -322,7 +308,6 @@
               <th>Fee Paid</th>
               <th>Transaction ID / UTR</th>
               <th>Status (Click to toggle)</th>
-              <th>Action</th>
             </tr>
           </thead>
           <tbody id="queueTableBody">
@@ -348,9 +333,9 @@
                 <td><span class="dept-tag">{{ $reg->department }}</span></td>
                 <td>
                   @if($reg->festive_green)
-                    <span class="outfit-badge green"><i class="fa-solid fa-shirt"></i> Green (₹20)</span>
+                    <span class="outfit-badge green"><i class="fa-solid fa-shirt"></i> Green (₹30)</span>
                   @else
-                    <span class="outfit-badge regular"><i class="fa-solid fa-user-ninja"></i> Regular (₹20)</span>
+                    <span class="outfit-badge regular"><i class="fa-solid fa-user-ninja"></i> Regular (₹30)</span>
                   @endif
                 </td>
                 <td><span class="fee-amount">₹{{ number_format($reg->fee_paid, 0) }}</span></td>
@@ -364,15 +349,10 @@
                     <i class="fa-solid {{ $statusIcon }}"></i> {{ $reg->status_label }}
                   </span>
                 </td>
-                <td>
-                  <button class="action-btn" title="Delete Entry" onclick="window.deletePlayer({{ $reg->id }})">
-                    <i class="fa-solid fa-trash-can"></i>
-                  </button>
-                </td>
               </tr>
             @empty
               <tr>
-                <td colspan="8">
+                <td colspan="7">
                   <div class="empty-state">
                     <i class="fa-solid fa-gamepad"></i>
                     <h3>No Players Found</h3>

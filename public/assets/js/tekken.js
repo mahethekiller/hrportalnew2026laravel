@@ -128,7 +128,7 @@
     if (!matchCountSelect) return;
 
     const isGreen = greenOutfitRadio ? greenOutfitRadio.value === 'yes' : true;
-    const ratePerMatch = 20; // Flat ₹20 per match for Teej Special Showdown
+    const ratePerMatch = 30; // Flat ₹30 per match
     const matchCount = parseInt(matchCountSelect.value, 10) || 1;
     const totalFee = ratePerMatch * matchCount;
 
@@ -145,7 +145,7 @@
 
     if (discountSavedTag) {
       discountSavedTag.style.display = 'inline-block';
-      discountSavedTag.textContent = isGreen ? `🎉 Festive Green Outfit` : `⚡ Teej Showdown Rate: ₹20 / match`;
+      discountSavedTag.textContent = `⚡ Entry Rate: ₹30 / match`;
     }
 
     const upiUri = `upi://pay?pa=teejtekken@upi&pn=Tekken%20Showdown&am=${totalFee}&cu=INR`;
@@ -298,8 +298,8 @@
 
     const rowCount = tbody.querySelectorAll('tr').length + 1;
     const outfitBadge = item.festive_green
-      ? `<span class="outfit-badge green"><i class="fa-solid fa-shirt"></i> Green (₹20)</span>`
-      : `<span class="outfit-badge regular"><i class="fa-solid fa-user-ninja"></i> Regular (₹20)</span>`;
+      ? `<span class="outfit-badge green"><i class="fa-solid fa-shirt"></i> Green (₹30)</span>`
+      : `<span class="outfit-badge regular"><i class="fa-solid fa-user-ninja"></i> Regular (₹30)</span>`;
 
     let statusClass = 'in-queue';
     let statusIcon = 'fa-hourglass-half';
@@ -310,6 +310,15 @@
       statusClass = 'completed';
       statusIcon = 'fa-circle-check';
     }
+
+    const hasActionCol = document.querySelector('.records-table th:last-child')?.textContent.includes('Action');
+    const actionTdHTML = hasActionCol ? `
+      <td>
+        <button class="action-btn" title="Delete Entry" onclick="window.deletePlayer(${item.id})">
+          <i class="fa-solid fa-trash-can"></i>
+        </button>
+      </td>
+    ` : '';
 
     const tr = document.createElement('tr');
     tr.id = `row-${item.id}`;
@@ -334,11 +343,7 @@
           <i class="fa-solid ${statusIcon}"></i> ${item.status_label || item.status}
         </span>
       </td>
-      <td>
-        <button class="action-btn" title="Delete Entry" onclick="window.deletePlayer(${item.id})">
-          <i class="fa-solid fa-trash-can"></i>
-        </button>
-      </td>
+      ${actionTdHTML}
     `;
 
     tbody.prepend(tr);
