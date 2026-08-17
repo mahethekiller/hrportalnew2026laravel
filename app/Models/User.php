@@ -51,7 +51,8 @@ class User extends Authenticatable
 
     public function roleRelation()
     {
-        return $this->belongsTo(UserRole::class, 'user_role', 'role_id');
+        $key = \Illuminate\Support\Facades\Schema::hasColumn((new UserRole)->getTable(), 'role_id') ? 'role_id' : 'id';
+        return $this->belongsTo(UserRole::class, 'user_role', $key);
     }
 
     public function employees()
