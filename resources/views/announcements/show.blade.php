@@ -67,7 +67,7 @@
                 </div>
                 @endif
 
-                <div class="fs-7 leading-relaxed text-body-emphasis">
+                <div class="fs-7 leading-relaxed text-body-emphasis announcement-content">
                     @if($hasHtml)
                         {!! $rawDescription !!}
                     @else

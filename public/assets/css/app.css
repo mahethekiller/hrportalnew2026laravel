@@ -889,3 +889,26 @@ h3, .headline-md {
     background-color: rgba(27, 132, 255, 0.15);
     color: var(--bs-primary);
 }
+
+/* Announcement Rich Text Dark Mode Compliance (MS Word & CKEditor HTML pastes) */
+[data-bs-theme="dark"] .announcement-content,
+[data-bs-theme="dark"] .announcement-content p,
+[data-bs-theme="dark"] .announcement-content span,
+[data-bs-theme="dark"] .announcement-content strong,
+[data-bs-theme="dark"] .announcement-content em,
+[data-bs-theme="dark"] .announcement-content h1,
+[data-bs-theme="dark"] .announcement-content h2,
+[data-bs-theme="dark"] .announcement-content h3,
+[data-bs-theme="dark"] .announcement-content h4,
+[data-bs-theme="dark"] .announcement-content h5,
+[data-bs-theme="dark"] .announcement-content h6,
+[data-bs-theme="dark"] .announcement-content li,
+[data-bs-theme="dark"] .announcement-content td,
+[data-bs-theme="dark"] .announcement-content th {
+    color: var(--text-main) !important;
+}
+
+[data-bs-theme="dark"] .announcement-content a {
+    color: #58a6ff !important;
+    text-decoration: underline;
+}
