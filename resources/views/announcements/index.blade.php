@@ -67,8 +67,8 @@
                         <span class="text-muted fs-9"><i class="fa-regular fa-clock me-1"></i>{{ $anc->start_date }}</span>
                     </div>
 
-                    <h5 class="fw-bold text-gray-900 mb-2">{{ $anc->title }}</h5>
-                    <p class="text-muted fs-8 leading-relaxed mb-4 flex-grow-1">{{ Str::limit($anc->summary, 110) }}</p>
+                    <h5 class="fw-bold text-body-emphasis mb-2">{{ $anc->title }}</h5>
+                    <p class="text-body-secondary fs-8 leading-relaxed mb-4 flex-grow-1">{{ Str::limit(strip_tags(html_entity_decode($anc->summary ?? '')), 110) }}</p>
 
                     <div class="pt-3 border-top d-flex align-items-center justify-content-between mt-auto">
                         <span class="text-muted fs-9">
