@@ -62,52 +62,64 @@
 <!-- Quick Metrics Overview -->
 <div class="row g-3 mb-4">
     <div class="col-xl-3 col-sm-6">
-        <div class="card border-0 shadow-sm rounded-3 p-3 bg-white h-100">
+        <div class="card border-0 shadow-sm rounded-3 p-3 bg-body-tertiary dashboard-card h-100">
             <div class="d-flex align-items-center justify-content-between">
                 <div>
-                    <span class="text-muted fs-9 fw-semibold d-block">My Leave Requests</span>
-                    <h3 class="fw-bolder text-gray-900 mb-0 mt-1">{{ count($leaves) }}</h3>
+                    <span class="text-body-secondary fs-9 fw-semibold d-block text-uppercase tracking-wider">Leave Requests</span>
+                    <h3 class="fw-bolder text-body-emphasis mb-0 mt-1">{{ count($leaves) }}</h3>
+                    <span class="badge bg-primary-subtle text-primary fw-bold fs-9 mt-1">
+                        <i class="fa-solid fa-calendar-check me-1"></i> ESS Log
+                    </span>
                 </div>
-                <div class="bg-light-primary text-primary p-3 rounded-circle" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
+                <div class="avatar-md rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center p-3" style="width: 52px; height: 52px;">
                     <i class="fa-solid fa-calendar-check fs-4"></i>
                 </div>
             </div>
         </div>
     </div>
     <div class="col-xl-3 col-sm-6">
-        <div class="card border-0 shadow-sm rounded-3 p-3 bg-white h-100">
+        <div class="card border-0 shadow-sm rounded-3 p-3 bg-body-tertiary dashboard-card h-100">
             <div class="d-flex align-items-center justify-content-between">
                 <div>
-                    <span class="text-muted fs-9 fw-semibold d-block">My Payslips</span>
-                    <h3 class="fw-bolder text-gray-900 mb-0 mt-1">{{ count($payslips) }}</h3>
+                    <span class="text-body-secondary fs-9 fw-semibold d-block text-uppercase tracking-wider">My Payslips</span>
+                    <h3 class="fw-bolder text-body-emphasis mb-0 mt-1">{{ count($payslips) }}</h3>
+                    <span class="badge bg-success-subtle text-success fw-bold fs-9 mt-1">
+                        <i class="fa-solid fa-shield-check me-1"></i> Verified
+                    </span>
                 </div>
-                <div class="bg-light-success text-success p-3 rounded-circle" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
+                <div class="avatar-md rounded-circle bg-success-subtle text-success d-flex align-items-center justify-content-center p-3" style="width: 52px; height: 52px;">
                     <i class="fa-solid fa-wallet fs-4"></i>
                 </div>
             </div>
         </div>
     </div>
     <div class="col-xl-3 col-sm-6">
-        <div class="card border-0 shadow-sm rounded-3 p-3 bg-white h-100">
+        <div class="card border-0 shadow-sm rounded-3 p-3 bg-body-tertiary dashboard-card h-100">
             <div class="d-flex align-items-center justify-content-between">
                 <div>
-                    <span class="text-muted fs-9 fw-semibold d-block">Meetings Today</span>
-                    <h3 class="fw-bolder text-gray-900 mb-0 mt-1">{{ count($meetings) }}</h3>
+                    <span class="text-body-secondary fs-9 fw-semibold d-block text-uppercase tracking-wider">Meetings Today</span>
+                    <h3 class="fw-bolder text-body-emphasis mb-0 mt-1">{{ count($meetings) }}</h3>
+                    <span class="badge bg-warning-subtle text-warning fw-bold fs-9 mt-1">
+                        <i class="fa-solid fa-clock me-1"></i> Scheduled
+                    </span>
                 </div>
-                <div class="bg-light-warning text-warning p-3 rounded-circle" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
+                <div class="avatar-md rounded-circle bg-warning-subtle text-warning d-flex align-items-center justify-content-center p-3" style="width: 52px; height: 52px;">
                     <i class="fa-solid fa-handshake fs-4"></i>
                 </div>
             </div>
         </div>
     </div>
     <div class="col-xl-3 col-sm-6">
-        <div class="card border-0 shadow-sm rounded-3 p-3 bg-white h-100">
+        <div class="card border-0 shadow-sm rounded-3 p-3 bg-body-tertiary dashboard-card h-100">
             <div class="d-flex align-items-center justify-content-between">
                 <div>
-                    <span class="text-muted fs-9 fw-semibold d-block">Active Broadcasts</span>
-                    <h3 class="fw-bolder text-gray-900 mb-0 mt-1">{{ count($announcements) }}</h3>
+                    <span class="text-body-secondary fs-9 fw-semibold d-block text-uppercase tracking-wider">Broadcasts</span>
+                    <h3 class="fw-bolder text-body-emphasis mb-0 mt-1">{{ count($announcements) }}</h3>
+                    <span class="badge bg-danger-subtle text-danger fw-bold fs-9 mt-1">
+                        <i class="fa-solid fa-bullhorn me-1"></i> Corporate
+                    </span>
                 </div>
-                <div class="bg-light-danger text-danger p-3 rounded-circle" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
+                <div class="avatar-md rounded-circle bg-danger-subtle text-danger d-flex align-items-center justify-content-center p-3" style="width: 52px; height: 52px;">
                     <i class="fa-solid fa-bullhorn fs-4"></i>
                 </div>
             </div>
@@ -119,37 +131,42 @@
     <div class="col-lg-8">
         
         <!-- Interactive Attendance / Clock In Widget -->
-        <div class="card border-0 shadow-sm rounded-3 mb-4 bg-white">
-            <div class="card-header border-0 bg-transparent pt-4 pb-0">
-                <h5 class="fw-bold text-gray-900 fs-6 mb-0"><i class="fa-solid fa-business-time me-2 text-primary"></i> Daily Work Session</h5>
-                <p class="text-muted fs-9 mb-0">Clock in to log your Work From Home sessions or verify your office check-in.</p>
+        <div class="card border-0 shadow-sm rounded-3 mb-4 bg-body-tertiary dashboard-card">
+            <div class="card-header border-0 bg-transparent pt-4 pb-0 d-flex align-items-center justify-content-between">
+                <div>
+                    <h5 class="fw-bold text-body-emphasis fs-6 mb-0"><i class="fa-solid fa-business-time me-2 text-primary"></i> Daily Work Session</h5>
+                    <p class="text-body-secondary fs-9 mb-0">Clock in to log your Work From Home sessions or verify your office check-in.</p>
+                </div>
+                <span class="badge bg-success-subtle text-success fs-9 fw-bold px-2 py-1">
+                    <span class="badge-pulse-dot bg-success me-1"></span> Live Punch System
+                </span>
             </div>
             <div class="card-body">
                 <div class="row align-items-center">
                     <div class="col-md-7 mb-3 mb-md-0">
                         @if($activeWfh)
-                            <div class="p-3 border border-warning border-opacity-50 rounded bg-warning bg-opacity-10 d-flex gap-3 align-items-center">
+                            <div class="p-3 border border-warning-subtle rounded-3 bg-warning-subtle bg-opacity-20 d-flex gap-3 align-items-center">
                                 <div class="spinner-grow text-warning" role="status" style="width: 1.5rem; height: 1.5rem;"></div>
                                 <div>
-                                    <span class="d-block fw-bold text-gray-900 fs-8">WFH Session Active</span>
-                                    <span class="fs-9 text-muted">Clocked in at {{ \Carbon\Carbon::parse($activeWfh->clock_in)->format('h:i A') }}</span>
-                                    <span class="d-block fs-9 text-gray-600 mt-1"><i class="fa-solid fa-quote-left me-1"></i> {{ $activeWfh->clean_description }}</span>
+                                    <span class="d-block fw-bold text-body-emphasis fs-8">WFH Session Active</span>
+                                    <span class="fs-9 text-body-secondary">Clocked in at {{ \Carbon\Carbon::parse($activeWfh->clock_in)->format('h:i A') }}</span>
+                                    <span class="d-block fs-9 text-body-secondary mt-1"><i class="fa-solid fa-quote-left me-1"></i> {{ $activeWfh->clean_description }}</span>
                                 </div>
                             </div>
                         @elseif($todayOfficePunch)
-                            <div class="p-3 border border-success border-opacity-50 rounded bg-success bg-opacity-10 d-flex gap-3 align-items-center">
+                            <div class="p-3 border border-success-subtle rounded-3 bg-success-subtle bg-opacity-20 d-flex gap-3 align-items-center">
                                 <div class="bg-success text-white p-2 rounded-circle fs-8"><i class="fa-solid fa-circle-check"></i></div>
                                 <div>
-                                    <span class="d-block fw-bold text-gray-900 fs-8">Office Session Clocked In</span>
-                                    <span class="fs-9 text-muted">Check-in recorded at {{ \Carbon\Carbon::parse($todayOfficePunch->check_in_time ?? $todayOfficePunch->check_in_datetime)->format('h:i A') }}</span>
+                                    <span class="d-block fw-bold text-body-emphasis fs-8">Office Session Clocked In</span>
+                                    <span class="fs-9 text-body-secondary">Check-in recorded at {{ \Carbon\Carbon::parse($todayOfficePunch->check_in_time ?? $todayOfficePunch->check_in_datetime)->format('h:i A') }}</span>
                                 </div>
                             </div>
                         @else
-                            <div class="p-3 border rounded bg-light d-flex gap-3 align-items-center">
-                                <div class="bg-secondary text-white p-2 rounded-circle fs-8"><i class="fa-solid fa-hourglass-start"></i></div>
+                            <div class="p-3 border border-subtle rounded-3 bg-body d-flex gap-3 align-items-center">
+                                <div class="bg-secondary-subtle text-secondary p-2 rounded-circle fs-8"><i class="fa-solid fa-hourglass-start"></i></div>
                                 <div>
-                                    <span class="d-block fw-bold text-gray-900 fs-8">No Active Work Session</span>
-                                    <span class="fs-9 text-muted">Submit a session log below to start your WFH work day.</span>
+                                    <span class="d-block fw-bold text-body-emphasis fs-8">No Active Work Session</span>
+                                    <span class="fs-9 text-body-secondary">Submit a session log below to start your WFH work day.</span>
                                 </div>
                             </div>
                         @endif
@@ -160,12 +177,12 @@
                             <form action="{{ route('attendance.wfh-clock-out') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="clocking_id" value="{{ $activeWfh->id }}">
-                                <button type="submit" class="btn btn-danger fw-bold py-2 w-100 fs-8">
+                                <button type="submit" class="btn btn-danger fw-bold py-2 w-100 fs-8 shadow-sm">
                                     <i class="fa-solid fa-right-from-bracket me-1"></i> Clock Out (WFH)
                                 </button>
                             </form>
                         @elseif(!$todayOfficePunch)
-                            <button class="btn btn-primary fw-bold py-2 w-100 fs-8" data-bs-toggle="collapse" data-bs-target="#wfhClockInCollapse">
+                            <button class="btn btn-primary fw-bold py-2 w-100 fs-8 shadow-sm" data-bs-toggle="collapse" data-bs-target="#wfhClockInCollapse">
                                 <i class="fa-solid fa-house-laptop me-1"></i> Start WFH Session
                             </button>
                         @else
@@ -178,16 +195,16 @@
 
                 <!-- Clock-in Collapse Form -->
                 <div class="collapse mt-3" id="wfhClockInCollapse">
-                    <div class="p-3 border rounded-3 bg-light">
+                    <div class="p-3 border border-subtle rounded-3 bg-body">
                         <form action="{{ route('attendance.wfh-clock-in') }}" method="POST">
                             @csrf
                             <div class="mb-3">
-                                <label class="form-label fs-9 fw-bold">WFH Work Description / Task Plan <span class="text-danger">*</span></label>
-                                <textarea name="description" class="form-control fs-8" rows="2" required placeholder="e.g. Working on bug fixes for core HR modules and dashboard updates..."></textarea>
+                                <label class="form-label fs-9 fw-bold text-body-emphasis">WFH Work Description / Task Plan <span class="text-danger">*</span></label>
+                                <textarea name="description" class="form-control fs-8 bg-body-tertiary text-body-emphasis" rows="2" required placeholder="e.g. Working on bug fixes for core HR modules and dashboard updates..."></textarea>
                             </div>
                             <div class="d-flex justify-content-end gap-2">
                                 <button type="button" class="btn btn-light btn-sm fs-9" data-bs-toggle="collapse" data-bs-target="#wfhClockInCollapse">Cancel</button>
-                                <button type="submit" class="btn btn-primary btn-sm fs-9 fw-bold">Confirm Clock In</button>
+                                <button type="submit" class="btn btn-primary btn-sm fs-9 fw-bold shadow-sm">Confirm Clock In</button>
                             </div>
                         </form>
                     </div>
@@ -196,35 +213,39 @@
         </div>
 
         <!-- Corporate Announcements -->
-        <div class="card border-0 shadow-sm rounded-3 mb-4 bg-white">
+        <div class="card border-0 shadow-sm rounded-3 mb-4 bg-body-tertiary dashboard-card">
             <div class="card-header border-0 bg-transparent pt-4 pb-0">
-                <h5 class="fw-bold text-gray-900 fs-6 mb-0"><i class="fa-solid fa-bullhorn me-2 text-danger"></i> Corporate Broadcasts</h5>
+                <h5 class="fw-bold text-body-emphasis fs-6 mb-0"><i class="fa-solid fa-bullhorn me-2 text-danger"></i> Corporate Broadcasts</h5>
             </div>
             <div class="card-body">
                 @forelse($announcements as $anc)
-                    <div class="p-3 border rounded-3 mb-3 bg-light bg-opacity-50">
+                    <div class="p-3 border border-subtle rounded-3 mb-3 bg-body">
                         <div class="d-flex align-items-center justify-content-between mb-1">
-                            <h6 class="fw-bold text-gray-900 mb-0 fs-8">{{ $anc->title }}</h6>
-                            <span class="badge bg-danger fs-9">{{ $anc->announcement_type }}</span>
+                            <h6 class="fw-bold text-body-emphasis mb-0 fs-8">{{ $anc->title }}</h6>
+                            <span class="badge bg-danger-subtle text-danger fs-9 fw-bold">{{ $anc->announcement_type }}</span>
                         </div>
-                        <p class="text-muted fs-8 mb-2">{{ $anc->summary }}</p>
-                        <a href="{{ route('announcements.show', $anc->announcement_id) }}" class="btn btn-light-primary btn-sm fs-9 fw-bold py-1">Read Post</a>
+                        <p class="text-body-secondary fs-8 mb-2">{{ $anc->summary }}</p>
+                        <a href="{{ route('announcements.show', $anc->announcement_id) }}" class="btn btn-primary-subtle text-primary btn-sm fs-9 fw-bold py-1">Read Post</a>
                     </div>
                 @empty
-                    <p class="text-muted fs-8 mb-0 py-3 text-center">No active announcements broadcasted.</p>
+                    <x-empty-state 
+                        icon="fa-solid fa-bullhorn" 
+                        title="No Active Broadcasts" 
+                        description="There are currently no corporate announcements or policy updates broadcasted." 
+                    />
                 @endforelse
             </div>
         </div>
 
         <!-- My Leaves History -->
-        <div class="card border-0 shadow-sm rounded-3 bg-white">
+        <div class="card border-0 shadow-sm rounded-3 bg-body-tertiary dashboard-card">
             <div class="card-header border-0 bg-transparent pt-4 pb-0">
-                <h5 class="fw-bold text-gray-900 fs-6 mb-0"><i class="fa-solid fa-clock-rotate-left me-2 text-info"></i> Recent Leave Applications</h5>
+                <h5 class="fw-bold text-body-emphasis fs-6 mb-0"><i class="fa-solid fa-clock-rotate-left me-2 text-info"></i> Recent Leave Applications</h5>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table class="table align-middle mb-0 fs-8">
-                        <thead class="bg-light">
+                    <table class="table table-hover align-middle mb-0 fs-8">
+                        <thead class="bg-body-secondary">
                             <tr>
                                 <th class="ps-4">Leave Duration</th>
                                 <th>Type</th>
@@ -236,18 +257,26 @@
                             @forelse($leaves as $lv)
                                 <tr>
                                     <td class="ps-4">
-                                        <span class="d-block fw-bold text-gray-900">{{ \Carbon\Carbon::parse($lv->from_date)->format('M d, Y') }}</span>
-                                        <span class="fs-9 text-muted">to {{ \Carbon\Carbon::parse($lv->to_date)->format('M d, Y') }}</span>
+                                        <span class="d-block fw-bold text-body-emphasis">{{ \Carbon\Carbon::parse($lv->from_date)->format('M d, Y') }}</span>
+                                        <span class="fs-9 text-body-secondary">to {{ \Carbon\Carbon::parse($lv->to_date)->format('M d, Y') }}</span>
                                     </td>
-                                    <td>{{ $lv->leave_type_id == 1 ? 'Casual' : 'Medical' }}</td>
-                                    <td>{{ Str::limit($lv->reason, 35) }}</td>
+                                    <td><span class="badge bg-secondary-subtle text-secondary fs-9 fw-bold">{{ $lv->leave_type_id == 1 ? 'Casual' : 'Medical' }}</span></td>
+                                    <td class="text-body-secondary">{{ Str::limit($lv->reason, 35) }}</td>
                                     <td>
-                                        <span class="badge {{ $lv->status_badge_class }}">{{ $lv->status_label }}</span>
+                                        <span class="badge bg-success-subtle text-success fw-bold fs-9">{{ $lv->status_label }}</span>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="text-center text-muted py-4">No recent leave applications.</td>
+                                    <td colspan="4" class="p-0">
+                                        <x-empty-state 
+                                            icon="fa-solid fa-calendar-xmark" 
+                                            title="No Leave Records" 
+                                            description="You have not submitted any leave applications recently."
+                                            actionUrl="{{ route('my-portal.leaves') }}"
+                                            actionText="Apply for Leave"
+                                        />
+                                    </td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -262,20 +291,20 @@
     <div class="col-lg-4">
         
         <!-- Quick Actions Panel -->
-        <div class="card border-0 shadow-sm rounded-3 mb-4 bg-white">
+        <div class="card border-0 shadow-sm rounded-3 mb-4 bg-body-tertiary dashboard-card">
             <div class="card-header border-0 bg-transparent pt-4 pb-0">
-                <h5 class="fw-bold text-gray-900 fs-7 mb-0"><i class="fa-solid fa-bolt text-warning me-2"></i> Quick Actions</h5>
+                <h5 class="fw-bold text-body-emphasis fs-7 mb-0"><i class="fa-solid fa-bolt text-warning me-2"></i> Quick Actions</h5>
             </div>
             <div class="card-body">
                 <div class="d-grid gap-2">
-                    <a href="{{ route('my-portal.profile-update') }}" class="btn btn-light-primary text-start fs-8 fw-semibold py-2">
-                        <i class="fa-solid fa-user-pen me-2"></i> Update Profile & Family
+                    <a href="{{ route('my-portal.profile-update') }}" class="btn btn-body text-start fs-8 fw-semibold py-2 border border-subtle text-body-emphasis shadow-xs">
+                        <i class="fa-solid fa-user-pen me-2 text-primary"></i> Update Profile & Family
                     </a>
-                    <a href="{{ route('my-portal.leaves') }}" class="btn btn-light-primary text-start fs-8 fw-semibold py-2">
-                        <i class="fa-solid fa-calendar-plus me-2"></i> Apply For Leave
+                    <a href="{{ route('my-portal.leaves') }}" class="btn btn-body text-start fs-8 fw-semibold py-2 border border-subtle text-body-emphasis shadow-xs">
+                        <i class="fa-solid fa-calendar-plus me-2 text-success"></i> Apply For Leave
                     </a>
-                    <a href="{{ route('my-portal.payslips') }}" class="btn btn-light-primary text-start fs-8 fw-semibold py-2">
-                        <i class="fa-solid fa-wallet me-2"></i> Download Payslips
+                    <a href="{{ route('my-portal.payslips') }}" class="btn btn-body text-start fs-8 fw-semibold py-2 border border-subtle text-body-emphasis shadow-xs">
+                        <i class="fa-solid fa-wallet me-2 text-warning"></i> Download Payslips
                     </a>
                 </div>
             </div>

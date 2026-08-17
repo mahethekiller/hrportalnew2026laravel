@@ -784,3 +784,108 @@ h3, .headline-md {
     border-color: var(--card-border);
     opacity: 0.6;
 }
+
+/* Dashboard UI/UX Enhancement System */
+.dashboard-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-bs-theme="dark"] .dashboard-card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Pulse Badge Indicators */
+.badge-pulse-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    display: inline-block;
+    animation: pulse-ring 1.8s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+@keyframes pulse-ring {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(23, 198, 83, 0.7);
+    }
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 6px rgba(23, 198, 83, 0);
+    }
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(23, 198, 83, 0);
+    }
+}
+
+/* Floating Action Dock (FAB) */
+.floating-action-dock {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 1050;
+}
+
+.fab-button {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1B84FF 0%, #056EE9 100%);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 20px rgba(27, 132, 255, 0.4);
+    transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: none;
+}
+
+.fab-button:hover {
+    transform: scale(1.08) rotate(5deg);
+    color: #ffffff;
+    box-shadow: 0 12px 28px rgba(27, 132, 255, 0.5);
+}
+
+/* Global Command Palette Modal */
+.command-palette-modal .modal-content {
+    border-radius: 16px !important;
+    overflow: hidden;
+}
+
+.command-palette-input {
+    border: none !important;
+    font-size: 1.1rem;
+    padding: 1.25rem 1.5rem;
+    background: transparent !important;
+}
+
+.command-palette-input:focus {
+    box-shadow: none !important;
+}
+
+.command-palette-item {
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    transition: background 0.15s ease;
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.command-palette-item:hover {
+    background-color: var(--bs-primary-light);
+    color: var(--bs-primary);
+}
+
+[data-bs-theme="dark"] .command-palette-item:hover {
+    background-color: rgba(27, 132, 255, 0.15);
+    color: var(--bs-primary);
+}

@@ -42,7 +42,16 @@
                         <i class="fa-solid fa-bars"></i>
                     </button>
                     
-                    <span class="navbar-brand fw-semibold text-body-emphasis">@yield('page_title', 'Dashboard')</span>
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="navbar-brand fw-semibold text-body-emphasis mb-0">@yield('page_title', 'Dashboard')</span>
+                        
+                        <!-- Quick Search / Command Palette Launcher Button -->
+                        <button type="button" class="btn btn-body-tertiary border-subtle btn-sm text-body-secondary d-none d-md-flex align-items-center gap-2 px-3 py-1 rounded-pill shadow-xs" data-bs-toggle="modal" data-bs-target="#commandPaletteModal">
+                            <i class="fa-solid fa-magnifying-glass fs-8"></i>
+                            <span class="fs-8">Quick Search & Jump...</span>
+                            <kbd class="bg-body-secondary text-body-emphasis border border-subtle rounded px-1 fs-9 ms-2">Ctrl K</kbd>
+                        </button>
+                    </div>
                     
                     <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
                         <ul class="navbar-nav align-items-center gap-3">
@@ -84,6 +93,62 @@
                 @endif
 
                 @yield('content')
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Quick Action Dock (FAB) -->
+    <div class="floating-action-dock dropdown">
+        <button class="fab-button" type="button" id="fabMenuButton" data-bs-toggle="dropdown" aria-expanded="false" title="Quick Actions">
+            <i class="fa-solid fa-bolt fs-4"></i>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end shadow-lg border-subtle p-2 mb-2" aria-labelledby="fabMenuButton" style="min-width: 220px; border-radius: 12px;">
+            <li><h6 class="dropdown-header text-uppercase fs-9 fw-bold tracking-wider">Quick Actions</h6></li>
+            <li><a class="dropdown-item rounded py-2 fs-8 fw-semibold" href="{{ route('my-portal.leaves') }}"><i class="fa-solid fa-calendar-plus text-primary me-2"></i> Apply for Leave</a></li>
+            <li><a class="dropdown-item rounded py-2 fs-8 fw-semibold" href="{{ route('my-portal.conveyance') }}"><i class="fa-solid fa-receipt text-success me-2"></i> Submit Claim</a></li>
+            <li><a class="dropdown-item rounded py-2 fs-8 fw-semibold" href="{{ route('my-portal.meetings') }}"><i class="fa-solid fa-door-open text-warning me-2"></i> Book Room</a></li>
+            <li><a class="dropdown-item rounded py-2 fs-8 fw-semibold" href="{{ route('support-tickets.create') }}"><i class="fa-solid fa-headset text-info me-2"></i> Raise HR Ticket</a></li>
+        </ul>
+    </div>
+
+    <!-- Command Palette Search Modal (Ctrl + K) -->
+    <div class="modal fade command-palette-modal" id="commandPaletteModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow-lg bg-body-tertiary">
+                <div class="p-3 border-bottom border-subtle d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-magnifying-glass text-body-secondary ms-2"></i>
+                    <input type="text" id="commandPaletteInput" class="form-control command-palette-input text-body-emphasis" placeholder="Search pages, employees, or features..." autocomplete="off">
+                    <button type="button" class="btn-close me-2" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-3" style="max-height: 400px; overflow-y: auto;">
+                    <div id="commandPaletteResults">
+                        <div class="text-uppercase fs-9 fw-bold text-body-secondary px-3 mb-2 tracking-wider">Navigation Shortcuts</div>
+                        <a href="{{ route('dashboard') }}" class="command-palette-item">
+                            <span><i class="fa-solid fa-chart-pie me-2 text-primary"></i> Main Dashboard</span>
+                            <span class="badge bg-body-secondary text-body-secondary fs-9">Page</span>
+                        </a>
+                        <a href="{{ route('my-portal.leaves') }}" class="command-palette-item">
+                            <span><i class="fa-solid fa-calendar-check me-2 text-success"></i> My Leave Applications</span>
+                            <span class="badge bg-body-secondary text-body-secondary fs-9">ESS</span>
+                        </a>
+                        <a href="{{ route('my-portal.payslips') }}" class="command-palette-item">
+                            <span><i class="fa-solid fa-wallet me-2 text-warning"></i> My Payslips</span>
+                            <span class="badge bg-body-secondary text-body-secondary fs-9">Payroll</span>
+                        </a>
+                        <a href="{{ route('manager-portal.index') }}" class="command-palette-item">
+                            <span><i class="fa-solid fa-users-gear me-2 text-info"></i> Manager Workstation</span>
+                            <span class="badge bg-body-secondary text-body-secondary fs-9">Manager</span>
+                        </a>
+                        <a href="{{ route('reports.index') }}" class="command-palette-item">
+                            <span><i class="fa-solid fa-chart-line me-2 text-danger"></i> Reports & Analytics</span>
+                            <span class="badge bg-body-secondary text-body-secondary fs-9">Admin</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="modal-footer py-2 px-3 bg-body border-top border-subtle d-flex justify-content-between">
+                    <span class="fs-9 text-body-secondary">Press <kbd class="bg-body-secondary text-body-emphasis border border-subtle rounded px-1 fs-9">Esc</kbd> to exit</span>
+                    <span class="fs-9 text-body-secondary">Antigravity Quick Search</span>
+                </div>
             </div>
         </div>
     </div>
@@ -131,6 +196,40 @@
         document.addEventListener('DOMContentLoaded', () => {
             const currentTheme = document.documentElement.getAttribute('data-bs-theme');
             updateThemeIcons(currentTheme);
+
+            // Command Palette (Ctrl + K) Keyboard Shortcut
+            document.addEventListener('keydown', (e) => {
+                if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+                    e.preventDefault();
+                    const paletteModalEl = document.getElementById('commandPaletteModal');
+                    if (paletteModalEl) {
+                        const modal = bootstrap.Modal.getOrCreateInstance(paletteModalEl);
+                        modal.toggle();
+                    }
+                }
+            });
+
+            // Focus search input when command palette modal opens
+            const paletteModalEl = document.getElementById('commandPaletteModal');
+            if (paletteModalEl) {
+                paletteModalEl.addEventListener('shown.bs.modal', () => {
+                    const input = document.getElementById('commandPaletteInput');
+                    if (input) input.focus();
+                });
+            }
+
+            // Real-time Command Palette Item Filter
+            const searchInput = document.getElementById('commandPaletteInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const term = this.value.toLowerCase().trim();
+                    const items = document.querySelectorAll('.command-palette-item');
+                    items.forEach(item => {
+                        const text = item.textContent.toLowerCase();
+                        item.style.display = text.includes(term) ? 'flex' : 'none';
+                    });
+                });
+            }
         });
     </script>
     @stack('js')
