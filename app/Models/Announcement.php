@@ -31,6 +31,15 @@ class Announcement extends Model
         return parent::getKeyName();
     }
 
+    public function getCreatedAtColumn()
+    {
+        $table = $this->getTable();
+        if (Schema::hasColumn($table, 'created_at')) {
+            return 'created_at';
+        }
+        return $this->getKeyName();
+    }
+
     protected $fillable = [
         'title',
         'announcement_type',

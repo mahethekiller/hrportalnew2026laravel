@@ -37,6 +37,15 @@ class EmployeeLeave extends Model
         return 'id';
     }
 
+    public function getCreatedAtColumn()
+    {
+        $table = $this->getTable();
+        if (Schema::hasColumn($table, 'created_at')) {
+            return 'created_at';
+        }
+        return $this->getKeyName();
+    }
+
     protected $fillable = [
         'company_id',
         'employee_id',

@@ -146,7 +146,8 @@ class DashboardController extends Controller
         $leaves = EmployeeLeave::where('employee_id', $employeeId)->latest()->take(5)->get();
         $payslips = PayrollPayment::where('employee_id', $employeeId)->latest()->take(5)->get();
         $meetings = Meeting::take(5)->get();
-        $announcements = Announcement::latest()->take(5)->get();
+        $announcementKey = (new Announcement)->getKeyName();
+        $announcements = Announcement::orderBy($announcementKey, 'desc')->take(5)->get();
 
         return view('dashboard.employee', compact(
             'upcomingHolidays',

@@ -40,6 +40,15 @@ class PayrollPayment extends Model
         return $this->attributes['make_payment_id'] ?? $this->attributes['id'] ?? null;
     }
 
+    public function getCreatedAtColumn()
+    {
+        $table = $this->getTable();
+        if (\Illuminate\Support\Facades\Schema::hasColumn($table, 'created_at')) {
+            return 'created_at';
+        }
+        return $this->getKeyName();
+    }
+
     /**
      * The attributes that are mass assignable.
      *
