@@ -30,7 +30,18 @@ class EmployeeController extends Controller
         $employees = $this->employeeService->getEmployees($filters, 12);
         $departments = Department::all();
 
-        return view('employees.index', compact('employees', 'departments', 'filters'));
+        $totalActive = Employee::where('is_active', 1)->count();
+        $totalDepartments = Department::count();
+        $totalInactive = Employee::where('is_active', '!=', 1)->count();
+
+        return view('employees.index', compact(
+            'employees',
+            'departments',
+            'filters',
+            'totalActive',
+            'totalDepartments',
+            'totalInactive'
+        ));
     }
 
     /**
