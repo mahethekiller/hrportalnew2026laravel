@@ -912,3 +912,126 @@ h3, .headline-md {
     color: #58a6ff !important;
     text-decoration: underline;
 }
+
+/* ==========================================================================
+   Antigravity Enterprise Button Design System
+   ========================================================================== */
+
+.btn {
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+}
+
+.btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.btn:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+.btn:focus-visible {
+    box-shadow: 0 0 0 0.25rem rgba(27, 132, 255, 0.35) !important;
+}
+
+/* Icon-Only Action Buttons */
+.btn-icon {
+    width: 38px;
+    height: 38px;
+    padding: 0 !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+.btn-icon-sm {
+    width: 32px;
+    height: 32px;
+    padding: 0 !important;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+
+.btn-icon-xs {
+    width: 26px;
+    height: 26px;
+    padding: 0 !important;
+    font-size: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+
+/* Subtle Button Variants */
+.btn-subtle-primary {
+    background-color: var(--bs-primary-bg-subtle, rgba(27, 132, 255, 0.1));
+    color: var(--bs-primary, #1B84FF) !important;
+    border: 1px solid transparent;
+}
+.btn-subtle-primary:hover {
+    background-color: var(--bs-primary, #1B84FF) !important;
+    color: #ffffff !important;
+}
+
+.btn-subtle-success {
+    background-color: var(--bs-success-bg-subtle, rgba(23, 198, 83, 0.1));
+    color: var(--bs-success, #17c653) !important;
+    border: 1px solid transparent;
+}
+.btn-subtle-success:hover {
+    background-color: var(--bs-success, #17c653) !important;
+    color: #ffffff !important;
+}
+
+.btn-subtle-warning {
+    background-color: var(--bs-warning-bg-subtle, rgba(246, 192, 0, 0.12));
+    color: var(--bs-warning, #f6c000) !important;
+    border: 1px solid transparent;
+}
+.btn-subtle-warning:hover {
+    background-color: var(--bs-warning, #f6c000) !important;
+    color: #000000 !important;
+}
+
+.btn-subtle-danger {
+    background-color: var(--bs-danger-bg-subtle, rgba(248, 40, 90, 0.1));
+    color: var(--bs-danger, #f8285a) !important;
+    border: 1px solid transparent;
+}
+.btn-subtle-danger:hover {
+    background-color: var(--bs-danger, #f8285a) !important;
+    color: #ffffff !important;
+}
+
+.btn-subtle-info {
+    background-color: var(--bs-info-bg-subtle, rgba(114, 57, 234, 0.1));
+    color: var(--bs-info, #7239ea) !important;
+    border: 1px solid transparent;
+}
+.btn-subtle-info:hover {
+    background-color: var(--bs-info, #7239ea) !important;
+    color: #ffffff !important;
+}
+
+.btn-subtle-secondary {
+    background-color: var(--bs-secondary-bg-subtle, rgba(126, 130, 153, 0.12));
+    color: var(--bs-secondary-color, #7e8299) !important;
+    border: 1px solid transparent;
+}
+.btn-subtle-secondary:hover {
+    background-color: var(--bs-secondary-color, #7e8299) !important;
+    color: #ffffff !important;
+}
