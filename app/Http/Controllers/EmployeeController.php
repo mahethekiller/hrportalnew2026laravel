@@ -26,9 +26,10 @@ class EmployeeController extends Controller
      */
     public function index(Request $request): View
     {
-        $filters = $request->only(['search', 'department_id', 'status']);
+        $filters = $request->only(['search', 'department_id', 'company_id', 'status']);
         $employees = $this->employeeService->getEmployees($filters, 12);
         $departments = Department::all();
+        $companies = \App\Models\Company::all();
 
         $totalActive = Employee::where('is_active', 1)->count();
         $totalDepartments = Department::count();
@@ -37,6 +38,7 @@ class EmployeeController extends Controller
         return view('employees.index', compact(
             'employees',
             'departments',
+            'companies',
             'filters',
             'totalActive',
             'totalDepartments',

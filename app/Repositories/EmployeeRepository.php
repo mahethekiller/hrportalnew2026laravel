@@ -32,6 +32,10 @@ class EmployeeRepository
             $query->where('department_id', $filters['department_id']);
         }
 
+        if (!empty($filters['company_id'])) {
+            $query->where('company_id', $filters['company_id']);
+        }
+
         if (isset($filters['status']) && $filters['status'] !== '') {
             $status = $filters['status'];
             if (is_numeric($status)) {

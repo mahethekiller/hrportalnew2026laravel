@@ -40,13 +40,23 @@
     <div class="card-body">
         <form method="GET" action="{{ route('employees.index') }}" class="row g-3 align-items-center">
             <input type="hidden" name="view" value="{{ request('view', 'table') }}">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="input-group">
                     <span class="input-group-text bg-body border-subtle"><i class="fa-solid fa-magnifying-glass text-body-secondary"></i></span>
-                    <input type="text" name="search" class="form-control bg-body text-body-emphasis border-subtle" placeholder="Search by name, ID, email, or username..." value="{{ request('search') }}">
+                    <input type="text" name="search" class="form-control bg-body text-body-emphasis border-subtle" placeholder="Search name, ID, email..." value="{{ request('search') }}">
                 </div>
             </div>
             <div class="col-md-3">
+                <select name="company_id" class="form-select bg-body text-body-emphasis border-subtle">
+                    <option value="">All Companies</option>
+                    @foreach($companies as $comp)
+                        <option value="{{ $comp->id }}" {{ request('company_id') == $comp->id ? 'selected' : '' }}>
+                            {{ $comp->name ?? $comp->company_name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-2">
                 <select name="department_id" class="form-select bg-body text-body-emphasis border-subtle">
                     <option value="">All Departments</option>
                     @foreach($departments as $dept)
@@ -56,7 +66,7 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <select name="status" class="form-select bg-body text-body-emphasis border-subtle">
                     <option value="">All Statuses</option>
                     <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>1: Active</option>
@@ -92,10 +102,20 @@
     </div>
 </div>
 
+@php
+    // Distinct Palette Mapping for Companies
+    $colorPalette = ['info', 'primary', 'success', 'warning', 'danger', 'secondary'];
+@endphp
+
 @if(request('view') === 'grid')
     <!-- Grid Cards View Mode -->
     <div class="row g-4 mb-4">
         @forelse($employees as $emp)
+            @php
+                $companyName = $emp->company->name ?? $emp->company->company_name ?? 'Default Corp';
+                $companyId = $emp->company_id ?? 1;
+                $compColor = $colorPalette[$companyId % count($colorPalette)];
+            @endphp
             <div class="col-xl-3 col-lg-4 col-md-6">
                 <div class="card border-0 shadow-sm rounded-3 bg-body-tertiary dashboard-card h-100 p-3 d-flex flex-column text-center">
                     <div class="position-absolute top-0 end-0 me-3 mt-3">
@@ -119,7 +139,11 @@
                     </h6>
                     <span class="fs-9 text-body-secondary mb-2">{{ $emp->designation->designation_name ?? $emp->designation->name ?? 'Staff Member' }}</span>
 
-                    <div class="mb-3">
+                    <!-- Company & Department Badges -->
+                    <div class="d-flex flex-wrap align-items-center justify-content-center gap-1 mb-3">
+                        <span class="badge bg-{{ $compColor }}-subtle text-{{ $compColor }} fs-9 fw-bold">
+                            <i class="fa-solid fa-building me-1"></i>{{ $companyName }}
+                        </span>
                         <span class="badge bg-secondary-subtle text-secondary fs-9 fw-bold">
                             <i class="fa-solid fa-sitemap me-1"></i>{{ $emp->department->department_name ?? $emp->department->name ?? 'General' }}
                         </span>
@@ -180,6 +204,7 @@
                         <tr>
                             <th class="ps-4 text-body-secondary fs-9 text-uppercase tracking-wider">Employee ID</th>
                             <th class="text-body-secondary fs-9 text-uppercase tracking-wider">Full Name</th>
+                            <th class="text-body-secondary fs-9 text-uppercase tracking-wider">Company</th>
                             <th class="text-body-secondary fs-9 text-uppercase tracking-wider">Department & Designation</th>
                             <th class="text-body-secondary fs-9 text-uppercase tracking-wider">Contact Email</th>
                             <th class="text-body-secondary fs-9 text-uppercase tracking-wider">Status</th>
@@ -188,6 +213,11 @@
                     </thead>
                     <tbody>
                         @forelse($employees as $emp)
+                            @php
+                                $companyName = $emp->company->name ?? $emp->company->company_name ?? 'Default Corp';
+                                $companyId = $emp->company_id ?? 1;
+                                $compColor = $colorPalette[$companyId % count($colorPalette)];
+                            @endphp
                             <tr>
                                 <td class="ps-4">
                                     <span class="fw-bold text-primary">{{ (!empty($emp->employee_id) && $emp->employee_id !== '0') ? $emp->employee_id : 'EMP-' . sprintf('%04d', $emp->id) }}</span>
@@ -209,6 +239,11 @@
                                             <div class="fs-9 text-body-secondary">{{ $emp->username ? '@' . $emp->username : '' }}</div>
                                         </div>
                                     </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-{{ $compColor }}-subtle text-{{ $compColor }} fw-bold fs-9">
+                                        <i class="fa-solid fa-building me-1"></i>{{ $companyName }}
+                                    </span>
                                 </td>
                                 <td>
                                     <div class="fw-semibold text-body-emphasis">{{ $emp->department->department_name ?? $emp->department->name ?? 'General' }}</div>
@@ -245,7 +280,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="p-0">
+                                <td colspan="7" class="p-0">
                                     <x-empty-state 
                                         icon="fa-solid fa-users-slash" 
                                         title="No Employee Records Found" 
