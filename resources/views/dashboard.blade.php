@@ -4,128 +4,82 @@
 @section('page_title', 'Enterprise HR Overview')
 
 @section('content')
+
+<!-- Signature "My Day" Persona Card -->
+<x-my-day-card 
+    :roleName="Auth::user()?->roleRelation?->role_name ?? 'employee'"
+    :pendingApprovalsCount="$pendingApprovalsCount ?? 3"
+    :leaveBalance="$leaveBalance ?? 18"
+    :candidateStallsCount="$candidateStallsCount ?? 2"
+    :hrPendingQueueCount="$hrPendingQueueCount ?? 5"
+/>
+
 <!-- System HR Announcement Banner -->
-<div class="announcement-banner mb-3 d-flex align-items-center justify-content-between">
+<div class="announcement-banner mb-4 d-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center gap-3">
         <div class="btn btn-light-primary btn-sm rounded-circle p-2">
             <i class="fa-solid fa-bullhorn fs-5"></i>
         </div>
         <div>
-            <div class="fw-bold text-body-emphasis">📢 Q3 Performance Review Cycle is Now Open</div>
-            <div class="small text-body-secondary">All managers and employees are requested to submit self-evaluations before August 15th.</div>
+            <div class="fw-bold text-body-emphasis">📢 Q3 Performance Review Cycle is Open</div>
+            <div class="small text-body-secondary">All managers and employees are requested to submit self-evaluations before August 31st.</div>
         </div>
     </div>
     <button class="btn btn-light-primary btn-sm d-none d-md-block">Start Evaluation</button>
 </div>
 
-<!-- Overview Header Banner -->
-<div class="row mb-3 align-items-center">
-    <div class="col-md-7">
-        <h2 class="headline-lg text-body-emphasis mb-1">Welcome Back, {{ Auth::user()->first_name ?? 'Administrator' }} 👋</h2>
-        <p class="text-body-secondary small mb-0">Enterprise workforce metrics and operational dashboard overview.</p>
-    </div>
-    <div class="col-md-5 text-md-end mt-3 mt-md-0">
-        <button class="btn btn-light-primary btn-sm me-2">
-            <i class="fa-solid fa-file-export me-1"></i>Export Report
-        </button>
-        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
-            <i class="fa-solid fa-user-plus me-1"></i>Add Employee
-        </button>
-    </div>
-</div>
-
-<!-- Quick Action Grid Tiles -->
+<!-- Compact Metric Stat Cards (Maintainable Blade Components) -->
 <div class="row g-3 mb-4">
-    <div class="col-6 col-md-3">
-        <a href="#" class="quick-action-tile">
-            <i class="fa-solid fa-calendar-plus text-primary fs-4 mb-2 d-block"></i>
-            <div class="fw-semibold small">Apply Leave</div>
-        </a>
-    </div>
-    <div class="col-6 col-md-3">
-        <a href="#" class="quick-action-tile">
-            <i class="fa-solid fa-receipt text-success fs-4 mb-2 d-block"></i>
-            <div class="fw-semibold small">Submit Claim</div>
-        </a>
-    </div>
-    <div class="col-6 col-md-3">
-        <a href="#" class="quick-action-tile">
-            <i class="fa-solid fa-file-invoice-dollar text-info fs-4 mb-2 d-block"></i>
-            <div class="fw-semibold small">View Payslip</div>
-        </a>
-    </div>
-    <div class="col-6 col-md-3">
-        <a href="#" class="quick-action-tile">
-            <i class="fa-solid fa-sitemap text-warning fs-4 mb-2 d-block"></i>
-            <div class="fw-semibold small">Org Directory</div>
-        </a>
-    </div>
-</div>
-
-<!-- Compact Metric Stat Cards -->
-<div class="row g-3 mb-4">
-    <!-- Stat 1 -->
+    <!-- Stat 1: Total Employees -->
     <div class="col-xl-3 col-md-6">
-        <div class="card h-100">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span class="label-sm">Total Employees</span>
-                    <span class="badge badge-light-primary"><i class="fa-solid fa-users me-1"></i>Active</span>
-                </div>
-                <div class="d-flex align-items-baseline justify-content-between">
-                    <h3 class="display-lg text-body-emphasis mb-0">1,596</h3>
-                    <span class="badge badge-light-success"><i class="fa-solid fa-arrow-trend-up me-1"></i>+8.4%</span>
-                </div>
-            </div>
-        </div>
+        <x-kpi-card 
+            title="Total Headcount" 
+            value="1,596" 
+            icon="fa-solid fa-users" 
+            variant="primary" 
+            badgeText="+8.4% YoY" 
+            badgeTrend="up" 
+        />
     </div>
 
-    <!-- Stat 2 -->
+    <!-- Stat 2: Active Leave Today -->
     <div class="col-xl-3 col-md-6">
-        <div class="card h-100">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span class="label-sm">Active Leave Today</span>
-                    <span class="badge badge-light-warning"><i class="fa-solid fa-clock me-1"></i>2 Pending</span>
-                </div>
-                <div class="d-flex align-items-baseline justify-content-between">
-                    <h3 class="display-lg text-body-emphasis mb-0">14</h3>
-                    <span class="text-body-secondary small">0.8% of staff</span>
-                </div>
-            </div>
-        </div>
+        <x-kpi-card 
+            title="Active Leave Today" 
+            value="14" 
+            icon="fa-solid fa-calendar-minus" 
+            variant="warning" 
+            badgeText="2 Pending" 
+            badgeTrend="down" 
+        />
     </div>
 
-    <!-- Stat 3 -->
+    <!-- Stat 3: Monthly Payroll -->
     <div class="col-xl-3 col-md-6">
-        <div class="card h-100">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span class="label-sm">Monthly Payroll</span>
-                    <span class="badge badge-light-success"><i class="fa-solid fa-circle-check me-1"></i>Synced</span>
-                </div>
-                <div class="d-flex align-items-baseline justify-content-between">
-                    <h3 class="display-lg text-body-emphasis mb-0">$284.5k</h3>
-                    <span class="badge badge-light-success">+3.2%</span>
-                </div>
-            </div>
-        </div>
+        <x-kpi-card 
+            title="Monthly Payroll" 
+            value="$284.5k" 
+            icon="fa-solid fa-wallet" 
+            variant="success" 
+            badgeText="Processed" 
+            badgeTrend="up" 
+        />
     </div>
 
     <!-- Stat 4: Shift Clock-In Tracker Widget -->
     <div class="col-xl-3 col-md-6">
-        <div class="card h-100 border-primary">
+        <div class="card h-100 border-primary shadow-xs">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <span class="label-sm text-primary">Shift Clock-In</span>
-                    <span class="badge badge-light-success">On Time</span>
+                    <span class="badge bg-success-subtle text-success">On Time</span>
                 </div>
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <div class="fw-bold fs-5 text-body-emphasis mb-0">07:42:15</div>
+                        <div class="fw-bold fs-5 font-mono text-body-emphasis mb-0">07:42:15</div>
                         <div class="small text-body-secondary">Logged today</div>
                     </div>
-                    <button class="btn btn-light-danger btn-sm"><i class="fa-solid fa-right-from-bracket me-1"></i>Clock Out</button>
+                    <button class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-right-from-bracket me-1"></i>Clock Out</button>
                 </div>
             </div>
         </div>

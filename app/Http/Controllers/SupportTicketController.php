@@ -84,13 +84,13 @@ class SupportTicketController extends Controller
         $ticket = SupportTicket::create([
             'company_id' => $companyId,
             'ticket_code' => 'TK-' . strtoupper(Str::random(6)),
-            'subject' => $request->subject,
+            'subject' => \App\Traits\HasCleanContent::sanitizeContent($request->subject, false),
             'employee_id' => $employeeId,
             'ticket_priority' => $request->ticket_priority,
             'department_id' => $request->department_id,
             'assigned_to' => '0',
-            'message' => $request->description,
-            'description' => $request->description,
+            'message' => \App\Traits\HasCleanContent::sanitizeContent($request->description, false),
+            'description' => \App\Traits\HasCleanContent::sanitizeContent($request->description, false),
             'ticket_remarks' => '',
             'ticket_status' => '1',
             'ticket_note' => '',
@@ -111,6 +111,32 @@ class SupportTicketController extends Controller
                 'attachment_file' => 'uploads/tickets/' . $fileName,
                 'created_at' => date('d-m-Y H:i:s'),
             ]);
+        }
+
+        // Send Email Notification (code10 = New Inquiry/Support Ticket)
+        try {
+            $userEmail = auth()->user()->email ?? ($employee ? $employee->email : null);
+            if ($userEmail) {
+                app(\App\Services\MailService::class)->sendTemplateEmail(
+                    templateCode: 'code10',
+                    toEmails: $userEmail,
+                    replacements: [
+                        '{ticket_code}' => $ticket->ticket_code,
+                        '{employee_name}' => auth()->user()->name ?? ($employee ? ($employee->first_name . ' ' . $employee->last_name) : 'Employee'),
+                        '{subject}' => $ticket->subject,
+                        '{ticket_subject}' => $ticket->subject,
+                        '{ticket_priority}' => ucfirst($ticket->ticket_priority),
+                        '{company_name}' => config('app.name'),
+                    ],
+                    moduleKey: 'ticket',
+                    companyId: (int) $companyId,
+                    actionUrl: route('support-tickets.show', $ticket->ticket_id),
+                    actionText: 'View Support Ticket',
+                    userId: (int) $employeeId
+                );
+            }
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Support ticket email error: ' . $e->getMessage());
         }
 
         return redirect()->route('support-tickets.index')
@@ -149,7 +175,7 @@ class SupportTicketController extends Controller
         TicketComment::create([
             'ticket_id' => $supportTicket->ticket_id,
             'user_id' => auth()->id(),
-            'ticket_comments' => $request->reply_content,
+            'ticket_comments' => \App\Traits\HasCleanContent::sanitizeContent($request->reply_content, false),
             'created_at' => date('d-m-Y H:i:s'),
         ]);
 
@@ -206,7 +232,7 @@ class SupportTicketController extends Controller
         $supportTicket->update([
             'ticket_status' => $request->ticket_status,
             'assigned_to' => $request->assigned_to ?? $supportTicket->assigned_to,
-            'ticket_remarks' => $request->ticket_remarks ?? $supportTicket->ticket_remarks,
+            'ticket_remarks' => \App\Traits\HasCleanContent::sanitizeContent($request->ticket_remarks ?? $supportTicket->ticket_remarks, false),
         ]);
 
         return redirect()->route('support-tickets.show', $supportTicket->ticket_id)

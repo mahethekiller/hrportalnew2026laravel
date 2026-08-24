@@ -14,7 +14,9 @@ class EmailHistory extends Model
      *
      * @var string
      */
-    protected $table = 'email_histories';
+    protected $table = 'xin_email_history';
+
+    public $timestamps = false;
 
     /**
      * The attributes that are mass assignable.
@@ -36,5 +38,24 @@ class EmailHistory extends Model
     public function user()
     {
         return $this->belongsTo(Employee::class, 'user_id', 'user_id');
+    }
+
+    /**
+     * Formatted sent date accessor supporting legacy UNIX timestamps and date strings.
+     */
+    public function getFormattedSentDateAttribute(): string
+    {
+        if (empty($this->sent_date)) {
+            return '-';
+        }
+
+        try {
+            if (is_numeric($this->sent_date)) {
+                return \Carbon\Carbon::createFromTimestamp((int) $this->sent_date)->format('d M Y, h:i A');
+            }
+            return \Carbon\Carbon::parse($this->sent_date)->format('d M Y, h:i A');
+        } catch (\Throwable $e) {
+            return (string) $this->sent_date;
+        }
     }
 }

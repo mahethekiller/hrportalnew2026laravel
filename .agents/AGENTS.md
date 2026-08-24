@@ -46,3 +46,8 @@ These rules represent the absolute constraints of the project. Any deviation fro
 - Shared functions must be placed in reusable **Traits** or **Helpers**.
 - If two modules require similar components (like a profile widget or file uploader), create a reusable Blade Component instead of duplicating HTML.
 
+## 🧹 Rule 6: Mandatory Content Sanitization & Clean Text Rendering
+- All ticket descriptions, comments, resolution remarks, announcements, and user text inputs must use `App\Traits\HasCleanContent` or `HasCleanContent::sanitizeContent($value, false)` before saving to the database.
+- In Blade views, never output raw database strings containing un-decoded HTML entities (`&lt;p data-start=...`) or raw HTML tags (`<p><br></p>`) inside `<textarea>` inputs or plain text display blocks.
+- Use `{!! $ticket->clean_description !!}` / `{!! $ticket->clean_remarks !!}` for rich view display and `{{ $ticket->plain_remarks }}` / `{{ $ticket->plain_description }}` for `<textarea>` form controls and truncated table snippets.
+

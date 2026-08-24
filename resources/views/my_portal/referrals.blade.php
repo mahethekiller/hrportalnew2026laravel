@@ -32,11 +32,11 @@
                 <tbody>
                     @forelse($referrals as $ref)
                         <tr>
-                            <td class="ps-4 fw-bold text-gray-900">{{ $ref->name }}</td>
+                            <td class="ps-4 fw-bold text-gray-900">{{ $ref->clean_subject ?: $ref->name }}</td>
                             <td>{{ $ref->email }}</td>
-                            <td>{{ $ref->contact_number }}</td>
-                            <td><span class="badge bg-soft-info text-info">{{ $ref->status }}</span></td>
-                            <td>{{ $ref->created_at }}</td>
+                            <td>{{ $ref->contact_number ?? $ref->contact_no ?? '--' }}</td>
+                            <td><span class="badge bg-primary-subtle text-primary">{{ $ref->status ?? 'Pending' }}</span></td>
+                            <td>{{ $ref->created_at ?? $ref->added_date ?? 'N/A' }}</td>
                         </tr>
                     @empty
                         <tr>

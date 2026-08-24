@@ -97,6 +97,20 @@ Route::middleware('auth')->group(function () {
     Route::get('/email-templates', [\App\Http\Controllers\SettingController::class, 'emailTemplates'])->name('email-templates.index');
     Route::put('/email-templates/{template}', [\App\Http\Controllers\SettingController::class, 'updateEmailTemplate'])->name('email-templates.update');
 
+    // Multi-SMTP Sender Profiles & Mail System Routes
+    Route::get('/smtp-profiles', [\App\Http\Controllers\SettingController::class, 'smtpProfiles'])->name('smtp-profiles.index');
+    Route::post('/smtp-profiles', [\App\Http\Controllers\SettingController::class, 'saveSmtpProfile'])->name('smtp-profiles.store');
+    Route::delete('/smtp-profiles/{id}', [\App\Http\Controllers\SettingController::class, 'deleteSmtpProfile'])->name('smtp-profiles.destroy');
+    Route::post('/smtp-profiles/test', [\App\Http\Controllers\SettingController::class, 'testSmtpProfile'])->name('smtp-profiles.test');
+    Route::post('/smtp-profiles/routing', [\App\Http\Controllers\SettingController::class, 'updateMailRouting'])->name('smtp-profiles.routing');
+    Route::post('/smtp-profiles/company-routing', [\App\Http\Controllers\SettingController::class, 'updateCompanyEmailSettings'])->name('smtp-profiles.company-routing');
+    Route::get('/email-logs', [\App\Http\Controllers\SettingController::class, 'emailLogs'])->name('email-logs.index');
+
+    // Theme & Color Profiles Routes
+    Route::get('/settings/theme', [\App\Http\Controllers\SettingController::class, 'themeSettings'])->name('settings.theme.index');
+    Route::post('/settings/theme', [\App\Http\Controllers\SettingController::class, 'updateThemeSettings'])->name('settings.theme.update');
+    Route::post('/settings/theme/user-preference', [\App\Http\Controllers\SettingController::class, 'updateUserThemePreference'])->name('settings.theme.preference');
+
     // Dynamic Navigation Manager Routes
     Route::get('/settings/navigation', [\App\Http\Controllers\NavigationMenuController::class, 'index'])->name('settings.navigation.index');
     Route::post('/settings/navigation', [\App\Http\Controllers\NavigationMenuController::class, 'store'])->name('settings.navigation.store');

@@ -62,4 +62,16 @@ class SettingRepository
     {
         return $template->update($data);
     }
+
+    public function getEmailLogs(): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    {
+        return \App\Models\EmailHistory::with('user')
+            ->orderBy('id', 'desc')
+            ->paginate(25);
+    }
+
+    public function getCompanies(): Collection
+    {
+        return \App\Models\Company::orderBy('company_id', 'asc')->get();
+    }
 }

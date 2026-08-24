@@ -135,4 +135,12 @@ class Asset extends Model
     {
         return $this->belongsTo(Company::class, 'company_id', 'company_id');
     }
+
+    /**
+     * Asset Image URL Accessor.
+     */
+    public function getImageUrlAttribute(): string
+    {
+        return \App\Helpers\UploadHelper::url('asset_image', $this->asset_image);
+    }
 }

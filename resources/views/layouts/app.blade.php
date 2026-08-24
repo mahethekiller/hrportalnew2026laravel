@@ -20,15 +20,43 @@
     <link href="{{ asset('assets/css/app.css') }}" rel="stylesheet">
     @stack('css')
 
-    <!-- Pre-load Dark Theme script to prevent UI flash -->
-    <script>
-        (function () {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-bs-theme', savedTheme);
-        })();
-    </script>
+    <!-- Pre-load Dark Theme & Color Profile Engine -->
+    <script src="{{ asset('assets/js/theme-engine.js') }}"></script>
 </head>
 <body class="bg-body-secondary">
+    @php
+        $themeService = app(\App\Services\ThemeService::class);
+        $activeThemeConfig = $themeService->getThemeConfig();
+        $seasonalAccents = $themeService->getSeasonalAccents();
+        $activeAccentKey = $activeThemeConfig['seasonal_accent'] ?? 'off';
+        $activeAccent = $seasonalAccents[$activeAccentKey] ?? null;
+    @endphp
+
+    @if(!empty($activeAccent) && $activeAccentKey !== 'off' && !empty($activeAccent['banner_css']))
+        <!-- Seasonal & Festival Banner Overlay -->
+        <div class="py-2 px-4 text-center fs-8 fw-bold z-3 position-relative d-flex align-items-center justify-content-center gap-2" style="{{ $activeAccent['banner_css'] }}">
+            <i class="fa-solid {{ $activeAccent['icon'] }} fs-6"></i>
+            <span>{{ $activeAccent['text'] }}</span>
+            <span class="badge bg-body text-body-emphasis border fs-9 ms-2">{{ $activeAccent['badge'] }}</span>
+        </div>
+    @endif
+
+    @if(session()->has('impersonated_by'))
+        <!-- Impersonation Guard Warning Banner -->
+        <div class="alert alert-warning border-0 rounded-0 m-0 py-2 px-4 d-flex align-items-center justify-content-between bg-warning-subtle text-warning-emphasis border-bottom border-warning-subtle z-3 position-relative">
+            <div class="d-flex align-items-center gap-2">
+                <i class="fa-solid fa-user-shield fs-5 text-warning"></i>
+                <span class="fs-8">Viewing as <strong>{{ Auth::user()->first_name ?? Auth::user()->name }}</strong> (Session Impersonated). Sensitive financial actions are locked and logged.</span>
+            </div>
+            @if(Route::has('impersonate.stop'))
+                <form method="POST" action="{{ route('impersonate.stop') }}" class="m-0">
+                    @csrf
+                    <button type="submit" class="btn btn-warning btn-sm fs-9 fw-bold px-3 py-1">Stop Impersonating</button>
+                </form>
+            @endif
+        </div>
+    @endif
+
     <div class="d-flex">
         <!-- Sidebar Navigation -->
         @include('layouts.sidebar')
@@ -55,9 +83,16 @@
                     
                     <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
                         <ul class="navbar-nav align-items-center gap-3">
-                            <!-- Theme Toggle Button -->
+                            <!-- Theme Palette Customizer Drawer Button -->
                             <li class="nav-item">
-                                <button class="btn btn-link text-body-secondary p-0 border-0 theme-toggle-btn fs-5" id="theme-toggle-btn" onclick="toggleTheme()" type="button" title="Toggle theme">
+                                <button class="btn btn-link text-body-secondary p-0 border-0 fs-5" type="button" data-bs-toggle="offcanvas" data-bs-target="#themeCustomizerDrawer" title="Theme & Color Profiles">
+                                    <i class="fa-solid fa-palette text-primary"></i>
+                                </button>
+                            </li>
+
+                            <!-- Theme Mode Toggle Button -->
+                            <li class="nav-item">
+                                <button class="btn btn-link text-body-secondary p-0 border-0 theme-toggle-btn fs-5" id="theme-toggle-btn" onclick="PortalTheme.setThemeMode(document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark')" type="button" title="Toggle theme mode">
                                     <i class="fa-solid fa-moon d-none" id="theme-icon-dark"></i>
                                     <i class="fa-solid fa-sun" id="theme-icon-light"></i>
                                 </button>
@@ -224,14 +259,15 @@
                 searchInput.addEventListener('input', function() {
                     const term = this.value.toLowerCase().trim();
                     const items = document.querySelectorAll('.command-palette-item');
-                    items.forEach(item => {
-                        const text = item.textContent.toLowerCase();
-                        item.style.display = text.includes(term) ? 'flex' : 'none';
                     });
                 });
             }
         });
     </script>
+
+    <!-- Theme Customizer Offcanvas Drawer -->
+    @include('layouts.theme_customizer')
+
     @stack('js')
 </body>
 </html>

@@ -20,48 +20,64 @@
     </div>
 
 
+    <!-- Role Preview Chips Bar -->
+    <div class="card border-0 shadow-sm mb-4 bg-body-tertiary">
+        <div class="card-body py-2 px-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
+            <div class="d-flex align-items-center gap-2">
+                <span class="label-sm me-1"><i class="fa-solid fa-eye me-1 text-primary"></i>Role Navigation Preview:</span>
+                <button type="button" class="btn btn-primary btn-sm rounded-pill px-3 role-preview-chip active" onclick="filterRolePreview('all', this)">All Nodes</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill px-3 role-preview-chip" onclick="filterRolePreview('employee', this)">Employee</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill px-3 role-preview-chip" onclick="filterRolePreview('manager', this)">Manager</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill px-3 role-preview-chip" onclick="filterRolePreview('recruiter', this)">Recruiter</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill px-3 role-preview-chip" onclick="filterRolePreview('hr', this)">HR Admin</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill px-3 role-preview-chip" onclick="filterRolePreview('admin', this)">Super Admin</button>
+            </div>
+            <span class="fs-9 text-body-secondary"><i class="fa-solid fa-circle-info me-1"></i>Filter tree to preview menu accessibility for each role persona</span>
+        </div>
+    </div>
+
     <!-- Drag & Drop Container -->
     <div class="card border-0 shadow-sm rounded-3">
         <div class="card-header border-0 pt-3 bg-body-tertiary d-flex align-items-center justify-content-between">
             <h3 class="card-title fw-bold text-body-emphasis fs-6 mb-0">
-                <i class="fa-solid fa-up-down-left-right text-primary me-2"></i> Interactive Menu Workstation
+                <i class="fa-solid fa-up-down-left-right text-primary me-2"></i> Navigation Menu Hierarchy Workstation
             </h3>
-            <span class="badge bg-light-primary text-primary fs-8 fw-semibold">
-                <i class="fa-solid fa-lightbulb me-1"></i> Drag cards or rows to re-order
+            <span class="badge bg-primary-subtle text-primary fs-8 fw-semibold">
+                <i class="fa-solid fa-lightbulb me-1"></i> Drag rows to re-order navigation leaves
             </span>
         </div>
 
         <div class="card-body p-4">
             <div id="dragMenuContainer" class="list-group col">
                 @foreach($menus as $root)
-                    <div class="list-group-item border rounded-3 mb-3 p-3 bg-body-tertiary" data-id="{{ $root->menu_id }}">
+                    <div class="list-group-item border rounded-3 mb-3 p-3 bg-body-tertiary menu-node-item" data-id="{{ $root->menu_id }}" data-resource="{{ strtolower($root->resource_key ?? 'public') }}">
                         <div class="d-flex align-items-center justify-content-between cursor-move">
                             <div class="d-flex align-items-center gap-2">
-                                <i class="fa-solid fa-bars-staggered text-body-secondary drag-handle fs-6"></i>
+                                <i class="fa-solid fa-grip-vertical text-body-secondary drag-handle fs-6 me-1"></i>
                                 <i class="{{ $root->icon ?? 'fa-solid fa-folder' }} text-primary fs-5"></i>
                                 <span class="fw-bold text-body-emphasis fs-6">{{ $root->title }}</span>
                                 @if(!$root->is_active)
-                                    <span class="badge bg-danger text-white fs-9 ms-2">Hidden</span>
+                                    <span class="badge bg-danger-subtle text-danger fs-9 ms-2">Hidden</span>
                                 @endif
                             </div>
                             <div class="d-flex align-items-center gap-2">
                                 @if($root->route_name)
-                                    <span class="badge bg-body-secondary text-body-emphasis border fs-9 font-monospace"><i class="fa-solid fa-link me-1 text-info"></i>{{ $root->route_name }}</span>
+                                    <span class="badge bg-body-secondary text-body-emphasis border fs-9 font-mono"><i class="fa-solid fa-link me-1 text-info"></i>{{ $root->route_name }}</span>
                                 @else
-                                    <span class="badge bg-light-primary text-primary fs-9">Root Category</span>
+                                    <span class="badge bg-primary-subtle text-primary fs-9">Root Category</span>
                                 @endif
 
                                 @if($root->resource_key)
-                                    <span class="badge bg-light-warning text-warning border border-warning-subtle fs-9">{{ $root->resource_key }}</span>
+                                    <span class="badge bg-warning-subtle text-warning border border-warning-subtle fs-9">{{ $root->resource_key }}</span>
                                 @endif
 
-                                <button class="btn btn-sm btn-light-secondary py-1 px-2 fs-9 ms-2" onclick='prepareEditModal(@json($root))'>
+                                <button class="btn btn-sm btn-outline-secondary py-1 px-2 fs-9 ms-2" onclick='prepareEditModal(@json($root))'>
                                     <i class="fa-solid fa-pen-to-square"></i> Edit
                                 </button>
 
                                 <form method="POST" action="{{ route('settings.navigation.destroy', $root->menu_id) }}" class="d-inline" onsubmit="return confirm('Delete this menu node and all its sub-links?');">
                                     @csrf @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-light-danger py-1 px-2 fs-9"><i class="fa-solid fa-trash"></i></button>
+                                    <button type="submit" class="btn btn-sm btn-ghost-danger py-1 px-2 fs-9" title="Delete Node"><i class="fa-solid fa-trash"></i></button>
                                 </form>
                             </div>
                         </div>
@@ -69,26 +85,26 @@
                         <!-- Nested Sub-Items Dropzone -->
                         <div class="nested-sortable-list mt-3 min-h-50px p-2 bg-body rounded border border-dashed" style="min-height: 50px;" data-parent-id="{{ $root->menu_id }}">
                             @foreach($root->children as $child)
-                                <div class="list-group-item border rounded p-2 mb-2 bg-body-secondary d-flex align-items-center justify-content-between cursor-move" data-id="{{ $child->menu_id }}">
+                                <div class="list-group-item border rounded p-2 mb-2 bg-body-secondary d-flex align-items-center justify-content-between cursor-move menu-node-item" data-id="{{ $child->menu_id }}" data-resource="{{ strtolower($child->resource_key ?? 'public') }}">
                                     <div class="d-flex align-items-center gap-2">
-                                        <i class="fa-solid fa-grip-vertical text-body-secondary drag-handle fs-7"></i>
+                                        <i class="fa-solid fa-grip-vertical text-body-secondary drag-handle fs-7 me-1"></i>
                                         <i class="{{ $child->icon ?? 'fa-solid fa-circle bullet-dot' }} text-success fs-7"></i>
                                         <span class="fw-semibold text-body-emphasis fs-7">{{ $child->title }}</span>
                                         @if(!$child->is_active)
-                                            <span class="badge bg-danger text-white fs-9">Hidden</span>
+                                            <span class="badge bg-danger-subtle text-danger fs-9">Hidden</span>
                                         @endif
                                     </div>
                                     <div class="d-flex align-items-center gap-2">
-                                        <span class="badge bg-light-info text-info border fs-9 font-monospace">{{ $child->route_name }}</span>
+                                        <span class="badge bg-body-secondary text-body-emphasis border fs-9 font-mono">{{ $child->route_name }}</span>
                                         @if($child->resource_key)
-                                            <span class="badge bg-light-warning text-warning border border-warning-subtle fs-9">{{ $child->resource_key }}</span>
+                                            <span class="badge bg-warning-subtle text-warning border border-warning-subtle fs-9">{{ $child->resource_key }}</span>
                                         @endif
-                                        <button class="btn btn-sm btn-light-secondary py-1 px-2 fs-9 ms-1" onclick='prepareEditModal(@json($child))'>
+                                        <button class="btn btn-sm btn-outline-secondary py-1 px-2 fs-9 ms-1" onclick='prepareEditModal(@json($child))'>
                                             <i class="fa-solid fa-pen-to-square"></i>
                                         </button>
                                         <form method="POST" action="{{ route('settings.navigation.destroy', $child->menu_id) }}" class="d-inline" onsubmit="return confirm('Delete this sub-menu link?');">
                                             @csrf @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-light-danger py-1 px-2 fs-9"><i class="fa-solid fa-trash"></i></button>
+                                            <button type="submit" class="btn btn-sm btn-ghost-danger py-1 px-2 fs-9" title="Delete Link"><i class="fa-solid fa-trash"></i></button>
                                         </form>
                                     </div>
                                 </div>
@@ -97,13 +113,18 @@
                     </div>
                 @endforeach
             </div>
-            
-            <div class="text-end mt-4">
-                <button id="saveMenuStructureBtn" class="btn btn-primary btn-sm px-4 fw-bold shadow-sm">
-                    <i class="fa-solid fa-cloud-arrow-up me-1"></i> Save Layout Hierarchy & Order
-                </button>
-            </div>
         </div>
+    </div>
+</div>
+
+<!-- Sticky Save Layout Bar (Appears when layout structure is modified) -->
+<div id="stickySaveFooterBar" class="position-fixed bottom-0 start-50 translate-middle-x mb-4 z-3 d-none">
+    <div class="card border-0 shadow-lg bg-body-tertiary px-4 py-3 rounded-pill border border-subtle d-flex flex-row align-items-center gap-3">
+        <span class="fw-semibold text-body-emphasis fs-7"><i class="fa-solid fa-circle-exclamation text-warning me-2"></i>Layout modifications detected.</span>
+        <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill px-3" onclick="window.location.reload()">Discard</button>
+        <button id="saveMenuStructureBtn" class="btn btn-primary btn-sm rounded-pill px-4 fw-bold shadow-sm">
+            <i class="fa-solid fa-cloud-arrow-up me-1"></i> Save Layout Order
+        </button>
     </div>
 </div>
 
@@ -186,7 +207,7 @@
                                         ];
                                     @endphp
                                     @foreach($icons as $ic)
-                                        <button type="button" class="btn btn-light-secondary btn-sm d-flex align-items-center gap-1 icon-select-btn px-2 py-1 fs-9" data-icon="{{ $ic }}" onclick="selectIcon('{{ $ic }}')">
+                                        <button type="button" class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1 icon-select-btn px-2 py-1 fs-9" data-icon="{{ $ic }}" onclick="selectIcon('{{ $ic }}')">
                                             <i class="{{ $ic }} text-primary"></i> <span>{{ str_replace(['fa-solid ', 'fa-regular '], '', $ic) }}</span>
                                         </button>
                                     @endforeach
@@ -204,7 +225,7 @@
                 </div>
 
                 <div class="modal-footer border-0 pt-0">
-                    <button type="button" class="btn btn-light-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary btn-sm fw-bold px-4">Save Navigation Node</button>
                 </div>
             </form>
@@ -212,10 +233,16 @@
     </div>
 </div>
 
-<!-- Load SortableJS -->
-<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<!-- Local Vendor Script (Zero CDN Compliance) -->
+<script src="{{ asset('assets/vendor/sortablejs/Sortable.min.js') }}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    var stickyBar = document.getElementById('stickySaveFooterBar');
+
+    function markDirty() {
+        if (stickyBar) stickyBar.classList.remove('d-none');
+    }
+
     // 1. SortableJS initialization
     var rootEl = document.getElementById('dragMenuContainer');
     if (rootEl) {
@@ -223,7 +250,8 @@ document.addEventListener('DOMContentLoaded', function () {
             group: 'roots',
             handle: '.drag-handle',
             animation: 150,
-            ghostClass: 'bg-light-warning'
+            ghostClass: 'bg-primary-subtle',
+            onEnd: markDirty
         });
     }
 
@@ -233,7 +261,8 @@ document.addEventListener('DOMContentLoaded', function () {
             group: 'children',
             handle: '.drag-handle',
             animation: 150,
-            ghostClass: 'bg-light-success'
+            ghostClass: 'bg-success-subtle',
+            onEnd: markDirty
         });
     });
 
@@ -271,6 +300,34 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+
+// Role Preview Chips Filter Helper
+function filterRolePreview(role, btnEl) {
+    document.querySelectorAll('.role-preview-chip').forEach(c => {
+        c.classList.remove('btn-primary', 'active');
+        c.classList.add('btn-outline-secondary');
+    });
+    btnEl.classList.remove('btn-outline-secondary');
+    btnEl.classList.add('btn-primary', 'active');
+
+    const roleResourceMap = {
+        'employee': ['public'],
+        'manager': ['public', 'organization', 'leave', 'attendance', 'performance'],
+        'recruiter': ['public', 'recruitment'],
+        'hr': ['public', 'employees', 'organization', 'leave', 'attendance', 'payroll', 'performance', 'training', 'assets', 'announcements', 'reports', 'support_tickets', 'hr_tickets'],
+        'admin': ['all']
+    };
+
+    const items = document.querySelectorAll('.menu-node-item');
+    items.forEach(item => {
+        const resKey = item.getAttribute('data-resource') || 'public';
+        if (role === 'all' || (roleResourceMap[role] && (roleResourceMap[role].includes('all') || roleResourceMap[role].includes(resKey)))) {
+            item.style.opacity = '1';
+        } else {
+            item.style.opacity = '0.35';
+        }
+    });
+}
 
 // Modal helpers
 function prepareAddModal() {

@@ -77,9 +77,9 @@ class AdminTicketController extends Controller
             'ticket_code' => 'ADTK-' . strtoupper(uniqid()),
             'ticket_priority' => $request->ticket_priority,
             'company_id' => $request->company_id,
-            'subject' => $request->subject,
+            'subject' => \App\Traits\HasCleanContent::sanitizeContent($request->subject, false),
             'employee_id' => $employeeId,
-            'description' => $request->description,
+            'description' => \App\Traits\HasCleanContent::sanitizeContent($request->description, false),
             'remarks' => '',
             'ticket_status' => '1', // Open
             'created_by' => auth()->user()?->username ?? 'User',
@@ -122,7 +122,7 @@ class AdminTicketController extends Controller
 
         $adminTicket->update([
             'ticket_status' => $request->ticket_status,
-            'remarks' => $request->remarks ?? $adminTicket->remarks,
+            'remarks' => \App\Traits\HasCleanContent::sanitizeContent($request->remarks ?? $adminTicket->remarks, false),
             'updated_by' => auth()->id(),
             'updated_date' => date('d-m-Y H:i:s'),
         ]);

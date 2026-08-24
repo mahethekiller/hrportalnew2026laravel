@@ -35,8 +35,8 @@
                 </div>
             </div>
             <div class="card-body py-3">
-                <h5 class="fw-bold text-gray-900 mb-3">{{ $adminTicket->subject }}</h5>
-                <p class="text-gray-800 fs-8 leading-relaxed whitespace-pre-line">{{ $adminTicket->description }}</p>
+                <h5 class="fw-bold text-gray-900 mb-3">{{ $adminTicket->clean_subject }}</h5>
+                <div class="text-gray-800 fs-8 leading-relaxed">{!! $adminTicket->clean_description !!}</div>
             </div>
         </div>
 
@@ -44,7 +44,7 @@
             <div class="card border-0 shadow-sm rounded-3 bg-light-primary border-start border-primary border-3">
                 <div class="card-body p-4">
                     <h6 class="fw-bold text-primary mb-2"><i class="fa-solid fa-comment-dots me-1"></i> Admin Resolution Remarks</h6>
-                    <p class="text-gray-800 fs-8 mb-0 whitespace-pre-line">{{ $adminTicket->remarks }}</p>
+                    <div class="text-gray-800 fs-8 mb-0">{!! $adminTicket->clean_remarks !!}</div>
                 </div>
             </div>
         @endif
@@ -94,7 +94,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label fs-9 fw-semibold text-muted">Resolution / Processing Remarks</label>
-                            <textarea name="remarks" rows="4" class="form-control form-control-sm fs-8" placeholder="Enter remarks here...">{{ $adminTicket->remarks }}</textarea>
+                            <textarea name="remarks" rows="4" class="form-control form-control-sm fs-8" placeholder="Enter remarks here...">{{ $adminTicket->plain_remarks }}</textarea>
                         </div>
                         <button type="submit" class="btn btn-primary btn-sm w-100 fw-bold">Update Configuration</button>
                     </form>

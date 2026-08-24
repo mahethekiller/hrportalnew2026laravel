@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class AdminTicket extends Model
 {
-    use HasFactory;
+    use HasFactory, \App\Traits\HasCleanContent;
 
     /**
      * The table associated with the model.

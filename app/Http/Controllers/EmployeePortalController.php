@@ -26,12 +26,26 @@ class EmployeePortalController extends Controller
 {
     protected function getEmployeeId(): int
     {
-        return (int) (auth()->user()?->employee_id ?? auth()->id() ?? 1);
+        $user = auth()->user();
+        if (!$user) return 1;
+
+        $emp = Employee::where('user_id', $user->id)
+            ->orWhere('employee_id', $user->employee_id ?? '')
+            ->orWhere('email', $user->email ?? '')
+            ->first();
+
+        $empId = (int) ($emp?->user_id ?? $user->employee_id ?? $user->id ?? 1);
+        return $empId > 0 ? $empId : (int) ($user->id ?? 1);
     }
 
     protected function getCompanyId(): int
     {
-        return (int) (auth()->user()?->company_id ?? 1);
+        $user = auth()->user();
+        if (!$user) return 1;
+
+        $emp = Employee::where('user_id', $user->id)->first();
+        $compId = (int) ($emp?->company_id ?? $user->company_id ?? 1);
+        return $compId > 0 ? $compId : 1;
     }
 
     /**
@@ -76,17 +90,22 @@ class EmployeePortalController extends Controller
         $data = [
             'company_id' => $this->getCompanyId(),
             'employee_id' => $this->getEmployeeId(),
-            'reason' => $request->reason,
+            'reason' => \App\Traits\HasCleanContent::sanitizeContent($request->reason, false),
             'status' => 1,
         ];
 
-        if (Schema::hasColumn($table, 'leave_type_id')) $data['leave_type_id'] = $request->leave_type_id;
-        if (Schema::hasColumn($table, 'from_date')) $data['from_date'] = $request->from_date;
-        if (Schema::hasColumn($table, 'to_date')) $data['to_date'] = $request->to_date;
-        if (Schema::hasColumn($table, 'start_date')) $data['start_date'] = $request->from_date;
-        if (Schema::hasColumn($table, 'end_date')) $data['end_date'] = $request->to_date;
+        if (Schema::hasColumn($table, 'leave_type_id')) $data['leave_type_id'] = (int) ($request->leave_type_id ?? 1);
+        if (Schema::hasColumn($table, 'from_date')) $data['from_date'] = (string) $request->from_date;
+        if (Schema::hasColumn($table, 'to_date')) $data['to_date'] = (string) $request->to_date;
+        if (Schema::hasColumn($table, 'start_date')) $data['start_date'] = (string) $request->from_date;
+        if (Schema::hasColumn($table, 'end_date')) $data['end_date'] = (string) $request->to_date;
+        if (Schema::hasColumn($table, 'start_duration')) $data['start_duration'] = 'Full';
+        if (Schema::hasColumn($table, 'end_duration')) $data['end_duration'] = 'Full';
+        if (Schema::hasColumn($table, 'casual_deducted')) $data['casual_deducted'] = 0.00;
+        if (Schema::hasColumn($table, 'earned_deducted')) $data['earned_deducted'] = 0.00;
+        if (Schema::hasColumn($table, 'remarks')) $data['remarks'] = '';
         if (Schema::hasColumn($table, 'applied_on')) $data['applied_on'] = date('Y-m-d H:i:s');
-        if (Schema::hasColumn($table, 'manager_id')) $data['manager_id'] = auth()->user()?->manager_id ?? 1;
+        if (Schema::hasColumn($table, 'manager_id')) $data['manager_id'] = auth()->user()?->manager_id ?? $this->getEmployeeId();
         if (Schema::hasColumn($table, 'created_at')) $data['created_at'] = date('Y-m-d H:i:s');
 
         EmployeeLeave::create($data);
@@ -286,8 +305,20 @@ class EmployeePortalController extends Controller
     public function referrals(): View
     {
         $employeeId = $this->getEmployeeId();
-        $refKey = (new Referral)->getKeyName();
-        $referrals = Referral::where('employee_id', $employeeId)->orderBy($refKey, 'desc')->get();
+        $userId = auth()->id() ?? $employeeId;
+        $ref = new Referral;
+        $table = $ref->getTable();
+        $refKey = $ref->getKeyName();
+
+        $query = Referral::query();
+
+        if (Schema::hasColumn($table, 'added_by')) {
+            $query->where('added_by', $employeeId)->orWhere('added_by', $userId);
+        } elseif (Schema::hasColumn($table, 'employee_id')) {
+            $query->where('employee_id', $employeeId);
+        }
+
+        $referrals = $query->orderBy($refKey, 'desc')->get();
         $openJobs = JobPost::latest()->get();
 
         return view('my_portal.referrals', compact('referrals', 'openJobs'));
@@ -299,7 +330,7 @@ class EmployeePortalController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'contact_number' => 'required|string|max:50',
-            'job_id' => 'required|integer',
+            'job_id' => 'nullable|integer',
             'resume' => 'nullable|file|mimes:pdf,doc,docx|max:5120',
         ]);
 
@@ -313,7 +344,7 @@ class EmployeePortalController extends Controller
 
         $table = (new Referral)->getTable();
         $data = [
-            'name' => $request->name,
+            'name' => \App\Traits\HasCleanContent::sanitizeContent($request->name, false),
             'email' => $request->email,
             'resume' => $resumePath,
             'status' => 'Pending',
@@ -321,13 +352,16 @@ class EmployeePortalController extends Controller
 
         if (Schema::hasColumn($table, 'company_id')) $data['company_id'] = $this->getCompanyId();
         if (Schema::hasColumn($table, 'employee_id')) $data['employee_id'] = $this->getEmployeeId();
-        if (Schema::hasColumn($table, 'job_id')) $data['job_id'] = $request->job_id;
+        if (Schema::hasColumn($table, 'job_id')) $data['job_id'] = $request->job_id ?? 0;
         if (Schema::hasColumn($table, 'contact_number')) $data['contact_number'] = $request->contact_number;
         if (Schema::hasColumn($table, 'contact_no')) $data['contact_no'] = $request->contact_number;
         if (Schema::hasColumn($table, 'assigned_to')) $data['assigned_to'] = 0;
-        if (Schema::hasColumn($table, 'added_by')) $data['added_by'] = $this->getEmployeeId();
+        if (Schema::hasColumn($table, 'added_by')) $data['added_by'] = auth()->id() ?? $this->getEmployeeId();
+        if (Schema::hasColumn($table, 'added_date')) $data['added_date'] = date('Y-m-d H:i:s');
+        if (Schema::hasColumn($table, 'created_at')) $data['created_at'] = date('Y-m-d H:i:s');
         if (Schema::hasColumn($table, 'description')) $data['description'] = 'Candidate Referral';
         if (Schema::hasColumn($table, 'remarks')) $data['remarks'] = '';
+        if (Schema::hasColumn($table, 'show_status')) $data['show_status'] = 1;
 
         Referral::create($data);
 

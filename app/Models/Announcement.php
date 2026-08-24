@@ -70,4 +70,12 @@ class Announcement extends Model
     {
         return $this->hasMany(AnnouncementSubmission::class, 'announcement_id');
     }
+
+    /**
+     * Announcement Cover Image URL Accessor.
+     */
+    public function getImageUrlAttribute(): string
+    {
+        return \App\Helpers\UploadHelper::url('announcements', $this->image);
+    }
 }

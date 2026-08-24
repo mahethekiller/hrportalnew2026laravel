@@ -36,8 +36,8 @@
                 </div>
             </div>
             <div class="card-body py-3">
-                <h5 class="fw-bold text-gray-900 mb-3">{{ $supportTicket->subject }}</h5>
-                <p class="text-gray-800 fs-8 leading-relaxed whitespace-pre-line">{{ $supportTicket->description }}</p>
+                <h5 class="fw-bold text-gray-900 mb-3">{{ $supportTicket->clean_subject }}</h5>
+                <div class="text-gray-800 fs-8 leading-relaxed">{!! $supportTicket->clean_description !!}</div>
             </div>
         </div>
 
@@ -59,7 +59,7 @@
                         </div>
                         <span class="text-muted fs-9">{{ $comment->created_at }}</span>
                     </div>
-                    <p class="text-gray-800 fs-8 mb-0 whitespace-pre-line">{{ $comment->ticket_comments }}</p>
+                    <div class="text-gray-800 fs-8 mb-0">{!! $comment->clean_comment !!}</div>
                 </div>
             </div>
         @empty
@@ -154,7 +154,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label fs-9 fw-semibold text-muted">Internal Remarks / Note</label>
-                            <textarea name="ticket_remarks" rows="3" class="form-control form-control-sm fs-8" placeholder="Internal processing remarks...">{{ $supportTicket->ticket_remarks }}</textarea>
+                            <textarea name="ticket_remarks" rows="3" class="form-control form-control-sm fs-8" placeholder="Internal processing remarks...">{{ $supportTicket->plain_remarks }}</textarea>
                         </div>
                         <button type="submit" class="btn btn-primary btn-sm w-100 fw-bold">Update Configuration</button>
                     </form>

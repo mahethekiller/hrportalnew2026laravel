@@ -8,12 +8,15 @@ use App\Models\EmailTemplate;
 use App\Models\SystemSetting;
 use App\Models\UserRole;
 use App\Repositories\SettingRepository;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
 class SettingService
 {
     public function __construct(
-        protected SettingRepository $settingRepository
+        protected SettingRepository $settingRepository,
+        protected MailService $mailService,
+        protected ThemeService $themeService
     ) {}
 
     public function getSystemSetting(): SystemSetting
@@ -58,5 +61,70 @@ class SettingService
     public function updateEmailTemplate(EmailTemplate $template, array $data): bool
     {
         return $this->settingRepository->updateEmailTemplate($template, $data);
+    }
+
+    public function getMailConfig(): array
+    {
+        return $this->mailService->getMailConfig();
+    }
+
+    public function saveMailConfig(array $config): bool
+    {
+        return $this->mailService->saveMailConfig($config);
+    }
+
+    public function getSmtpProfiles(): array
+    {
+        return $this->mailService->getSmtpProfiles();
+    }
+
+    public function saveSmtpProfile(array $data): array
+    {
+        return $this->mailService->saveSmtpProfile($data);
+    }
+
+    public function deleteSmtpProfile(string $id): bool
+    {
+        return $this->mailService->deleteSmtpProfile($id);
+    }
+
+    public function testSmtpProfile(array $profileData, string $recipientEmail): array
+    {
+        return $this->mailService->testSmtpConnection($profileData, $recipientEmail);
+    }
+
+    public function getEmailLogs(): LengthAwarePaginator
+    {
+        return $this->settingRepository->getEmailLogs();
+    }
+
+    public function getCompanies(): Collection
+    {
+        return $this->settingRepository->getCompanies();
+    }
+
+    public function getThemeConfig(): array
+    {
+        return $this->themeService->getThemeConfig();
+    }
+
+    public function saveThemeConfig(array $config): bool
+    {
+        return $this->themeService->saveThemeConfig($config);
+    }
+
+    public function getColorProfiles(): array
+    {
+        return $this->themeService->getColorProfiles();
+    }
+
+    public function getFontFamilies(): array
+    {
+        return $this->themeService->getFontFamilies();
+    }
+
+    public function getSeasonalAccents(): array
+    {
+        return $this->themeService->getSeasonalAccents();
     }
 }

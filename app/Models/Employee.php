@@ -588,4 +588,12 @@ class Employee extends Authenticatable
     {
         return $this->belongsTo(Employee::class, 'sub_manager_id', 'user_id');
     }
+
+    /**
+     * Profile Picture URL Accessor.
+     */
+    public function getProfilePictureUrlAttribute(): string
+    {
+        return \App\Helpers\UploadHelper::url('profile', $this->profile_picture, $this->gender ?? 'Male');
+    }
 }

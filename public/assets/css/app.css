@@ -1,73 +1,157 @@
-/* Executive Precision x Metronic 8 Custom Design System */
+/* Executive Precision x PRD Custom Design System */
 :root {
     --sidebar-width: 250px;
     
-    /* Executive Precision & Metronic 8 Colors (Light Mode) */
-    --bs-primary: #1B84FF;
-    --bs-primary-active: #056EE9;
-    --bs-primary-light: #E8F3FF;
+    /* PRD Color Tokens (Light Mode) */
+    --canvas: #F4F6F5;
+    --surface: #FFFFFF;
+    --surface-raised: #FFFFFF;
+    --ink: #16202B;
+    --slate: #5B6B78;
+    --line: #E2E7E5;
     
-    --bs-secondary: #4B41E1;
-    --bs-secondary-light: #E2DFFF;
+    --fern: #2F7A63;
+    --fern-active: #24624F;
+    --fern-wash: #E4F0EA;
     
-    --bs-success: #17C653;
-    --bs-success-light: #DFFFEA;
+    --marigold: #B07A14;
+    --marigold-wash: #FBF1DC;
     
-    --bs-danger: #F8285A;
-    --bs-danger-light: #FFEEF3;
+    --clay: #BE4A3F;
+    --clay-wash: #FBE9E7;
     
-    --bs-warning: #F1BC00;
-    --bs-warning-light: #FFF8DD;
+    --harbor: #3A6EA5;
+
+    /* Bootstrap 5.3 Mapped Variables (Fern Action Color) */
+    --bs-primary: #2F7A63;
+    --bs-primary-active: #24624F;
+    --bs-primary-light: #E4F0EA;
+    --bs-primary-rgb: 47, 122, 99;
     
-    --bs-info: #7239EA;
-    --bs-info-light: #F8F5FF;
+    --bs-secondary: #5B6B78;
+    --bs-secondary-light: #F4F6F5;
     
-    --bg-color: #F8FAFC; /* Soft-minimalist background */
-    --text-main: #131B2E; /* Executive deep navy heading text */
-    --text-muted: #64748B; /* Slate text */
+    --bs-success: #2F7A63;
+    --bs-success-light: #E4F0EA;
     
-    --sidebar-bg: #FFFFFF; /* Crisp white sidebar in light mode */
-    --sidebar-color: #475569;
-    --sidebar-hover-bg: #F1F5F9;
-    --sidebar-hover-color: #0F172A;
-    --sidebar-active-bg: #1B84FF;
-    --sidebar-active-color: #FFFFFF;
-    --sidebar-border: #E2E8F0;
+    --bs-danger: #BE4A3F;
+    --bs-danger-light: #FBE9E7;
+    
+    --bs-warning: #B07A14;
+    --bs-warning-light: #FBF1DC;
+    
+    --bs-info: #3A6EA5;
+    --bs-info-light: #E8F0F8;
+    
+    --bg-color: #F4F6F5;
+    --text-main: #16202B;
+    --text-muted: #5B6B78;
+    
+    --sidebar-bg: #FFFFFF;
+    --sidebar-color: #5B6B78;
+    --sidebar-hover-bg: #E4F0EA;
+    --sidebar-hover-color: #16202B;
+    --sidebar-active-bg: #E4F0EA;
+    --sidebar-active-color: #2F7A63;
+    --sidebar-border: #E2E7E5;
     
     --card-bg: #FFFFFF;
-    --card-border: #E2E8F0;
+    --card-border: #E2E7E5;
     --card-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.05), 0px 1px 2px 0px rgba(0, 0, 0, 0.03);
     
     --input-bg: #FFFFFF;
     --input-border: #CBD5E1;
-    --input-focus-border: #1B84FF;
+    --input-focus-border: #2F7A63;
     
-    --nav-bg: rgba(255, 255, 255, 0.85);
+    --nav-bg: rgba(255, 255, 255, 0.9);
 }
 
 [data-bs-theme="dark"] {
-    /* Executive Precision & Metronic 8 Colors (Dark Mode) */
-    --bg-color: #0F172A;
-    --text-main: #F8FAFC;
-    --text-muted: #94A3B8;
+    /* PRD Color Tokens (Dark Mode Canvas) */
+    --canvas: #0E1620;
+    --surface: #17222E;
+    --surface-raised: #1E2B39;
+    --ink: #EDF1F4;
+    --slate: #93A3B1;
+    --line: #2A3846;
     
-    --sidebar-bg: #1E293B;
-    --sidebar-color: #94A3B8;
-    --sidebar-hover-bg: #334155;
-    --sidebar-hover-color: #FFFFFF;
-    --sidebar-active-bg: #1B84FF;
-    --sidebar-active-color: #FFFFFF;
-    --sidebar-border: #334155;
+    --fern: #4FA98C;
+    --fern-active: #3C8A71;
+    --fern-wash: #1B3A33;
     
-    --card-bg: #1E293B;
-    --card-border: #334155;
+    --marigold: #E8B44A;
+    --marigold-wash: #3A2F17;
+    
+    --clay: #E4796D;
+    --clay-wash: #3B1F1C;
+    
+    --harbor: #6FA3D8;
+
+    /* Bootstrap 5.3 Mapped Variables (Dark Theme) */
+    --bs-primary: #4FA98C;
+    --bs-primary-active: #3C8A71;
+    --bs-primary-light: #1B3A33;
+    --bs-primary-rgb: 79, 169, 140;
+
+    --bg-color: #0E1620;
+    --text-main: #EDF1F4;
+    --text-muted: #93A3B1;
+    
+    --sidebar-bg: #17222E;
+    --sidebar-color: #93A3B1;
+    --sidebar-hover-bg: #1E2B39;
+    --sidebar-hover-color: #EDF1F4;
+    --sidebar-active-bg: #1B3A33;
+    --sidebar-active-color: #4FA98C;
+    --sidebar-border: #2A3846;
+    
+    --card-bg: #17222E;
+    --card-border: #2A3846;
     --card-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
     
-    --input-bg: #1E293B;
-    --input-border: #334155;
-    --input-focus-border: #1B84FF;
+    --input-bg: #17222E;
+    --input-border: #2A3846;
+    --input-focus-border: #4FA98C;
     
-    --nav-bg: rgba(15, 23, 42, 0.85);
+    --nav-bg: rgba(14, 22, 32, 0.9);
+}
+
+/* Typography Tokens & Utilities */
+.font-serif {
+    font-family: 'Fraunces', Georgia, serif;
+}
+
+.font-mono {
+    font-family: 'IBM Plex Mono', monospace;
+    font-variant-numeric: tabular-nums;
+}
+
+.font-sans {
+    font-family: 'Figtree', -apple-system, system-ui, sans-serif;
+}
+
+.display-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-size: 1.85rem;
+    line-height: 1.25;
+}
+
+/* Tabular Figures for Tables & Financial Data */
+table, .table, .tabular-nums {
+    font-variant-numeric: tabular-nums;
+}
+
+/* Ghost Actions Buttons */
+.btn-ghost-danger {
+    background: transparent;
+    color: var(--slate);
+    border: none;
+    transition: all 0.15s ease-in-out;
+}
+.btn-ghost-danger:hover {
+    background-color: var(--clay-wash);
+    color: var(--clay);
 }
 
 /* Base Typography Specs (Compact High-Density Metrics) */
@@ -172,10 +256,12 @@ h3, .headline-md {
 }
 
 #sidebar .nav-link.active {
-    background-color: var(--sidebar-active-bg) !important;
-    color: var(--sidebar-active-color) !important;
+    background-color: var(--fern-wash) !important;
+    color: var(--fern) !important;
     font-weight: 600;
-    box-shadow: 0 2px 6px rgba(27, 132, 255, 0.25);
+    border-left: 3px solid var(--fern) !important;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
 }
 
 #sidebar .nav-link i.menu-icon {
@@ -221,9 +307,12 @@ h3, .headline-md {
 }
 
 #sidebar .nav-sub-link.active {
-    background-color: var(--bs-primary-light) !important;
-    color: var(--bs-primary) !important;
+    background-color: var(--fern-wash) !important;
+    color: var(--fern) !important;
     font-weight: 600;
+    border-left: 3px solid var(--fern) !important;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
 }
 
 #sidebar .nav-sub-link i.bullet-dot {

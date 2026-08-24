@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Schema;
 
 class Referral extends Model
 {
-    use HasFactory;
+    use HasFactory, \App\Traits\HasCleanContent;
 
     protected $table = 'xin_referrals';
     protected $primaryKey = 'referral_id';
@@ -42,19 +42,29 @@ class Referral extends Model
         'resume',
         'assigned_to',
         'added_by',
+        'added_date',
         'description',
         'remarks',
         'status',
+        'show_status',
         'created_at'
     ];
 
     public function employee()
     {
+        $table = $this->getTable();
+        if (Schema::hasColumn($table, 'added_by')) {
+            return $this->belongsTo(Employee::class, 'added_by', 'user_id');
+        }
         return $this->belongsTo(Employee::class, 'employee_id');
     }
 
     public function job()
     {
-        return $this->belongsTo(JobPost::class, 'job_id');
+        $table = $this->getTable();
+        if (Schema::hasColumn($table, 'job_id')) {
+            return $this->belongsTo(JobPost::class, 'job_id');
+        }
+        return null;
     }
 }

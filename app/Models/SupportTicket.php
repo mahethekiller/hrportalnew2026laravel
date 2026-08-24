@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Schema;
 
 class SupportTicket extends Model
 {
-    use HasFactory;
+    use HasFactory, \App\Traits\HasCleanContent;
 
     protected $table = 'xin_support_tickets';
     protected $primaryKey = 'ticket_id';

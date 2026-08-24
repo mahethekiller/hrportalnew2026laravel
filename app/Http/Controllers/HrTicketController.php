@@ -77,9 +77,9 @@ class HrTicketController extends Controller
             'ticket_code' => 'HRTK-' . strtoupper(uniqid()),
             'ticket_priority' => $request->ticket_priority,
             'company_id' => $request->company_id,
-            'subject' => $request->subject,
+            'subject' => \App\Traits\HasCleanContent::sanitizeContent($request->subject, false),
             'employee_id' => $employeeId,
-            'description' => $request->description,
+            'description' => \App\Traits\HasCleanContent::sanitizeContent($request->description, false),
             'remarks' => '',
             'ticket_status' => '1', // Open
             'created_by' => auth()->user()?->username ?? 'User',
@@ -122,7 +122,7 @@ class HrTicketController extends Controller
 
         $hrTicket->update([
             'ticket_status' => $request->ticket_status,
-            'remarks' => $request->remarks ?? $hrTicket->remarks,
+            'remarks' => \App\Traits\HasCleanContent::sanitizeContent($request->remarks ?? $hrTicket->remarks, false),
             'updated_by' => auth()->id(),
             'updated_date' => date('d-m-Y H:i:s'),
         ]);

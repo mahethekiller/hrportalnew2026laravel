@@ -5,17 +5,26 @@
 @section('content')
 <div class="d-flex flex-column flex-column-fluid">
     <!-- Header Banner -->
-    <div class="d-flex align-items-center justify-content-between mb-4">
+    <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
         <div>
-            <h1 class="h3 mb-1 fw-bold text-gray-900">Global System Settings</h1>
-            <p class="text-muted fs-7 mb-0">Configure portal identity, active core modules, timezone, and employee self-service capabilities.</p>
+            <h1 class="h3 mb-1 fw-bold text-body-emphasis">Global System Settings</h1>
+            <p class="text-body-secondary fs-7 mb-0">Configure portal identity, active core modules, timezone, and employee self-service capabilities.</p>
         </div>
-        <div class="d-flex gap-2">
-            <a href="{{ route('user-roles.index') }}" class="btn btn-light-primary btn-sm">
+        <div class="d-flex gap-2 flex-wrap">
+            <a href="{{ route('settings.theme.index') }}" class="btn btn-primary btn-sm fw-semibold">
+                <i class="fa-solid fa-palette me-1"></i> Theme & Branding
+            </a>
+            <a href="{{ route('user-roles.index') }}" class="btn btn-light-primary btn-sm fw-semibold">
                 <i class="fa-solid fa-user-shield me-1"></i> User Roles & Access
             </a>
-            <a href="{{ route('email-templates.index') }}" class="btn btn-light-info btn-sm">
+            <a href="{{ route('smtp-profiles.index') }}" class="btn btn-light-success btn-sm fw-semibold">
+                <i class="fa-solid fa-server me-1"></i> SMTP Profiles & Routing
+            </a>
+            <a href="{{ route('email-templates.index') }}" class="btn btn-light-info btn-sm fw-semibold">
                 <i class="fa-solid fa-envelope-open-text me-1"></i> Email Templates
+            </a>
+            <a href="{{ route('email-logs.index') }}" class="btn btn-light-warning btn-sm fw-semibold">
+                <i class="fa-solid fa-clock-rotate-left me-1"></i> Email Logs
             </a>
         </div>
     </div>

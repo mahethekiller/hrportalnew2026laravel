@@ -56,8 +56,8 @@
                         <tr>
                             <td class="ps-4 font-monospace fw-bold text-primary">#{{ $tk->ticket_code }}</td>
                             <td>
-                                <div class="fw-bold text-gray-900">{{ $tk->subject }}</div>
-                                <div class="text-muted fs-9 text-truncate" style="max-width: 250px;">{{ Str::limit($tk->description, 50) }}</div>
+                                <div class="fw-bold text-gray-900">{{ $tk->clean_subject }}</div>
+                                <div class="text-muted fs-9 text-truncate" style="max-width: 250px;">{{ Str::limit($tk->plain_description, 50) }}</div>
                             </td>
                             <td>{{ $tk->employee ? $tk->employee->first_name . ' ' . $tk->employee->last_name : 'System' }}</td>
                             <td>{{ $tk->company ? $tk->company->name : '--' }}</td>

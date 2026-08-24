@@ -421,4 +421,12 @@ class Company extends Model
     {
         return $this->hasMany(WarningType::class, 'company_id');
     }
+
+    /**
+     * Logo URL Accessor.
+     */
+    public function getLogoUrlAttribute(): string
+    {
+        return \App\Helpers\UploadHelper::url('logo', $this->logo);
+    }
 }

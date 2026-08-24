@@ -20,69 +20,49 @@
         </div>
     </div>
 
-    <!-- Pipeline Summary Statistics Cards -->
+    <!-- Pipeline Summary Statistics Cards (Maintainable KPI Components) -->
     <div class="row g-3 mb-4">
         <div class="col-xl-3 col-sm-6">
-            <div class="card card-flush border-0 shadow-sm">
-                <div class="card-body p-3 d-flex align-items-center">
-                    <div class="symbol symbol-45px bg-light-secondary text-dark me-3 rounded d-flex align-items-center justify-content-center" style="width:45px; height:45px;">
-                        <i class="fa-solid fa-users fs-4"></i>
-                    </div>
-                    <div>
-                        <span class="text-muted fs-8 fw-semibold text-uppercase">Total Applicants</span>
-                        <div class="fs-4 fw-bold text-gray-900">{{ $summary['total_applicants'] ?? 0 }} Candidates</div>
-                    </div>
-                </div>
-            </div>
+            <x-kpi-card 
+                title="Total Applicants" 
+                :value="($summary['total_applicants'] ?? 0) . ' Candidates'" 
+                icon="fa-solid fa-users" 
+                variant="primary" 
+            />
         </div>
         <div class="col-xl-3 col-sm-6">
-            <div class="card card-flush border-0 shadow-sm">
-                <div class="card-body p-3 d-flex align-items-center">
-                    <div class="symbol symbol-45px bg-light-primary text-primary me-3 rounded d-flex align-items-center justify-content-center" style="width:45px; height:45px;">
-                        <i class="fa-solid fa-user-tag fs-4"></i>
-                    </div>
-                    <div>
-                        <span class="text-muted fs-8 fw-semibold text-uppercase">Shortlisted</span>
-                        <div class="fs-4 fw-bold text-gray-900">{{ $summary['shortlisted_count'] ?? 0 }} Candidates</div>
-                    </div>
-                </div>
-            </div>
+            <x-kpi-card 
+                title="Shortlisted" 
+                :value="($summary['shortlisted_count'] ?? 0) . ' Candidates'" 
+                icon="fa-solid fa-user-tag" 
+                variant="info" 
+            />
         </div>
         <div class="col-xl-3 col-sm-6">
-            <div class="card card-flush border-0 shadow-sm">
-                <div class="card-body p-3 d-flex align-items-center">
-                    <div class="symbol symbol-45px bg-light-info text-info me-3 rounded d-flex align-items-center justify-content-center" style="width:45px; height:45px;">
-                        <i class="fa-solid fa-comments fs-4"></i>
-                    </div>
-                    <div>
-                        <span class="text-muted fs-8 fw-semibold text-uppercase">Interviews Scheduled</span>
-                        <div class="fs-4 fw-bold text-gray-900">{{ $summary['interview_count'] ?? 0 }} Candidates</div>
-                    </div>
-                </div>
-            </div>
+            <x-kpi-card 
+                title="Interviews Scheduled" 
+                :value="($summary['interview_count'] ?? 0) . ' Candidates'" 
+                icon="fa-solid fa-comments" 
+                variant="warning" 
+            />
         </div>
         <div class="col-xl-3 col-sm-6">
-            <div class="card card-flush border-0 shadow-sm">
-                <div class="card-body p-3 d-flex align-items-center">
-                    <div class="symbol symbol-45px bg-light-success text-success me-3 rounded d-flex align-items-center justify-content-center" style="width:45px; height:45px;">
-                        <i class="fa-solid fa-user-check fs-4"></i>
-                    </div>
-                    <div>
-                        <span class="text-muted fs-8 fw-semibold text-uppercase">Hired / Offered</span>
-                        <div class="fs-4 fw-bold text-gray-900">{{ $summary['hired_count'] ?? 0 }} Candidates</div>
-                    </div>
-                </div>
-            </div>
+            <x-kpi-card 
+                title="Hired / Offered" 
+                :value="($summary['hired_count'] ?? 0) . ' Candidates'" 
+                icon="fa-solid fa-user-check" 
+                variant="success" 
+            />
         </div>
     </div>
 
     <!-- Main Candidate Pipeline Table Card -->
     <div class="card border-0 shadow-sm">
-        <div class="card-header border-0 pt-3 bg-light bg-opacity-50">
+        <div class="card-header border-bottom border-subtle pt-3 bg-body-tertiary">
             <form method="GET" action="{{ route('recruitment-applications.index') }}" class="row g-2 align-items-center w-100">
                 <div class="col-md-5">
                     <div class="input-group input-group-sm">
-                        <span class="input-group-text bg-white border-end-0"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
+                        <span class="input-group-text bg-body border-end-0"><i class="fa-solid fa-magnifying-glass text-body-secondary"></i></span>
                         <input type="text" name="search" class="form-control form-control-sm border-start-0" placeholder="Search candidate name, email, phone, or company..." value="{{ request('search') }}">
                     </div>
                 </div>
@@ -98,7 +78,7 @@
                 </div>
                 <div class="col-md-3 text-end d-flex gap-2 justify-content-end">
                     <button type="submit" class="btn btn-primary btn-sm px-3"><i class="fa-solid fa-filter me-1"></i> Filter</button>
-                    <a href="{{ route('recruitment-applications.index') }}" class="btn btn-light-secondary btn-sm px-3"><i class="fa-solid fa-rotate-left me-1"></i> Reset</a>
+                    <a href="{{ route('recruitment-applications.index') }}" class="btn btn-outline-secondary btn-sm px-3"><i class="fa-solid fa-rotate-left me-1"></i> Reset</a>
                 </div>
             </form>
         </div>
@@ -106,61 +86,66 @@
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0 gs-4 fs-7">
-                    <thead class="table-light text-muted fw-bold text-uppercase fs-9">
+                    <thead class="bg-body-secondary text-body-secondary fw-bold text-uppercase fs-9">
                         <tr>
                             <th class="ps-4">Candidate</th>
-                            <th>Applied Job Opening</th>
+                            <th>Applied Requisition</th>
                             <th>Current Company</th>
                             <th>Experience</th>
-                            <th>Current / Expected CTC</th>
-                            <th>Notice Period</th>
+                            <th>CTC Range</th>
                             <th>Stage Status</th>
                             <th class="text-end pe-4">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($applications as $app)
+                            @php
+                                $daysInStage = $app->created_at ? now()->diffInDays($app->created_at) : 0;
+                                $isStalled = ($daysInStage >= 7 && !in_array($app->application_status, ['Hired', 'Rejected']));
+                            @endphp
                             <tr>
                                 <td class="ps-4">
                                     <div class="d-flex align-items-center">
-                                        <div class="symbol symbol-35px me-2 bg-light-primary text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold fs-7" style="width:35px; height:35px;">
+                                        <div class="avatar-md rounded-circle me-2 bg-primary-subtle text-primary fw-bold fs-7 d-flex align-items-center justify-content-center" style="width:36px; height:36px;">
                                             {{ substr($app->candidate_name ?? 'C', 0, 1) }}
                                         </div>
                                         <div>
-                                            <div class="fw-bold text-gray-900">{{ $app->candidate_name }}</div>
-                                            <div class="fs-9 text-muted">{{ $app->email }} | {{ $app->contact_no }}</div>
+                                            <div class="fw-bold text-body-emphasis">
+                                                {{ $app->candidate_name }}
+                                                @if($isStalled)
+                                                    <span class="badge bg-danger-subtle text-danger fs-9 ms-1" title="Candidate in stage for over 7 days">
+                                                        <i class="fa-solid fa-hourglass-half me-1"></i>Stalled ({{ $daysInStage }}d)
+                                                    </span>
+                                                @endif
+                                            </div>
+                                            <div class="fs-9 text-body-secondary">{{ $app->email }} | {{ $app->contact_no }}</div>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="fw-bold text-gray-900">{{ $app->job->job_title ?? 'General Position' }}</div>
-                                    <span class="badge badge-light-primary font-monospace fs-9">{{ $app->job->job_code ?? 'JOB-GENERAL' }}</span>
+                                    <div class="fw-bold text-body-emphasis">{{ $app->job->job_title ?? 'General Requisition' }}</div>
+                                    <span class="badge bg-primary-subtle text-primary font-mono fs-9">{{ $app->job->job_code ?? 'JOB-GEN' }}</span>
                                 </td>
                                 <td>
-                                    <span class="fw-medium text-gray-800">{{ $app->current_company ?? 'N/A' }}</span>
-                                    <div class="fs-9 text-muted">{{ $app->current_location ?? '' }}</div>
+                                    <span class="fw-medium text-body-emphasis">{{ $app->current_company ?? 'N/A' }}</span>
+                                    <div class="fs-9 text-body-secondary">{{ $app->current_location ?? '' }}</div>
                                 </td>
                                 <td>
-                                    <span class="badge badge-light-secondary font-monospace fs-8">{{ $app->experience ?? 'Fresh' }}</span>
+                                    <span class="badge bg-secondary-subtle text-body-secondary font-mono fs-8">{{ $app->experience ?? 'Fresh' }}</span>
                                 </td>
                                 <td>
-                                    <div class="fs-8 text-gray-800 font-monospace">{{ $app->current_package ?? '--' }} / <strong>{{ $app->expected_package ?? '--' }}</strong></div>
+                                    <div class="fs-8 font-mono text-body-emphasis">{{ $app->current_package ?? '--' }} / <strong>{{ $app->expected_package ?? '--' }}</strong></div>
                                 </td>
                                 <td>
-                                    <span class="text-gray-700 fs-8">{{ $app->notice_period ?? 'Immediate' }}</span>
-                                </td>
-                                <td>
-                                    <span class="badge {{ $app->status_badge_class }}">
-                                        {{ $app->status_label }}
-                                    </span>
+                                    <x-status-badge :status="$app->application_status ?? 'Applied'" :pulse="$isStalled" />
                                 </td>
                                 <td class="text-end pe-4">
                                     <!-- Stage Update Dropdown -->
                                     <div class="dropdown d-inline">
-                                        <button class="btn btn-sm btn-light-secondary py-1 px-2 fs-8 dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                        <button class="btn btn-sm btn-outline-secondary py-1 px-2 fs-8 dropdown-toggle" type="button" data-bs-toggle="dropdown">
                                             Stage
                                         </button>
-                                        <ul class="dropdown-menu dropdown-menu-end fs-8">
+                                        <ul class="dropdown-menu dropdown-menu-end fs-8 shadow border-subtle">
                                             <li>
                                                 <form method="POST" action="{{ route('recruitment-applications.status', $app->application_id) }}">
                                                     @csrf
@@ -188,9 +173,12 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="text-center py-5 text-muted">
-                                    <i class="fa-solid fa-user-slash fs-2 mb-2 d-block text-muted"></i>
-                                    No recruitment candidate applications found.
+                                <td colspan="7" class="p-0">
+                                    <x-empty-state 
+                                        icon="fa-solid fa-user-slash" 
+                                        title="No Candidates Found" 
+                                        description="No applicant profiles match the selected filters or stage criteria." 
+                                    />
                                 </td>
                             </tr>
                         @endforelse
