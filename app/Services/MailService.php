@@ -76,6 +76,11 @@ class MailService
                     'onboarding' => '',
                     'resignation' => '',
                 ],
+                'default_clearance_officers' => [
+                    'it_person' => 0,
+                    'account_per' => 0,
+                    'hr_person' => 0,
+                ],
                 'company_extra_ccs' => [],
             ];
 

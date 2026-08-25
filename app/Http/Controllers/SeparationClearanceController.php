@@ -72,6 +72,14 @@ class SeparationClearanceController extends Controller
             $q->whereNull('hr_status')->orWhere('hr_status', '!=', 1);
         })->count();
 
+        // Default Clearance Officers Settings
+        $mailConfig = $this->mailService->getMailConfig();
+        $defaultOfficers = $mailConfig['default_clearance_officers'] ?? [
+            'it_person' => 0,
+            'account_per' => 0,
+            'hr_person' => 0,
+        ];
+
         return view('settings.clearance', compact(
             'resignations',
             'officers',
@@ -80,8 +88,32 @@ class SeparationClearanceController extends Controller
             'search',
             'totalResignations',
             'completedClearances',
-            'pendingClearances'
+            'pendingClearances',
+            'defaultOfficers'
         ));
+    }
+
+    /**
+     * Save Default Assigned Clearance Officers Settings.
+     */
+    public function updateDefaultOfficers(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'default_it_person' => ['nullable', 'integer'],
+            'default_account_per' => ['nullable', 'integer'],
+            'default_hr_person' => ['nullable', 'integer'],
+        ]);
+
+        $config = $this->mailService->getMailConfig();
+        $config['default_clearance_officers'] = [
+            'it_person' => (int) $request->input('default_it_person', 0),
+            'account_per' => (int) $request->input('default_account_per', 0),
+            'hr_person' => (int) $request->input('default_hr_person', 0),
+        ];
+
+        $this->mailService->saveMailConfig($config);
+
+        return redirect()->back()->with('success', 'Default assigned clearance officers updated successfully.');
     }
 
     /**

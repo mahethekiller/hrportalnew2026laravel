@@ -67,6 +67,64 @@
                 </div>
             </div>
         </div>
+    <!-- Default Assigned Officers Settings Collapse/Card -->
+    <div class="card border-0 shadow-sm rounded-3 mb-4">
+        <div class="card-header bg-body-tertiary border-0 pt-3 pb-3 d-flex align-items-center justify-content-between">
+            <div>
+                <h6 class="fw-bold text-body-emphasis mb-0 fs-7">
+                    <i class="fa-solid fa-user-shield text-primary me-2"></i> Default Assigned Clearance Officers
+                </h6>
+                <span class="fs-9 text-body-secondary">Set default IT, Accounts, and HR officers auto-assigned upon new employee resignation submit</span>
+            </div>
+            <button class="btn btn-outline-primary btn-sm fw-bold fs-9 px-3" type="button" data-bs-toggle="collapse" data-bs-target="#defaultOfficersCollapse" aria-expanded="false">
+                <i class="fa-solid fa-sliders me-1"></i> Configure Default Officers
+            </button>
+        </div>
+        <div class="collapse" id="defaultOfficersCollapse">
+            <div class="card-body bg-body-tertiary border-top border-subtle">
+                <form method="POST" action="{{ route('clearance.default_officers') }}">
+                    @csrf
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-4">
+                            <label class="form-label fs-8 fw-semibold text-body-emphasis">Default IT Officer</label>
+                            <select name="default_it_person" class="form-select form-select-sm select-search bg-body text-body-emphasis">
+                                <option value="0" {{ empty($defaultOfficers['it_person']) ? 'selected' : '' }}>-- Select Default IT Officer --</option>
+                                @foreach($officers as $ofc)
+                                    <option value="{{ $ofc->user_id }}" {{ (int)($defaultOfficers['it_person'] ?? 0) === (int)$ofc->user_id ? 'selected' : '' }}>
+                                        {{ $ofc->first_name }} {{ $ofc->last_name }} ({{ $ofc->employee_id }})
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fs-8 fw-semibold text-body-emphasis">Default Accounts Officer</label>
+                            <select name="default_account_per" class="form-select form-select-sm select-search bg-body text-body-emphasis">
+                                <option value="0" {{ empty($defaultOfficers['account_per']) ? 'selected' : '' }}>-- Select Default Accounts Officer --</option>
+                                @foreach($officers as $ofc)
+                                    <option value="{{ $ofc->user_id }}" {{ (int)($defaultOfficers['account_per'] ?? 0) === (int)$ofc->user_id ? 'selected' : '' }}>
+                                        {{ $ofc->first_name }} {{ $ofc->last_name }} ({{ $ofc->employee_id }})
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fs-8 fw-semibold text-body-emphasis">Default HR Officer</label>
+                            <select name="default_hr_person" class="form-select form-select-sm select-search bg-body text-body-emphasis">
+                                <option value="0" {{ empty($defaultOfficers['hr_person']) ? 'selected' : '' }}>-- Select Default HR Officer --</option>
+                                @foreach($officers as $ofc)
+                                    <option value="{{ $ofc->user_id }}" {{ (int)($defaultOfficers['hr_person'] ?? 0) === (int)$ofc->user_id ? 'selected' : '' }}>
+                                        {{ $ofc->first_name }} {{ $ofc->last_name }} ({{ $ofc->employee_id }})
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-1 text-end">
+                            <button type="submit" class="btn btn-primary btn-sm fw-bold w-100"><i class="fa-solid fa-floppy-disk me-1"></i> Save</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
     <!-- Main Clearance Queue Table Card -->

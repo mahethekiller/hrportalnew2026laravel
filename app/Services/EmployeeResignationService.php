@@ -66,7 +66,8 @@ class EmployeeResignationService
         $calculatedLwd = $employee->calculateLwd($noticeDate)->format('Y-m-d');
         $requestedLwd = !empty($data['resignation_date']) ? $data['resignation_date'] : $calculatedLwd;
 
-        $sanitizedReason = self::sanitizeContent($data['reason'] ?? '', false);
+        $mailConfig = $this->mailService->getMailConfig();
+        $defaultOfficers = $mailConfig['default_clearance_officers'] ?? [];
 
         $resignationData = [
             'company_id' => $employee->company_id ?? 1,
@@ -83,9 +84,9 @@ class EmployeeResignationService
             'coo_comment' => '',
             'sage_comment' => '',
             'login_comment' => '',
-            'it_person' => 0,
-            'account_per' => 0,
-            'hr_person' => 0,
+            'it_person' => (int) ($defaultOfficers['it_person'] ?? 0),
+            'account_per' => (int) ($defaultOfficers['account_per'] ?? 0),
+            'hr_person' => (int) ($defaultOfficers['hr_person'] ?? 0),
             'manager_person' => $employee->manager_id ?? 0,
             'sage_person' => 0,
             'login_person' => 0,

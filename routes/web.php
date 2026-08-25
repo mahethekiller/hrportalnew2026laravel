@@ -194,6 +194,7 @@ Route::middleware('auth')->group(function () {
 
     // Departmental No-Dues Clearance Hub Routes
     Route::get('/settings/clearance', [\App\Http\Controllers\SeparationClearanceController::class, 'index'])->name('clearance.index');
+    Route::post('/settings/clearance/default-officers', [\App\Http\Controllers\SeparationClearanceController::class, 'updateDefaultOfficers'])->name('clearance.default_officers');
     Route::post('/settings/clearance/{id}/assign', [\App\Http\Controllers\SeparationClearanceController::class, 'assignOfficers'])->name('clearance.assign');
     Route::post('/settings/clearance/{id}/notify', [\App\Http\Controllers\SeparationClearanceController::class, 'notifyOfficer'])->name('clearance.notify');
     Route::post('/settings/clearance/{id}/update', [\App\Http\Controllers\SeparationClearanceController::class, 'updateClearance'])->name('clearance.update');
