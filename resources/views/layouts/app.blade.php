@@ -234,15 +234,26 @@
 
             // Global Select2 Searchable Dropdown Initializer
             if (typeof $.fn.select2 !== 'undefined') {
-                $('.select-search, select.select2, select[data-control="select2"]').each(function() {
-                    var $this = $(this);
-                    var placeholder = $this.attr('placeholder') || 'Search & Select...';
-                    $this.select2({
-                        width: '100%',
-                        placeholder: placeholder,
-                        allowClear: true,
-                        dropdownParent: $this.closest('.modal').length ? $this.closest('.modal') : $(document.body)
+                function initPortalSelect2(context) {
+                    var $targets = context ? $(context).find('.select-search, select.select2, select[data-control="select2"]') : $('.select-search, select.select2, select[data-control="select2"]');
+                    $targets.each(function() {
+                        var $this = $(this);
+                        var placeholder = $this.attr('placeholder') || 'Search & Select...';
+                        $this.select2({
+                            width: '100%',
+                            placeholder: placeholder,
+                            allowClear: true,
+                            minimumResultsForSearch: 0,
+                            dropdownParent: $this.closest('.modal').length ? $this.closest('.modal') : $(document.body)
+                        });
                     });
+                }
+
+                initPortalSelect2();
+
+                // Re-initialize or adjust width on Bootstrap tab switches & modals
+                $(document).on('shown.bs.tab shown.bs.modal', function(e) {
+                    initPortalSelect2(e.target);
                 });
             }
 

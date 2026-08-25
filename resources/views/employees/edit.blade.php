@@ -411,4 +411,26 @@
         </div>
     </div>
 </form>
+
+@push('js')
+<script>
+    $(document).ready(function() {
+        if (typeof $.fn.select2 !== 'undefined') {
+            $('.select-search').select2({
+                width: '100%',
+                placeholder: 'Search & Select...',
+                minimumResultsForSearch: 0
+            });
+
+            $('button[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
+                $('.select-search').select2({
+                    width: '100%',
+                    placeholder: 'Search & Select...',
+                    minimumResultsForSearch: 0
+                });
+            });
+        }
+    });
+</script>
+@endpush
 @endsection
