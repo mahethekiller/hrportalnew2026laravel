@@ -513,59 +513,6 @@ class EmployeePortalController extends Controller
     }
 
     /**
-     * Resignation Notice
-     */
-    public function resignation(): View
-    {
-        $resignation = EmployeeResignation::where('employee_id', $this->getEmployeeId())->first();
-        return view('my_portal.resignation', compact('resignation'));
-    }
-
-    public function storeResignation(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'notice_date' => 'required|string',
-            'resignation_date' => 'required|string',
-            'reason' => 'required|string',
-        ]);
-
-        $table = (new EmployeeResignation)->getTable();
-        $data = [
-            'company_id' => $this->getCompanyId(),
-            'notice_date' => $request->notice_date,
-            'resignation_date' => $request->resignation_date,
-            'reason' => $request->reason,
-            'status' => 'Under Review',
-        ];
-
-        if (Schema::hasColumn($table, 'manager_id')) $data['manager_id'] = 1;
-        if (Schema::hasColumn($table, 'requested_notice')) $data['requested_notice'] = '30 Days';
-        if (Schema::hasColumn($table, 'manager_comment')) $data['manager_comment'] = '';
-        if (Schema::hasColumn($table, 'it_comment')) $data['it_comment'] = '';
-        if (Schema::hasColumn($table, 'account_comment')) $data['account_comment'] = '';
-        if (Schema::hasColumn($table, 'hr_comment')) $data['hr_comment'] = '';
-        if (Schema::hasColumn($table, 'coo_comment')) $data['coo_comment'] = '';
-        if (Schema::hasColumn($table, 'sage_comment')) $data['sage_comment'] = '';
-        if (Schema::hasColumn($table, 'login_comment')) $data['login_comment'] = '';
-        if (Schema::hasColumn($table, 'it_person')) $data['it_person'] = '';
-        if (Schema::hasColumn($table, 'account_per')) $data['account_per'] = '';
-        if (Schema::hasColumn($table, 'hr_person')) $data['hr_person'] = '';
-        if (Schema::hasColumn($table, 'manager_person')) $data['manager_person'] = '';
-        if (Schema::hasColumn($table, 'sage_person')) $data['sage_person'] = '';
-        if (Schema::hasColumn($table, 'login_person')) $data['login_person'] = '';
-        if (Schema::hasColumn($table, 'employee_accept')) $data['employee_accept'] = 'Pending';
-        if (Schema::hasColumn($table, 'comments')) $data['comments'] = '';
-        if (Schema::hasColumn($table, 'added_by')) $data['added_by'] = $this->getEmployeeId();
-
-        EmployeeResignation::updateOrCreate(
-            ['employee_id' => $this->getEmployeeId()],
-            $data
-        );
-
-        return redirect()->back()->with('success', 'Resignation notice submitted successfully.');
-    }
-
-    /**
      * ESS profile edit form
      */
     public function editProfile(): View
