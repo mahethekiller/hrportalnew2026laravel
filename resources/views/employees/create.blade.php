@@ -176,7 +176,7 @@
                     <div class="row g-3">
                         <div class="col-md-4">
                             <label class="label-sm mb-1">Department</label>
-                            <select name="department_id" class="form-select">
+                            <select name="department_id" class="form-select select-search">
                                 <option value="">Select Department...</option>
                                 @foreach($departments as $dept)
                                     <option value="{{ $dept->id }}" {{ old('department_id') == $dept->id ? 'selected' : '' }}>
@@ -187,7 +187,7 @@
                         </div>
                         <div class="col-md-4">
                             <label class="label-sm mb-1">Designation</label>
-                            <select name="designation_id" class="form-select">
+                            <select name="designation_id" class="form-select select-search">
                                 <option value="">Select Designation...</option>
                                 @foreach($designations as $desig)
                                     <option value="{{ $desig->id }}" {{ old('designation_id') == $desig->id ? 'selected' : '' }}>
@@ -198,7 +198,7 @@
                         </div>
                         <div class="col-md-4">
                             <label class="label-sm mb-1">Company Entity</label>
-                            <select name="company_id" class="form-select">
+                            <select name="company_id" class="form-select select-search">
                                 <option value="">Select Company...</option>
                                 @foreach($companies as $company)
                                     <option value="{{ $company->id }}" {{ old('company_id') == $company->id ? 'selected' : '' }}>
@@ -209,7 +209,7 @@
                         </div>
                         <div class="col-md-4">
                             <label class="label-sm mb-1">Reporting Manager</label>
-                            <select name="manager_id" class="form-select">
+                            <select name="manager_id" class="form-select select-search">
                                 <option value="0" {{ (int) old('manager_id') === 0 ? 'selected' : '' }}>-- No Manager (Top Level) --</option>
                                 @foreach($managers as $mgr)
                                     <option value="{{ $mgr->user_id }}" {{ (int) old('manager_id') === (int) $mgr->user_id ? 'selected' : '' }}>
@@ -220,7 +220,7 @@
                         </div>
                         <div class="col-md-4">
                             <label class="label-sm mb-1">Secondary / Sub Manager</label>
-                            <select name="sub_manager_id" class="form-select">
+                            <select name="sub_manager_id" class="form-select select-search">
                                 <option value="0" {{ (int) old('sub_manager_id') === 0 ? 'selected' : '' }}>-- None --</option>
                                 @foreach($managers as $mgr)
                                     <option value="{{ $mgr->user_id }}" {{ (int) old('sub_manager_id') === (int) $mgr->user_id ? 'selected' : '' }}>

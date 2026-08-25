@@ -232,6 +232,20 @@
             const currentTheme = document.documentElement.getAttribute('data-bs-theme');
             updateThemeIcons(currentTheme);
 
+            // Global Select2 Searchable Dropdown Initializer
+            if (typeof $.fn.select2 !== 'undefined') {
+                $('.select-search, select.select2, select[data-control="select2"]').each(function() {
+                    var $this = $(this);
+                    var placeholder = $this.attr('placeholder') || 'Search & Select...';
+                    $this.select2({
+                        width: '100%',
+                        placeholder: placeholder,
+                        allowClear: true,
+                        dropdownParent: $this.closest('.modal').length ? $this.closest('.modal') : $(document.body)
+                    });
+                });
+            }
+
             // Command Palette (Ctrl + K) Keyboard Shortcut
             document.addEventListener('keydown', (e) => {
                 if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {

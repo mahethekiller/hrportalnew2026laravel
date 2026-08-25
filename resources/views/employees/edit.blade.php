@@ -188,7 +188,7 @@
                     <div class="row g-3">
                         <div class="col-md-4">
                             <label class="form-label fs-8 fw-semibold">Department</label>
-                            <select name="department_id" class="form-select form-select-sm bg-body text-body-emphasis border-subtle">
+                            <select name="department_id" class="form-select form-select-sm select-search bg-body text-body-emphasis border-subtle">
                                 <option value="">Select Department...</option>
                                 @foreach($departments as $dept)
                                     <option value="{{ $dept->id }}" {{ old('department_id', $employee->department_id) == $dept->id ? 'selected' : '' }}>
@@ -199,7 +199,7 @@
                         </div>
                         <div class="col-md-4">
                             <label class="form-label fs-8 fw-semibold">Designation</label>
-                            <select name="designation_id" class="form-select form-select-sm bg-body text-body-emphasis border-subtle">
+                            <select name="designation_id" class="form-select form-select-sm select-search bg-body text-body-emphasis border-subtle">
                                 <option value="">Select Designation...</option>
                                 @foreach($designations as $desig)
                                     <option value="{{ $desig->id }}" {{ old('designation_id', $employee->designation_id) == $desig->id ? 'selected' : '' }}>
@@ -210,7 +210,7 @@
                         </div>
                         <div class="col-md-4">
                             <label class="form-label fs-8 fw-semibold">Company Entity</label>
-                            <select name="company_id" class="form-select form-select-sm bg-body text-body-emphasis border-subtle">
+                            <select name="company_id" class="form-select form-select-sm select-search bg-body text-body-emphasis border-subtle">
                                 <option value="">Select Company...</option>
                                 @foreach($companies as $company)
                                     <option value="{{ $company->id }}" {{ old('company_id', $employee->company_id) == $company->id ? 'selected' : '' }}>
@@ -221,7 +221,7 @@
                         </div>
                         <div class="col-md-4">
                             <label class="form-label fs-8 fw-semibold">Reporting Manager <span class="text-primary">*</span></label>
-                            <select name="manager_id" class="form-select form-select-sm bg-body text-body-emphasis border-subtle">
+                            <select name="manager_id" class="form-select form-select-sm select-search bg-body text-body-emphasis border-subtle">
                                 <option value="0" {{ (int) old('manager_id', $employee->manager_id) === 0 ? 'selected' : '' }}>-- No Manager (Top Level) --</option>
                                 @foreach($managers as $mgr)
                                     @if((int)$mgr->user_id !== (int)$employee->user_id)
@@ -234,7 +234,7 @@
                         </div>
                         <div class="col-md-4">
                             <label class="form-label fs-8 fw-semibold">Secondary / Sub Manager</label>
-                            <select name="sub_manager_id" class="form-select form-select-sm bg-body text-body-emphasis border-subtle">
+                            <select name="sub_manager_id" class="form-select form-select-sm select-search bg-body text-body-emphasis border-subtle">
                                 <option value="0" {{ (int) old('sub_manager_id', $employee->sub_manager_id) === 0 ? 'selected' : '' }}>-- None --</option>
                                 @foreach($managers as $mgr)
                                     @if((int)$mgr->user_id !== (int)$employee->user_id)

@@ -175,9 +175,9 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <div class="mb-3">
+                                             <div class="mb-3">
                                                 <label class="form-label fs-8 fw-semibold">IT Department Clearance Officer</label>
-                                                <select name="it_person" class="form-select form-select-sm">
+                                                <select name="it_person" class="form-select form-select-sm select-search">
                                                     <option value="">-- Select IT Officer --</option>
                                                     @foreach($officers as $off)
                                                         <option value="{{ $off->user_id }}" {{ (int)$res->it_person === (int)$off->user_id ? 'selected' : '' }}>
@@ -188,7 +188,7 @@
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label fs-8 fw-semibold">Accounts Department Clearance Officer</label>
-                                                <select name="account_per" class="form-select form-select-sm">
+                                                <select name="account_per" class="form-select form-select-sm select-search">
                                                     <option value="">-- Select Accounts Officer --</option>
                                                     @foreach($officers as $off)
                                                         <option value="{{ $off->user_id }}" {{ (int)$res->account_per === (int)$off->user_id ? 'selected' : '' }}>
@@ -199,7 +199,7 @@
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label fs-8 fw-semibold">HR Department Clearance Officer</label>
-                                                <select name="hr_person" class="form-select form-select-sm">
+                                                <select name="hr_person" class="form-select form-select-sm select-search">
                                                     <option value="">-- Select HR Officer --</option>
                                                     @foreach($officers as $off)
                                                         <option value="{{ $off->user_id }}" {{ (int)$res->hr_person === (int)$off->user_id ? 'selected' : '' }}>
