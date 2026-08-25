@@ -144,7 +144,7 @@
                         <div class="col-md-4">
                             <label class="form-label fs-8 fw-semibold">Marital Status</label>
                             <select name="marital_status" class="form-select form-select-sm bg-body text-body-emphasis border-subtle">
-                                <option value="">Select Status...</option>
+                                <option value="" {{ empty(old('marital_status', $employee->marital_status)) ? 'selected' : '' }}>Select Status...</option>
                                 <option value="Single" {{ old('marital_status', $employee->marital_status) == 'Single' ? 'selected' : '' }}>Single</option>
                                 <option value="Married" {{ old('marital_status', $employee->marital_status) == 'Married' ? 'selected' : '' }}>Married</option>
                                 <option value="Divorced" {{ old('marital_status', $employee->marital_status) == 'Divorced' ? 'selected' : '' }}>Divorced</option>
@@ -157,6 +157,7 @@
                         <div class="col-md-3">
                             <label class="form-label fs-8 fw-semibold">Blood Group</label>
                             <select name="blood_group" class="form-select form-select-sm bg-body text-body-emphasis border-subtle">
+                                <option value="" {{ empty(old('blood_group', $employee->blood_group)) ? 'selected' : '' }}>Select Blood Group...</option>
                                 <option value="O+" {{ old('blood_group', $employee->blood_group) == 'O+' ? 'selected' : '' }}>O+</option>
                                 <option value="A+" {{ old('blood_group', $employee->blood_group) == 'A+' ? 'selected' : '' }}>A+</option>
                                 <option value="B+" {{ old('blood_group', $employee->blood_group) == 'B+' ? 'selected' : '' }}>B+</option>
@@ -189,9 +190,9 @@
                         <div class="col-md-4">
                             <label class="form-label fs-8 fw-semibold">Department</label>
                             <select name="department_id" class="form-select form-select-sm select-search bg-body text-body-emphasis border-subtle">
-                                <option value="">Select Department...</option>
+                                <option value="" {{ empty(old('department_id', $employee->department_id)) ? 'selected' : '' }}>Select Department...</option>
                                 @foreach($departments as $dept)
-                                    <option value="{{ $dept->id }}" {{ old('department_id', $employee->department_id) == $dept->id ? 'selected' : '' }}>
+                                    <option value="{{ $dept->id }}" {{ (int)old('department_id', $employee->department_id) === (int)$dept->id ? 'selected' : '' }}>
                                         {{ $dept->department_name ?? $dept->name }}
                                     </option>
                                 @endforeach
@@ -200,9 +201,9 @@
                         <div class="col-md-4">
                             <label class="form-label fs-8 fw-semibold">Designation</label>
                             <select name="designation_id" class="form-select form-select-sm select-search bg-body text-body-emphasis border-subtle">
-                                <option value="">Select Designation...</option>
+                                <option value="" {{ empty(old('designation_id', $employee->designation_id)) ? 'selected' : '' }}>Select Designation...</option>
                                 @foreach($designations as $desig)
-                                    <option value="{{ $desig->id }}" {{ old('designation_id', $employee->designation_id) == $desig->id ? 'selected' : '' }}>
+                                    <option value="{{ $desig->id }}" {{ (int)old('designation_id', $employee->designation_id) === (int)$desig->id ? 'selected' : '' }}>
                                         {{ $desig->designation_name ?? $desig->name }}
                                     </option>
                                 @endforeach
@@ -211,9 +212,9 @@
                         <div class="col-md-4">
                             <label class="form-label fs-8 fw-semibold">Company Entity</label>
                             <select name="company_id" class="form-select form-select-sm select-search bg-body text-body-emphasis border-subtle">
-                                <option value="">Select Company...</option>
+                                <option value="" {{ empty(old('company_id', $employee->company_id)) ? 'selected' : '' }}>Select Company...</option>
                                 @foreach($companies as $company)
-                                    <option value="{{ $company->id }}" {{ old('company_id', $employee->company_id) == $company->id ? 'selected' : '' }}>
+                                    <option value="{{ $company->id }}" {{ (int)old('company_id', $employee->company_id) === (int)$company->id ? 'selected' : '' }}>
                                         {{ $company->name ?? $company->company_name }}
                                     </option>
                                 @endforeach
@@ -222,10 +223,10 @@
                         <div class="col-md-4">
                             <label class="form-label fs-8 fw-semibold">Reporting Manager <span class="text-primary">*</span></label>
                             <select name="manager_id" class="form-select form-select-sm select-search bg-body text-body-emphasis border-subtle">
-                                <option value="0" {{ (int) old('manager_id', $employee->manager_id) === 0 ? 'selected' : '' }}>-- No Manager (Top Level) --</option>
+                                <option value="0" {{ empty(old('manager_id', $employee->manager_id)) || (int) old('manager_id', $employee->manager_id) === 0 ? 'selected' : '' }}>-- No Manager (Top Level) --</option>
                                 @foreach($managers as $mgr)
                                     @if((int)$mgr->user_id !== (int)$employee->user_id)
-                                        <option value="{{ $mgr->user_id }}" {{ (int) old('manager_id', $employee->manager_id) === (int) $mgr->user_id ? 'selected' : '' }}>
+                                        <option value="{{ $mgr->user_id }}" {{ !empty($employee->manager_id) && (int) old('manager_id', $employee->manager_id) === (int) $mgr->user_id ? 'selected' : '' }}>
                                             {{ $mgr->first_name }} {{ $mgr->last_name }} ({{ $mgr->employee_id }})
                                         </option>
                                     @endif
@@ -235,10 +236,10 @@
                         <div class="col-md-4">
                             <label class="form-label fs-8 fw-semibold">Secondary / Sub Manager</label>
                             <select name="sub_manager_id" class="form-select form-select-sm select-search bg-body text-body-emphasis border-subtle">
-                                <option value="0" {{ (int) old('sub_manager_id', $employee->sub_manager_id) === 0 ? 'selected' : '' }}>-- None --</option>
+                                <option value="0" {{ empty(old('sub_manager_id', $employee->sub_manager_id)) || (int) old('sub_manager_id', $employee->sub_manager_id) === 0 ? 'selected' : '' }}>-- None --</option>
                                 @foreach($managers as $mgr)
                                     @if((int)$mgr->user_id !== (int)$employee->user_id)
-                                        <option value="{{ $mgr->user_id }}" {{ (int) old('sub_manager_id', $employee->sub_manager_id) === (int) $mgr->user_id ? 'selected' : '' }}>
+                                        <option value="{{ $mgr->user_id }}" {{ !empty($employee->sub_manager_id) && (int) old('sub_manager_id', $employee->sub_manager_id) === (int) $mgr->user_id ? 'selected' : '' }}>
                                             {{ $mgr->first_name }} {{ $mgr->last_name }} ({{ $mgr->employee_id }})
                                         </option>
                                     @endif
@@ -248,6 +249,7 @@
                         <div class="col-md-4">
                             <label class="form-label fs-8 fw-semibold">Employment Type</label>
                             <select name="employment_type" class="form-select form-select-sm bg-body text-body-emphasis border-subtle">
+                                <option value="" {{ empty(old('employment_type', $employee->employment_type)) ? 'selected' : '' }}>Select Employment Type...</option>
                                 <option value="Full Time" {{ old('employment_type', $employee->employment_type) == 'Full Time' ? 'selected' : '' }}>Full Time</option>
                                 <option value="Part Time" {{ old('employment_type', $employee->employment_type) == 'Part Time' ? 'selected' : '' }}>Part Time</option>
                                 <option value="Contract" {{ old('employment_type', $employee->employment_type) == 'Contract' ? 'selected' : '' }}>Contract</option>
