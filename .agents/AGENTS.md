@@ -51,3 +51,9 @@ These rules represent the absolute constraints of the project. Any deviation fro
 - In Blade views, never output raw database strings containing un-decoded HTML entities (`&lt;p data-start=...`) or raw HTML tags (`<p><br></p>`) inside `<textarea>` inputs or plain text display blocks.
 - Use `{!! $ticket->clean_description !!}` / `{!! $ticket->clean_remarks !!}` for rich view display and `{{ $ticket->plain_remarks }}` / `{{ $ticket->plain_description }}` for `<textarea>` form controls and truncated table snippets.
 
+## 🚀 Rule 7: Server Deployment Guide Maintenance
+- Whenever creating or modifying features that require database seeders, configuration changes, permission updates, or background commands:
+  1. Ensure all database changes are 100% non-destructive to existing production database records.
+  2. Maintain and document the exact step-by-step deployment instructions in `SERVER_DEPLOYMENT_GUIDE.md` in the project root.
+  3. Never drop, truncate, or overwrite existing production database tables or user records.
+
