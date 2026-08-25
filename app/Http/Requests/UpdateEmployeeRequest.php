@@ -44,6 +44,7 @@ class UpdateEmployeeRequest extends FormRequest
             'sub_department' => ['nullable'],
             'designation_id' => ['nullable'],
             'manager_id' => ['nullable'],
+            'sub_manager_id' => ['nullable'],
             'company_id' => ['nullable'],
             'office_shift_id' => ['nullable'],
             'date_of_joining' => ['nullable'],

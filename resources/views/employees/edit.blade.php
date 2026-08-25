@@ -220,6 +220,32 @@
                             </select>
                         </div>
                         <div class="col-md-4">
+                            <label class="form-label fs-8 fw-semibold">Reporting Manager <span class="text-primary">*</span></label>
+                            <select name="manager_id" class="form-select form-select-sm bg-body text-body-emphasis border-subtle">
+                                <option value="0">-- No Manager (Top Level) --</option>
+                                @foreach($managers as $mgr)
+                                    @if((int)$mgr->user_id !== (int)$employee->user_id)
+                                        <option value="{{ $mgr->user_id }}" {{ old('manager_id', $employee->manager_id) == $mgr->user_id ? 'selected' : '' }}>
+                                            {{ $mgr->first_name }} {{ $mgr->last_name }} ({{ $mgr->employee_id }})
+                                        </option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fs-8 fw-semibold">Secondary / Sub Manager</label>
+                            <select name="sub_manager_id" class="form-select form-select-sm bg-body text-body-emphasis border-subtle">
+                                <option value="0">-- None --</option>
+                                @foreach($managers as $mgr)
+                                    @if((int)$mgr->user_id !== (int)$employee->user_id)
+                                        <option value="{{ $mgr->user_id }}" {{ old('sub_manager_id', $employee->sub_manager_id) == $mgr->user_id ? 'selected' : '' }}>
+                                            {{ $mgr->first_name }} {{ $mgr->last_name }} ({{ $mgr->employee_id }})
+                                        </option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-4">
                             <label class="form-label fs-8 fw-semibold">Employment Type</label>
                             <select name="employment_type" class="form-select form-select-sm bg-body text-body-emphasis border-subtle">
                                 <option value="Full Time" {{ old('employment_type', $employee->employment_type) == 'Full Time' ? 'selected' : '' }}>Full Time</option>

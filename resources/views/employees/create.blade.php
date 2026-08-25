@@ -208,6 +208,28 @@
                             </select>
                         </div>
                         <div class="col-md-4">
+                            <label class="label-sm mb-1">Reporting Manager</label>
+                            <select name="manager_id" class="form-select">
+                                <option value="0">-- No Manager (Top Level) --</option>
+                                @foreach($managers as $mgr)
+                                    <option value="{{ $mgr->user_id }}" {{ old('manager_id') == $mgr->user_id ? 'selected' : '' }}>
+                                        {{ $mgr->first_name }} {{ $mgr->last_name }} ({{ $mgr->employee_id }})
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="label-sm mb-1">Secondary / Sub Manager</label>
+                            <select name="sub_manager_id" class="form-select">
+                                <option value="0">-- None --</option>
+                                @foreach($managers as $mgr)
+                                    <option value="{{ $mgr->user_id }}" {{ old('sub_manager_id') == $mgr->user_id ? 'selected' : '' }}>
+                                        {{ $mgr->first_name }} {{ $mgr->last_name }} ({{ $mgr->employee_id }})
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-4">
                             <label class="label-sm mb-1">Employment Type</label>
                             <select name="employment_type" class="form-select">
                                 <option value="Full Time" {{ old('employment_type') == 'Full Time' ? 'selected' : '' }}>Full Time</option>

@@ -54,8 +54,9 @@ class EmployeeController extends Controller
         $departments = Department::all();
         $designations = Designation::all();
         $companies = Company::all();
+        $managers = Employee::where('is_active', 1)->orderBy('first_name', 'asc')->get();
 
-        return view('employees.create', compact('departments', 'designations', 'companies'));
+        return view('employees.create', compact('departments', 'designations', 'companies', 'managers'));
     }
 
     /**
@@ -108,8 +109,9 @@ class EmployeeController extends Controller
         $departments = Department::all();
         $designations = Designation::all();
         $companies = Company::all();
+        $managers = Employee::where('is_active', 1)->orderBy('first_name', 'asc')->get();
 
-        return view('employees.edit', compact('employee', 'departments', 'designations', 'companies'));
+        return view('employees.edit', compact('employee', 'departments', 'designations', 'companies', 'managers'));
     }
 
     /**

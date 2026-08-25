@@ -224,13 +224,18 @@ class EmployeeService
                 }
             }
 
+            if (array_key_exists('manager_id', $data)) {
+                $data['manager_id'] = (int) $data['manager_id'];
+            }
+            if (array_key_exists('sub_manager_id', $data)) {
+                $data['sub_manager_id'] = (int) $data['sub_manager_id'];
+            }
+
             // Prevent setting NOT NULL database columns to null
             $notNullDefaults = [
                 'salary' => 0.00,
                 'earned_leave' => 0,
                 'casual_leave' => 0,
-                'manager_id' => 0,
-                'sub_manager_id' => 0,
                 'sub_department' => 0,
                 'salary_template' => 0,
                 'hourly_grade_id' => 0,
@@ -249,7 +254,7 @@ class EmployeeService
 
             // Clean up any remaining null values if column was previously set or has a default
             foreach ($data as $key => $val) {
-                if (is_null($val) && isset($employee->$key) && !is_null($employee->$key)) {
+                if ($key !== 'manager_id' && $key !== 'sub_manager_id' && is_null($val) && isset($employee->$key) && !is_null($employee->$key)) {
                     $data[$key] = $employee->$key;
                 }
             }
