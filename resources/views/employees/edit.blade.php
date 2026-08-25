@@ -222,10 +222,10 @@
                         <div class="col-md-4">
                             <label class="form-label fs-8 fw-semibold">Reporting Manager <span class="text-primary">*</span></label>
                             <select name="manager_id" class="form-select form-select-sm bg-body text-body-emphasis border-subtle">
-                                <option value="0">-- No Manager (Top Level) --</option>
+                                <option value="0" {{ (int) old('manager_id', $employee->manager_id) === 0 ? 'selected' : '' }}>-- No Manager (Top Level) --</option>
                                 @foreach($managers as $mgr)
                                     @if((int)$mgr->user_id !== (int)$employee->user_id)
-                                        <option value="{{ $mgr->user_id }}" {{ old('manager_id', $employee->manager_id) == $mgr->user_id ? 'selected' : '' }}>
+                                        <option value="{{ $mgr->user_id }}" {{ (int) old('manager_id', $employee->manager_id) === (int) $mgr->user_id ? 'selected' : '' }}>
                                             {{ $mgr->first_name }} {{ $mgr->last_name }} ({{ $mgr->employee_id }})
                                         </option>
                                     @endif
@@ -235,10 +235,10 @@
                         <div class="col-md-4">
                             <label class="form-label fs-8 fw-semibold">Secondary / Sub Manager</label>
                             <select name="sub_manager_id" class="form-select form-select-sm bg-body text-body-emphasis border-subtle">
-                                <option value="0">-- None --</option>
+                                <option value="0" {{ (int) old('sub_manager_id', $employee->sub_manager_id) === 0 ? 'selected' : '' }}>-- None --</option>
                                 @foreach($managers as $mgr)
                                     @if((int)$mgr->user_id !== (int)$employee->user_id)
-                                        <option value="{{ $mgr->user_id }}" {{ old('sub_manager_id', $employee->sub_manager_id) == $mgr->user_id ? 'selected' : '' }}>
+                                        <option value="{{ $mgr->user_id }}" {{ (int) old('sub_manager_id', $employee->sub_manager_id) === (int) $mgr->user_id ? 'selected' : '' }}>
                                             {{ $mgr->first_name }} {{ $mgr->last_name }} ({{ $mgr->employee_id }})
                                         </option>
                                     @endif

@@ -210,9 +210,9 @@
                         <div class="col-md-4">
                             <label class="label-sm mb-1">Reporting Manager</label>
                             <select name="manager_id" class="form-select">
-                                <option value="0">-- No Manager (Top Level) --</option>
+                                <option value="0" {{ (int) old('manager_id') === 0 ? 'selected' : '' }}>-- No Manager (Top Level) --</option>
                                 @foreach($managers as $mgr)
-                                    <option value="{{ $mgr->user_id }}" {{ old('manager_id') == $mgr->user_id ? 'selected' : '' }}>
+                                    <option value="{{ $mgr->user_id }}" {{ (int) old('manager_id') === (int) $mgr->user_id ? 'selected' : '' }}>
                                         {{ $mgr->first_name }} {{ $mgr->last_name }} ({{ $mgr->employee_id }})
                                     </option>
                                 @endforeach
@@ -221,9 +221,9 @@
                         <div class="col-md-4">
                             <label class="label-sm mb-1">Secondary / Sub Manager</label>
                             <select name="sub_manager_id" class="form-select">
-                                <option value="0">-- None --</option>
+                                <option value="0" {{ (int) old('sub_manager_id') === 0 ? 'selected' : '' }}>-- None --</option>
                                 @foreach($managers as $mgr)
-                                    <option value="{{ $mgr->user_id }}" {{ old('sub_manager_id') == $mgr->user_id ? 'selected' : '' }}>
+                                    <option value="{{ $mgr->user_id }}" {{ (int) old('sub_manager_id') === (int) $mgr->user_id ? 'selected' : '' }}>
                                         {{ $mgr->first_name }} {{ $mgr->last_name }} ({{ $mgr->employee_id }})
                                     </option>
                                 @endforeach
