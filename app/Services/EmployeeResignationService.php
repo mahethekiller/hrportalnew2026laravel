@@ -15,6 +15,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 
 class EmployeeResignationService
 {
@@ -38,6 +39,22 @@ class EmployeeResignationService
     public function getById(int $id): ?EmployeeResignation
     {
         return $this->repository->findById($id);
+    }
+
+    /**
+     * Safely write audit log entry if log table exists.
+     */
+    protected function logResignationAction(array $logData): void
+    {
+        try {
+            $logModel = new EmployeeResignationLog();
+            $tableName = $logModel->getTable();
+            if (Schema::hasTable($tableName)) {
+                EmployeeResignationLog::create($logData);
+            }
+        } catch (\Throwable $e) {
+            Log::warning("Skipped resignation audit log entry: " . $e->getMessage());
+        }
     }
 
     /**
@@ -82,8 +99,8 @@ class EmployeeResignationService
 
         $resignation = $this->repository->create($resignationData);
 
-        // Audit Log Entry
-        EmployeeResignationLog::create([
+        // Safe Audit Log Entry
+        $this->logResignationAction([
             'resignation_id' => $resignation->resignation_id,
             'company_id' => $resignation->company_id,
             'employee_id' => $resignation->employee_id,
@@ -129,8 +146,8 @@ class EmployeeResignationService
         $updated = $this->repository->update($resignation, $updateData);
 
         if ($updated) {
-            // Audit Log Entry
-            EmployeeResignationLog::create([
+            // Safe Audit Log Entry
+            $this->logResignationAction([
                 'resignation_id' => $resignation->resignation_id,
                 'company_id' => $resignation->company_id,
                 'employee_id' => $resignation->employee_id,
@@ -256,8 +273,8 @@ class EmployeeResignationService
         $updated = $this->repository->update($resignation, $updateData);
 
         if ($updated) {
-            // Audit Log Entry
-            EmployeeResignationLog::create([
+            // Safe Audit Log Entry
+            $this->logResignationAction([
                 'resignation_id' => $resignation->resignation_id,
                 'company_id' => $resignation->company_id,
                 'employee_id' => $resignation->employee_id,

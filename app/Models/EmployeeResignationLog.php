@@ -4,23 +4,28 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Schema;
 
 class EmployeeResignationLog extends Model
 {
     use HasFactory;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'employee_resignations_logs';
+    protected $table = 'xin_employee_resignations_logs';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    public function getTable()
+    {
+        if (Schema::hasTable('xin_employee_resignations_logs')) {
+            return 'xin_employee_resignations_logs';
+        }
+        if (Schema::hasTable('xin_employee_resignation_logs')) {
+            return 'xin_employee_resignation_logs';
+        }
+        if (Schema::hasTable('employee_resignations_logs')) {
+            return 'employee_resignations_logs';
+        }
+        return parent::getTable();
+    }
+
     protected $fillable = [
         'resignation_id',
         'company_id',
