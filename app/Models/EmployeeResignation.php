@@ -6,7 +6,6 @@ use App\Traits\HasCleanContent;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Schema;
 
 class EmployeeResignation extends Model
 {
@@ -15,23 +14,6 @@ class EmployeeResignation extends Model
     protected $table = 'xin_employee_resignations';
     protected $primaryKey = 'resignation_id';
     public $timestamps = false;
-
-    public function getTable()
-    {
-        if (Schema::hasTable('employee_resignations')) {
-            return 'employee_resignations';
-        }
-        return parent::getTable();
-    }
-
-    public function getKeyName()
-    {
-        $table = $this->getTable();
-        if (Schema::hasColumn($table, 'id')) {
-            return 'id';
-        }
-        return parent::getKeyName();
-    }
 
     protected $fillable = [
         'company_id',
