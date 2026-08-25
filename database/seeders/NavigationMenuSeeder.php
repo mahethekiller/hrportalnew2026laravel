@@ -104,6 +104,15 @@ class NavigationMenuSeeder extends Seeder
             'sort_order' => 9,
         ]);
 
+        NavigationMenu::create([
+            'parent_id' => $myDayRoot->menu_id,
+            'title' => 'Resignation & Exit',
+            'icon' => 'fa-solid fa-right-from-bracket',
+            'route_name' => 'my-portal.resignation',
+            'resource_key' => null,
+            'sort_order' => 10,
+        ]);
+
         // 2. My Team Category (Manager Persona)
         $myTeamRoot = NavigationMenu::create([
             'title' => 'My Team',
@@ -154,6 +163,15 @@ class NavigationMenuSeeder extends Seeder
             'route_name' => 'manager-portal.team_performance',
             'resource_key' => 'performance',
             'sort_order' => 5,
+        ]);
+
+        NavigationMenu::create([
+            'parent_id' => $myTeamRoot->menu_id,
+            'title' => 'Team Resignations',
+            'icon' => 'fa-solid fa-users-slash',
+            'route_name' => 'my-portal.team_resignations',
+            'resource_key' => 'organization',
+            'sort_order' => 6,
         ]);
 
         // 3. Hiring Category (Recruiter Persona)
@@ -355,6 +373,15 @@ class NavigationMenuSeeder extends Seeder
             'route_name' => 'admin-tickets.index',
             'resource_key' => 'admin_tickets',
             'sort_order' => 7,
+        ]);
+
+        NavigationMenu::create([
+            'parent_id' => $systemRoot->menu_id,
+            'title' => 'No-Dues Clearance Hub',
+            'icon' => 'fa-solid fa-building-circle-check',
+            'route_name' => 'clearance.index',
+            'resource_key' => 'settings',
+            'sort_order' => 8,
         ]);
 
         // Grant Role ID 1 (All Access)
