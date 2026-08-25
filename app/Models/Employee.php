@@ -596,4 +596,22 @@ class Employee extends Authenticatable
     {
         return \App\Helpers\UploadHelper::url('profile', $this->profile_picture, $this->gender ?? 'Male');
     }
+
+    /**
+     * Notice Period in Months Accessor.
+     */
+    public function getNoticePeriodMonthsAttribute(): int
+    {
+        $val = (int) ($this->notice_period ?? 1);
+        return $val > 0 ? $val : 1;
+    }
+
+    /**
+     * Calculate Last Working Day (LWD) based on Notice Period Months.
+     */
+    public function calculateLwd(?string $noticeDate = null): \Carbon\Carbon
+    {
+        $startDate = !empty($noticeDate) ? \Carbon\Carbon::parse($noticeDate) : \Carbon\Carbon::today();
+        return $startDate->copy()->addMonths($this->notice_period_months);
+    }
 }

@@ -816,4 +816,129 @@ class EmployeePortalController extends Controller
 
         return redirect()->back()->with('success', 'Onboarding details submitted successfully. HR will review and activate your profile.');
     }
+
+    /**
+     * Resignation & Exit Clearance Dashboard for Employee.
+     */
+    public function resignation(): View
+    {
+        $employeeId = $this->getEmployeeId();
+        $employee = Employee::where('user_id', $employeeId)->first();
+        
+        $resignationService = app(\App\Services\EmployeeResignationService::class);
+        $resignation = $resignationService->getEmployeeResignations($employeeId)->first();
+
+        $calculatedLwd = $employee ? $employee->calculateLwd(date('Y-m-d')) : \Carbon\Carbon::today()->addMonth();
+
+        return view('my_portal.resignation', compact('employee', 'resignation', 'calculatedLwd'));
+    }
+
+    /**
+     * Submit Initial Resignation Notice.
+     */
+    public function storeResignation(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'notice_date' => ['required', 'date'],
+            'resignation_date' => ['required', 'date', 'after_or_equal:notice_date'],
+            'reason' => ['required', 'string', 'max:2000'],
+        ]);
+
+        $employeeId = $this->getEmployeeId();
+        $employee = Employee::where('user_id', $employeeId)->first();
+        if (!$employee) {
+            return redirect()->back()->with('error', 'Employee record not found.');
+        }
+
+        $resignationService = app(\App\Services\EmployeeResignationService::class);
+        $resignationService->submitResignation($request->all(), $employee);
+
+        return redirect()->back()->with('success', 'Resignation notice submitted successfully. Notification sent to stakeholders.');
+    }
+
+    /**
+     * Submit Exit Questionnaire, Asset Checklist & No-Dues Document.
+     */
+    public function storeExitForm(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'resignation_id' => ['required', 'integer'],
+            'exit_form_file' => ['nullable', 'file', 'mimes:pdf,doc,docx,png,jpg,jpeg', 'max:5120'],
+            'reason_details' => ['nullable', 'string', 'max:2000'],
+            'handover_summary' => ['nullable', 'string', 'max:2000'],
+        ]);
+
+        $resignationService = app(\App\Services\EmployeeResignationService::class);
+        $resignation = $resignationService->getById((int) $request->input('resignation_id'));
+        if (!$resignation) {
+            return redirect()->back()->with('error', 'Resignation record not found.');
+        }
+
+        $resignationService->submitExitForm($resignation, $request->all(), $request->file('exit_form_file'));
+
+        return redirect()->back()->with('success', 'Exit questionnaire and No-Dues documentation uploaded successfully.');
+    }
+
+    /**
+     * Team Resignations Dashboard for Reporting Managers.
+     */
+    public function teamResignations(): View
+    {
+        $managerId = $this->getEmployeeId();
+        $resignationService = app(\App\Services\EmployeeResignationService::class);
+        $teamResignations = $resignationService->getPaginated(['manager_id' => $managerId], 15);
+
+        return view('my_portal.team_resignations', compact('teamResignations'));
+    }
+
+    /**
+     * Manager Response Submission.
+     */
+    public function respondResignation(Request $request, int $id): RedirectResponse
+    {
+        $request->validate([
+            'status' => ['required', 'integer', 'in:1,2'],
+            'resignation_date' => ['required', 'date'],
+            'manager_comment' => ['required', 'string', 'max:1000'],
+        ]);
+
+        $resignationService = app(\App\Services\EmployeeResignationService::class);
+        $resignation = $resignationService->getById($id);
+        if (!$resignation) {
+            return redirect()->back()->with('error', 'Resignation record not found.');
+        }
+
+        $resignationService->respondByManager($resignation, $request->all(), auth()->user());
+
+        $statusText = (int) $request->input('status') === 1 ? 'Accepted' : 'Rejected';
+        return redirect()->back()->with('success', "Resignation request {$statusText} successfully.");
+    }
+
+    /**
+     * Download Relieving Letter PDF.
+     */
+    public function downloadRelievingLetter(int $id)
+    {
+        $resignationService = app(\App\Services\EmployeeResignationService::class);
+        $resignation = $resignationService->getById($id);
+        if (!$resignation) {
+            return redirect()->back()->with('error', 'Resignation record not found.');
+        }
+
+        return $resignationService->generateRelievingPdf($resignation, 'relieving');
+    }
+
+    /**
+     * Download Experience Certificate PDF.
+     */
+    public function downloadExperienceCertificate(int $id)
+    {
+        $resignationService = app(\App\Services\EmployeeResignationService::class);
+        $resignation = $resignationService->getById($id);
+        if (!$resignation) {
+            return redirect()->back()->with('error', 'Resignation record not found.');
+        }
+
+        return $resignationService->generateRelievingPdf($resignation, 'experience');
+    }
 }

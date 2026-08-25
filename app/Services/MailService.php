@@ -56,6 +56,7 @@ class MailService
                     'recruitment' => true,
                     'payroll' => true,
                     'onboarding' => true,
+                    'resignation' => true,
                 ],
                 'module_profile_mappings' => [
                     'leave' => 'default',
@@ -64,6 +65,7 @@ class MailService
                     'recruitment' => 'default',
                     'payroll' => 'default',
                     'onboarding' => 'default',
+                    'resignation' => 'default',
                 ],
                 'global_extra_ccs' => [
                     'leave' => '',
@@ -72,6 +74,7 @@ class MailService
                     'recruitment' => '',
                     'payroll' => '',
                     'onboarding' => '',
+                    'resignation' => '',
                 ],
                 'company_extra_ccs' => [],
             ];
@@ -379,5 +382,100 @@ class MailService
             }
         }
         return $content;
+    }
+
+    /**
+     * Dispatch single-threaded resignation notification emails to Employee, Manager, and Admin Extra CCs.
+     */
+    public function sendResignationNotification(
+        string $event,
+        \App\Models\EmployeeResignation $resignation,
+        string $subjectText,
+        string $bodyHtml,
+        ?string $actionUrl = null
+    ): bool {
+        try {
+            $companyId = (int) ($resignation->company_id ?? 0);
+            $this->applyModuleSmtpProfile('resignation');
+
+            $employee = $resignation->employee;
+            if (!$employee) {
+                return false;
+            }
+
+            $primaryRecipients = [];
+            if (!empty($employee->email)) {
+                $primaryRecipients[] = $employee->email;
+            }
+
+            // Reporting Manager
+            if ($resignation->manager && !empty($resignation->manager->email)) {
+                $primaryRecipients[] = $resignation->manager->email;
+            } elseif ($employee->manager && !empty($employee->manager->email)) {
+                $primaryRecipients[] = $employee->manager->email;
+            }
+
+            // Department Clearance Assigned Persons (if present)
+            if ($resignation->itPerson && !empty($resignation->itPerson->email)) {
+                $primaryRecipients[] = $resignation->itPerson->email;
+            }
+            if ($resignation->accountPerson && !empty($resignation->accountPerson->email)) {
+                $primaryRecipients[] = $resignation->accountPerson->email;
+            }
+            if ($resignation->hrPerson && !empty($resignation->hrPerson->email)) {
+                $primaryRecipients[] = $resignation->hrPerson->email;
+            }
+
+            // Admin Extra CC Recipients (Kamal Sir, Priyanka, etc.)
+            $extraCcs = $this->getModuleExtraCcs('resignation', $companyId);
+            $allTo = array_values(array_unique(array_filter(array_merge($primaryRecipients, $extraCcs))));
+
+            if (empty($allTo)) {
+                return false;
+            }
+
+            $threadSubject = sprintf('[i2u2 Portal] Resignation Request - %s %s (%s)', 
+                $employee->first_name ?? $employee->name ?? 'Employee',
+                $employee->last_name ?? '',
+                $employee->employee_id ?? $employee->id ?? 'EMP'
+            );
+
+            // Single Thread Headers
+            $threadId = 'resignation-' . $resignation->resignation_id . '@i2u2portal.local';
+            $messageIdHeader = "<{$event}-" . time() . "-{$threadId}>";
+            $inReplyToHeader = "<init-{$threadId}>";
+            $referencesHeader = "<init-{$threadId}>";
+
+            $mailable = new \App\Mail\ResignationMail(
+                $event,
+                $resignation,
+                $threadSubject,
+                $bodyHtml,
+                $actionUrl,
+                $messageIdHeader,
+                $event === 'submitted' ? null : $inReplyToHeader,
+                $event === 'submitted' ? null : $referencesHeader
+            );
+
+            Mail::to($allTo)->send($mailable);
+
+            // Log Email History
+            EmailHistory::create([
+                'subject' => $threadSubject,
+                'message' => $bodyHtml,
+                'from_email' => Config::get('mail.from.address', 'noreply@company.com'),
+                'to_emails' => implode(', ', $allTo),
+                'sent_date' => date('Y-m-d H:i:s'),
+                'mail_type' => 'resignation',
+                'mail_type_id' => $resignation->resignation_id,
+                'user_id' => $employee->user_id ?? $employee->id ?? 1,
+                'show_status' => 1,
+            ]);
+
+            return true;
+        } catch (Throwable $e) {
+            Log::error("Failed to send resignation notification [{$event}]: " . $e->getMessage(), ['exception' => $e]);
+            return false;
+        }
     }
 }

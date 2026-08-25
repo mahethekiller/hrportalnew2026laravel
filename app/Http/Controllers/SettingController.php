@@ -174,6 +174,7 @@ class SettingController extends Controller
             'recruitment' => $request->has('module_switch_recruitment'),
             'payroll' => $request->has('module_switch_payroll'),
             'onboarding' => $request->has('module_switch_onboarding'),
+            'resignation' => $request->has('module_switch_resignation'),
         ];
 
         // Module Profile Mappings
@@ -184,6 +185,7 @@ class SettingController extends Controller
             'recruitment' => $request->input('profile_recruitment', 'default'),
             'payroll' => $request->input('profile_payroll', 'default'),
             'onboarding' => $request->input('profile_onboarding', 'default'),
+            'resignation' => $request->input('profile_resignation', 'default'),
         ];
 
         // Global Extra CCs
@@ -194,6 +196,7 @@ class SettingController extends Controller
             'recruitment' => $request->input('extra_cc_recruitment', ''),
             'payroll' => $request->input('extra_cc_payroll', ''),
             'onboarding' => $request->input('extra_cc_onboarding', ''),
+            'resignation' => $request->input('extra_cc_resignation', ''),
         ];
 
         $this->settingService->saveMailConfig($config);
@@ -222,6 +225,7 @@ class SettingController extends Controller
             'recruitment' => $request->input('company_extra_cc_recruitment', ''),
             'payroll' => $request->input('company_extra_cc_payroll', ''),
             'onboarding' => $request->input('company_extra_cc_onboarding', ''),
+            'resignation' => $request->input('company_extra_cc_resignation', ''),
         ];
 
         $this->settingService->saveMailConfig($config);

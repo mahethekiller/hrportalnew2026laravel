@@ -40,6 +40,11 @@ class EmployeeResignationLog extends Model
 
     public function employee()
     {
-        return $this->belongsTo(Employee::class, 'employee_id');
+        return $this->belongsTo(Employee::class, 'employee_id', 'user_id');
+    }
+
+    public function updater()
+    {
+        return $this->belongsTo(Employee::class, 'updated_by', 'user_id');
     }
 }

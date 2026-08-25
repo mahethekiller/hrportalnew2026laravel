@@ -183,9 +183,20 @@ Route::middleware('auth')->group(function () {
         Route::post('/tax-documents', [\App\Http\Controllers\EmployeePortalController::class, 'storeTaxDocument'])->name('tax_documents.store');
         Route::get('/resignation', [\App\Http\Controllers\EmployeePortalController::class, 'resignation'])->name('resignation');
         Route::post('/resignation', [\App\Http\Controllers\EmployeePortalController::class, 'storeResignation'])->name('resignation.store');
+        Route::post('/resignation/exit-form', [\App\Http\Controllers\EmployeePortalController::class, 'storeExitForm'])->name('resignation.exit_form');
+        Route::get('/team-resignations', [\App\Http\Controllers\EmployeePortalController::class, 'teamResignations'])->name('team_resignations');
+        Route::post('/team-resignations/{id}', [\App\Http\Controllers\EmployeePortalController::class, 'respondResignation'])->name('team_resignations.respond');
+        Route::get('/resignation/{id}/relieving-letter', [\App\Http\Controllers\EmployeePortalController::class, 'downloadRelievingLetter'])->name('resignation.relieving_letter');
+        Route::get('/resignation/{id}/experience-certificate', [\App\Http\Controllers\EmployeePortalController::class, 'downloadExperienceCertificate'])->name('resignation.experience_certificate');
         Route::get('/profile-update', [\App\Http\Controllers\EmployeePortalController::class, 'editProfile'])->name('profile-update');
         Route::post('/profile-update', [\App\Http\Controllers\EmployeePortalController::class, 'updateProfile'])->name('profile-update.store');
     });
+
+    // Departmental No-Dues Clearance Hub Routes
+    Route::get('/settings/clearance', [\App\Http\Controllers\SeparationClearanceController::class, 'index'])->name('clearance.index');
+    Route::post('/settings/clearance/{id}/assign', [\App\Http\Controllers\SeparationClearanceController::class, 'assignOfficers'])->name('clearance.assign');
+    Route::post('/settings/clearance/{id}/notify', [\App\Http\Controllers\SeparationClearanceController::class, 'notifyOfficer'])->name('clearance.notify');
+    Route::post('/settings/clearance/{id}/update', [\App\Http\Controllers\SeparationClearanceController::class, 'updateClearance'])->name('clearance.update');
 
     // Manager Team Hub Routes
     Route::prefix('manager-portal')->name('manager-portal.')->group(function () {

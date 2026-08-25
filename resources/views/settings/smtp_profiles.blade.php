@@ -148,6 +148,7 @@
                                     'recruitment' => ['name' => 'Talent & Recruitment', 'icon' => 'fa-user-plus', 'color' => 'text-success'],
                                     'payroll' => ['name' => 'Payroll & Payslips', 'icon' => 'fa-money-bill-wave', 'color' => 'text-danger'],
                                     'onboarding' => ['name' => 'Employee Onboarding', 'icon' => 'fa-id-card', 'color' => 'text-indigo'],
+                                    'resignation' => ['name' => 'Resignation & Exit Clearance', 'icon' => 'fa-right-from-bracket', 'color' => 'text-purple'],
                                 ];
                             @endphp
 
@@ -238,6 +239,10 @@
                         <div class="col-md-6">
                             <label class="form-label fs-8 fw-semibold">Onboarding Extra CCs</label>
                             <input type="text" name="company_extra_cc_onboarding" id="compCc_onboarding" class="form-control form-control-sm" placeholder="e.g. onboarding-tech@company.com">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fs-8 fw-semibold">Resignation & Exit Clearance Extra CCs</label>
+                            <input type="text" name="company_extra_cc_resignation" id="compCc_resignation" class="form-control form-control-sm" placeholder="e.g. exit-hr@company.com, kamal@i2k2.com">
                         </div>
                     </div>
                     <div class="d-flex justify-content-end mt-4">
@@ -423,6 +428,7 @@
         document.getElementById('compCc_payroll').value = cc.payroll || '';
         document.getElementById('compCc_announcement').value = cc.announcement || '';
         document.getElementById('compCc_onboarding').value = cc.onboarding || '';
+        document.getElementById('compCc_resignation').value = cc.resignation || '';
     }
 </script>
 @endsection
