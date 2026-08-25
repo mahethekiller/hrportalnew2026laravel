@@ -158,8 +158,35 @@
                                         <i class="fa-solid fa-user-gear me-1"></i> Assign Officers
                                     </button>
                                     <button type="button" class="btn btn-primary btn-sm fw-bold" data-bs-toggle="modal" data-bs-target="#clearanceModal_{{ $res->resignation_id }}">
-                                        <i class="fa-solid fa-square-check me-1"></i> Update Clearance
+                                        <i class="fa-solid fa-square-check me-1"></i> Update & Send Email
                                     </button>
+                                    <button type="button" class="btn btn-primary btn-sm dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <span class="visually-hidden">Toggle Dropdown</span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow-sm fs-8">
+                                        <li><h6 class="dropdown-header text-uppercase fs-9 fw-bold">Send / Resend No-Dues Link</h6></li>
+                                        <li>
+                                            <form method="POST" action="{{ route('clearance.notify', $res->resignation_id) }}">
+                                                @csrf
+                                                <input type="hidden" name="stage" value="it">
+                                                <button type="submit" class="dropdown-item py-2"><i class="fa-solid fa-paper-plane text-info me-2"></i> Resend to IT Officer</button>
+                                            </form>
+                                        </li>
+                                        <li>
+                                            <form method="POST" action="{{ route('clearance.notify', $res->resignation_id) }}">
+                                                @csrf
+                                                <input type="hidden" name="stage" value="accounts">
+                                                <button type="submit" class="dropdown-item py-2"><i class="fa-solid fa-paper-plane text-success me-2"></i> Resend to Accounts Officer</button>
+                                            </form>
+                                        </li>
+                                        <li>
+                                            <form method="POST" action="{{ route('clearance.notify', $res->resignation_id) }}">
+                                                @csrf
+                                                <input type="hidden" name="stage" value="hr">
+                                                <button type="submit" class="dropdown-item py-2"><i class="fa-solid fa-paper-plane text-primary me-2"></i> Resend to HR Officer</button>
+                                            </form>
+                                        </li>
+                                    </ul>
                                 </div>
                             </td>
                         </tr>
