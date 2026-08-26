@@ -80,6 +80,6 @@ These rules represent the absolute constraints of the project. Any deviation fro
 
 ## ⏳ Rule 12: Mandatory Form Submit Disabling & Loading Spinner State
 - All form submissions across all Blade views and modal dialogs must automatically disable the primary submit button (`disabled="disabled"`) and display a visual loading spinner indicator (`<i class="fa-solid fa-circle-notch fa-spin me-1"></i> Processing...`).
-- This is enforced globally via jQuery form submit handlers in `layouts/app.blade.php`, preventing duplicate form submissions and double API calls.
+- Enforced globally via `<head>` helper `onclick="submitWithLoader(this)"` or by adding `class="btn-loader"` / `class="submit-loader"` to submit buttons, preventing duplicate form submissions and double API calls.
 
 
