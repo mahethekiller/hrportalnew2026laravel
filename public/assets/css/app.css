@@ -505,11 +505,13 @@ h3, .headline-md {
     background-color: var(--bs-primary) !important;
     border-color: var(--bs-primary) !important;
     color: #FFFFFF !important;
+    box-shadow: 0 2px 4px rgba(79, 70, 229, 0.25) !important;
 }
 
 .btn-primary:hover, .btn-primary:focus {
     background-color: var(--bs-primary-active) !important;
     border-color: var(--bs-primary-active) !important;
+    box-shadow: 0 4px 10px rgba(79, 70, 229, 0.35) !important;
 }
 
 /* Metronic Light/Subtle Buttons & High Contrast Overrides */
@@ -551,7 +553,7 @@ h3, .headline-md {
 
 .btn-light-primary {
     background-color: var(--bs-primary-light) !important;
-    border: 1px solid rgba(27, 132, 255, 0.2) !important;
+    border: 1px solid rgba(79, 70, 229, 0.25) !important;
     color: var(--bs-primary) !important;
 }
 .btn-light-primary:hover {
