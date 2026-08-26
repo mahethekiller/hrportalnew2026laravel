@@ -68,9 +68,9 @@ These rules represent the absolute constraints of the project. Any deviation fro
 - This automatically activates live search filtering via Select2, ensuring users can instantly search and filter options.
 
 ## 🛑 Rule 10: In-Modal Error Alerts & Input State Retention
-- All modal forms across all Blade views must automatically remain/re-open open upon validation error (`@if($errors->any())` script auto-trigger).
-- All form inputs inside modals must retain user-entered values using `value="{{ old('field_name') }}"` and retain select option states (`old('field_name') == $val ? 'selected' : ''`).
-- Form validation errors must be rendered both inside the modal body (`@if($errors->any())` alert banner) and inline using `@error('field_name')` directives and `is-invalid` classes.
+- All modal forms across all Blade views must automatically remain/re-open open upon validation error or exception (`@if($errors->any() || session('error'))` script auto-trigger).
+- All form inputs inside modals must retain user-entered values using `value="{{ old('field_name') }}"`, retain select option states (`old('field_name') == $val ? 'selected' : ''`), and retain checkbox states (`old('field_name', '1') == '1' ? 'checked' : ''`).
+- Form validation/exception errors must be rendered directly inside the modal body (`@if(session('error'))` / `@if($errors->any())` alert banners) and inline using `@error('field_name')` directives and `is-invalid` classes.
 
 ## 📐 Rule 11: Strict Bootstrap 5 Modal Markup Compliance
 - All modal dialogs across all Blade views must follow strict Bootstrap 5 HTML element hierarchy:

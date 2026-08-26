@@ -571,14 +571,14 @@
                                         <i class="fa-solid fa-paper-plane me-1"></i> Email Notification Settings
                                     </div>
                                     <div class="form-check form-switch mb-0">
-                                        <input class="form-check-input" type="checkbox" name="send_email_notification" id="sendEmailSchedSwitch" value="1" checked>
+                                        <input class="form-check-input" type="checkbox" name="send_email_notification" id="sendEmailSchedSwitch" value="1" {{ old('send_email_notification', '1') == '1' ? 'checked' : '' }}>
                                         <label class="form-check-label fs-9 text-muted fw-semibold" for="sendEmailSchedSwitch">Enable Mail</label>
                                     </div>
                                 </div>
                                 <div class="row g-2 pt-1 border-top border-subtle">
                                     <div class="col-md-6">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="notify_candidate" id="notifyCandSchedCheck" value="1" checked>
+                                            <input class="form-check-input" type="checkbox" name="notify_candidate" id="notifyCandSchedCheck" value="1" {{ old('notify_candidate', '1') == '1' ? 'checked' : '' }}>
                                             <label class="form-check-label fs-8 text-body-emphasis" for="notifyCandSchedCheck">
                                                 <i class="fa-solid fa-user me-1 text-success"></i> Send to Candidate Email
                                             </label>
@@ -586,7 +586,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="notify_interviewers" id="notifyPanSchedCheck" value="1" checked>
+                                            <input class="form-check-input" type="checkbox" name="notify_interviewers" id="notifyPanSchedCheck" value="1" {{ old('notify_interviewers', '1') == '1' ? 'checked' : '' }}>
                                             <label class="form-check-label fs-8 text-body-emphasis" for="notifyPanSchedCheck">
                                                 <i class="fa-solid fa-users me-1 text-info"></i> Send to Interview Panelists (CC)
                                             </label>
