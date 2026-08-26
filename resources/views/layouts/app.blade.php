@@ -55,11 +55,10 @@
         $activeAccent = null;
 
         // 1. Dynamic Holiday Auto-Sync with Published Holidays Table
-        if ($activeAccentKey !== 'off') {
-            try {
-                if (\Illuminate\Support\Facades\Schema::hasTable('xin_holidays')) {
-                    $today = date('Y-m-d');
-                    $upcomingRange = date('Y-m-d', strtotime('+14 days'));
+        try {
+            if (\Illuminate\Support\Facades\Schema::hasTable('xin_holidays')) {
+                $today = date('Y-m-d');
+                $upcomingRange = date('Y-m-d', strtotime('+14 days'));
 
                     // Check if today is an active published holiday
                     $todayHoliday = \App\Models\Holiday::where('start_date', '<=', $today)
@@ -111,7 +110,6 @@
             } catch (\Throwable $e) {
                 // Ignore in SQLite test environment
             }
-        }
 
         // 2. Fallback to manual theme selection if set
         if (!$activeAccent && isset($seasonalAccents[$activeAccentKey]) && $activeAccentKey !== 'off') {

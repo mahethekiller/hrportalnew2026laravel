@@ -77,12 +77,10 @@ Ensure the Laravel Task Scheduler is configured in the server's crontab (`cronta
 - **Configuration Dependencies**:
   1. System Settings > SMTP Profiles & Routing (`resignation` module extra CC routing).
   2. No-Dues Clearance Hub > Default Clearance Officers Configuration (`default_clearance_officers`).
-### Version 2.2.0 - Candidate Interview Email Invitations & Dynamic SMTP
-- **Database Table Dependencies**: `xin_email_template` (Template code: `candidate_interview_scheduled`).
-- **Seeder Requirements**: `EmailTemplateSeeder` (`php artisan db:seed --class=EmailTemplateSeeder`).
-- **Configuration Dependencies**:
-  1. System Settings > Email Notifications: Ensure global mail toggle is enabled and module switch `"recruitment": true` is enabled in `storage/app/settings/mail_system_config.json`.
-  2. SMTP Settings: Ensure active SMTP profile (Host, Port, Username, Password, From Address) is configured in **System Settings -> SMTP Settings**.
+### Version 2.3.0 - Corporate Holiday Calendar & Dynamic Seasonal Banner Overlay
+- **Seeder Requirements**: Run `php artisan db:seed --class=NavigationMenuSeeder` to populate *Benefits & Policies* and *Holiday Calendar* in live sidebar menus.
+- **Cache Clearing**: Run `php artisan view:clear && php artisan route:clear && php artisan config:clear` to purge cached views and routes.
+- **Dynamic Holiday Sync**: Dynamic banner automatically detects active or upcoming holidays within 14 days from `xin_holidays` table regardless of theme configuration JSON state.
 
 ---
 
