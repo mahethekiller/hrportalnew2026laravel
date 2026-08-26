@@ -97,6 +97,7 @@ class RecruitmentService
         ]);
 
         $this->applicationRepository->updateStatus($application, 'Hired', 'Converted to Employee ID: ' . $employee->user_id);
+        $application->update(['user_id' => $employee->user_id]);
 
         return $employee;
     }

@@ -46,7 +46,7 @@ class JobApplicationRepository
         $data['job_id'] = !empty($data['job_id']) ? (int) $data['job_id'] : 1;
         $data['contact_no'] = !empty($data['contact_no']) ? $data['contact_no'] : 'N/A';
         $data['gender'] = !empty($data['gender']) ? $data['gender'] : 'Male';
-        $data['user_id'] = !empty($data['user_id']) ? (int) $data['user_id'] : (auth()->id() ?? 1);
+        $data['user_id'] = !empty($data['user_id']) ? (int) $data['user_id'] : 0;
         $data['added_by'] = $data['added_by'] ?? (auth()->check() ? trim((string) (auth()->user()->first_name ?? '') . ' ' . (string) (auth()->user()->last_name ?? '')) : 'System Admin');
         $data['message'] = $data['message'] ?? '';
         $data['job_resume'] = $data['job_resume'] ?? '';
