@@ -86,7 +86,7 @@
                     </div>
                     <div class="card-body">
                         <div class="form-check form-switch mb-3">
-                            <input class="form-check-input" type="checkbox" name="enable_registration" id="enableRegistration" {{ !empty($setting->enable_registration) ? 'checked' : '' }}>
+                            <input class="form-check-input" type="checkbox" name="enable_registration" id="enableRegistration" {{ in_array($setting->enable_registration, ['yes', 'true', '1', 1, true], true) ? 'checked' : '' }}>
                             <label class="form-check-label fw-semibold fs-8 text-gray-800" for="enableRegistration">
                                 Allow New User Self-Registration
                             </label>
@@ -106,25 +106,25 @@
                     </div>
                     <div class="card-body">
                         <div class="form-check form-switch mb-3">
-                            <input class="form-check-input" type="checkbox" name="module_recruitment" id="moduleRecruitment" {{ !empty($setting->module_recruitment) ? 'checked' : '' }}>
+                            <input class="form-check-input" type="checkbox" name="module_recruitment" id="moduleRecruitment" {{ in_array($setting->module_recruitment, ['yes', 'true', '1', 1, true], true) ? 'checked' : '' }}>
                             <label class="form-check-label fw-semibold fs-8 text-gray-800" for="moduleRecruitment">
                                 Enable Talent Recruitment Module
                             </label>
                         </div>
                         <div class="form-check form-switch mb-3">
-                            <input class="form-check-input" type="checkbox" name="module_training" id="moduleTraining" {{ !empty($setting->module_training) ? 'checked' : '' }}>
+                            <input class="form-check-input" type="checkbox" name="module_training" id="moduleTraining" {{ in_array($setting->module_training, ['yes', 'true', '1', 1, true], true) ? 'checked' : '' }}>
                             <label class="form-check-label fw-semibold fs-8 text-gray-800" for="moduleTraining">
                                 Enable Training & Development Module
                             </label>
                         </div>
                         <div class="form-check form-switch mb-3">
-                            <input class="form-check-input" type="checkbox" name="module_performance" id="modulePerformance" {{ !empty($setting->module_performance) ? 'checked' : '' }}>
+                            <input class="form-check-input" type="checkbox" name="module_performance" id="modulePerformance" {{ in_array($setting->module_performance, ['yes', 'true', '1', 1, true], true) ? 'checked' : '' }}>
                             <label class="form-check-label fw-semibold fs-8 text-gray-800" for="modulePerformance">
                                 Enable Performance Management Module
                             </label>
                         </div>
                         <div class="form-check form-switch mb-3">
-                            <input class="form-check-input" type="checkbox" name="module_assets" id="moduleAssets" {{ !empty($setting->module_assets) ? 'checked' : '' }}>
+                            <input class="form-check-input" type="checkbox" name="module_assets" id="moduleAssets" {{ in_array($setting->module_assets, ['yes', 'true', '1', 1, true], true) ? 'checked' : '' }}>
                             <label class="form-check-label fw-semibold fs-8 text-gray-800" for="moduleAssets">
                                 Enable Assets & Inventory Management Module
                             </label>
@@ -140,25 +140,25 @@
                     </div>
                     <div class="card-body">
                         <div class="form-check form-switch mb-3">
-                            <input class="form-check-input" type="checkbox" name="employee_manage_own_contact" id="empContact" {{ !empty($setting->employee_manage_own_contact) ? 'checked' : '' }}>
+                            <input class="form-check-input" type="checkbox" name="employee_manage_own_contact" id="empContact" {{ in_array($setting->employee_manage_own_contact, ['yes', 'true', '1', 1, true], true) ? 'checked' : '' }}>
                             <label class="form-check-label fw-semibold fs-8 text-gray-800" for="empContact">
                                 Employees can manage their emergency contacts
                             </label>
                         </div>
                         <div class="form-check form-switch mb-3">
-                            <input class="form-check-input" type="checkbox" name="employee_manage_own_profile" id="empProfile" {{ !empty($setting->employee_manage_own_profile) ? 'checked' : '' }}>
+                            <input class="form-check-input" type="checkbox" name="employee_manage_own_profile" id="empProfile" {{ in_array($setting->employee_manage_own_profile, ['yes', 'true', '1', 1, true], true) ? 'checked' : '' }}>
                             <label class="form-check-label fw-semibold fs-8 text-gray-800" for="empProfile">
                                 Employees can update basic profile info
                             </label>
                         </div>
                         <div class="form-check form-switch mb-3">
-                            <input class="form-check-input" type="checkbox" name="employee_manage_own_qualification" id="empQualification" {{ !empty($setting->employee_manage_own_qualification) ? 'checked' : '' }}>
+                            <input class="form-check-input" type="checkbox" name="employee_manage_own_qualification" id="empQualification" {{ in_array($setting->employee_manage_own_qualification, ['yes', 'true', '1', 1, true], true) ? 'checked' : '' }}>
                             <label class="form-check-label fw-semibold fs-8 text-gray-800" for="empQualification">
                                 Employees can upload educational qualifications
                             </label>
                         </div>
                         <div class="form-check form-switch mb-3">
-                            <input class="form-check-input" type="checkbox" name="employee_manage_own_document" id="empDocument" {{ !empty($setting->employee_manage_own_document) ? 'checked' : '' }}>
+                            <input class="form-check-input" type="checkbox" name="employee_manage_own_document" id="empDocument" {{ in_array($setting->employee_manage_own_document, ['yes', 'true', '1', 1, true], true) ? 'checked' : '' }}>
                             <label class="form-check-label fw-semibold fs-8 text-gray-800" for="empDocument">
                                 Employees can upload personal identity documents
                             </label>

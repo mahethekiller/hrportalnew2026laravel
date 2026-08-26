@@ -37,16 +37,16 @@ class SettingController extends Controller
             'footer_text',
         ]);
         
-        // Checkbox values handling
-        $data['enable_registration'] = $request->has('enable_registration') ? 1 : 0;
-        $data['module_recruitment'] = $request->has('module_recruitment') ? 1 : 0;
-        $data['module_training'] = $request->has('module_training') ? 1 : 0;
-        $data['module_performance'] = $request->has('module_performance') ? 1 : 0;
-        $data['module_assets'] = $request->has('module_assets') ? 1 : 0;
-        $data['employee_manage_own_contact'] = $request->has('employee_manage_own_contact') ? 1 : 0;
-        $data['employee_manage_own_profile'] = $request->has('employee_manage_own_profile') ? 1 : 0;
-        $data['employee_manage_own_qualification'] = $request->has('employee_manage_own_qualification') ? 1 : 0;
-        $data['employee_manage_own_document'] = $request->has('employee_manage_own_document') ? 1 : 0;
+        // Checkbox values handling matching legacy schema strings ("yes"/"no" & "true"/"false")
+        $data['enable_registration'] = $request->has('enable_registration') ? 'yes' : 'no';
+        $data['module_recruitment'] = $request->has('module_recruitment') ? 'true' : 'false';
+        $data['module_training'] = $request->has('module_training') ? 'true' : 'false';
+        $data['module_performance'] = $request->has('module_performance') ? 'true' : 'false';
+        $data['module_assets'] = $request->has('module_assets') ? 'true' : 'false';
+        $data['employee_manage_own_contact'] = $request->has('employee_manage_own_contact') ? 'yes' : 'no';
+        $data['employee_manage_own_profile'] = $request->has('employee_manage_own_profile') ? 'yes' : 'no';
+        $data['employee_manage_own_qualification'] = $request->has('employee_manage_own_qualification') ? 'yes' : 'no';
+        $data['employee_manage_own_document'] = $request->has('employee_manage_own_document') ? 'yes' : 'no';
 
         $this->settingService->updateSystemSetting($data);
 

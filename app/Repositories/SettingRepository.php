@@ -33,7 +33,11 @@ class SettingRepository
     public function updateSystemSetting(SystemSetting $setting, array $data): bool
     {
         $data['updated_at'] = date('Y-m-d H:i:s');
-        return $setting->update($data);
+        $settingId = $setting->setting_id ?? $setting->id ?? 1;
+        
+        return (bool) \Illuminate\Support\Facades\DB::table('xin_system_setting')
+            ->where('setting_id', $settingId)
+            ->update($data);
     }
 
     public function getRoles(): Collection
