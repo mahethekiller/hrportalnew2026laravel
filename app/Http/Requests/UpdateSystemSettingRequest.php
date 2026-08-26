@@ -17,7 +17,7 @@ class UpdateSystemSettingRequest extends FormRequest
     {
         return [
             'application_name' => ['required', 'string', 'max:255'],
-            'support_email' => ['required', 'email', 'max:150'],
+            'support_email' => ['nullable', 'email', 'max:150'],
             'default_currency' => ['nullable', 'string', 'max:20'],
             'default_currency_symbol' => ['nullable', 'string', 'max:10'],
             'system_timezone' => ['nullable', 'string', 'max:100'],

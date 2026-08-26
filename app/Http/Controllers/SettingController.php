@@ -28,7 +28,14 @@ class SettingController extends Controller
 
     public function updateSystemSetting(UpdateSystemSettingRequest $request): RedirectResponse
     {
-        $data = $request->validated();
+        $data = $request->only([
+            'application_name',
+            'support_email',
+            'default_currency',
+            'default_currency_symbol',
+            'system_timezone',
+            'footer_text',
+        ]);
         
         // Checkbox values handling
         $data['enable_registration'] = $request->has('enable_registration') ? 1 : 0;
