@@ -1229,33 +1229,44 @@
                 });
             });
 
+            window.allDesignationsList = @json($designations->map(function($d) { return ['id' => $d->designation_id ?? $d->id, 'name' => $d->name_with_company, 'department_id' => $d->department_id]; }));
+
             $(document).on('change', 'select[name="department_id"]', function() {
                 var $deptSelect = $(this);
                 var selectedDeptId = $deptSelect.val();
                 var $form = $deptSelect.closest('form, .modal-body, .modal-content');
                 var $desigSelect = $form.find('select[name="designation_id"]');
 
-                if ($desigSelect.length) {
-                    var currentDesigVal = $desigSelect.val();
-                    var isValidMatch = false;
+                if ($desigSelect.length && window.allDesignationsList) {
+                    var currentVal = $desigSelect.val();
+                    $desigSelect.find('option:not([value=""])').remove();
 
-                    $desigSelect.find('option').each(function() {
-                        var $opt = $(this);
-                        var optDeptId = $opt.attr('data-department-id');
-                        if (!optDeptId || !selectedDeptId || optDeptId == selectedDeptId) {
-                            $opt.prop('disabled', false).show();
-                            if ($opt.val() == currentDesigVal) {
-                                isValidMatch = true;
+                    var hasCurrentMatch = false;
+                    window.allDesignationsList.forEach(function(desig) {
+                        if (!selectedDeptId || desig.department_id == selectedDeptId) {
+                            var isSelected = (currentVal && desig.id == currentVal);
+                            if (isSelected) {
+                                hasCurrentMatch = true;
                             }
-                        } else {
-                            $opt.prop('disabled', true).hide();
+                            $desigSelect.append(
+                                $('<option>', {
+                                    value: desig.id,
+                                    text: desig.name,
+                                    'data-department-id': desig.department_id,
+                                    selected: isSelected
+                                })
+                            );
                         }
                     });
 
-                    if (!isValidMatch && selectedDeptId) {
-                        $desigSelect.val('').trigger('change.select2');
-                    } else {
+                    if (!hasCurrentMatch) {
+                        $desigSelect.val('');
+                    }
+
+                    if ($desigSelect.data('select2')) {
                         $desigSelect.trigger('change.select2');
+                    } else {
+                        $desigSelect.trigger('change');
                     }
                 }
             });
