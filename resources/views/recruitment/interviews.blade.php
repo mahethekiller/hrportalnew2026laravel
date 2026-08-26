@@ -42,52 +42,26 @@
                 <table class="table table-hover align-middle mb-0 gs-4 fs-7">
                     <thead class="table-light text-muted fw-bold text-uppercase fs-9">
                         <tr>
-                            <th class="ps-4">Candidate</th>
+                            <th class="ps-4" style="min-width: 140px;">Actions</th>
+                            <th>Candidate</th>
                             <th>Interview Date & Time</th>
                             <th>Mode / Location</th>
                             <th>Interviewer Panel</th>
                             <th>Offered CTC</th>
-                            <th>Status</th>
-                            <th class="text-end pe-4">Actions</th>
+                            <th class="pe-4">Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($interviews as $itv)
                             <tr>
                                 <td class="ps-4">
-                                    <div class="fw-bold text-gray-900">{{ $itv->jobApplication->candidate_name ?? 'Candidate' }}</div>
-                                    <div class="fs-9 text-muted">{{ $itv->jobApplication->email ?? '' }}</div>
-                                </td>
-                                <td>
-                                    <span class="fw-medium text-gray-800">{{ $itv->formatted_interview_date }}</span>
-                                    <div class="fs-9 text-muted"><i class="fa-regular fa-clock me-1"></i>{{ $itv->interview_time }}</div>
-                                </td>
-                                <td>
-                                    <span class="badge badge-light-primary text-uppercase fs-9">{{ $itv->interview_mode }}</span>
-                                    <div class="fs-9 text-muted">{{ $itv->interview_place ?? 'Online Meeting' }}</div>
-                                </td>
-                                <td>
-                                    <span class="text-gray-800 fs-8">{{ $itv->interviewer ? ($itv->interviewer->first_name . ' ' . $itv->interviewer->last_name) : ($itv->added_by ?? 'Recruiter') }}</span>
-                                </td>
-                                <td>
-                                    <span class="font-monospace text-success fw-bold">{{ $itv->offered_ctc ?? '--' }}</span>
-                                </td>
-                                <td>
-                                    <span class="badge {{ $itv->status_badge_class }}">
-                                        {{ $itv->status_label }}
-                                    </span>
-                                    @if($itv->convert_to_employee != 0)
-                                        <div class="mt-1"><span class="badge badge-light-success fs-9"><i class="fa-solid fa-user-check me-1"></i>Converted</span></div>
-                                    @endif
-                                </td>
-                                <td class="text-end pe-4">
                                     <div class="d-inline-flex gap-1 align-items-center">
                                         <!-- Convert to Employee Action -->
                                         @if(in_array(strtolower($itv->status), ['confirmed', 'selected', 'offeraccepted']) && $itv->convert_to_employee == 0)
                                             <form method="POST" action="{{ route('recruitment-interviews.convert', $itv->job_interview_id) }}" class="d-inline" onsubmit="return confirm('Convert candidate {{ $itv->jobApplication->candidate_name ?? '' }} to active employee?');">
                                                 @csrf
                                                 <button type="submit" class="btn btn-sm btn-success py-1 px-2 fs-8" title="Convert to Active Employee">
-                                                    <i class="fa-solid fa-user-plus me-1"></i> Convert to Staff
+                                                    <i class="fa-solid fa-user-plus me-1"></i> Convert
                                                 </button>
                                             </form>
                                         @endif
@@ -97,7 +71,7 @@
                                             <button class="btn btn-sm btn-light-secondary py-1 px-2 fs-8 dropdown-toggle" type="button" data-bs-toggle="dropdown">
                                                 Status
                                             </button>
-                                            <ul class="dropdown-menu dropdown-menu-end fs-8">
+                                            <ul class="dropdown-menu fs-8 shadow border-subtle">
                                                 <li>
                                                     <form method="POST" action="{{ route('recruitment-interviews.status', $itv->job_interview_id) }}">
                                                         @csrf
@@ -136,6 +110,32 @@
                                             </ul>
                                         </div>
                                     </div>
+                                </td>
+                                <td>
+                                    <div class="fw-bold text-gray-900">{{ $itv->jobApplication->candidate_name ?? 'Candidate' }}</div>
+                                    <div class="fs-9 text-muted">{{ $itv->jobApplication->email ?? '' }}</div>
+                                </td>
+                                <td>
+                                    <span class="fw-medium text-gray-800">{{ $itv->formatted_interview_date }}</span>
+                                    <div class="fs-9 text-muted"><i class="fa-regular fa-clock me-1"></i>{{ $itv->interview_time }}</div>
+                                </td>
+                                <td>
+                                    <span class="badge badge-light-primary text-uppercase fs-9">{{ $itv->interview_mode }}</span>
+                                    <div class="fs-9 text-muted">{{ $itv->interview_place ?? 'Online Meeting' }}</div>
+                                </td>
+                                <td>
+                                    <span class="text-gray-800 fs-8">{{ $itv->interviewer ? ($itv->interviewer->first_name . ' ' . $itv->interviewer->last_name) : ($itv->added_by ?? 'Recruiter') }}</span>
+                                </td>
+                                <td>
+                                    <span class="font-monospace text-success fw-bold">{{ $itv->offered_ctc ?? '--' }}</span>
+                                </td>
+                                <td class="pe-4">
+                                    <span class="badge {{ $itv->status_badge_class }}">
+                                        {{ $itv->status_label }}
+                                    </span>
+                                    @if($itv->convert_to_employee != 0)
+                                        <div class="mt-1"><span class="badge badge-light-success fs-9"><i class="fa-solid fa-user-check me-1"></i>Converted</span></div>
+                                    @endif
                                 </td>
                             </tr>
                         @empty
