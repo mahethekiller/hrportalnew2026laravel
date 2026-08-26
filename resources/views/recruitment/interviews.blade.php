@@ -252,7 +252,7 @@
                                             <i class="fa-solid fa-paper-plane me-1"></i> Send Next Round Email Notification
                                         </div>
                                         <div class="form-check form-switch mb-0">
-                                            <input class="form-check-input" type="checkbox" name="send_email_notification" id="sendEmailNextSwitch{{ $itv->job_interview_id }}" value="1" checked>
+                                            <input class="form-check-input" type="checkbox" name="send_email_notification" id="sendEmailNextSwitch{{ $itv->job_interview_id }}" value="1" {{ old('send_email_notification') == '1' ? 'checked' : '' }}>
                                             <label class="form-check-label fs-9 text-muted fw-semibold" for="sendEmailNextSwitch{{ $itv->job_interview_id }}">Enable Mail</label>
                                         </div>
                                     </div>
@@ -431,7 +431,7 @@
                                             <i class="fa-solid fa-paper-plane me-1"></i> Send Status Email Notification
                                         </div>
                                         <div class="form-check form-switch mb-0">
-                                            <input class="form-check-input" type="checkbox" name="send_email_notification" id="sendEmailSwitch_{{ $stCfg['modal_id'] }}" value="1" checked>
+                                            <input class="form-check-input" type="checkbox" name="send_email_notification" id="sendEmailSwitch_{{ $stCfg['modal_id'] }}" value="1" {{ old('send_email_notification') == '1' ? 'checked' : '' }}>
                                             <label class="form-check-label fs-9 text-muted fw-semibold" for="sendEmailSwitch_{{ $stCfg['modal_id'] }}">Send Mail</label>
                                         </div>
                                     </div>
@@ -931,7 +931,7 @@
                                         <i class="fa-solid fa-paper-plane me-1"></i> Email Notification Settings
                                     </div>
                                     <div class="form-check form-switch mb-0">
-                                        <input class="form-check-input" type="checkbox" name="send_email_notification" id="sendEmailSchedSwitch" value="1" {{ old('send_email_notification', '1') == '1' ? 'checked' : '' }}>
+                                        <input class="form-check-input" type="checkbox" name="send_email_notification" id="sendEmailSchedSwitch" value="1" {{ old('send_email_notification') == '1' ? 'checked' : '' }}>
                                         <label class="form-check-label fs-9 text-muted fw-semibold" for="sendEmailSchedSwitch">Enable Mail</label>
                                     </div>
                                 </div>
