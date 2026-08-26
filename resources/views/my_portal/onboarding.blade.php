@@ -260,15 +260,15 @@
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold fs-9 text-muted text-uppercase">Contact Full Name</label>
-                                    <input type="text" class="form-control fs-8 py-2" name="emergency_contact_name" value="{{ old('emergency_contact_name', $pendingUpdate ? $pendingUpdate->emergency_contact_name : $employee->emergency_contact_name) }}" required>
+                                    <input type="text" class="form-control fs-8 py-2" name="emergency_contact_name" value="{{ old('emergency_contact_name', $pendingUpdate ? $pendingUpdate->emergency_contact_name : $employee->emergency_contact_name) }}">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold fs-9 text-muted text-uppercase">Relationship</label>
-                                    <input type="text" class="form-control fs-8 py-2" name="emergency_contact_relation" value="{{ old('emergency_contact_relation', $pendingUpdate ? $pendingUpdate->emergency_contact_relation : $employee->emergency_contact_relation) }}" required>
+                                    <input type="text" class="form-control fs-8 py-2" name="emergency_contact_relation" value="{{ old('emergency_contact_relation', $pendingUpdate ? $pendingUpdate->emergency_contact_relation : $employee->emergency_contact_relation) }}">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold fs-9 text-muted text-uppercase">Mobile Phone Number</label>
-                                    <input type="text" class="form-control fs-8 py-2" name="emergency_contact_mobile" value="{{ old('emergency_contact_mobile', $pendingUpdate ? $pendingUpdate->emergency_contact_mobile : $employee->emergency_contact_mobile) }}" required>
+                                    <input type="text" class="form-control fs-8 py-2" name="emergency_contact_mobile" value="{{ old('emergency_contact_mobile', $pendingUpdate ? $pendingUpdate->emergency_contact_mobile : $employee->emergency_contact_mobile) }}">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold fs-9 text-muted text-uppercase">Contact Occupation</label>
@@ -319,5 +319,24 @@
 
     <!-- Vendor Scripts -->
     <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var form = document.querySelector('form');
+            if (form) {
+                form.addEventListener('invalid', function(e) {
+                    var invalidEl = e.target;
+                    var tabPane = invalidEl.closest('.tab-pane');
+                    if (tabPane) {
+                        var tabId = tabPane.getAttribute('id');
+                        var tabTrigger = document.querySelector('[data-bs-target="#' + tabId + '"]');
+                        if (tabTrigger) {
+                            bootstrap.Tab.getOrCreateInstance(tabTrigger).show();
+                            setTimeout(function() { invalidEl.focus(); }, 150);
+                        }
+                    }
+                }, true);
+            }
+        });
+    </script>
 </body>
 </html>
