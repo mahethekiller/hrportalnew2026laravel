@@ -101,7 +101,8 @@ class EmployeeService
             // 2. Hash employee password for legacy auth fields
             $data['user_id'] = $user->id;
             $data['employee_id'] = $empCode;
-            $data['card_no'] = $data['card_no'] ?? $empCode;
+            $numericCardNo = preg_replace('/\D/', '', (string)($data['card_no'] ?? $empCode));
+            $data['card_no'] = !empty($numericCardNo) ? (int)$numericCardNo : (int)$user->id;
             $data['username'] = $data['username'] ?? $empCode;
             $data['office_shift_id'] = $data['office_shift_id'] ?? 1;
             $data['user_role_id'] = $data['user_role_id'] ?? 1;
