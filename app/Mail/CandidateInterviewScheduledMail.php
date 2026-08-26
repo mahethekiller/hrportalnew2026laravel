@@ -26,9 +26,9 @@ class CandidateInterviewScheduledMail extends Mailable
         $candidateName = $interview->jobApplication->candidate_name ?? 'Candidate';
         $jobTitle = $interview->jobApplication->job->job_title ?? 'Position';
 
-        $siteName = 'Antigravity HR Portal';
+        $siteName = config('app.name', 'I2U2 Portal');
         try {
-            $setting = \App\Models\Setting::first();
+            $setting = \App\Models\SystemSetting::first();
             if ($setting && !empty($setting->application_name)) {
                 $siteName = $setting->application_name;
             }
