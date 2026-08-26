@@ -122,20 +122,20 @@
                             @endphp
                             <tr>
                                 <td class="ps-4 text-nowrap">
-                                    <div class="btn-group btn-group-sm" role="group">
+                                    <div class="d-inline-flex align-items-center gap-1.5">
                                         <!-- View Details Button -->
-                                        <button type="button" class="btn btn-outline-primary px-2" data-bs-toggle="modal" data-bs-target="#viewCandidateModal{{ $app->application_id }}" title="View Candidate Profile">
+                                        <button type="button" class="btn btn-sm btn-outline-primary px-2.5 rounded-2" data-bs-toggle="modal" data-bs-target="#viewCandidateModal{{ $app->application_id }}" title="View Candidate Profile">
                                             <i class="fa-solid fa-eye"></i>
                                         </button>
 
                                         <!-- Edit Candidate Button -->
-                                        <button type="button" class="btn btn-outline-warning px-2" data-bs-toggle="modal" data-bs-target="#editCandidateModal{{ $app->application_id }}" title="Edit Candidate Profile">
+                                        <button type="button" class="btn btn-sm btn-outline-warning px-2.5 rounded-2" data-bs-toggle="modal" data-bs-target="#editCandidateModal{{ $app->application_id }}" title="Edit Candidate Profile">
                                             <i class="fa-solid fa-pen-to-square"></i>
                                         </button>
 
                                         <!-- Stage Update Dropdown -->
-                                        <div class="btn-group btn-group-sm" role="group">
-                                            <button class="btn btn-outline-secondary px-2 dropdown-toggle" type="button" data-bs-toggle="dropdown" title="Update Pipeline Stage">
+                                        <div class="dropdown d-inline">
+                                            <button class="btn btn-sm btn-outline-secondary px-2.5 dropdown-toggle rounded-2" type="button" data-bs-toggle="dropdown" title="Update Pipeline Stage">
                                                 <i class="fa-solid fa-sliders"></i>
                                             </button>
                                             <ul class="dropdown-menu fs-8 shadow border-subtle">
