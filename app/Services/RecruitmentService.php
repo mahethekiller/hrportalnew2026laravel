@@ -56,6 +56,17 @@ class RecruitmentService
 
     public function scheduleInterview(array $data): JobInterview
     {
+        $appId = $data['job_application_id'] ?? $data['application_id'] ?? null;
+        if (!empty($appId)) {
+            $existing = \App\Models\JobInterview::where('job_application_id', $appId)
+                ->where('interview_date', $data['interview_date'] ?? date('Y-m-d'))
+                ->where('created_at', '>=', date('Y-m-d H:i:s', strtotime('-15 seconds')))
+                ->first();
+            if ($existing) {
+                return $existing;
+            }
+        }
+
         $interview = $this->interviewRepository->create($data);
 
         if (!empty($data['application_id'])) {

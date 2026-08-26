@@ -311,30 +311,23 @@
                         item.style.display = text.includes(term) ? '' : 'none';
                     });
                 });
-            // Global Form Submit Button Disable & Spinner Indicator
-            $(document).on('click', 'button[type="submit"], input[type="submit"]', function() {
-                var $btn = $(this);
-                var $form = $btn.closest('form');
-                if ($form.length && $form.attr('data-no-loader') !== 'true' && !$btn.hasClass('disabled')) {
-                    $btn.data('original-html', $btn.html());
-                    $btn.addClass('disabled').css('pointer-events', 'none');
-                    $btn.html('<i class="fa-solid fa-circle-notch fa-spin me-1"></i> Processing...');
-                    setTimeout(function() {
-                        $btn.prop('disabled', true);
-                    }, 50);
-                }
-            });
-
-            $(document).on('submit', 'form', function() {
+            // Global Form Submit Lock & Visual Spinner Indicator
+            $(document).on('submit', 'form', function(e) {
                 var $form = $(this);
-                if ($form.attr('data-no-loader') === 'true') return;
+                if ($form.attr('data-no-loader') === 'true') return true;
+
+                if ($form.data('is-submitting') === true) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                }
+
+                $form.data('is-submitting', true);
+
                 var $btn = $form.find('button[type="submit"], input[type="submit"]');
-                if ($btn.length && !$btn.hasClass('disabled')) {
-                    $btn.addClass('disabled').css('pointer-events', 'none');
+                if ($btn.length) {
+                    $btn.addClass('disabled').css({'pointer-events': 'none', 'opacity': '0.75'});
                     $btn.html('<i class="fa-solid fa-circle-notch fa-spin me-1"></i> Processing...');
-                    setTimeout(function() {
-                        $btn.prop('disabled', true);
-                    }, 50);
                 }
             });
         });
