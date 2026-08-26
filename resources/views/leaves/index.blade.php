@@ -117,19 +117,47 @@
                 <table class="table table-hover align-middle mb-0 gs-4 fs-7">
                     <thead class="table-light text-muted fw-bold text-uppercase fs-9">
                         <tr>
-                            <th class="ps-4">Employee</th>
+                            <th class="ps-4" style="min-width: 100px;">Actions</th>
+                            <th>Employee</th>
                             <th>Leave Type</th>
                             <th>Duration</th>
                             <th>Days</th>
                             <th>Applied On</th>
-                            <th>Status</th>
-                            <th class="text-end pe-4">Actions</th>
+                            <th class="pe-4">Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($leaveApplications as $leave)
                             <tr>
                                 <td class="ps-4">
+                                    <div class="dropdown">
+                                        <button class="btn btn-light btn-sm btn-icon" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                                        </button>
+                                        <ul class="dropdown-menu shadow border-0 fs-7">
+                                            <li>
+                                                <button class="dropdown-item text-success py-2" data-bs-toggle="modal" data-bs-target="#approveLeaveModal{{ $leave->leave_id }}">
+                                                    <i class="fa-solid fa-circle-check me-2"></i> Approve
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button class="dropdown-item text-danger py-2" data-bs-toggle="modal" data-bs-target="#rejectLeaveModal{{ $leave->leave_id }}">
+                                                    <i class="fa-solid fa-circle-xmark me-2"></i> Reject
+                                                </button>
+                                            </li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li>
+                                                <form method="POST" action="{{ route('leaves.destroy', $leave->leave_id) }}" onsubmit="return confirm('Delete this leave application record?');">
+                                                    @csrf @method('DELETE')
+                                                    <button type="submit" class="dropdown-item text-muted py-2">
+                                                        <i class="fa-solid fa-trash me-2"></i> Delete
+                                                    </button>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                                <td>
                                     <div class="d-flex align-items-center">
                                         <div class="symbol symbol-35px me-2 bg-light-primary text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold fs-7" style="width:35px; height:35px;">
                                             {{ substr($leave->employee->first_name ?? 'E', 0, 1) }}
@@ -153,39 +181,11 @@
                                 <td>
                                     <span class="text-muted fs-8">{{ $leave->applied_on ? date('M d, Y', strtotime($leave->applied_on)) : 'N/A' }}</span>
                                 </td>
-                                <td>
+                                <td class="pe-4">
                                     <span class="badge {{ $leave->status_badge_class }}">
                                         {{ $leave->status_label }}
                                     </span>
-                                </td>
-                                <td class="text-end pe-4">
-                                    <div class="dropdown">
-                                        <button class="btn btn-light btn-sm btn-icon" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="fa-solid fa-ellipsis-vertical"></i>
-                                        </button>
-                                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 fs-7">
-                                            <li>
-                                                <button class="dropdown-item text-success py-2" data-bs-toggle="modal" data-bs-target="#approveLeaveModal{{ $leave->leave_id }}">
-                                                    <i class="fa-solid fa-circle-check me-2"></i> Approve
-                                                </button>
-                                            </li>
-                                            <li>
-                                                <button class="dropdown-item text-danger py-2" data-bs-toggle="modal" data-bs-target="#rejectLeaveModal{{ $leave->leave_id }}">
-                                                    <i class="fa-solid fa-circle-xmark me-2"></i> Reject
-                                                </button>
-                                            </li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li>
-                                                <form method="POST" action="{{ route('leaves.destroy', $leave->leave_id) }}" onsubmit="return confirm('Delete this leave application record?');">
-                                                    @csrf @method('DELETE')
-                                                    <button type="submit" class="dropdown-item text-muted py-2">
-                                                        <i class="fa-solid fa-trash me-2"></i> Delete
-                                                    </button>
-                                                </form>
-                                            </li>
-                                        </ul>
-                                    </div>
-
+                                    
                                     <!-- Approve Modal -->
                                     <div class="modal fade" id="approveLeaveModal{{ $leave->leave_id }}" tabindex="-1">
                                         <div class="modal-dialog modal-dialog-centered">

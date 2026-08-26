@@ -14,31 +14,17 @@
             <table class="table table-hover align-middle mb-0 fs-8">
                 <thead class="bg-body-tertiary">
                     <tr>
-                        <th class="ps-4">Employee</th>
+                        <th class="ps-4" style="min-width: 150px;">Actions</th>
+                        <th>Employee</th>
                         <th>Dates</th>
                         <th>Reason</th>
-                        <th>Status</th>
-                        <th class="text-end pe-4">Manager Actions</th>
+                        <th class="pe-4">Status</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($leaves as $leave)
                         <tr>
-                            <td class="ps-4 fw-bold text-body-emphasis">
-                                {{ $leave->employee ? $leave->employee->first_name . ' ' . $leave->employee->last_name : 'Employee #' . $leave->employee_id }}
-                            </td>
-                            <td>{{ $leave->from_date }} to {{ $leave->to_date }}</td>
-                            <td>{{ Str::limit($leave->reason, 40) }}</td>
-                            <td>
-                                @if($leave->status == 2)
-                                    <span class="badge bg-success-subtle text-success">Approved</span>
-                                @elseif($leave->status == 3)
-                                    <span class="badge bg-danger-subtle text-danger">Rejected</span>
-                                @else
-                                    <span class="badge bg-warning-subtle text-warning">Pending Approval</span>
-                                @endif
-                            </td>
-                            <td class="text-end pe-4">
+                            <td class="ps-4">
                                 @if($leave->status == 1)
                                     <form method="POST" action="{{ route('manager-portal.team_leaves.status', $leave->leave_id) }}" class="d-inline">
                                         @csrf
@@ -52,6 +38,20 @@
                                     </form>
                                 @else
                                     <span class="text-body-secondary fs-9">Processed</span>
+                                @endif
+                            </td>
+                            <td class="fw-bold text-body-emphasis">
+                                {{ $leave->employee ? $leave->employee->first_name . ' ' . $leave->employee->last_name : 'Employee #' . $leave->employee_id }}
+                            </td>
+                            <td>{{ $leave->from_date }} to {{ $leave->to_date }}</td>
+                            <td>{{ Str::limit($leave->reason, 40) }}</td>
+                            <td class="pe-4">
+                                @if($leave->status == 2)
+                                    <span class="badge bg-success-subtle text-success">Approved</span>
+                                @elseif($leave->status == 3)
+                                    <span class="badge bg-danger-subtle text-danger">Rejected</span>
+                                @else
+                                    <span class="badge bg-warning-subtle text-warning">Pending Approval</span>
                                 @endif
                             </td>
                         </tr>

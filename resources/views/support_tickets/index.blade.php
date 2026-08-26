@@ -41,20 +41,25 @@
             <table class="table table-hover align-middle mb-0 fs-8">
                 <thead class="table-light text-uppercase fs-9 fw-bold">
                     <tr>
-                        <th class="ps-4">Ticket Code</th>
+                        <th class="ps-4" style="min-width: 120px;">Actions</th>
+                        <th>Ticket Code</th>
                         <th>Subject</th>
                         <th>Opened By</th>
                         <th>Department</th>
                         <th>Priority</th>
                         <th>Status</th>
-                        <th>Created At</th>
-                        <th class="text-end pe-4">Actions</th>
+                        <th class="pe-4">Created At</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($tickets as $tk)
                         <tr>
-                            <td class="ps-4 font-monospace fw-bold text-primary">#{{ $tk->ticket_code }}</td>
+                            <td class="ps-4">
+                                <a href="{{ route('support-tickets.show', $tk->ticket_id) }}" class="btn btn-sm btn-light-primary py-1 px-2 fs-9">
+                                    <i class="fa-solid fa-eye me-1"></i> View Thread
+                                </a>
+                            </td>
+                            <td class="font-monospace fw-bold text-primary">#{{ $tk->ticket_code }}</td>
                             <td>
                                 <div class="fw-bold text-gray-900">{{ $tk->clean_subject }}</div>
                                 <div class="text-muted fs-9 text-truncate" style="max-width: 250px;">{{ Str::limit($tk->plain_description, 50) }}</div>
@@ -77,12 +82,7 @@
                                 @endphp
                                 <span class="badge {{ $sBadge }} text-capitalize px-2 py-1 fs-9">{{ $statusName }}</span>
                             </td>
-                            <td>{{ $tk->created_at }}</td>
-                            <td class="text-end pe-4">
-                                <a href="{{ route('support-tickets.show', $tk->ticket_id) }}" class="btn btn-sm btn-light-primary py-1 px-2 fs-9">
-                                    <i class="fa-solid fa-eye me-1"></i> View Thread
-                                </a>
-                            </td>
+                            <td class="pe-4">{{ $tk->created_at }}</td>
                         </tr>
                     @empty
                         <tr>

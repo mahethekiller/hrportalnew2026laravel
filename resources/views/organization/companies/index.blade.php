@@ -28,17 +28,23 @@
             <table class="table table-hover align-middle mb-0">
                 <thead>
                     <tr>
+                        <th class="ps-4" style="min-width: 80px;">Actions</th>
                         <th>Company Name</th>
                         <th>Registration No</th>
                         <th>Email Contact</th>
                         <th>Phone</th>
-                        <th>Status</th>
-                        <th class="text-end">Actions</th>
+                        <th class="pe-4">Status</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($companies as $comp)
                         <tr>
+                            <td class="ps-4">
+                                <form method="POST" action="{{ route('companies.destroy', $comp->id) }}" class="d-inline" onsubmit="return confirm('Delete this company entity?');">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="btn btn-light-danger btn-sm" title="Delete Entity"><i class="fa-solid fa-trash"></i></button>
+                                </form>
+                            </td>
                             <td>
                                 <div class="d-flex align-items-center gap-3">
                                     @if($comp->logo && file_exists(public_path('uploads/logo/' . $comp->logo)))
@@ -57,18 +63,12 @@
                             <td><code class="text-primary fw-bold">{{ $comp->registration_no ?? 'N/A' }}</code></td>
                             <td>{{ $comp->email }}</td>
                             <td>{{ $comp->contact_number ?? 'N/A' }}</td>
-                            <td>
+                            <td class="pe-4">
                                 @if($comp->is_active ?? true)
                                     <span class="badge badge-light-success"><i class="fa-solid fa-circle-check me-1"></i>Active</span>
                                 @else
                                     <span class="badge badge-light-secondary">Disabled</span>
                                 @endif
-                            </td>
-                            <td class="text-end">
-                                <form method="POST" action="{{ route('companies.destroy', $comp->id) }}" class="d-inline" onsubmit="return confirm('Delete this company entity?');">
-                                    @csrf @method('DELETE')
-                                    <button type="submit" class="btn btn-light-danger btn-sm" title="Delete Entity"><i class="fa-solid fa-trash"></i></button>
-                                </form>
                             </td>
                         </tr>
                     @empty

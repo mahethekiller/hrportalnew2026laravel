@@ -37,18 +37,23 @@
                 <table class="table table-hover align-middle mb-0 border-0">
                     <thead class="table-light">
                         <tr>
-                            <th class="ps-4">Employee</th>
+                            <th class="ps-4" style="min-width: 170px;">Actions</th>
+                            <th>Employee</th>
                             <th>Notice Date</th>
                             <th>Requested LWD</th>
                             <th>Notice Period</th>
-                            <th>Manager Decision</th>
-                            <th class="pe-4 text-end">Action</th>
+                            <th class="pe-4">Manager Decision</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($teamResignations as $res)
                         <tr>
                             <td class="ps-4">
+                                <button type="button" class="btn btn-primary btn-sm fw-bold px-3" data-bs-toggle="modal" data-bs-target="#reviewModal_{{ $res->resignation_id }}">
+                                    <i class="fa-solid fa-pen-to-square me-1"></i> Review & Respond
+                                </button>
+                            </td>
+                            <td>
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="avatar avatar-sm rounded-circle bg-primary-subtle text-primary fw-bold d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
                                         {{ strtoupper(substr($res->employee->first_name ?? 'E', 0, 1)) }}
@@ -62,14 +67,9 @@
                             <td class="fs-8 fw-semibold text-body-emphasis">{{ $res->notice_date }}</td>
                             <td class="fs-8 fw-bold text-danger">{{ $res->resignation_date }}</td>
                             <td class="fs-8 text-body-secondary">{{ $res->employee->notice_period_months ?? 1 }} Month(s)</td>
-                            <td>
+                            <td class="pe-4">
                                 @php $mgrHelper = $res->getStageStatusHelper((int) $res->manager_status); @endphp
                                 <span class="{{ $mgrHelper['class'] }} fs-8"><i class="fa-solid {{ $mgrHelper['icon'] }} me-1"></i> {{ $mgrHelper['label'] }}</span>
-                            </td>
-                            <td class="pe-4 text-end">
-                                <button type="button" class="btn btn-primary btn-sm fw-bold px-3" data-bs-toggle="modal" data-bs-target="#reviewModal_{{ $res->resignation_id }}">
-                                    <i class="fa-solid fa-pen-to-square me-1"></i> Review & Respond
-                                </button>
                             </td>
                         </tr>
 

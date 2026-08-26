@@ -27,17 +27,22 @@
                 <table class="table table-hover align-middle mb-0 gs-4 fs-7">
                     <thead class="table-light text-muted fw-bold text-uppercase fs-9">
                         <tr>
-                            <th class="ps-4">Role ID & Name</th>
+                            <th class="ps-4" style="min-width: 100px;">Actions</th>
+                            <th>Role ID & Name</th>
                             <th>Access Scope</th>
                             <th>Authorized Module Resources</th>
-                            <th>Created Date</th>
-                            <th class="text-end pe-4">Actions</th>
+                            <th class="pe-4">Created Date</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($roles as $rl)
                             <tr>
                                 <td class="ps-4">
+                                    <button type="button" class="btn btn-sm btn-light-primary py-1 px-2 fs-8" data-bs-toggle="modal" data-bs-target="#editRoleModal{{ $rl->id }}">
+                                        <i class="fa-solid fa-pen-to-square me-1"></i> Edit Permissions
+                                    </button>
+                                </td>
+                                <td>
                                     <div class="fw-bold text-gray-900"><i class="fa-solid fa-user-shield me-2 text-primary"></i>{{ $rl->role_name }}</div>
                                     <span class="fs-9 text-muted font-monospace">ROLE-#{{ $rl->id }}</span>
                                 </td>
@@ -53,15 +58,9 @@
                                         @endforelse
                                     </div>
                                 </td>
-                                <td>
+                                <td class="pe-4">
                                     <span class="fs-8 text-gray-800">{{ $rl->created_at ?? '--' }}</span>
                                 </td>
-                                <td class="text-end pe-4">
-                                    <button type="button" class="btn btn-sm btn-light-primary py-1 px-2 fs-8" data-bs-toggle="modal" data-bs-target="#editRoleModal{{ $rl->id }}">
-                                        <i class="fa-solid fa-pen me-1"></i> Edit Role
-                                    </button>
-                                </td>
-                                
                             </tr>
                         @empty
                             <tr>

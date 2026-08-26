@@ -105,21 +105,26 @@
                 <table class="table table-hover align-middle mb-0 gs-4 fs-7">
                     <thead class="table-light text-muted fw-bold text-uppercase fs-9">
                         <tr>
-                            <th class="ps-4">Employee</th>
+                            <th class="ps-4" style="min-width: 100px;">Actions</th>
+                            <th>Employee</th>
                             <th>Payment Date</th>
                             <th>Basic Salary</th>
                             <th>Allowances</th>
                             <th>Deductions</th>
                             <th>Net Salary</th>
                             <th>Method</th>
-                            <th>Status</th>
-                            <th class="text-end pe-4">Actions</th>
+                            <th class="pe-4">Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($payments as $pay)
                             <tr>
                                 <td class="ps-4">
+                                    <a href="{{ route('payroll.payslip', $pay->make_payment_id) }}" class="btn btn-light-primary btn-sm py-1 px-2 fs-8" target="_blank">
+                                        <i class="fa-solid fa-file-invoice-dollar me-1"></i> Payslip
+                                    </a>
+                                </td>
+                                <td>
                                     <div class="d-flex align-items-center">
                                         <div class="symbol symbol-35px me-2 bg-light-primary text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold fs-7" style="width:35px; height:35px;">
                                             {{ substr($pay->employee->first_name ?? 'E', 0, 1) }}
@@ -142,15 +147,10 @@
                                 <td>
                                     <span class="badge badge-light-info text-uppercase fs-9">{{ $pay->payment_method ?? 'Direct Deposit' }}</span>
                                 </td>
-                                <td>
+                                <td class="pe-4">
                                     <span class="badge {{ $pay->status_badge_class }}">
                                         {{ $pay->status_label }}
                                     </span>
-                                </td>
-                                <td class="text-end pe-4">
-                                    <a href="{{ route('payroll.payslip', $pay->make_payment_id) }}" class="btn btn-light-primary btn-sm py-1 px-2 fs-8" target="_blank">
-                                        <i class="fa-solid fa-file-invoice-dollar me-1"></i> Payslip
-                                    </a>
                                 </td>
                             </tr>
                         @empty
