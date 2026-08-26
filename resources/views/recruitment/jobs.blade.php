@@ -105,49 +105,23 @@
                 <table class="table table-hover align-middle mb-0 gs-4 fs-7">
                     <thead class="table-light text-muted fw-bold text-uppercase fs-9">
                         <tr>
-                            <th class="ps-4">Job Code</th>
+                            <th class="ps-4" style="min-width: 100px;">Actions</th>
+                            <th>Job Code</th>
                             <th>Position & Title</th>
                             <th>Job Type & Location</th>
                             <th>Vacancies</th>
                             <th>Experience</th>
                             <th>Closing Date</th>
-                            <th>Status</th>
-                            <th class="text-end pe-4">Actions</th>
+                            <th class="pe-4">Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($jobs as $jb)
                             <tr>
                                 <td class="ps-4">
-                                    <span class="badge badge-light-primary font-monospace fs-8">{{ $jb->job_code ?? 'JOB-000' }}</span>
-                                </td>
-                                <td>
-                                    <div class="fw-bold text-gray-900">{{ $jb->job_title }}</div>
-                                    <div class="fs-9 text-muted">{{ $jb->department ?? 'General Department' }}</div>
-                                </td>
-                                <td>
-                                    <span class="badge badge-light-info text-uppercase fs-9">{{ $jb->job_type ?? 'Full Time' }}</span>
-                                    <div class="fs-9 text-muted"><i class="fa-solid fa-location-dot me-1"></i>{{ $jb->job_location ?? 'On-Site' }}</div>
-                                </td>
-                                <td>
-                                    <span class="font-monospace fw-bold text-primary">{{ $jb->job_vacancy }} Positions</span>
-                                </td>
-                                <td>
-                                    <span class="fs-8 text-gray-800">{{ $jb->minimum_experience ?? '0' }} - {{ $jb->maximum_experience ?? '5' }} Yrs</span>
-                                </td>
-                                <td>
-                                    <span class="fw-medium text-gray-800">{{ $jb->formatted_closing_date }}</span>
-                                </td>
-                                <td>
-                                    <span class="badge {{ $jb->status_badge_class }}">
-                                        {{ $jb->status_label }}
-                                    </span>
-                                </td>
-                                <td class="text-end pe-4">
                                     <button type="button" class="btn btn-sm btn-light-primary py-1 px-2 fs-8" data-bs-toggle="modal" data-bs-target="#editJobPostModal{{ $jb->job_id }}">
-                                        <i class="fa-solid fa-pen me-1"></i> Edit
+                                        <i class="fa-solid fa-pen-to-square me-1"></i> Edit
                                     </button>
-
                                     <!-- Modal: Edit Job Post Requisition -->
                                     <div class="modal fade text-start" id="editJobPostModal{{ $jb->job_id }}" tabindex="-1">
                                         <div class="modal-dialog modal-dialog-centered modal-lg">

@@ -48,39 +48,22 @@
                 <table class="table table-hover align-middle mb-0 gs-4 fs-7">
                     <thead class="table-light text-muted fw-bold text-uppercase fs-9">
                         <tr>
-                            <th class="ps-4">Job Code Tag</th>
+                            <th class="ps-4" style="min-width: 100px;">Actions</th>
+                            <th>Job Code Tag</th>
                             <th>Target Position / Role</th>
                             <th>Added By</th>
                             <th>Created Date</th>
-                            <th>Status</th>
-                            <th class="text-end pe-4">Actions</th>
+                            <th class="pe-4">Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($jobCodes as $jc)
                             <tr>
                                 <td class="ps-4">
-                                    <span class="badge badge-light-primary font-monospace fs-8">{{ $jc->job_code }}</span>
-                                </td>
-                                <td>
-                                    <div class="fw-bold text-gray-900">{{ $jc->position }}</div>
-                                </td>
-                                <td>
-                                    <span class="fs-8 text-gray-800">{{ $jc->added_by ?? 'Recruiter' }}</span>
-                                </td>
-                                <td>
-                                    <span class="fs-8 text-gray-800">{{ $jc->added_date ?? '--' }}</span>
-                                </td>
-                                <td>
-                                    <span class="badge {{ $jc->status_badge_class }}">
-                                        {{ $jc->status_label }}
-                                    </span>
-                                </td>
-                                <td class="text-end pe-4">
                                     <button type="button" class="btn btn-sm btn-light-primary py-1 px-2 fs-8" data-bs-toggle="modal" data-bs-target="#editJobCodeModal{{ $jc->job_code_id }}">
-                                        <i class="fa-solid fa-pen me-1"></i> Edit
+                                        <i class="fa-solid fa-pen-to-square me-1"></i> Edit
                                     </button>
-
+                                    
                                     <!-- Modal: Edit Job Code -->
                                     <div class="modal fade text-start" id="editJobCodeModal{{ $jc->job_code_id }}" tabindex="-1">
                                         <div class="modal-dialog modal-dialog-centered">
