@@ -122,45 +122,46 @@
                             @endphp
                             <tr>
                                 <td class="ps-4 text-nowrap">
-                                    <div class="d-inline-flex align-items-center gap-1">
+                                    <div class="btn-group btn-group-sm" role="group">
                                         <!-- View Details Button -->
-                                        <button type="button" class="btn btn-sm btn-outline-primary py-1 px-2 fs-8 rounded-2" data-bs-toggle="modal" data-bs-target="#viewCandidateModal{{ $app->application_id }}" title="View Candidate Profile">
+                                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewCandidateModal{{ $app->application_id }}" title="View Candidate Profile">
                                             <i class="fa-solid fa-eye me-1"></i> View
                                         </button>
 
                                         <!-- Edit Candidate Button -->
-                                        <button type="button" class="btn btn-sm btn-outline-warning py-1 px-2 fs-8 rounded-2" data-bs-toggle="modal" data-bs-target="#editCandidateModal{{ $app->application_id }}" title="Edit Candidate Profile">
+                                        <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editCandidateModal{{ $app->application_id }}" title="Edit Candidate Profile">
                                             <i class="fa-solid fa-pen-to-square me-1"></i> Edit
                                         </button>
 
                                         <!-- Stage Update Dropdown -->
-                                        <div class="dropdown d-inline">
-                                            <button class="btn btn-sm btn-outline-secondary py-1 px-2 fs-8 dropdown-toggle rounded-2" type="button" data-bs-toggle="dropdown">
-                                                Stage
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" title="Update Candidate Stage">
+                                                <i class="fa-solid fa-sliders me-1"></i> Stage
                                             </button>
-                                        <ul class="dropdown-menu fs-8 shadow border-subtle">
-                                            <li>
-                                                <form method="POST" action="{{ route('recruitment-applications.status', $app->application_id) }}">
-                                                    @csrf
-                                                    <input type="hidden" name="status" value="Shortlisted">
-                                                    <button type="submit" class="dropdown-item text-primary"><i class="fa-solid fa-user-check me-2"></i> Shortlist Candidate</button>
-                                                </form>
-                                            </li>
-                                            <li>
-                                                <form method="POST" action="{{ route('recruitment-applications.status', $app->application_id) }}">
-                                                    @csrf
-                                                    <input type="hidden" name="status" value="Hired">
-                                                    <button type="submit" class="dropdown-item text-success"><i class="fa-solid fa-award me-2"></i> Mark Hired / Offer</button>
-                                                </form>
-                                            </li>
-                                            <li>
-                                                <form method="POST" action="{{ route('recruitment-applications.status', $app->application_id) }}">
-                                                    @csrf
-                                                    <input type="hidden" name="status" value="Rejected">
-                                                    <button type="submit" class="dropdown-item text-danger"><i class="fa-solid fa-ban me-2"></i> Reject Candidate</button>
-                                                </form>
-                                            </li>
-                                        </ul>
+                                            <ul class="dropdown-menu fs-8 shadow border-subtle">
+                                                <li>
+                                                    <form method="POST" action="{{ route('recruitment-applications.status', $app->application_id) }}" onsubmit="submitWithLoader(this.querySelector('button'))">
+                                                        @csrf
+                                                        <input type="hidden" name="status" value="Shortlisted">
+                                                        <button type="submit" class="dropdown-item text-primary"><i class="fa-solid fa-user-check me-2"></i> Shortlist Candidate</button>
+                                                    </form>
+                                                </li>
+                                                <li>
+                                                    <form method="POST" action="{{ route('recruitment-applications.status', $app->application_id) }}" onsubmit="submitWithLoader(this.querySelector('button'))">
+                                                        @csrf
+                                                        <input type="hidden" name="status" value="Hired">
+                                                        <button type="submit" class="dropdown-item text-success"><i class="fa-solid fa-award me-2"></i> Mark Hired / Offer</button>
+                                                    </form>
+                                                </li>
+                                                <li>
+                                                    <form method="POST" action="{{ route('recruitment-applications.status', $app->application_id) }}" onsubmit="submitWithLoader(this.querySelector('button'))">
+                                                        @csrf
+                                                        <input type="hidden" name="status" value="Rejected">
+                                                        <button type="submit" class="dropdown-item text-danger"><i class="fa-solid fa-ban me-2"></i> Reject Candidate</button>
+                                                    </form>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
 
                                     <!-- Candidate Details Modal -->
@@ -402,7 +403,7 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
-                                                        <button type="submit" class="btn btn-warning btn-sm fw-bold">Update Candidate Profile</button>
+                                                        <button type="submit" class="btn btn-warning btn-sm fw-bold" onclick="submitWithLoader(this)"><i class="fa-solid fa-check me-1"></i> Update Candidate Profile</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -597,7 +598,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary btn-sm fw-bold">Submit Candidate</button>
+                    <button type="submit" class="btn btn-primary btn-sm fw-bold" onclick="submitWithLoader(this)"><i class="fa-solid fa-paper-plane me-1"></i> Submit Candidate</button>
                 </div>
             </div>
         </form>
