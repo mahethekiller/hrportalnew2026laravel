@@ -271,20 +271,49 @@
                                 </div>
                             </div>
 
-                            <!-- Editable Mail Preview Drawer -->
-                            <div class="mt-2 pt-2 border-top border-subtle">
-                                <button type="button" class="btn btn-sm btn-outline-info py-1 px-3 fs-9 rounded-2" data-bs-toggle="collapse" data-bs-target="#editMailContentNext{{ $itv->job_interview_id }}">
-                                    <i class="fa-solid fa-pen-to-square me-1"></i> Preview & Edit Mail Subject / Body...
+                            <!-- WYSIWYG Rich Text Mail Preview & Editor -->
+                            <div class="mt-3 pt-2 border-top border-subtle">
+                                <button type="button" class="btn btn-sm btn-outline-info py-1 px-3 fs-9 rounded-2 mb-2" data-bs-toggle="collapse" data-bs-target="#editMailContentNext{{ $itv->job_interview_id }}">
+                                    <i class="fa-solid fa-pen-to-square me-1"></i> Preview & Edit Invitation Mail (WYSIWYG Editor)
                                 </button>
-                                <div class="collapse mt-2" id="editMailContentNext{{ $itv->job_interview_id }}">
+                                <div class="collapse show" id="editMailContentNext{{ $itv->job_interview_id }}">
                                     <div class="card card-body bg-body p-3 border">
-                                        <div class="mb-2">
+                                        <div class="mb-3">
                                             <label class="form-label fs-9 fw-semibold text-body-secondary mb-1">Custom Email Subject</label>
-                                            <input type="text" name="custom_email_subject" class="form-control form-control-sm fs-8" placeholder="Default: [Next Round Interview] {{ $itv->jobApplication->candidate_name ?? '' }}">
+                                            <input type="text" name="custom_email_subject" class="form-control form-control-sm fs-8" value="{{ old('custom_email_subject') }}" placeholder="Default: [Next Round Interview] {{ $itv->jobApplication->candidate_name ?? '' }}">
                                         </div>
                                         <div class="mb-0">
-                                            <label class="form-label fs-9 fw-semibold text-body-secondary mb-1">Custom Email Body (Optional override)</label>
-                                            <textarea name="custom_email_body" class="form-control form-control-sm fs-8" rows="3" placeholder="Leave empty to use standard interview invitation letter...">{{ old('custom_email_body') }}</textarea>
+                                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                                <label class="form-label fs-9 fw-semibold text-body-secondary mb-0">Email Message Body (WYSIWYG Editor)</label>
+                                                <span class="fs-9 text-muted"><i class="fa-solid fa-wand-magic-sparkles me-1 text-info"></i> Editable Live Preview</span>
+                                            </div>
+
+                                            <!-- WYSIWYG Toolbar -->
+                                            <div class="wysiwyg-toolbar border border-bottom-0 rounded-top bg-body-tertiary p-2 d-flex flex-wrap align-items-center gap-1">
+                                                <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Bold" onclick="execWysiwygCmd('bold', this)"><i class="fa-solid fa-bold"></i></button>
+                                                <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Italic" onclick="execWysiwygCmd('italic', this)"><i class="fa-solid fa-italic"></i></button>
+                                                <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Underline" onclick="execWysiwygCmd('underline', this)"><i class="fa-solid fa-underline"></i></button>
+                                                <div class="vr mx-1"></div>
+                                                <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Bullet List" onclick="execWysiwygCmd('insertUnorderedList', this)"><i class="fa-solid fa-list-ul"></i></button>
+                                                <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Numbered List" onclick="execWysiwygCmd('insertOrderedList', this)"><i class="fa-solid fa-list-ol"></i></button>
+                                                <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Heading" onclick="execWysiwygCmd('formatBlock', this, '<h3>')"><i class="fa-solid fa-heading"></i></button>
+                                                <div class="vr mx-1"></div>
+                                                <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Insert Link" onclick="insertWysiwygLink(this)"><i class="fa-solid fa-link"></i></button>
+                                                <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Clear Formatting" onclick="execWysiwygCmd('removeFormat', this)"><i class="fa-solid fa-eraser"></i></button>
+                                                <button type="button" class="btn btn-xs btn-outline-secondary border py-1 px-2 ms-auto" title="Reset Default Template" onclick="resetWysiwygEditor(this)">
+                                                    <i class="fa-solid fa-rotate-left me-1"></i> Reset Template
+                                                </button>
+                                            </div>
+
+                                            <!-- WYSIWYG Canvas -->
+                                            @php
+                                                $nextDefaultMsg = $defaultTemplate->message ?? '<p>Dear <strong>{candidate_name}</strong>,</p><p>We are pleased to invite you for the Next Round interview regarding your application for <strong>{job_title}</strong>.</p><div style="background: #f1f5f9; border-left: 4px solid #2563eb; padding: 16px; margin: 20px 0; border-radius: 4px;"><p style="margin: 0 0 8px 0;"><strong>Date:</strong> {interview_date}</p><p style="margin: 0 0 8px 0;"><strong>Time:</strong> {interview_time}</p><p style="margin: 0 0 8px 0;"><strong>Mode:</strong> {interview_mode}</p><p style="margin: 0 0 8px 0;"><strong>Venue / Link:</strong> {interview_place}</p><p style="margin: 0;"><strong>Interviewer Panel:</strong> {panelists}</p></div><p><strong>Instructions / Remarks:</strong></p><p style="background: #fafafa; border-left: 3px solid #cbd5e1; padding: 10px 15px; font-style: italic; color: #334155;">{remarks}</p><p style="margin-top: 25px;">Please confirm your availability for this interview schedule.</p><p>Best regards,<br><strong>Recruitment Team</strong></p>';
+                                            @endphp
+
+                                            <div class="wysiwyg-canvas border rounded-bottom p-3 bg-body fs-8 text-body" contenteditable="true" style="min-height: 220px; max-height: 380px; overflow-y: auto; line-height: 1.6;" data-default-template="{{ e($nextDefaultMsg) }}">
+                                                {!! old('custom_email_body', $nextDefaultMsg) !!}
+                                            </div>
+                                            <textarea name="custom_email_body" class="wysiwyg-hidden-input d-none">{{ old('custom_email_body', $nextDefaultMsg) }}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -545,20 +574,49 @@
                             </div>
                         </div>
 
-                        <!-- Editable Mail Preview Drawer -->
-                        <div class="mt-2 pt-2 border-top border-subtle">
-                            <button type="button" class="btn btn-sm btn-outline-info py-1 px-3 fs-9 rounded-2" data-bs-toggle="collapse" data-bs-target="#editMailContentSched">
-                                <i class="fa-solid fa-pen-to-square me-1"></i> Preview & Edit Mail Subject / Body...
+                        <!-- WYSIWYG Rich Text Mail Preview & Editor -->
+                        <div class="mt-3 pt-2 border-top border-subtle">
+                            <button type="button" class="btn btn-sm btn-outline-info py-1 px-3 fs-9 rounded-2 mb-2" data-bs-toggle="collapse" data-bs-target="#editMailContentSched">
+                                <i class="fa-solid fa-pen-to-square me-1"></i> Preview & Edit Invitation Mail (WYSIWYG Editor)
                             </button>
-                            <div class="collapse mt-2" id="editMailContentSched">
+                            <div class="collapse show" id="editMailContentSched">
                                 <div class="card card-body bg-body p-3 border">
-                                    <div class="mb-2">
+                                    <div class="mb-3">
                                         <label class="form-label fs-9 fw-semibold text-body-secondary mb-1">Custom Email Subject</label>
-                                        <input type="text" name="custom_email_subject" class="form-control form-control-sm fs-8" placeholder="Default: [Interview Invitation] Candidate Name - Applied Position">
+                                        <input type="text" name="custom_email_subject" class="form-control form-control-sm fs-8" value="{{ old('custom_email_subject') }}" placeholder="Default: [Interview Invitation] Candidate Name - Applied Position">
                                     </div>
                                     <div class="mb-0">
-                                        <label class="form-label fs-9 fw-semibold text-body-secondary mb-1">Custom Email Body (Optional override)</label>
-                                        <textarea name="custom_email_body" class="form-control form-control-sm fs-8" rows="3" placeholder="Leave empty to use standard interview invitation letter..."></textarea>
+                                        <div class="d-flex align-items-center justify-content-between mb-1">
+                                            <label class="form-label fs-9 fw-semibold text-body-secondary mb-0">Email Message Body (WYSIWYG Editor)</label>
+                                            <span class="fs-9 text-muted"><i class="fa-solid fa-wand-magic-sparkles me-1 text-primary"></i> Editable Live Preview</span>
+                                        </div>
+
+                                        <!-- WYSIWYG Toolbar -->
+                                        <div class="wysiwyg-toolbar border border-bottom-0 rounded-top bg-body-tertiary p-2 d-flex flex-wrap align-items-center gap-1">
+                                            <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Bold" onclick="execWysiwygCmd('bold', this)"><i class="fa-solid fa-bold"></i></button>
+                                            <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Italic" onclick="execWysiwygCmd('italic', this)"><i class="fa-solid fa-italic"></i></button>
+                                            <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Underline" onclick="execWysiwygCmd('underline', this)"><i class="fa-solid fa-underline"></i></button>
+                                            <div class="vr mx-1"></div>
+                                            <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Bullet List" onclick="execWysiwygCmd('insertUnorderedList', this)"><i class="fa-solid fa-list-ul"></i></button>
+                                            <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Numbered List" onclick="execWysiwygCmd('insertOrderedList', this)"><i class="fa-solid fa-list-ol"></i></button>
+                                            <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Heading" onclick="execWysiwygCmd('formatBlock', this, '<h3>')"><i class="fa-solid fa-heading"></i></button>
+                                            <div class="vr mx-1"></div>
+                                            <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Insert Link" onclick="insertWysiwygLink(this)"><i class="fa-solid fa-link"></i></button>
+                                            <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Clear Formatting" onclick="execWysiwygCmd('removeFormat', this)"><i class="fa-solid fa-eraser"></i></button>
+                                            <button type="button" class="btn btn-xs btn-outline-secondary border py-1 px-2 ms-auto" title="Reset Default Template" onclick="resetWysiwygEditor(this)">
+                                                <i class="fa-solid fa-rotate-left me-1"></i> Reset Template
+                                            </button>
+                                        </div>
+
+                                        <!-- WYSIWYG Canvas -->
+                                        @php
+                                            $defaultMsg = $defaultTemplate->message ?? '<p>Dear <strong>{candidate_name}</strong>,</p><p>We are pleased to invite you for an interview regarding your application for <strong>{job_title}</strong>.</p><div style="background: #f1f5f9; border-left: 4px solid #2563eb; padding: 16px; margin: 20px 0; border-radius: 4px;"><p style="margin: 0 0 8px 0;"><strong>Date:</strong> {interview_date}</p><p style="margin: 0 0 8px 0;"><strong>Time:</strong> {interview_time}</p><p style="margin: 0 0 8px 0;"><strong>Mode:</strong> {interview_mode}</p><p style="margin: 0 0 8px 0;"><strong>Venue / Link:</strong> {interview_place}</p><p style="margin: 0;"><strong>Interviewer Panel:</strong> {panelists}</p></div><p><strong>Instructions / Remarks:</strong></p><p style="background: #fafafa; border-left: 3px solid #cbd5e1; padding: 10px 15px; font-style: italic; color: #334155;">{remarks}</p><p style="margin-top: 25px;">Please confirm your availability for this interview schedule.</p><p>Best regards,<br><strong>Recruitment Team</strong></p>';
+                                        @endphp
+
+                                        <div class="wysiwyg-canvas border rounded-bottom p-3 bg-body fs-8 text-body" contenteditable="true" style="min-height: 220px; max-height: 380px; overflow-y: auto; line-height: 1.6;" data-default-template="{{ e($defaultMsg) }}">
+                                            {!! old('custom_email_body', $defaultMsg) !!}
+                                        </div>
+                                        <textarea name="custom_email_body" class="wysiwyg-hidden-input d-none">{{ old('custom_email_body', $defaultMsg) }}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -577,6 +635,40 @@
 
 @push('js')
 <script>
+    function execWysiwygCmd(cmd, btn, value) {
+        var $canvas = $(btn).closest('.card-body, .modal-body').find('.wysiwyg-canvas');
+        if ($canvas.length) {
+            $canvas.focus();
+            document.execCommand(cmd, false, value || null);
+            syncWysiwygContent($canvas);
+        }
+    }
+
+    function insertWysiwygLink(btn) {
+        var url = prompt("Enter Hyperlink URL (e.g. https://meet.google.com/xyz):", "https://");
+        if (url) {
+            execWysiwygCmd('createLink', btn, url);
+        }
+    }
+
+    function syncWysiwygContent($canvas) {
+        var html = $canvas.html();
+        var $textarea = $canvas.siblings('.wysiwyg-hidden-input');
+        if ($textarea.length) {
+            $textarea.val(html);
+        }
+    }
+
+    function resetWysiwygEditor(btn) {
+        var $box = $(btn).closest('.card-body, .modal-body');
+        var $canvas = $box.find('.wysiwyg-canvas');
+        var defaultHtml = $canvas.attr('data-default-template') || '';
+        if (defaultHtml) {
+            $canvas.html(defaultHtml);
+            syncWysiwygContent($canvas);
+        }
+    }
+
     (function() {
         function initModalSelect2($modal) {
             if (typeof $.fn.select2 !== 'undefined' && $modal && $modal.length) {
@@ -596,6 +688,16 @@
         }
 
         $(document).ready(function() {
+            $(document).on('keyup blur paste input', '.wysiwyg-canvas', function() {
+                syncWysiwygContent($(this));
+            });
+
+            $(document).on('submit', 'form', function() {
+                $(this).find('.wysiwyg-canvas').each(function() {
+                    syncWysiwygContent($(this));
+                });
+            });
+
             @if($errors->any())
                 var oldNextRoundId = @json(old('next_round_interview_id'));
                 if (oldNextRoundId) {

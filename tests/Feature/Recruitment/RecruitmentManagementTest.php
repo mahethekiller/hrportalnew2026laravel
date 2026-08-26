@@ -108,6 +108,17 @@ class RecruitmentManagementTest extends TestCase
             });
         }
 
+        if (!Schema::hasTable('xin_email_template')) {
+            Schema::create('xin_email_template', function ($table) {
+                $table->bigIncrements('template_id');
+                $table->string('template_code', 100);
+                $table->string('name', 200)->nullable();
+                $table->string('subject', 255)->nullable();
+                $table->text('message')->nullable();
+                $table->integer('status')->default(1);
+            });
+        }
+
         if (!Schema::hasTable('xin_office_shift')) {
             Schema::create('xin_office_shift', function ($table) {
                 $table->bigIncrements('office_shift_id');

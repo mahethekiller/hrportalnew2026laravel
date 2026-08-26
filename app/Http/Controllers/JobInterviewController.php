@@ -25,8 +25,13 @@ class JobInterviewController extends Controller
         $interviews = $this->recruitmentService->getInterviewsPaginated($filters);
         $applications = $this->recruitmentService->getApplicationsPaginated([], 200);
         $interviewers = $this->employeeService->getActiveEmployees();
+        try {
+            $defaultTemplate = \App\Models\EmailTemplate::where('template_code', 'candidate_interview_scheduled')->first();
+        } catch (\Throwable $e) {
+            $defaultTemplate = null;
+        }
 
-        return view('recruitment.interviews', compact('interviews', 'applications', 'interviewers', 'filters'));
+        return view('recruitment.interviews', compact('interviews', 'applications', 'interviewers', 'defaultTemplate', 'filters'));
     }
 
     public function store(StoreJobInterviewRequest $request): RedirectResponse
