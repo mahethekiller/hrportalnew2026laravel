@@ -97,6 +97,15 @@ class NavigationMenuSeeder extends Seeder
 
         NavigationMenu::create([
             'parent_id' => $myDayRoot->menu_id,
+            'title' => 'Holiday Calendar',
+            'icon' => 'fa-solid fa-calendar-heart',
+            'route_name' => 'holidays.index',
+            'resource_key' => null,
+            'sort_order' => 9,
+        ]);
+
+        NavigationMenu::create([
+            'parent_id' => $myDayRoot->menu_id,
             'title' => 'Support Tickets',
             'icon' => 'fa-solid fa-headset',
             'route_name' => 'support-tickets.index',

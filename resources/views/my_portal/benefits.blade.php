@@ -3,9 +3,9 @@
 @section('content')
 @php
     $canManagePolicies = auth()->check() && (
-        auth()->user()->can('edit.employees') || 
-        auth()->user()->user_role_id == 1 || 
-        in_array(strtolower(auth()->user()->roleRelation->role_name ?? ''), ['administrator', 'hr manager', 'super admin', 'admin', 'hr'])
+        auth()->user()->can('edit.employees') ||
+        auth()->user()->user_role_id == 1 ||
+        in_array(strtolower(auth()->user()->roleRelation->role_name ?? ''), ['administrator', 'super admin', 'hr'])
     );
 @endphp
 <div class="d-flex flex-column flex-column-fluid">

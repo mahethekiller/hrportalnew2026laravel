@@ -196,6 +196,9 @@ Route::middleware('auth')->group(function () {
         Route::delete('/benefits/{id}', [\App\Http\Controllers\EmployeePortalController::class, 'destroyBenefitDocument'])->name('benefits.destroy');
     });
 
+    // Holiday Calendar Routes
+    Route::resource('holidays', \App\Http\Controllers\HolidayController::class);
+
     // Departmental No-Dues Clearance Hub Routes
     Route::get('/settings/clearance', [\App\Http\Controllers\SeparationClearanceController::class, 'index'])->name('clearance.index');
     Route::post('/settings/clearance/default-officers', [\App\Http\Controllers\SeparationClearanceController::class, 'updateDefaultOfficers'])->name('clearance.default_officers');
