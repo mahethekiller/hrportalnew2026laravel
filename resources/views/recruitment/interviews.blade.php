@@ -124,7 +124,10 @@
                                     <div class="fs-9 text-muted">{{ $itv->interview_place ?? 'Online Meeting' }}</div>
                                 </td>
                                 <td>
-                                    <span class="text-gray-800 fs-8">{{ $itv->interviewer ? ($itv->interviewer->first_name . ' ' . $itv->interviewer->last_name) : ($itv->added_by ?? 'Recruiter') }}</span>
+                                    <div class="fw-bold text-body-emphasis fs-8">{{ $itv->interviewer ? ($itv->interviewer->first_name . ' ' . $itv->interviewer->last_name) : ($itv->added_by ?? 'Recruiter') }}</div>
+                                    @if(!empty($itv->interviewer?->employee_id))
+                                        <span class="badge bg-secondary-subtle text-body-secondary font-mono fs-9">ID: {{ $itv->interviewer->employee_id }}</span>
+                                    @endif
                                 </td>
                                 <td>
                                     <span class="font-monospace text-success fw-bold">{{ $itv->offered_ctc ?? '--' }}</span>
@@ -211,7 +214,9 @@
                             <select name="interviewers_id" class="form-select form-select-sm select-search" data-control="select2" data-placeholder="Search Interviewer...">
                                 <option value=""></option>
                                 @foreach($interviewers as $emp)
-                                    <option value="{{ $emp->user_id }}" {{ old('interviewers_id') == $emp->user_id ? 'selected' : '' }}>{{ $emp->first_name }} {{ $emp->last_name }}</option>
+                                    <option value="{{ $emp->user_id }}" {{ old('interviewers_id') == $emp->user_id ? 'selected' : '' }}>
+                                        {{ $emp->first_name }} {{ $emp->last_name }} @if(!empty($emp->employee_id)) (ID: {{ $emp->employee_id }}) @endif
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
