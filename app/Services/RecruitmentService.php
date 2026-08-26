@@ -118,10 +118,7 @@ class RecruitmentService
         if ($updated) {
             $interview->refresh();
             $interview->load('jobApplication');
-
-            if (!empty($data['send_email_notification'])) {
-                $this->dispatchInterviewEmail($interview, $data);
-            }
+            $this->dispatchInterviewEmail($interview, $data);
         }
 
         return $updated;
@@ -129,12 +126,13 @@ class RecruitmentService
 
     protected function dispatchInterviewEmail(JobInterview $interview, array $options = []): void
     {
-        $sendMail = isset($options['send_email_notification'])
-            ? filter_var($options['send_email_notification'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? true
-            : true;
+        $sendMail = filter_var($options['send_email_notification'] ?? false, FILTER_VALIDATE_BOOLEAN);
 
         if (!$sendMail) {
-            \Illuminate\Support\Facades\Log::info("Interview email skipped: send_email_notification disabled in options.");
+            \Illuminate\Support\Facades\Log::info("Interview email skipped: send_email_notification disabled in options.", [
+                'interview_id' => $interview->job_interview_id,
+                'send_email_notification' => $options['send_email_notification'] ?? 'not_set'
+            ]);
             return;
         }
 

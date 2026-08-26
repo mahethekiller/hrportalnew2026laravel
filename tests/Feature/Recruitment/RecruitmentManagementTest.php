@@ -210,6 +210,30 @@ class RecruitmentManagementTest extends TestCase
         });
     }
 
+    public function test_interview_email_is_skipped_when_send_email_notification_is_disabled(): void
+    {
+        $user = User::factory()->create();
+        $application = JobApplication::create([
+            'candidate_name' => 'Sanjay Dutt',
+            'email' => 'sanjay@example.com',
+            'contact_no' => '9876543211',
+            'application_status' => 'Applied',
+            'show_status' => 1,
+        ]);
+
+        \Illuminate\Support\Facades\Mail::fake();
+
+        $response = $this->actingAs($user)->post(route('recruitment-interviews.store'), [
+            'application_id' => $application->application_id,
+            'interview_mode' => 'Online Video Call',
+            'interview_date' => '2026-08-28',
+            'interview_time' => '15:00',
+        ]);
+
+        $response->assertRedirect(route('recruitment-interviews.index'));
+        \Illuminate\Support\Facades\Mail::assertNothingSent();
+    }
+
     public function test_candidate_can_be_converted_to_employee(): void
     {
         $user = User::factory()->create();
