@@ -627,19 +627,20 @@
 
         $(document).ready(function() {
             @if($errors->any())
-                @if(old('edit_application_id'))
-                    var editEl = document.getElementById('editCandidateModal{{ old('edit_application_id') }}');
+                var oldEditId = @json(old('edit_application_id'));
+                if (oldEditId) {
+                    var editEl = document.getElementById('editCandidateModal' + oldEditId);
                     if (editEl) {
                         var editModal = bootstrap.Modal.getOrCreateInstance(editEl);
                         editModal.show();
                     }
-                @else
+                } else {
                     var modalEl = document.getElementById('createCandidateModal');
                     if (modalEl) {
                         var candModal = bootstrap.Modal.getOrCreateInstance(modalEl);
                         candModal.show();
                     }
-                @endif
+                }
             @endif
         });
 

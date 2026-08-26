@@ -466,19 +466,20 @@
 
         $(document).ready(function() {
             @if($errors->any())
-                @if(old('next_round_interview_id'))
-                    var modalEl = document.getElementById('nextRoundModal{{ old('next_round_interview_id') }}');
+                var oldNextRoundId = @json(old('next_round_interview_id'));
+                if (oldNextRoundId) {
+                    var modalEl = document.getElementById('nextRoundModal' + oldNextRoundId);
                     if (modalEl) {
                         var nrModal = bootstrap.Modal.getOrCreateInstance(modalEl);
                         nrModal.show();
                     }
-                @else
+                } else {
                     var modalEl = document.getElementById('scheduleInterviewModal');
                     if (modalEl) {
                         var intvModal = bootstrap.Modal.getOrCreateInstance(modalEl);
                         intvModal.show();
                     }
-                @endif
+                }
             @endif
         });
 
