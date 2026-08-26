@@ -204,6 +204,15 @@ class MailService
     }
 
     /**
+     * Public helper to apply dynamic SMTP settings for a module.
+     */
+    public function applySmtpForModule(string $moduleKey = 'recruitment'): void
+    {
+        $profile = $this->resolveSmtpProfileForModule($moduleKey);
+        $this->applyDynamicSmtpConfig($profile);
+    }
+
+    /**
      * Resolve active SMTP profile for module.
      */
     public function resolveSmtpProfileForModule(string $moduleKey): array

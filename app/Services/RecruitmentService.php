@@ -121,6 +121,7 @@ class RecruitmentService
         $customBody = !empty($options['custom_email_body']) ? (string) $options['custom_email_body'] : null;
 
         try {
+            $this->mailService->applySmtpForModule('recruitment');
             $mailable = new \App\Mail\CandidateInterviewScheduledMail($interview, $customSubject, $customBody);
 
             if (!empty($recipients)) {

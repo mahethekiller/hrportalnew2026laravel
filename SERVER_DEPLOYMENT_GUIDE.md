@@ -77,7 +77,12 @@ Ensure the Laravel Task Scheduler is configured in the server's crontab (`cronta
 - **Configuration Dependencies**:
   1. System Settings > SMTP Profiles & Routing (`resignation` module extra CC routing).
   2. No-Dues Clearance Hub > Default Clearance Officers Configuration (`default_clearance_officers`).
-- **Asset Dependencies**: Local Select2 assets (`public/assets/vendor/select2`).
+### Version 2.2.0 - Candidate Interview Email Invitations & Dynamic SMTP
+- **Database Table Dependencies**: `xin_email_template` (Template code: `candidate_interview_scheduled`).
+- **Seeder Requirements**: `EmailTemplateSeeder` (`php artisan db:seed --class=EmailTemplateSeeder`).
+- **Configuration Dependencies**:
+  1. System Settings > Email Notifications: Ensure global mail toggle is enabled and module switch `"recruitment": true` is enabled in `storage/app/settings/mail_system_config.json`.
+  2. SMTP Settings: Ensure active SMTP profile (Host, Port, Username, Password, From Address) is configured in **System Settings -> SMTP Settings**.
 
 ---
 
