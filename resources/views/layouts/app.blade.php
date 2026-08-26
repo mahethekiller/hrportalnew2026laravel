@@ -235,7 +235,8 @@
             $targets.each(function() {
                 var $this = $(this);
                 var $modal = $this.closest('.modal');
-                var placeholder = $this.attr('data-placeholder') || $this.attr('placeholder') || 'Search & Select...';
+                var placeholderText = $this.attr('data-placeholder') || $this.attr('placeholder') || 'Search & Select...';
+                var isRequired = $this.prop('required') || $this.attr('required');
 
                 if ($this.data('select2')) {
                     try { $this.select2('destroy'); } catch(e) {}
@@ -243,8 +244,11 @@
                 
                 $this.select2({
                     width: '100%',
-                    placeholder: placeholder,
-                    allowClear: true,
+                    placeholder: {
+                        id: '',
+                        text: placeholderText
+                    },
+                    allowClear: !isRequired,
                     minimumResultsForSearch: 0,
                     dropdownParent: $modal.length ? $modal : $(document.body)
                 });
