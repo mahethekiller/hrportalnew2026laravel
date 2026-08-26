@@ -15,7 +15,8 @@ class RecruitmentService
     public function __construct(
         protected JobApplicationRepository $applicationRepository,
         protected JobInterviewRepository $interviewRepository,
-        protected \App\Services\EmployeeService $employeeService
+        protected \App\Services\EmployeeService $employeeService,
+        protected \App\Services\MailService $mailService
     ) {}
 
     public function getApplicationsPaginated(array $filters = [], int $perPage = 15): LengthAwarePaginator
@@ -65,6 +66,7 @@ class RecruitmentService
                     $updateData['application_remarks'] = $data['application_remarks'];
                 }
                 $this->applicationRepository->update($application, $updateData);
+                $interview->setRelation('jobApplication', $application);
             }
         }
 
@@ -85,6 +87,7 @@ class RecruitmentService
 
         if ($updated && in_array(strtolower($status), ['nextround', 'confirmed', 'scheduled'])) {
             $interview->refresh();
+            $interview->load('jobApplication');
             $this->dispatchInterviewEmail($interview, $extraData);
         }
 
@@ -109,19 +112,24 @@ class RecruitmentService
             $ccEmails = array_filter($panelists->pluck('email')->toArray());
         }
 
+        $recipients = [];
+        if ($notifyCandidate && !empty($candidateEmail)) {
+            $recipients[] = $candidateEmail;
+        }
+
         $customSubject = !empty($options['custom_email_subject']) ? (string) $options['custom_email_subject'] : null;
         $customBody = !empty($options['custom_email_body']) ? (string) $options['custom_email_body'] : null;
 
         try {
             $mailable = new \App\Mail\CandidateInterviewScheduledMail($interview, $customSubject, $customBody);
 
-            if ($notifyCandidate && !empty($candidateEmail)) {
-                $pendingMail = \Illuminate\Support\Facades\Mail::to($candidateEmail);
+            if (!empty($recipients)) {
+                $pendingMail = \Illuminate\Support\Facades\Mail::to($recipients);
                 if (!empty($ccEmails)) {
                     $pendingMail->cc($ccEmails);
                 }
                 $pendingMail->send($mailable);
-            } elseif ($notifyInterviewers && !empty($ccEmails)) {
+            } elseif (!empty($ccEmails)) {
                 \Illuminate\Support\Facades\Mail::to($ccEmails)->send($mailable);
             }
         } catch (\Throwable $e) {
