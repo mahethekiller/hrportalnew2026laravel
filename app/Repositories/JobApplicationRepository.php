@@ -44,6 +44,7 @@ class JobApplicationRepository
     {
         $data['application_status'] = $data['application_status'] ?? 'Applied';
         $data['job_id'] = !empty($data['job_id']) ? (int) $data['job_id'] : 1;
+        $data['contact_no'] = !empty($data['contact_no']) ? $data['contact_no'] : 'N/A';
         $data['show_status'] = 1;
         $data['created_at'] = date('Y-m-d H:i:s');
 

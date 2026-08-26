@@ -18,7 +18,8 @@ class StoreJobApplicationRequest extends FormRequest
         return [
             'candidate_name' => ['required', 'string', 'max:200'],
             'email' => ['required', 'email', 'max:150'],
-            'contact_no' => ['required', 'string', 'max:50'],
+            'contact_no' => ['nullable', 'string', 'max:50'],
+            'job_id' => ['nullable', 'integer'],
             'gender' => ['nullable', 'string', 'max:20'],
             'experience' => ['nullable', 'string', 'max:50'],
             'department_id' => ['nullable', 'integer'],

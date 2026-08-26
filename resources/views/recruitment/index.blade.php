@@ -207,13 +207,17 @@
                 </div>
                 <div class="modal-body">
                     <div class="row g-3 mb-3">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label class="form-label fs-8 fw-semibold">Candidate Full Name <span class="text-danger">*</span></label>
                             <input type="text" name="candidate_name" class="form-control form-control-sm" required placeholder="e.g. Rahul Sharma">
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label class="form-label fs-8 fw-semibold">Email Address <span class="text-danger">*</span></label>
                             <input type="email" name="email" class="form-control form-control-sm" required placeholder="rahul@example.com">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fs-8 fw-semibold">Contact Phone Number</label>
+                            <input type="text" name="contact_no" class="form-control form-control-sm" placeholder="e.g. +91 9876543210">
                         </div>
                     </div>
 
@@ -236,7 +240,9 @@
                             <select name="department_id" class="form-select form-select-sm select-search" data-control="select2" data-placeholder="Search Department...">
                                 <option value=""></option>
                                 @foreach($departments as $dept)
-                                    <option value="{{ $dept->department_id }}">{{ $dept->department_name }}</option>
+                                    <option value="{{ $dept->department_id }}">
+                                        {{ $dept->department_name }} @if(!empty($dept->company)) ({{ $dept->company->name }}) @endif
+                                    </option>
                                 @endforeach
                             </select>
                         </div>

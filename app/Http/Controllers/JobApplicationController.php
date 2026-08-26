@@ -24,7 +24,7 @@ class JobApplicationController extends Controller
         $filters = $request->only(['search', 'status']);
         $applications = $this->recruitmentService->getApplicationsPaginated($filters);
         $summary = $this->recruitmentService->getSummaryStats();
-        $departments = Department::orderBy('department_name')->get();
+        $departments = Department::with('company')->orderBy('department_name')->get();
         $jobs = \App\Models\JobPost::orderBy('job_title')->get();
 
         return view('recruitment.index', compact('applications', 'summary', 'departments', 'jobs', 'filters'));
