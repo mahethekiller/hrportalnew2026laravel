@@ -213,28 +213,52 @@ class RecruitmentService
         }
     }
 
-    public function convertToEmployee(JobInterview $interview): ?\App\Models\Employee
+    public function convertToEmployee(JobInterview $interview, array $customData = []): ?\App\Models\Employee
     {
         $application = $interview->jobApplication;
         if (!$application) {
             return null;
         }
 
-        $names = explode(' ', trim($application->candidate_name), 2);
-        $firstName = $names[0] ?? 'Candidate';
-        $lastName = $names[1] ?? 'Employee';
+        $names = explode(' ', trim($application->candidate_name ?? ''), 2);
+        $firstName = !empty($customData['first_name']) ? (string)$customData['first_name'] : ($names[0] ?? 'Candidate');
+        $lastName = !empty($customData['last_name']) ? (string)$customData['last_name'] : ($names[1] ?? 'Employee');
 
-        $employee = $this->employeeService->createEmployee([
+        $empData = [
             'first_name' => $firstName,
             'last_name' => $lastName,
-            'email' => $application->email ?? ('emp_' . uniqid() . '@example.com'),
-            'contact_no' => $application->contact_no ?? '0000000000',
-            'gender' => $application->gender ?? 'Male',
-            'department_id' => $application->department_id ?? 1,
-            'designation_id' => 1,
+            'email' => !empty($customData['email']) ? (string)$customData['email'] : ($application->email ?? ('emp_' . uniqid() . '@example.com')),
+            'contact_no' => !empty($customData['contact_no']) ? (string)$customData['contact_no'] : ($application->contact_no ?? '0000000000'),
+            'gender' => !empty($customData['gender']) ? (string)$customData['gender'] : ($application->gender ?? 'Male'),
+            'department_id' => !empty($customData['department_id']) ? (int)$customData['department_id'] : ($application->department_id ?? 1),
+            'designation_id' => !empty($customData['designation_id']) ? (int)$customData['designation_id'] : 1,
             'company_id' => 1,
-            'password' => '12345678',
-        ]);
+            'password' => !empty($customData['password']) ? (string)$customData['password'] : '12345678',
+        ];
+
+        if (!empty($customData['employee_id'])) {
+            $empData['employee_id'] = (string)$customData['employee_id'];
+        }
+        if (!empty($customData['joining_date'])) {
+            $empData['date_of_joining'] = (string)$customData['joining_date'];
+            $empData['joining_date'] = (string)$customData['joining_date'];
+        }
+        if (!empty($customData['basic_salary'])) {
+            $empData['basic_salary'] = (string)$customData['basic_salary'];
+        }
+
+        $employee = $this->employeeService->createEmployee($empData);
+
+        if ($employee && !empty($customData['role_id'])) {
+            try {
+                $role = \Spatie\Permission\Models\Role::find($customData['role_id']);
+                if ($role) {
+                    $employee->syncRoles([$role->name]);
+                }
+            } catch (\Throwable $re) {
+                \Illuminate\Support\Facades\Log::warning("Role sync failed on convert: " . $re->getMessage());
+            }
+        }
 
         $interview->update([
             'convert_to_employee' => 1,
@@ -242,7 +266,7 @@ class RecruitmentService
             'status' => 'confirmed',
         ]);
 
-        $this->applicationRepository->updateStatus($application, 'Hired', 'Converted to Employee ID: ' . $employee->user_id);
+        $this->applicationRepository->updateStatus($application, 'Hired', 'Converted to Employee ID: ' . ($employee->employee_id ?? $employee->user_id));
         $application->update(['user_id' => $employee->user_id]);
 
         return $employee;

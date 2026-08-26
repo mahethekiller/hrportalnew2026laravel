@@ -66,14 +66,11 @@
                                             <i class="fa-solid fa-pen-to-square"></i>
                                         </button>
 
-                                        <!-- Convert to Employee Action (Icon Only) -->
+                                        <!-- Convert to Employee Action (Opens Onboarding Modal) -->
                                         @if(in_array(strtolower($itv->status), ['confirmed', 'selected', 'offeraccepted']) && $itv->convert_to_employee == 0)
-                                            <form method="POST" action="{{ route('recruitment-interviews.convert', $itv->job_interview_id) }}" class="d-inline m-0" onsubmit="return confirm('Convert candidate {{ $itv->jobApplication->candidate_name ?? '' }} to active employee?');">
-                                                @csrf
-                                                <button type="submit" class="btn btn-sm btn-icon btn-light-success py-1 px-2 fs-8 rounded-2" title="Convert to Active Employee">
-                                                    <i class="fa-solid fa-user-plus"></i>
-                                                </button>
-                                            </form>
+                                            <button type="button" class="btn btn-sm btn-icon btn-light-success py-1 px-2 fs-8 rounded-2" data-bs-toggle="modal" data-bs-target="#convertModal{{ $itv->job_interview_id }}" title="Onboard & Convert to Active Employee">
+                                                <i class="fa-solid fa-user-plus"></i>
+                                            </button>
                                         @endif
 
                                         <!-- Status Change Dropdown (Icon Only) -->
@@ -508,6 +505,153 @@
             </div>
         </div>
     @endforeach
+
+    <!-- Modal: Convert Candidate to Active Employee Onboarding Studio -->
+    <div class="modal fade" id="convertModal{{ $itv->job_interview_id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <form method="POST" action="{{ route('recruitment-interviews.convert', $itv->job_interview_id) }}" class="modal-content text-start">
+                @csrf
+                <div class="modal-header border-bottom">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="avatar-sm rounded-circle bg-success-subtle text-success fw-bold d-flex align-items-center justify-content-center" style="width:38px; height:38px;">
+                            <i class="fa-solid fa-user-plus fs-6"></i>
+                        </div>
+                        <div>
+                            <h5 class="modal-title fw-bold text-body-emphasis mb-0">Onboard & Convert to Active Employee</h5>
+                            <div class="fs-9 text-body-secondary">Candidate: {{ $itv->jobApplication->candidate_name ?? 'N/A' }} | Position: {{ $itv->jobApplication->job->job_title ?? 'N/A' }}</div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    @if($errors->any() && old('convert_interview_id') == $itv->job_interview_id)
+                        <div class="alert alert-danger p-3 fs-8 mb-3 border-danger-subtle rounded-3">
+                            <div class="fw-bold text-danger mb-1"><i class="fa-solid fa-circle-exclamation me-1"></i> Conversion Validation Errors:</div>
+                            <ul class="mb-0 ps-3">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    <input type="hidden" name="convert_interview_id" value="{{ $itv->job_interview_id }}">
+
+                    <div class="row g-4">
+                        <!-- Left Column: Personal & Contact Details -->
+                        <div class="col-lg-6 border-end pe-lg-4">
+                            <h6 class="fs-8 text-uppercase fw-bold text-success mb-3"><i class="fa-solid fa-id-card me-2"></i>Personal & Contact Details</h6>
+
+                            @php
+                                $candName = $itv->jobApplication->candidate_name ?? '';
+                                $names = explode(' ', trim($candName), 2);
+                                $candFirst = $names[0] ?? '';
+                                $candLast = $names[1] ?? '';
+                            @endphp
+
+                            <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                    <label class="form-label fs-8 fw-semibold">First Name <span class="text-danger">*</span></label>
+                                    <input type="text" name="first_name" class="form-control form-control-sm" required value="{{ old('first_name', $candFirst) }}">
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label fs-8 fw-semibold">Last Name <span class="text-danger">*</span></label>
+                                    <input type="text" name="last_name" class="form-control form-control-sm" required value="{{ old('last_name', $candLast) }}">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fs-8 fw-semibold">Employee ID / Code</label>
+                                <input type="text" name="employee_id" class="form-control form-control-sm font-monospace" value="{{ old('employee_id', 'EMP-' . date('Y') . '-' . str_pad((string)$itv->job_interview_id, 3, '0', STR_PAD_LEFT)) }}" placeholder="e.g. EMP-2026-104">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fs-8 fw-semibold">Official Email Address <span class="text-danger">*</span></label>
+                                <input type="email" name="email" class="form-control form-control-sm" required value="{{ old('email', $itv->jobApplication->email ?? '') }}">
+                            </div>
+
+                            <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                    <label class="form-label fs-8 fw-semibold">Phone / Contact No.</label>
+                                    <input type="text" name="contact_no" class="form-control form-control-sm" value="{{ old('contact_no', $itv->jobApplication->contact_no ?? $itv->jobApplication->phone ?? '') }}">
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label fs-8 fw-semibold">Gender</label>
+                                    <select name="gender" class="form-select form-select-sm">
+                                        @php $candGen = strtolower($itv->jobApplication->gender ?? 'male'); @endphp
+                                        <option value="Male" {{ old('gender', $candGen) == 'male' ? 'selected' : '' }}>Male</option>
+                                        <option value="Female" {{ old('gender', $candGen) == 'female' ? 'selected' : '' }}>Female</option>
+                                        <option value="Other" {{ old('gender', $candGen) == 'other' ? 'selected' : '' }}>Other</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="mb-0">
+                                <label class="form-label fs-8 fw-semibold">Initial Portal Password</label>
+                                <input type="text" name="password" class="form-control form-control-sm font-monospace" value="{{ old('password', '12345678') }}" placeholder="Default: 12345678">
+                            </div>
+                        </div>
+
+                        <!-- Right Column: Organization Assignment & Pay -->
+                        <div class="col-lg-6 ps-lg-4">
+                            <h6 class="fs-8 text-uppercase fw-bold text-primary mb-3"><i class="fa-solid fa-briefcase me-2"></i>Job Assignment & Compensation</h6>
+
+                            <div class="mb-3">
+                                <label class="form-label fs-8 fw-semibold">Date of Joining (DOJ)</label>
+                                <input type="date" name="joining_date" class="form-control form-control-sm" value="{{ old('joining_date', date('Y-m-d')) }}">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fs-8 fw-semibold">Department Assignment</label>
+                                <select name="department_id" class="form-select form-select-sm select-search" data-control="select2" data-placeholder="Select Department...">
+                                    <option value=""></option>
+                                    @foreach($departments as $dept)
+                                        <option value="{{ $dept->department_id ?? $dept->id }}" {{ old('department_id', $itv->jobApplication->department_id ?? '') == ($dept->department_id ?? $dept->id) ? 'selected' : '' }}>
+                                            {{ $dept->department_name ?? $dept->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fs-8 fw-semibold">Designation Title</label>
+                                <select name="designation_id" class="form-select form-select-sm select-search" data-control="select2" data-placeholder="Select Designation...">
+                                    <option value=""></option>
+                                    @foreach($designations as $desig)
+                                        <option value="{{ $desig->designation_id ?? $desig->id }}" {{ old('designation_id') == ($desig->designation_id ?? $desig->id) ? 'selected' : '' }}>
+                                            {{ $desig->designation_name ?? $desig->title }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fs-8 fw-semibold">System Permission Role</label>
+                                <select name="role_id" class="form-select form-select-sm select-search" data-control="select2" data-placeholder="Select User Role...">
+                                    <option value=""></option>
+                                    @foreach($roles as $rl)
+                                        <option value="{{ $rl->id }}" {{ old('role_id') == $rl->id ? 'selected' : '' }}>
+                                            {{ $rl->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="mb-0">
+                                <label class="form-label fs-8 fw-semibold">Offered Basic Salary / Annual CTC (₹)</label>
+                                <input type="text" name="basic_salary" class="form-control form-control-sm font-monospace text-success fw-bold" value="{{ old('basic_salary', $itv->offered_ctc ?? '') }}" placeholder="e.g. 600000">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-body-tertiary">
+                    <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" onclick="submitWithLoader(this)" class="btn btn-success btn-sm fw-bold">
+                        <i class="fa-solid fa-user-check me-1"></i> Onboard & Create Employee
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- Modal: Edit Scheduled Interview -->
     <div class="modal fade" id="editInterviewModal{{ $itv->job_interview_id }}" tabindex="-1" aria-hidden="true">
@@ -1086,9 +1230,16 @@
             });
 
             @if($errors->any() || session('error'))
+                var oldConvertId = @json(old('convert_interview_id'));
                 var oldNextRoundId = @json(old('next_round_interview_id'));
                 var oldEditId = @json(old('edit_interview_id'));
-                if (oldNextRoundId) {
+                if (oldConvertId) {
+                    var modalEl = document.getElementById('convertModal' + oldConvertId);
+                    if (modalEl) {
+                        var cvModal = bootstrap.Modal.getOrCreateInstance(modalEl);
+                        cvModal.show();
+                    }
+                } else if (oldNextRoundId) {
                     var modalEl = document.getElementById('nextRoundModal' + oldNextRoundId);
                     if (modalEl) {
                         var nrModal = bootstrap.Modal.getOrCreateInstance(modalEl);
