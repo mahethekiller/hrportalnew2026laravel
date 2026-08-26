@@ -53,7 +53,7 @@ class JobApplicationRepository
         $data['source'] = $data['source'] ?? 'Portal Direct';
         $data['sub_source'] = $data['sub_source'] ?? '';
         $data['referral_name'] = $data['referral_name'] ?? '';
-        $data['company'] = $data['company'] ?? '';
+        $data['company'] = !empty($data['company']) && is_numeric($data['company']) ? (int) $data['company'] : 1;
         $data['hr_remarks'] = $data['hr_remarks'] ?? '';
         $data['application_remarks'] = $data['application_remarks'] ?? '';
         $data['change_reason'] = $data['change_reason'] ?? '';
