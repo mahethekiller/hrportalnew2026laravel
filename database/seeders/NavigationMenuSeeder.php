@@ -208,6 +208,15 @@ class NavigationMenuSeeder extends Seeder
             'sort_order' => 3,
         ]);
 
+        NavigationMenu::create([
+            'parent_id' => $hiringRoot->menu_id,
+            'title' => 'Interview Schedules',
+            'icon' => 'fa-solid fa-calendar-check',
+            'route_name' => 'recruitment-interviews.index',
+            'resource_key' => 'recruitment',
+            'sort_order' => 4,
+        ]);
+
         // 4. People Ops Category (HR Admin Persona)
         $peopleOpsRoot = NavigationMenu::create([
             'title' => 'People Ops',
