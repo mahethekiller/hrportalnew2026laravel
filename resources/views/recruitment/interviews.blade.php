@@ -170,12 +170,27 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
+                    @if($errors->any())
+                        <div class="alert alert-danger alert-dismissible fade show mb-3 p-3 fs-8 border-danger-subtle" role="alert">
+                            <div class="d-flex align-items-center mb-1">
+                                <i class="fa-solid fa-circle-exclamation me-2 fs-6 text-danger"></i>
+                                <strong class="text-danger">Scheduling Error:</strong>
+                            </div>
+                            <ul class="mb-0 ps-3">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    @endif
+
                     <div class="mb-3">
                         <label class="form-label fs-8 fw-semibold">Select Candidate <span class="text-danger">*</span></label>
                         <select name="application_id" class="form-select form-select-sm select-search" data-control="select2" data-placeholder="Search Candidate..." required>
                             <option value=""></option>
                             @foreach($applications as $app)
-                                <option value="{{ $app->application_id }}">
+                                <option value="{{ $app->application_id }}" {{ old('application_id') == $app->application_id ? 'selected' : '' }}>
                                     {{ $app->candidate_name }} ({{ $app->email }})
                                 </option>
                             @endforeach
@@ -186,9 +201,9 @@
                         <div class="col-6">
                             <label class="form-label fs-8 fw-semibold">Interview Mode <span class="text-danger">*</span></label>
                             <select name="interview_mode" class="form-select form-select-sm" required>
-                                <option value="Online Video Call">Online Video Call (Google Meet/Teams)</option>
-                                <option value="In-Person Office">In-Person Office Interview</option>
-                                <option value="Telephonic">Telephonic Screening</option>
+                                <option value="Online Video Call" {{ old('interview_mode', 'Online Video Call') == 'Online Video Call' ? 'selected' : '' }}>Online Video Call (Google Meet/Teams)</option>
+                                <option value="In-Person Office" {{ old('interview_mode') == 'In-Person Office' ? 'selected' : '' }}>In-Person Office Interview</option>
+                                <option value="Telephonic" {{ old('interview_mode') == 'Telephonic' ? 'selected' : '' }}>Telephonic Screening</option>
                             </select>
                         </div>
                         <div class="col-6">
@@ -196,7 +211,7 @@
                             <select name="interviewers_id" class="form-select form-select-sm select-search" data-control="select2" data-placeholder="Search Interviewer...">
                                 <option value=""></option>
                                 @foreach($interviewers as $emp)
-                                    <option value="{{ $emp->user_id }}">{{ $emp->first_name }} {{ $emp->last_name }}</option>
+                                    <option value="{{ $emp->user_id }}" {{ old('interviewers_id') == $emp->user_id ? 'selected' : '' }}>{{ $emp->first_name }} {{ $emp->last_name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -205,25 +220,64 @@
                     <div class="row g-2 mb-3">
                         <div class="col-6">
                             <label class="form-label fs-8 fw-semibold">Interview Date <span class="text-danger">*</span></label>
-                            <input type="date" name="interview_date" class="form-control form-control-sm" required value="{{ date('Y-m-d') }}">
+                            <input type="date" name="interview_date" class="form-control form-control-sm" required value="{{ old('interview_date', date('Y-m-d')) }}">
                         </div>
                         <div class="col-6">
                             <label class="form-label fs-8 fw-semibold">Interview Time <span class="text-danger">*</span></label>
-                            <input type="time" name="interview_time" class="form-control form-control-sm" required value="11:00">
+                            <input type="time" name="interview_time" class="form-control form-control-sm" required value="{{ old('interview_time', '11:00') }}">
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fs-8 fw-semibold">Meeting Link / Office Room</label>
-                        <input type="text" name="interview_place" class="form-control form-control-sm" placeholder="e.g. https://meet.google.com/abc-defg-hij or Room 302">
+                        <input type="text" name="interview_place" value="{{ old('interview_place') }}" class="form-control form-control-sm" placeholder="e.g. https://meet.google.com/abc-defg-hij or Room 302">
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary btn-sm">Schedule Interview</button>
+                    <button type="submit" class="btn btn-primary btn-sm fw-bold">Schedule Interview</button>
                 </div>
             </div>
         </form>
     </div>
 </div>
 @endsection
+
+@push('js')
+<script>
+    (function() {
+        function initModalSelect2($modal) {
+            if (typeof $.fn.select2 !== 'undefined' && $modal && $modal.length) {
+                $modal.find('.select-search').each(function() {
+                    var $s = $(this);
+                    if ($s.data('select2')) {
+                        try { $s.select2('destroy'); } catch(e) {}
+                    }
+                    $s.select2({
+                        width: '100%',
+                        placeholder: $s.attr('data-placeholder') || 'Search & Select...',
+                        allowClear: true,
+                        dropdownParent: $modal
+                    });
+                });
+            }
+        }
+
+        $(document).ready(function() {
+            @if($errors->any())
+                var modalEl = document.getElementById('scheduleInterviewModal');
+                if (modalEl) {
+                    var intvModal = bootstrap.Modal.getOrCreateInstance(modalEl);
+                    intvModal.show();
+                }
+            @endif
+        });
+
+        document.addEventListener('shown.bs.modal', function(e) {
+            if (e.target && e.target.id === 'scheduleInterviewModal') {
+                initModalSelect2($(e.target));
+            }
+        });
+    })();
+</script>
+@endpush
