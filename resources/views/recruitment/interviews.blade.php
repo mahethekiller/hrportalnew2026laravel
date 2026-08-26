@@ -42,7 +42,7 @@
                 <table class="table table-hover align-middle mb-0 gs-4 fs-7">
                     <thead class="table-light text-muted fw-bold text-uppercase fs-9">
                         <tr>
-                            <th class="ps-4 text-nowrap" style="min-width: 195px;">Actions</th>
+                            <th class="ps-4 text-nowrap" style="width: 120px;">Actions</th>
                             <th>Candidate</th>
                             <th>Interview Date & Time</th>
                             <th>Mode / Location</th>
@@ -55,68 +55,66 @@
                         @forelse($interviews as $itv)
                             <tr>
                                 <td class="ps-4 text-nowrap">
-                                    <div class="d-inline-flex gap-1 align-items-center">
-                                        <!-- View Details Button -->
-                                        <button type="button" class="btn btn-sm btn-outline-primary py-1 px-2 fs-8 rounded-2" data-bs-toggle="modal" data-bs-target="#viewInterviewModal{{ $itv->job_interview_id }}" title="View Interview Details">
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button type="button" class="btn btn-outline-primary py-1 px-2 fs-8 rounded-start-2" data-bs-toggle="modal" data-bs-target="#viewInterviewModal{{ $itv->job_interview_id }}" title="View Details">
                                             <i class="fa-solid fa-eye me-1"></i> View
                                         </button>
-
-                                        <!-- Edit Details Button -->
-                                        <button type="button" class="btn btn-sm btn-outline-warning py-1 px-2 fs-8 rounded-2" data-bs-toggle="modal" data-bs-target="#editInterviewModal{{ $itv->job_interview_id }}" title="Edit Interview Schedule">
-                                            <i class="fa-solid fa-pen-to-square me-1"></i> Edit
+                                        <button type="button" class="btn btn-outline-primary py-1 px-2 fs-8 dropdown-toggle dropdown-toggle-split rounded-end-2" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <span class="visually-hidden">Actions</span>
                                         </button>
-
-                                        <!-- Convert to Employee Action -->
-                                        @if(in_array(strtolower($itv->status), ['confirmed', 'selected', 'offeraccepted']) && $itv->convert_to_employee == 0)
-                                            <form method="POST" action="{{ route('recruitment-interviews.convert', $itv->job_interview_id) }}" class="d-inline" onsubmit="return confirm('Convert candidate {{ $itv->jobApplication->candidate_name ?? '' }} to active employee?');">
-                                                @csrf
-                                                <button type="submit" class="btn btn-sm btn-success py-1 px-2 fs-8 rounded-2" title="Convert to Active Employee">
-                                                    <i class="fa-solid fa-user-plus me-1"></i> Convert
+                                        <ul class="dropdown-menu fs-8 shadow-sm border-subtle py-2">
+                                            <li>
+                                                <button type="button" class="dropdown-item py-1.5 px-3" data-bs-toggle="modal" data-bs-target="#editInterviewModal{{ $itv->job_interview_id }}">
+                                                    <i class="fa-solid fa-pen-to-square me-2 text-warning"></i> Edit Schedule
                                                 </button>
-                                            </form>
-                                        @endif
-
-                                        <!-- Status Change Dropdown -->
-                                        <div class="dropdown d-inline">
-                                            <button class="btn btn-sm btn-outline-secondary py-1 px-2 fs-8 dropdown-toggle rounded-2" type="button" data-bs-toggle="dropdown">
-                                                Status
-                                            </button>
-                                            <ul class="dropdown-menu fs-8 shadow border-subtle">
+                                            </li>
+                                            @if(in_array(strtolower($itv->status), ['confirmed', 'selected', 'offeraccepted']) && $itv->convert_to_employee == 0)
+                                                <li><hr class="dropdown-divider my-1"></li>
                                                 <li>
-                                                    <form method="POST" action="{{ route('recruitment-interviews.status', $itv->job_interview_id) }}">
+                                                    <form method="POST" action="{{ route('recruitment-interviews.convert', $itv->job_interview_id) }}" onsubmit="return confirm('Convert candidate {{ $itv->jobApplication->candidate_name ?? '' }} to active employee?');">
                                                         @csrf
-                                                        <input type="hidden" name="status" value="confirmed">
-                                                        <button type="submit" class="dropdown-item text-success"><i class="fa-solid fa-check-circle me-2"></i> Confirmed</button>
+                                                        <button type="submit" class="dropdown-item py-1.5 px-3 text-success fw-semibold">
+                                                            <i class="fa-solid fa-user-plus me-2 text-success"></i> Convert to Employee
+                                                        </button>
                                                     </form>
                                                 </li>
-                                                <li>
-                                                    <form method="POST" action="{{ route('recruitment-interviews.status', $itv->job_interview_id) }}">
-                                                        @csrf
-                                                        <input type="hidden" name="status" value="selected">
-                                                        <button type="submit" class="dropdown-item text-primary"><i class="fa-solid fa-user-check me-2"></i> Selected</button>
-                                                    </form>
-                                                </li>
-                                                <li>
-                                                    <button type="button" class="dropdown-item text-info" data-bs-toggle="modal" data-bs-target="#nextRoundModal{{ $itv->job_interview_id }}">
-                                                        <i class="fa-solid fa-forward me-2"></i> Next Round Schedule...
-                                                    </button>
-                                                </li>
-                                                <li>
-                                                    <form method="POST" action="{{ route('recruitment-interviews.status', $itv->job_interview_id) }}">
-                                                        @csrf
-                                                        <input type="hidden" name="status" value="onhold">
-                                                        <button type="submit" class="dropdown-item text-warning"><i class="fa-solid fa-pause-circle me-2"></i> On Hold</button>
-                                                    </form>
-                                                </li>
-                                                <li>
-                                                    <form method="POST" action="{{ route('recruitment-interviews.status', $itv->job_interview_id) }}">
-                                                        @csrf
-                                                        <input type="hidden" name="status" value="rejected">
-                                                        <button type="submit" class="dropdown-item text-danger"><i class="fa-solid fa-ban me-2"></i> Rejected</button>
-                                                    </form>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                            @endif
+                                            <li><hr class="dropdown-divider my-1"></li>
+                                            <li><h6 class="dropdown-header text-uppercase fs-9 fw-bold text-muted px-3 py-1 mb-0">Change Status</h6></li>
+                                            <li>
+                                                <form method="POST" action="{{ route('recruitment-interviews.status', $itv->job_interview_id) }}">
+                                                    @csrf
+                                                    <input type="hidden" name="status" value="confirmed">
+                                                    <button type="submit" class="dropdown-item py-1.5 px-3 text-success"><i class="fa-solid fa-check-circle me-2 text-success"></i> Mark Confirmed</button>
+                                                </form>
+                                            </li>
+                                            <li>
+                                                <form method="POST" action="{{ route('recruitment-interviews.status', $itv->job_interview_id) }}">
+                                                    @csrf
+                                                    <input type="hidden" name="status" value="selected">
+                                                    <button type="submit" class="dropdown-item py-1.5 px-3 text-primary"><i class="fa-solid fa-user-check me-2 text-primary"></i> Mark Selected</button>
+                                                </form>
+                                            </li>
+                                            <li>
+                                                <button type="button" class="dropdown-item py-1.5 px-3 text-info" data-bs-toggle="modal" data-bs-target="#nextRoundModal{{ $itv->job_interview_id }}">
+                                                    <i class="fa-solid fa-forward me-2 text-info"></i> Schedule Next Round...
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <form method="POST" action="{{ route('recruitment-interviews.status', $itv->job_interview_id) }}">
+                                                    @csrf
+                                                    <input type="hidden" name="status" value="onhold">
+                                                    <button type="submit" class="dropdown-item py-1.5 px-3 text-warning"><i class="fa-solid fa-pause-circle me-2 text-warning"></i> Mark On Hold</button>
+                                                </form>
+                                            </li>
+                                            <li>
+                                                <form method="POST" action="{{ route('recruitment-interviews.status', $itv->job_interview_id) }}">
+                                                    @csrf
+                                                    <input type="hidden" name="status" value="rejected">
+                                                    <button type="submit" class="dropdown-item py-1.5 px-3 text-danger"><i class="fa-solid fa-ban me-2 text-danger"></i> Mark Rejected</button>
+                                                </form>
+                                            </li>
+                                        </ul>
                                     </div>
                                 </td>
                                 <td>
