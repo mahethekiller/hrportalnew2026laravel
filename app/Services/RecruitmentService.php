@@ -85,7 +85,7 @@ class RecruitmentService
 
         $updated = $this->interviewRepository->updateStatus($interview, $status, $extraData);
 
-        if ($updated && in_array(strtolower($status), ['nextround', 'confirmed', 'scheduled'])) {
+        if ($updated) {
             $interview->refresh();
             $interview->load('jobApplication');
             $this->dispatchInterviewEmail($interview, $extraData);
@@ -96,25 +96,42 @@ class RecruitmentService
 
     protected function dispatchInterviewEmail(JobInterview $interview, array $options = []): void
     {
-        $sendMail = isset($options['send_email_notification']) ? (bool) $options['send_email_notification'] : true;
+        $sendMail = isset($options['send_email_notification'])
+            ? filter_var($options['send_email_notification'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? true
+            : true;
+
         if (!$sendMail) {
+            \Illuminate\Support\Facades\Log::info("Interview email skipped: send_email_notification disabled in options.");
             return;
         }
 
-        $notifyCandidate = isset($options['notify_candidate']) ? (bool) $options['notify_candidate'] : true;
-        $notifyInterviewers = isset($options['notify_interviewers']) ? (bool) $options['notify_interviewers'] : true;
+        $notifyCandidate = isset($options['notify_candidate'])
+            ? filter_var($options['notify_candidate'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? true
+            : true;
 
-        $candidateEmail = $interview->jobApplication->email ?? null;
+        $notifyInterviewers = isset($options['notify_interviewers'])
+            ? filter_var($options['notify_interviewers'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? true
+            : true;
+
+        $candidateEmail = trim((string) ($interview->jobApplication->email ?? ''));
         $panelists = $interview->interviewer_list;
         $ccEmails = [];
 
         if ($notifyInterviewers && $panelists->isNotEmpty()) {
-            $ccEmails = array_filter($panelists->pluck('email')->toArray());
+            $ccEmails = array_filter(array_map('trim', $panelists->pluck('email')->toArray()), fn($e) => filter_var($e, FILTER_VALIDATE_EMAIL));
         }
 
         $recipients = [];
-        if ($notifyCandidate && !empty($candidateEmail)) {
+        if ($notifyCandidate && !empty($candidateEmail) && filter_var($candidateEmail, FILTER_VALIDATE_EMAIL)) {
             $recipients[] = $candidateEmail;
+        }
+
+        if (empty($recipients) && empty($ccEmails)) {
+            \Illuminate\Support\Facades\Log::warning("Interview email skipped: No valid candidate or interviewer email addresses found.", [
+                'interview_id' => $interview->job_interview_id,
+                'raw_candidate_email' => $interview->jobApplication->email ?? 'NULL'
+            ]);
+            return;
         }
 
         $customSubject = !empty($options['custom_email_subject']) ? (string) $options['custom_email_subject'] : null;
@@ -133,8 +150,25 @@ class RecruitmentService
             } elseif (!empty($ccEmails)) {
                 \Illuminate\Support\Facades\Mail::to($ccEmails)->send($mailable);
             }
+
+            // Log sent email to EmailHistory table
+            try {
+                \App\Models\EmailHistory::create([
+                    'user_id' => auth()->id() ?? $interview->added_by ?? 1,
+                    'email_to' => implode(', ', array_merge($recipients, $ccEmails)),
+                    'subject' => $mailable->customSubject ?? 'Candidate Interview Notice',
+                    'message' => $mailable->customBody ?? 'Interview invitation email sent.',
+                    'created_at' => date('Y-m-d H:i:s'),
+                ]);
+            } catch (\Throwable $eh) {
+                \Illuminate\Support\Facades\Log::warning("Failed logging EmailHistory: " . $eh->getMessage());
+            }
+
+            \Illuminate\Support\Facades\Log::info("Interview notification email sent successfully to: " . implode(', ', array_merge($recipients, $ccEmails)));
         } catch (\Throwable $e) {
-            \Illuminate\Support\Facades\Log::error('Failed sending interview notification mail: ' . $e->getMessage());
+            \Illuminate\Support\Facades\Log::error('Failed sending interview notification mail: ' . $e->getMessage(), [
+                'exception' => $e
+            ]);
         }
     }
 
