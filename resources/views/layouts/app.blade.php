@@ -345,6 +345,19 @@
                 return false;
             }
         }, true);
+
+        // Global Clean Submit Helper Function
+        window.submitWithLoader = function(btn) {
+            if (!btn) return;
+            const form = btn.closest('form');
+            if (form && form.checkValidity()) {
+                btn.disabled = true;
+                btn.classList.add('disabled');
+                btn.style.pointerEvents = 'none';
+                btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin me-1"></i> Processing...';
+                form.submit();
+            }
+        };
     </script>
 
     <!-- Theme Customizer Offcanvas Drawer -->
