@@ -288,3 +288,21 @@
     </div>
 </div>
 @endsection
+
+@push('js')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof window.initPortalSelect2 === 'function') {
+            window.initPortalSelect2('#createCandidateModal');
+        }
+        const candModal = document.getElementById('createCandidateModal');
+        if (candModal) {
+            candModal.addEventListener('shown.bs.modal', function() {
+                if (typeof window.initPortalSelect2 === 'function') {
+                    window.initPortalSelect2(this);
+                }
+            });
+        }
+    });
+</script>
+@endpush
