@@ -100,7 +100,7 @@
                 profile: localStorage.getItem('portal_theme_profile') || systemDefault.theme_color_profile || 'sapphire',
                 customHex: localStorage.getItem('portal_custom_hex') || systemDefault.custom_primary_hex || '#1E40AF',
                 mode: localStorage.getItem('portal_theme_mode') || systemDefault.theme_mode || 'light',
-                font: localStorage.getItem('portal_font_family') || systemDefault.font_family || 'inter',
+                font: localStorage.getItem('portal_font_family') || systemDefault.font_family || 'plus_jakarta',
                 sidebar: localStorage.getItem('portal_sidebar_style') || systemDefault.sidebar_style || 'default',
             };
         },
