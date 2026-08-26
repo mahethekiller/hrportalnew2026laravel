@@ -62,4 +62,33 @@ class JobApplicationController extends Controller
         return redirect()->route('recruitment-applications.index')
             ->with('success', 'Candidate application stage updated to "' . $request->input('status') . '".');
     }
+
+    public function downloadResume(JobApplication $application)
+    {
+        if (empty($application->job_resume)) {
+            abort(404, 'Resume file not found for this candidate.');
+        }
+
+        $path = $application->job_resume;
+
+        if (\Illuminate\Support\Facades\Storage::disk('public')->exists($path)) {
+            return \Illuminate\Support\Facades\Storage::disk('public')->response($path);
+        }
+
+        if (\Illuminate\Support\Facades\Storage::disk('local')->exists($path)) {
+            return \Illuminate\Support\Facades\Storage::disk('local')->response($path);
+        }
+
+        $fullPath = storage_path('app/public/' . $path);
+        if (file_exists($fullPath)) {
+            return response()->file($fullPath);
+        }
+
+        $localFullPath = storage_path('app/' . $path);
+        if (file_exists($localFullPath)) {
+            return response()->file($localFullPath);
+        }
+
+        abort(404, 'Resume file does not exist on server storage.');
+    }
 }

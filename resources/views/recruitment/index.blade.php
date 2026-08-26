@@ -253,7 +253,7 @@
                                                 </div>
                                                 <div class="modal-footer">
                                                     @if(!empty($app->job_resume))
-                                                        <a href="{{ asset('storage/' . $app->job_resume) }}" target="_blank" class="btn btn-outline-primary btn-sm me-auto fw-bold">
+                                                        <a href="{{ route('recruitment-applications.resume', $app->application_id) }}" target="_blank" class="btn btn-outline-primary btn-sm me-auto fw-bold">
                                                             <i class="fa-solid fa-file-pdf me-1"></i> View / Download Resume Document
                                                         </a>
                                                     @endif
