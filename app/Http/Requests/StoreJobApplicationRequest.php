@@ -29,6 +29,7 @@ class StoreJobApplicationRequest extends FormRequest
             'expected_package' => ['nullable', 'string', 'max:50'],
             'notice_period' => ['nullable', 'string', 'max:50'],
             'change_reason' => ['nullable', 'string', 'max:500'],
+            'hr_remarks' => ['nullable', 'string', 'max:500'],
             'application_status' => ['nullable', 'string', 'max:50'],
             'application_remarks' => ['nullable', 'string', 'max:500'],
         ];

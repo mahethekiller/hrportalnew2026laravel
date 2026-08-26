@@ -282,6 +282,17 @@
                         </div>
                     </div>
 
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fs-8 fw-semibold">Reason to Leave / Change</label>
+                            <input type="text" name="change_reason" class="form-control form-control-sm" placeholder="e.g. Career Growth / Better Opportunity">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fs-8 fw-semibold">HR / Recruiter Remarks</label>
+                            <input type="text" name="hr_remarks" class="form-control form-control-sm" placeholder="Internal HR assessment notes...">
+                        </div>
+                    </div>
+
                     <div class="mb-3">
                         <label class="form-label fs-8 fw-semibold">Application Remarks / Sourcing Notes</label>
                         <textarea name="application_remarks" class="form-control form-control-sm" rows="2" placeholder="Optional recruiter comments or skill summary..."></textarea>
