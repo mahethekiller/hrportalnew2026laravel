@@ -210,111 +210,116 @@
                         @endif
                         <input type="hidden" name="next_round_interview_id" value="{{ $itv->job_interview_id }}">
 
-                        <div class="row g-3 mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label fs-8 fw-semibold">Next Round Date <span class="text-danger">*</span></label>
-                                <input type="date" name="next_round_date" class="form-control form-control-sm" required value="{{ old('next_round_date', !empty($itv->next_round_date) ? $itv->next_round_date : date('Y-m-d', strtotime('+1 day'))) }}">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fs-8 fw-semibold">Next Round Time <span class="text-danger">*</span></label>
-                                <input type="time" name="interview_time" class="form-control form-control-sm" required value="{{ old('interview_time', $itv->interview_time ?? '11:00') }}">
-                            </div>
-                        </div>
+                        <div class="row g-4">
+                            <!-- Left Column: Next Round Schedule Parameters -->
+                            <div class="col-lg-5 border-end pe-lg-4">
+                                <h6 class="fs-8 text-uppercase fw-bold text-info mb-3"><i class="fa-solid fa-forward me-2"></i>Next Round Schedule Parameters</h6>
 
-                        <div class="mb-3">
-                            <label class="form-label fs-8 fw-semibold">Next Round Interview Panelists (Multi-Select)</label>
-                            <select name="interviewers_id[]" class="form-select form-select-sm select-search" data-control="select2" data-placeholder="Select Interviewers..." multiple>
-                                @foreach($interviewers as $emp)
-                                    <option value="{{ $emp->user_id }}" {{ in_array($emp->user_id, explode(',', (string) $itv->interviewers_id)) ? 'selected' : '' }}>
-                                        {{ $emp->first_name }} {{ $emp->last_name }} @if(!empty($emp->employee_id)) (ID: {{ $emp->employee_id }}) @endif
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label fs-8 fw-semibold">Next Round Evaluation Notes / Remarks</label>
-                            <textarea name="remarks" class="form-control form-control-sm" rows="2" placeholder="Key focus areas or evaluation criteria for the next round...">{{ old('remarks', $itv->remarks) }}</textarea>
-                        </div>
-
-                        <!-- Email Notification Settings & Recipient Selection -->
-                        <div class="card border border-info-subtle bg-body-tertiary p-3 rounded-3 mb-2">
-                            <div class="d-flex align-items-center justify-content-between mb-2">
-                                <div class="fw-bold fs-8 text-info">
-                                    <i class="fa-solid fa-paper-plane me-1"></i> Send Next Round Email Notification
-                                </div>
-                                <div class="form-check form-switch mb-0">
-                                    <input class="form-check-input" type="checkbox" name="send_email_notification" id="sendEmailNextSwitch{{ $itv->job_interview_id }}" value="1" checked>
-                                    <label class="form-check-label fs-9 text-muted fw-semibold" for="sendEmailNextSwitch{{ $itv->job_interview_id }}">Enable Mail</label>
-                                </div>
-                            </div>
-                            <div class="alert alert-info py-2 px-3 fs-9 mb-2">
-                                <i class="fa-solid fa-circle-info me-1"></i> Mail info: Invitation notice will be sent with updated date & venue details.
-                            </div>
-                            <div class="row g-2 pt-1 border-top border-subtle">
-                                <div class="col-md-6">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="notify_candidate" id="notifyCandNextCheck{{ $itv->job_interview_id }}" value="1" checked>
-                                        <label class="form-check-label fs-8 text-body-emphasis" for="notifyCandNextCheck{{ $itv->job_interview_id }}">
-                                            <i class="fa-solid fa-user me-1 text-success"></i> Candidate: {{ $itv->jobApplication->email ?? 'N/A' }}
-                                        </label>
+                                <div class="row g-2 mb-3">
+                                    <div class="col-6">
+                                        <label class="form-label fs-8 fw-semibold">Next Round Date <span class="text-danger">*</span></label>
+                                        <input type="date" name="next_round_date" class="form-control form-control-sm" required value="{{ old('next_round_date', !empty($itv->next_round_date) ? $itv->next_round_date : date('Y-m-d', strtotime('+1 day'))) }}">
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label fs-8 fw-semibold">Next Round Time <span class="text-danger">*</span></label>
+                                        <input type="time" name="interview_time" class="form-control form-control-sm" required value="{{ old('interview_time', $itv->interview_time ?? '11:00') }}">
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="notify_interviewers" id="notifyPanNextCheck{{ $itv->job_interview_id }}" value="1" checked>
-                                        <label class="form-check-label fs-8 text-body-emphasis" for="notifyPanNextCheck{{ $itv->job_interview_id }}">
-                                            <i class="fa-solid fa-users me-1 text-info"></i> Interview Panelists (CC)
-                                        </label>
-                                    </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fs-8 fw-semibold">Next Round Interview Panelists (Multi-Select)</label>
+                                    <select name="interviewers_id[]" class="form-select form-select-sm select-search" data-control="select2" data-placeholder="Select Interviewers..." multiple>
+                                        @foreach($interviewers as $emp)
+                                            <option value="{{ $emp->user_id }}" {{ in_array($emp->user_id, explode(',', (string) $itv->interviewers_id)) ? 'selected' : '' }}>
+                                                {{ $emp->first_name }} {{ $emp->last_name }} @if(!empty($emp->employee_id)) (ID: {{ $emp->employee_id }}) @endif
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="mb-0">
+                                    <label class="form-label fs-8 fw-semibold">Next Round Evaluation Notes / Remarks</label>
+                                    <textarea name="remarks" class="form-control form-control-sm" rows="3" placeholder="Key focus areas or evaluation criteria for the next round...">{{ old('remarks', $itv->remarks) }}</textarea>
                                 </div>
                             </div>
 
-                            <!-- WYSIWYG Rich Text Mail Preview & Editor -->
-                            <div class="mt-3 pt-2 border-top border-subtle">
-                                <button type="button" class="btn btn-sm btn-outline-info py-1 px-3 fs-9 rounded-2 mb-2" data-bs-toggle="collapse" data-bs-target="#editMailContentNext{{ $itv->job_interview_id }}">
-                                    <i class="fa-solid fa-pen-to-square me-1"></i> Preview & Edit Invitation Mail (WYSIWYG Editor)
-                                </button>
-                                <div class="collapse show" id="editMailContentNext{{ $itv->job_interview_id }}">
-                                    <div class="card card-body bg-body p-3 border">
-                                        <div class="mb-3">
-                                            <label class="form-label fs-9 fw-semibold text-body-secondary mb-1">Custom Email Subject</label>
-                                            <input type="text" name="custom_email_subject" class="form-control form-control-sm fs-8" value="{{ old('custom_email_subject') }}" placeholder="Default: [Next Round Interview] {{ $itv->jobApplication->candidate_name ?? '' }}">
+                            <!-- Right Column: Email Settings & WYSIWYG Editor -->
+                            <div class="col-lg-7 ps-lg-4">
+                                <h6 class="fs-8 text-uppercase fw-bold text-primary mb-3"><i class="fa-solid fa-paper-plane me-2"></i>Next Round Email Invitation Studio</h6>
+
+                                <!-- Email Notification Settings & Recipient Selection -->
+                                <div class="card border border-info-subtle bg-body-tertiary p-3 rounded-3 mb-3">
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <div class="fw-bold fs-8 text-info">
+                                            <i class="fa-solid fa-paper-plane me-1"></i> Send Next Round Email Notification
                                         </div>
-                                        <div class="mb-0">
-                                            <div class="d-flex align-items-center justify-content-between mb-1">
-                                                <label class="form-label fs-9 fw-semibold text-body-secondary mb-0">Email Message Body (WYSIWYG Editor)</label>
-                                                <span class="fs-9 text-muted"><i class="fa-solid fa-wand-magic-sparkles me-1 text-info"></i> Editable Live Preview</span>
-                                            </div>
-
-                                            <!-- WYSIWYG Toolbar -->
-                                            <div class="wysiwyg-toolbar border border-bottom-0 rounded-top bg-body-tertiary p-2 d-flex flex-wrap align-items-center gap-1">
-                                                <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Bold" onclick="execWysiwygCmd('bold', this)"><i class="fa-solid fa-bold"></i></button>
-                                                <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Italic" onclick="execWysiwygCmd('italic', this)"><i class="fa-solid fa-italic"></i></button>
-                                                <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Underline" onclick="execWysiwygCmd('underline', this)"><i class="fa-solid fa-underline"></i></button>
-                                                <div class="vr mx-1"></div>
-                                                <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Bullet List" onclick="execWysiwygCmd('insertUnorderedList', this)"><i class="fa-solid fa-list-ul"></i></button>
-                                                <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Numbered List" onclick="execWysiwygCmd('insertOrderedList', this)"><i class="fa-solid fa-list-ol"></i></button>
-                                                <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Heading" onclick="execWysiwygCmd('formatBlock', this, '<h3>')"><i class="fa-solid fa-heading"></i></button>
-                                                <div class="vr mx-1"></div>
-                                                <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Insert Link" onclick="insertWysiwygLink(this)"><i class="fa-solid fa-link"></i></button>
-                                                <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Clear Formatting" onclick="execWysiwygCmd('removeFormat', this)"><i class="fa-solid fa-eraser"></i></button>
-                                                <button type="button" class="btn btn-xs btn-outline-secondary border py-1 px-2 ms-auto" title="Reset Default Template" onclick="resetWysiwygEditor(this)">
-                                                    <i class="fa-solid fa-rotate-left me-1"></i> Reset Template
-                                                </button>
-                                            </div>
-
-                                            <!-- WYSIWYG Canvas -->
-                                            @php
-                                                $nextDefaultMsg = $defaultTemplate->message ?? '<p>Dear <strong>{candidate_name}</strong>,</p><p>We are pleased to invite you for the Next Round interview regarding your application for <strong>{job_title}</strong>.</p><div style="background: #f1f5f9; border-left: 4px solid #2563eb; padding: 16px; margin: 20px 0; border-radius: 4px;"><p style="margin: 0 0 8px 0;"><strong>Date:</strong> {interview_date}</p><p style="margin: 0 0 8px 0;"><strong>Time:</strong> {interview_time}</p><p style="margin: 0 0 8px 0;"><strong>Mode:</strong> {interview_mode}</p><p style="margin: 0 0 8px 0;"><strong>Venue / Link:</strong> {interview_place}</p><p style="margin: 0;"><strong>Interviewer Panel:</strong> {panelists}</p></div><p><strong>Instructions / Remarks:</strong></p><p style="background: #fafafa; border-left: 3px solid #cbd5e1; padding: 10px 15px; font-style: italic; color: #334155;">{remarks}</p><p style="margin-top: 25px;">Please confirm your availability for this interview schedule.</p><p>Best regards,<br><strong>Recruitment Team</strong></p>';
-                                            @endphp
-
-                                            <div class="wysiwyg-canvas border rounded-bottom p-3 bg-body fs-8 text-body" contenteditable="true" style="min-height: 220px; max-height: 380px; overflow-y: auto; line-height: 1.6;" data-default-template="{{ e($nextDefaultMsg) }}">
-                                                {!! old('custom_email_body', $nextDefaultMsg) !!}
-                                            </div>
-                                            <textarea name="custom_email_body" class="wysiwyg-hidden-input d-none">{{ old('custom_email_body', $nextDefaultMsg) }}</textarea>
+                                        <div class="form-check form-switch mb-0">
+                                            <input class="form-check-input" type="checkbox" name="send_email_notification" id="sendEmailNextSwitch{{ $itv->job_interview_id }}" value="1" checked>
+                                            <label class="form-check-label fs-9 text-muted fw-semibold" for="sendEmailNextSwitch{{ $itv->job_interview_id }}">Enable Mail</label>
                                         </div>
                                     </div>
+                                    <div class="alert alert-info py-1 px-3 fs-9 mb-2">
+                                        <i class="fa-solid fa-circle-info me-1"></i> Invitation notice will be sent with updated date & venue details.
+                                    </div>
+                                    <div class="row g-2 pt-1 border-top border-subtle">
+                                        <div class="col-md-6">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="notify_candidate" id="notifyCandNextCheck{{ $itv->job_interview_id }}" value="1" checked>
+                                                <label class="form-check-label fs-8 text-body-emphasis" for="notifyCandNextCheck{{ $itv->job_interview_id }}">
+                                                    <i class="fa-solid fa-user me-1 text-success"></i> Candidate: {{ $itv->jobApplication->email ?? 'N/A' }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="notify_interviewers" id="notifyPanNextCheck{{ $itv->job_interview_id }}" value="1" checked>
+                                                <label class="form-check-label fs-8 text-body-emphasis" for="notifyPanNextCheck{{ $itv->job_interview_id }}">
+                                                    <i class="fa-solid fa-users me-1 text-info"></i> Interview Panelists (CC)
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Custom Email Subject -->
+                                <div class="mb-3">
+                                    <label class="form-label fs-9 fw-semibold text-body-secondary mb-1">Custom Email Subject</label>
+                                    <input type="text" name="custom_email_subject" class="form-control form-control-sm fs-8" value="{{ old('custom_email_subject') }}" placeholder="Default: [Next Round Interview] {{ $itv->jobApplication->candidate_name ?? '' }}">
+                                </div>
+
+                                <!-- WYSIWYG Rich Text Editor -->
+                                <div class="mb-0">
+                                    <div class="d-flex align-items-center justify-content-between mb-1">
+                                        <label class="form-label fs-9 fw-semibold text-body-secondary mb-0">Email Message Body (WYSIWYG Editor)</label>
+                                        <span class="fs-9 text-muted"><i class="fa-solid fa-wand-magic-sparkles me-1 text-info"></i> Editable Live Preview</span>
+                                    </div>
+
+                                    <!-- WYSIWYG Toolbar -->
+                                    <div class="wysiwyg-toolbar border border-bottom-0 rounded-top bg-body-tertiary p-2 d-flex flex-wrap align-items-center gap-1">
+                                        <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Bold" onclick="execWysiwygCmd('bold', this)"><i class="fa-solid fa-bold"></i></button>
+                                        <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Italic" onclick="execWysiwygCmd('italic', this)"><i class="fa-solid fa-italic"></i></button>
+                                        <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Underline" onclick="execWysiwygCmd('underline', this)"><i class="fa-solid fa-underline"></i></button>
+                                        <div class="vr mx-1"></div>
+                                        <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Bullet List" onclick="execWysiwygCmd('insertUnorderedList', this)"><i class="fa-solid fa-list-ul"></i></button>
+                                        <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Numbered List" onclick="execWysiwygCmd('insertOrderedList', this)"><i class="fa-solid fa-list-ol"></i></button>
+                                        <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Heading" onclick="execWysiwygCmd('formatBlock', this, '<h3>')"><i class="fa-solid fa-heading"></i></button>
+                                        <div class="vr mx-1"></div>
+                                        <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Insert Link" onclick="insertWysiwygLink(this)"><i class="fa-solid fa-link"></i></button>
+                                        <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Clear Formatting" onclick="execWysiwygCmd('removeFormat', this)"><i class="fa-solid fa-eraser"></i></button>
+                                        <button type="button" class="btn btn-xs btn-outline-secondary border py-1 px-2 ms-auto" title="Reset Default Template" onclick="resetWysiwygEditor(this)">
+                                            <i class="fa-solid fa-rotate-left me-1"></i> Reset Template
+                                        </button>
+                                    </div>
+
+                                    <!-- WYSIWYG Canvas -->
+                                    @php
+                                        $nextDefaultMsg = $defaultTemplate->message ?? '<p>Dear <strong>{candidate_name}</strong>,</p><p>We are pleased to invite you for the Next Round interview regarding your application for <strong>{job_title}</strong>.</p><div style="background: #f1f5f9; border-left: 4px solid #2563eb; padding: 16px; margin: 20px 0; border-radius: 4px;"><p style="margin: 0 0 8px 0;"><strong>Date:</strong> {interview_date}</p><p style="margin: 0 0 8px 0;"><strong>Time:</strong> {interview_time}</p><p style="margin: 0 0 8px 0;"><strong>Mode:</strong> {interview_mode}</p><p style="margin: 0 0 8px 0;"><strong>Venue / Link:</strong> {interview_place}</p><p style="margin: 0;"><strong>Interviewer Panel:</strong> {panelists}</p></div><p><strong>Instructions / Remarks:</strong></p><p style="background: #fafafa; border-left: 3px solid #cbd5e1; padding: 10px 15px; font-style: italic; color: #334155;">{remarks}</p><p style="margin-top: 25px;">Please confirm your availability for this interview schedule.</p><p>Best regards,<br><strong>Recruitment Team</strong></p>';
+                                    @endphp
+
+                                    <div class="wysiwyg-canvas border rounded-bottom p-3 bg-body fs-8 text-body" contenteditable="true" style="min-height: 250px; max-height: 380px; overflow-y: auto; line-height: 1.6;" data-default-template="{{ e($nextDefaultMsg) }}">
+                                        {!! old('custom_email_body', $nextDefaultMsg) !!}
+                                    </div>
+                                    <textarea name="custom_email_body" class="wysiwyg-hidden-input d-none">{{ old('custom_email_body', $nextDefaultMsg) }}</textarea>
                                 </div>
                             </div>
                         </div>
