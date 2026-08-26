@@ -60,7 +60,11 @@ class RecruitmentService
         if (!empty($data['application_id'])) {
             $application = $this->applicationRepository->findById((int) $data['application_id']);
             if ($application) {
-                $this->applicationRepository->updateStatus($application, 'Interview Scheduled');
+                $updateData = ['application_status' => 'Interview Scheduled'];
+                if (!empty($data['application_remarks'])) {
+                    $updateData['application_remarks'] = $data['application_remarks'];
+                }
+                $this->applicationRepository->update($application, $updateData);
             }
         }
 
@@ -69,6 +73,12 @@ class RecruitmentService
 
     public function updateInterviewStatus(JobInterview $interview, string $status, array $extraData = []): bool
     {
+        if (!empty($extraData['application_remarks']) && $interview->jobApplication) {
+            $this->applicationRepository->update($interview->jobApplication, [
+                'application_remarks' => $extraData['application_remarks']
+            ]);
+        }
+
         return $this->interviewRepository->updateStatus($interview, $status, $extraData);
     }
 

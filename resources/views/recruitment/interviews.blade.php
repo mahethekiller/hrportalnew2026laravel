@@ -346,6 +346,15 @@
                         </div>
 
                         <!-- Remarks -->
+                        @if(!empty($itv->jobApplication->application_remarks))
+                            <div class="col-12">
+                                <div class="card border border-subtle bg-body-tertiary p-3 rounded-3 mb-3">
+                                    <h6 class="fs-8 text-uppercase fw-bold text-primary mb-2"><i class="fa-solid fa-file-lines me-2"></i>Candidate Application Remarks</h6>
+                                    <p class="mb-0 fs-8 text-body-emphasis text-break" style="white-space: pre-wrap;">{{ $itv->jobApplication->application_remarks }}</p>
+                                </div>
+                            </div>
+                        @endif
+
                         @if(!empty($itv->remarks) || !empty($itv->description))
                             <div class="col-12">
                                 <div class="card border border-subtle bg-body-tertiary p-3 rounded-3">
@@ -446,6 +455,11 @@
                     <div class="mb-3">
                         <label class="form-label fs-8 fw-semibold">Meeting Link / Office Room</label>
                         <input type="text" name="interview_place" value="{{ old('interview_place') }}" class="form-control form-control-sm" placeholder="e.g. https://meet.google.com/abc-defg-hij or Room 302">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fs-8 fw-semibold">Candidate Application Remarks / Screening Notes</label>
+                        <textarea name="application_remarks" class="form-control form-control-sm" rows="2" placeholder="Optional notes regarding candidate skills, screening summary, or initial feedback...">{{ old('application_remarks') }}</textarea>
                     </div>
                 </div>
                 <div class="modal-footer">

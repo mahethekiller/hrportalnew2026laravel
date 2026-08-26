@@ -25,6 +25,7 @@ class StoreJobInterviewRequest extends FormRequest
             'offered_ctc' => ['nullable', 'string', 'max:100'],
             'expected_doj' => ['nullable', 'date'],
             'description' => ['nullable', 'string', 'max:1000'],
+            'application_remarks' => ['nullable', 'string', 'max:1000'],
         ];
     }
 }
