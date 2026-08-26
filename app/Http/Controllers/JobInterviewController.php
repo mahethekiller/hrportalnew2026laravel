@@ -24,7 +24,7 @@ class JobInterviewController extends Controller
         $filters = $request->only(['search']);
         $interviews = $this->recruitmentService->getInterviewsPaginated($filters);
         $applications = $this->recruitmentService->getApplicationsPaginated([], 200);
-        $interviewers = $this->employeeService->getEmployees([], 200);
+        $interviewers = $this->employeeService->getActiveEmployees();
 
         return view('recruitment.interviews', compact('interviews', 'applications', 'interviewers', 'filters'));
     }

@@ -81,4 +81,17 @@ class EmployeeRepository
     {
         return (bool) $employee->delete();
     }
+
+    /**
+     * Get active employee collection for dropdowns.
+     */
+    public function getActiveEmployees(): Collection
+    {
+        return Employee::with(['department', 'designation'])
+            ->where(function ($q) {
+                $q->where('is_active', 1)->orWhereNull('is_active');
+            })
+            ->orderBy('first_name', 'asc')
+            ->get();
+    }
 }

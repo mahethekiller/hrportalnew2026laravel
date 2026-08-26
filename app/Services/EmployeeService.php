@@ -26,6 +26,14 @@ class EmployeeService
     }
 
     /**
+     * Get active employee list for selection dropdowns.
+     */
+    public function getActiveEmployees()
+    {
+        return $this->repository->getActiveEmployees();
+    }
+
+    /**
      * Get employee details by ID.
      */
     public function getEmployeeById(int $id): ?Employee
