@@ -157,7 +157,7 @@
                                         {{ $itv->status_label }}
                                     </span>
                                     @if($itv->convert_to_employee != 0)
-                                        <div class="mt-1"><span class="badge badge-light-success fs-9"><i class="fa-solid fa-user-check me-1"></i>Converted</span></div>
+                                        <div class="mt-1"><span class="badge badge-light-purple fs-9"><i class="fa-solid fa-user-check me-1"></i>Converted</span></div>
                                     @endif
                                 </td>
                             </tr>

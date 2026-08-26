@@ -101,10 +101,12 @@ class JobInterview extends Model
         $status = strtolower((string) ($this->status ?? 'pending'));
         return match ($status) {
             'rejected' => 'badge-light-danger',
-            'selected', 'confirmed', 'offeraccepted' => 'badge-light-success',
-            'pending' => 'badge-light-warning',
-            'onhold', 'shortlisted' => 'badge-light-info',
-            'rescheduled', 'nextround' => 'badge-light-primary',
+            'selected' => 'badge-light-success',
+            'confirmed' => 'badge-light-primary',
+            'pending', 'scheduled' => 'badge-light-info',
+            'onhold', 'shortlisted' => 'badge-light-warning',
+            'rescheduled', 'nextround' => 'badge-light-purple',
+            'offeraccepted' => 'badge-light-success',
             default => 'badge-light-secondary',
         };
     }
