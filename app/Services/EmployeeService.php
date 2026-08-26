@@ -112,7 +112,7 @@ class EmployeeService
             $data['date_of_birth'] = $data['date_of_birth'] ?? '1990-01-01';
             $data['date_of_joining'] = $data['date_of_joining'] ?? date('Y-m-d');
             $data['gender'] = $data['gender'] ?? 'Male';
-            $data['e_status'] = $data['e_status'] ?? 'Full Time';
+            $data['e_status'] = is_numeric($data['e_status'] ?? null) ? (int)$data['e_status'] : 1;
             $data['marital_status'] = $data['marital_status'] ?? 'Single';
             $data['contact_no'] = $data['contact_no'] ?? '0000000000';
             $data['salary'] = $data['salary'] ?? 0;
