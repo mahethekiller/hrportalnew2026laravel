@@ -270,6 +270,25 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Editable Mail Preview Drawer -->
+                            <div class="mt-2 pt-2 border-top border-subtle">
+                                <button type="button" class="btn btn-sm btn-outline-info py-1 px-3 fs-9 rounded-2" data-bs-toggle="collapse" data-bs-target="#editMailContentNext{{ $itv->job_interview_id }}">
+                                    <i class="fa-solid fa-pen-to-square me-1"></i> Preview & Edit Mail Subject / Body...
+                                </button>
+                                <div class="collapse mt-2" id="editMailContentNext{{ $itv->job_interview_id }}">
+                                    <div class="card card-body bg-body p-3 border">
+                                        <div class="mb-2">
+                                            <label class="form-label fs-9 fw-semibold text-body-secondary mb-1">Custom Email Subject</label>
+                                            <input type="text" name="custom_email_subject" class="form-control form-control-sm fs-8" placeholder="Default: [Next Round Interview] {{ $itv->jobApplication->candidate_name ?? '' }}">
+                                        </div>
+                                        <div class="mb-0">
+                                            <label class="form-label fs-9 fw-semibold text-body-secondary mb-1">Custom Email Body (Optional override)</label>
+                                            <textarea name="custom_email_body" class="form-control form-control-sm fs-8" rows="3" placeholder="Leave empty to use standard interview invitation letter...">{{ old('custom_email_body') }}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -522,6 +541,25 @@
                                     <label class="form-check-label fs-8 text-body-emphasis" for="notifyPanSchedCheck">
                                         <i class="fa-solid fa-users me-1 text-info"></i> Send to Interview Panelists (CC)
                                     </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Editable Mail Preview Drawer -->
+                        <div class="mt-2 pt-2 border-top border-subtle">
+                            <button type="button" class="btn btn-sm btn-outline-info py-1 px-3 fs-9 rounded-2" data-bs-toggle="collapse" data-bs-target="#editMailContentSched">
+                                <i class="fa-solid fa-pen-to-square me-1"></i> Preview & Edit Mail Subject / Body...
+                            </button>
+                            <div class="collapse mt-2" id="editMailContentSched">
+                                <div class="card card-body bg-body p-3 border">
+                                    <div class="mb-2">
+                                        <label class="form-label fs-9 fw-semibold text-body-secondary mb-1">Custom Email Subject</label>
+                                        <input type="text" name="custom_email_subject" class="form-control form-control-sm fs-8" placeholder="Default: [Interview Invitation] Candidate Name - Applied Position">
+                                    </div>
+                                    <div class="mb-0">
+                                        <label class="form-label fs-9 fw-semibold text-body-secondary mb-1">Custom Email Body (Optional override)</label>
+                                        <textarea name="custom_email_body" class="form-control form-control-sm fs-8" rows="3" placeholder="Leave empty to use standard interview invitation letter..."></textarea>
+                                    </div>
                                 </div>
                             </div>
                         </div>

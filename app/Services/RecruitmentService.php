@@ -109,8 +109,11 @@ class RecruitmentService
             $ccEmails = array_filter($panelists->pluck('email')->toArray());
         }
 
+        $customSubject = !empty($options['custom_email_subject']) ? (string) $options['custom_email_subject'] : null;
+        $customBody = !empty($options['custom_email_body']) ? (string) $options['custom_email_body'] : null;
+
         try {
-            $mailable = new \App\Mail\CandidateInterviewScheduledMail($interview);
+            $mailable = new \App\Mail\CandidateInterviewScheduledMail($interview, $customSubject, $customBody);
 
             if ($notifyCandidate && !empty($candidateEmail)) {
                 $pendingMail = \Illuminate\Support\Facades\Mail::to($candidateEmail);

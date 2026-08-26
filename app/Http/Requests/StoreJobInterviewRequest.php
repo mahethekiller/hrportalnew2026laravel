@@ -29,6 +29,8 @@ class StoreJobInterviewRequest extends FormRequest
             'send_email_notification' => ['nullable', 'boolean'],
             'notify_candidate' => ['nullable', 'boolean'],
             'notify_interviewers' => ['nullable', 'boolean'],
+            'custom_email_subject' => ['nullable', 'string', 'max:255'],
+            'custom_email_body' => ['nullable', 'string', 'max:5000'],
         ];
     }
 }

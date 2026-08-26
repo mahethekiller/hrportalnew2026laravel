@@ -23,8 +23,12 @@
             <h1>Interview Invitation Notice</h1>
         </div>
         <div class="content">
-            <p>Dear <strong>{{ $application->candidate_name ?? 'Candidate' }}</strong>,</p>
-            <p>We are pleased to invite you for an interview regarding your application for <strong>{{ $application->job->job_title ?? 'Applied Position' }}</strong>.</p>
+            @if(!empty($customBody))
+                <div style="margin-bottom: 20px; white-space: pre-wrap; line-height: 1.6;">{!! nl2br(e($customBody)) !!}</div>
+            @else
+                <p>Dear <strong>{{ $application->candidate_name ?? 'Candidate' }}</strong>,</p>
+                <p>We are pleased to invite you for an interview regarding your application for <strong>{{ $application->job->job_title ?? 'Applied Position' }}</strong>.</p>
+            @endif
             
             <div class="details-box">
                 <div class="details-item">

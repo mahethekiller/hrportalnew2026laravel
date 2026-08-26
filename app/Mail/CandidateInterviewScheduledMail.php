@@ -15,15 +15,17 @@ class CandidateInterviewScheduledMail extends Mailable
 
     public JobInterview $interview;
     public string $customSubject;
+    public ?string $customBody;
 
-    public function __construct(JobInterview $interview, ?string $customSubject = null)
+    public function __construct(JobInterview $interview, ?string $customSubject = null, ?string $customBody = null)
     {
         $this->interview = $interview;
+        $this->customBody = $customBody;
         
         $candidateName = $interview->jobApplication->candidate_name ?? 'Candidate';
         $jobTitle = $interview->jobApplication->job->job_title ?? 'Position';
         
-        $this->customSubject = $customSubject ?? "[Interview Invitation] {$candidateName} - {$jobTitle}";
+        $this->customSubject = !empty($customSubject) ? $customSubject : "[Interview Invitation] {$candidateName} - {$jobTitle}";
     }
 
     public function build(): self
@@ -34,6 +36,7 @@ class CandidateInterviewScheduledMail extends Mailable
                 'interview' => $this->interview,
                 'application' => $this->interview->jobApplication,
                 'panelists' => $this->interview->interviewer_list,
+                'customBody' => $this->customBody,
             ]);
     }
 }
