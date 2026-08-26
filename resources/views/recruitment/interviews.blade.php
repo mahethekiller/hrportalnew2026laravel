@@ -1,5 +1,18 @@
 @extends('layouts.app')
 
+@push('css')
+<style>
+    #scheduleInterviewModal .modal-dialog,
+    [id^="nextRoundModal"] .modal-dialog,
+    [id^="viewInterviewModal"] .modal-dialog {
+        max-width: 95% !important;
+        width: 95% !important;
+        min-width: 90% !important;
+        margin: 1.75rem auto !important;
+    }
+</style>
+@endpush
+
 @section('title', 'Scheduled Candidate Interviews')
 
 @section('content')
