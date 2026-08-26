@@ -54,6 +54,20 @@ class JobApplicationRepository
         $data['sub_source'] = $data['sub_source'] ?? '';
         $data['referral_name'] = $data['referral_name'] ?? '';
         $data['company'] = $data['company'] ?? '';
+        $data['hr_remarks'] = $data['hr_remarks'] ?? '';
+        $data['application_remarks'] = $data['application_remarks'] ?? '';
+        $data['change_reason'] = $data['change_reason'] ?? '';
+        $data['current_company'] = $data['current_company'] ?? '';
+        $data['current_location'] = $data['current_location'] ?? '';
+        $data['current_package'] = $data['current_package'] ?? '';
+        $data['expected_package'] = $data['expected_package'] ?? '';
+        $data['notice_period'] = $data['notice_period'] ?? '';
+        $data['experience'] = $data['experience'] ?? '';
+        $data['covid_status'] = $data['covid_status'] ?? '';
+        $data['profile_picture'] = $data['profile_picture'] ?? '';
+        $data['reason_to_leave'] = $data['reason_to_leave'] ?? '';
+        $data['remarks'] = $data['remarks'] ?? '';
+        $data['date_cv_sourced'] = $data['date_cv_sourced'] ?? date('Y-m-d');
         $data['show_status'] = 1;
         $data['created_at'] = date('Y-m-d H:i:s');
 
