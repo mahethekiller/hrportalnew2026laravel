@@ -22,6 +22,28 @@
 
     <!-- Pre-load Dark Theme & Color Profile Engine -->
     <script src="{{ asset('assets/js/theme-engine.js') }}?v={{ @filemtime(public_path('assets/js/theme-engine.js')) }}"></script>
+
+    <!-- Global Form Submit Helper -->
+    <script>
+        window.submitWithLoader = function(btn) {
+            if (!btn) return;
+            const form = btn.closest('form');
+            if (form && form.checkValidity()) {
+                btn.disabled = true;
+                btn.classList.add('disabled');
+                btn.style.pointerEvents = 'none';
+                btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin me-1"></i> Processing...';
+                form.submit();
+            }
+        };
+
+        document.addEventListener('click', function(e) {
+            const btn = e.target.closest('.btn-loader, .submit-loader');
+            if (btn) {
+                window.submitWithLoader(btn);
+            }
+        }, true);
+    </script>
 </head>
 <body class="bg-body-secondary">
     @php
@@ -345,19 +367,6 @@
                 return false;
             }
         }, true);
-
-        // Global Clean Submit Helper Function
-        window.submitWithLoader = function(btn) {
-            if (!btn) return;
-            const form = btn.closest('form');
-            if (form && form.checkValidity()) {
-                btn.disabled = true;
-                btn.classList.add('disabled');
-                btn.style.pointerEvents = 'none';
-                btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin me-1"></i> Processing...';
-                form.submit();
-            }
-        };
     </script>
 
     <!-- Theme Customizer Offcanvas Drawer -->
