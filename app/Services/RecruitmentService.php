@@ -154,6 +154,16 @@ class RecruitmentService
             $ccEmails = array_filter(array_map('trim', $panelists->pluck('email')->toArray()), fn($e) => filter_var($e, FILTER_VALIDATE_EMAIL));
         }
 
+        if (!empty($options['cc_employees_id'])) {
+            $ccIds = is_array($options['cc_employees_id']) ? $options['cc_employees_id'] : explode(',', (string) $options['cc_employees_id']);
+            $extraCcEmps = \App\Models\Employee::whereIn('user_id', array_filter($ccIds))
+                ->orWhereIn('employee_id', array_filter($ccIds))
+                ->pluck('email')
+                ->toArray();
+            $extraCcEmails = array_filter(array_map('trim', $extraCcEmps), fn($e) => filter_var($e, FILTER_VALIDATE_EMAIL));
+            $ccEmails = array_unique(array_merge($ccEmails, $extraCcEmails));
+        }
+
         $recipients = [];
         if ($notifyCandidate && !empty($candidateEmail) && filter_var($candidateEmail, FILTER_VALIDATE_EMAIL)) {
             $recipients[] = $candidateEmail;

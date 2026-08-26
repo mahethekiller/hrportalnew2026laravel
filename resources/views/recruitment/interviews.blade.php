@@ -84,18 +84,14 @@
                                             <ul class="dropdown-menu fs-8 shadow-sm border-subtle py-2">
                                                 <li><h6 class="dropdown-header text-uppercase fs-9 fw-bold text-muted px-3 py-1 mb-0">Change Status</h6></li>
                                                 <li>
-                                                    <form method="POST" action="{{ route('recruitment-interviews.status', $itv->job_interview_id) }}">
-                                                        @csrf
-                                                        <input type="hidden" name="status" value="confirmed">
-                                                        <button type="submit" class="dropdown-item py-1.5 px-3 text-success"><i class="fa-solid fa-check-circle me-2 text-success"></i> Mark Confirmed</button>
-                                                    </form>
+                                                    <button type="button" class="dropdown-item py-1.5 px-3 text-success" data-bs-toggle="modal" data-bs-target="#statusModal_{{ $itv->job_interview_id }}_confirmed">
+                                                        <i class="fa-solid fa-check-circle me-2 text-success"></i> Mark Confirmed...
+                                                    </button>
                                                 </li>
                                                 <li>
-                                                    <form method="POST" action="{{ route('recruitment-interviews.status', $itv->job_interview_id) }}">
-                                                        @csrf
-                                                        <input type="hidden" name="status" value="selected">
-                                                        <button type="submit" class="dropdown-item py-1.5 px-3 text-primary"><i class="fa-solid fa-user-check me-2 text-primary"></i> Mark Selected</button>
-                                                    </form>
+                                                    <button type="button" class="dropdown-item py-1.5 px-3 text-primary" data-bs-toggle="modal" data-bs-target="#statusModal_{{ $itv->job_interview_id }}_selected">
+                                                        <i class="fa-solid fa-user-check me-2 text-primary"></i> Mark Selected...
+                                                    </button>
                                                 </li>
                                                 <li>
                                                     <button type="button" class="dropdown-item py-1.5 px-3 text-info" data-bs-toggle="modal" data-bs-target="#nextRoundModal{{ $itv->job_interview_id }}">
@@ -103,18 +99,14 @@
                                                     </button>
                                                 </li>
                                                 <li>
-                                                    <form method="POST" action="{{ route('recruitment-interviews.status', $itv->job_interview_id) }}">
-                                                        @csrf
-                                                        <input type="hidden" name="status" value="onhold">
-                                                        <button type="submit" class="dropdown-item py-1.5 px-3 text-warning"><i class="fa-solid fa-pause-circle me-2 text-warning"></i> Mark On Hold</button>
-                                                    </form>
+                                                    <button type="button" class="dropdown-item py-1.5 px-3 text-warning" data-bs-toggle="modal" data-bs-target="#statusModal_{{ $itv->job_interview_id }}_onhold">
+                                                        <i class="fa-solid fa-pause-circle me-2 text-warning"></i> Mark On Hold...
+                                                    </button>
                                                 </li>
                                                 <li>
-                                                    <form method="POST" action="{{ route('recruitment-interviews.status', $itv->job_interview_id) }}">
-                                                        @csrf
-                                                        <input type="hidden" name="status" value="rejected">
-                                                        <button type="submit" class="dropdown-item py-1.5 px-3 text-danger"><i class="fa-solid fa-ban me-2 text-danger"></i> Mark Rejected</button>
-                                                    </form>
+                                                    <button type="button" class="dropdown-item py-1.5 px-3 text-danger" data-bs-toggle="modal" data-bs-target="#statusModal_{{ $itv->job_interview_id }}_rejected">
+                                                        <i class="fa-solid fa-ban me-2 text-danger"></i> Mark Rejected...
+                                                    </button>
                                                 </li>
                                             </ul>
                                         </div>
@@ -285,6 +277,16 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="mt-2 pt-2 border-top border-subtle">
+                                         <label class="form-label fs-9 fw-semibold text-body-secondary mb-1"><i class="fa-solid fa-user-plus me-1 text-primary"></i> Add Extra CC Employees (Multi-Select)</label>
+                                         <select name="cc_employees_id[]" class="form-select form-select-sm select-search" data-control="select2" data-placeholder="Select Extra CC Employees..." multiple>
+                                             @foreach($interviewers as $emp)
+                                                 <option value="{{ $emp->user_id }}">
+                                                     {{ $emp->first_name }} {{ $emp->last_name }} @if(!empty($emp->employee_id)) (ID: {{ $emp->employee_id }}) @endif
+                                                 </option>
+                                             @endforeach
+                                         </select>
+                                     </div>
                                 </div>
 
                                 <!-- Custom Email Subject -->
@@ -337,6 +339,175 @@
             </form>
         </div>
     </div>
+
+    @php
+        $statusConfigs = [
+            'confirmed' => [
+                'modal_id' => 'statusModal_' . $itv->job_interview_id . '_confirmed',
+                'title' => 'Confirm Candidate Interview',
+                'badge_class' => 'text-success',
+                'icon' => 'fa-check-circle',
+                'btn_class' => 'btn-success',
+                'btn_label' => 'Confirm Interview & Notify',
+                'default_subject' => '[Interview Confirmed] Candidate Schedule Confirmation',
+                'default_body' => '<p>Dear <strong>{candidate_name}</strong>,</p><p>Your interview schedule for <strong>{job_title}</strong> has been <strong>CONFIRMED</strong>.</p><div style="background: #ecfdf5; border-left: 4px solid #10b981; padding: 16px; margin: 20px 0; border-radius: 4px;"><p style="margin: 0 0 8px 0;"><strong>Date:</strong> {interview_date}</p><p style="margin: 0 0 8px 0;"><strong>Time:</strong> {interview_time}</p><p style="margin: 0 0 8px 0;"><strong>Mode:</strong> {interview_mode}</p><p style="margin: 0;"><strong>Venue / Link:</strong> {interview_place}</p></div><p><strong>Remarks / Instructions:</strong></p><p style="background: #fafafa; border-left: 3px solid #cbd5e1; padding: 10px 15px; font-style: italic; color: #334155;">{remarks}</p><p style="margin-top: 25px;">Please confirm your receipt of this confirmation notice.</p><p>Best regards,<br><strong>Recruitment Team</strong></p>',
+            ],
+            'selected' => [
+                'modal_id' => 'statusModal_' . $itv->job_interview_id . '_selected',
+                'title' => 'Mark Candidate Selected',
+                'badge_class' => 'text-primary',
+                'icon' => 'fa-user-check',
+                'btn_class' => 'btn-primary',
+                'btn_label' => 'Update Status to Selected',
+                'default_subject' => '[Selection Notice] Congratulations! You have been selected for {job_title}',
+                'default_body' => '<p>Dear <strong>{candidate_name}</strong>,</p><p>Congratulations! We are delighted to inform you that you have been <strong>SELECTED</strong> for the position of <strong>{job_title}</strong> following your interview performance.</p><div style="background: #eff6ff; border-left: 4px solid #3b82f6; padding: 16px; margin: 20px 0; border-radius: 4px;"><p style="margin: 0 0 8px 0;"><strong>Offered Position:</strong> {job_title}</p><p style="margin: 0;"><strong>Interviewer Remarks:</strong> {remarks}</p></div><p>Our Human Resources team will reach out shortly with your formal offer letter, salary breakdown, and onboarding documentation requirements.</p><p>Best regards,<br><strong>Recruitment Team</strong></p>',
+            ],
+            'onhold' => [
+                'modal_id' => 'statusModal_' . $itv->job_interview_id . '_onhold',
+                'title' => 'Mark Application On Hold',
+                'badge_class' => 'text-warning',
+                'icon' => 'fa-pause-circle',
+                'btn_class' => 'btn-warning text-dark',
+                'btn_label' => 'Update Status to On Hold',
+                'default_subject' => '[Application Status] Update regarding your application for {job_title}',
+                'default_body' => '<p>Dear <strong>{candidate_name}</strong>,</p><p>Thank you for taking the time to interview for the position of <strong>{job_title}</strong>.</p><p>We wish to inform you that your application status is currently <strong>ON HOLD</strong> while our hiring committee completes evaluation for all candidate profiles.</p><div style="background: #fffbeb; border-left: 4px solid #f59e0b; padding: 16px; margin: 20px 0; border-radius: 4px;"><p style="margin: 0;"><strong>Evaluation Status:</strong> Application On-Hold pending final review.</p></div><p>We appreciate your patience and will share a further update as soon as the decision process is finalized.</p><p>Best regards,<br><strong>Recruitment Team</strong></p>',
+            ],
+            'rejected' => [
+                'modal_id' => 'statusModal_' . $itv->job_interview_id . '_rejected',
+                'title' => 'Mark Application Rejected',
+                'badge_class' => 'text-danger',
+                'icon' => 'fa-ban',
+                'btn_class' => 'btn-danger',
+                'btn_label' => 'Update Status to Rejected',
+                'default_subject' => '[Application Update] Application Status for {job_title}',
+                'default_body' => '<p>Dear <strong>{candidate_name}</strong>,</p><p>Thank you for taking the time to interview with us for the position of <strong>{job_title}</strong> at <strong>{site_name}</strong>.</p><p>While we were impressed with your background and qualifications, we have decided to move forward with another candidate whose experience more closely matches our immediate technical requirements for this role.</p><p>We sincerely appreciate your interest in our organization and wish you all the best in your professional journey.</p><p>Best regards,<br><strong>Recruitment Team</strong></p>',
+            ],
+        ];
+    @endphp
+
+    @foreach($statusConfigs as $stKey => $stCfg)
+        <div class="modal fade" id="{{ $stCfg['modal_id'] }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+                <form method="POST" action="{{ route('recruitment-interviews.status', $itv->job_interview_id) }}" class="modal-content text-start">
+                    @csrf
+                    <input type="hidden" name="status" value="{{ $stKey }}">
+                    <div class="modal-header border-bottom">
+                        <h5 class="modal-title fw-bold text-body-emphasis">
+                            <i class="fa-solid {{ $stCfg['icon'] }} me-2 {{ $stCfg['badge_class'] }}"></i> {{ $stCfg['title'] }}: {{ $itv->jobApplication->candidate_name ?? 'Candidate' }}
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row g-4">
+                            <!-- Left Column: Details & Remarks -->
+                            <div class="col-lg-5 border-end pe-lg-4">
+                                <h6 class="fs-8 text-uppercase fw-bold {{ $stCfg['badge_class'] }} mb-3"><i class="fa-solid fa-sliders me-2"></i>Status Parameters</h6>
+
+                                <div class="mb-3">
+                                    <label class="form-label fs-8 fw-semibold">Candidate Application</label>
+                                    <input type="text" class="form-control form-control-sm bg-body-tertiary" value="{{ $itv->jobApplication->candidate_name ?? 'N/A' }} ({{ $itv->jobApplication->job->job_title ?? 'N/A' }})" readonly>
+                                </div>
+
+                                @if($stKey === 'selected')
+                                    <div class="mb-3">
+                                        <label class="form-label fs-8 fw-semibold">Offered Annual CTC (₹)</label>
+                                        <input type="number" step="0.01" name="offered_ctc" value="{{ old('offered_ctc', $itv->offered_ctc) }}" class="form-control form-control-sm" placeholder="Annual CTC e.g. 600000">
+                                    </div>
+                                @endif
+
+                                <div class="mb-0">
+                                    <label class="form-label fs-8 fw-semibold">Status Remarks / Evaluation Notes</label>
+                                    <textarea name="remarks" class="form-control form-control-sm" rows="4" placeholder="Remarks or evaluation notes for candidate status update...">{{ old('remarks', $itv->remarks) }}</textarea>
+                                </div>
+                            </div>
+
+                            <!-- Right Column: Email Studio -->
+                            <div class="col-lg-7 ps-lg-4">
+                                <h6 class="fs-8 text-uppercase fw-bold text-primary mb-3"><i class="fa-solid fa-paper-plane me-2"></i>Email Notification Studio</h6>
+
+                                <div class="card border border-subtle bg-body-tertiary p-3 rounded-3 mb-3">
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <div class="fw-bold fs-8 {{ $stCfg['badge_class'] }}">
+                                            <i class="fa-solid fa-paper-plane me-1"></i> Send Status Email Notification
+                                        </div>
+                                        <div class="form-check form-switch mb-0">
+                                            <input class="form-check-input" type="checkbox" name="send_email_notification" id="sendEmailSwitch_{{ $stCfg['modal_id'] }}" value="1" checked>
+                                            <label class="form-check-label fs-9 text-muted fw-semibold" for="sendEmailSwitch_{{ $stCfg['modal_id'] }}">Send Mail</label>
+                                        </div>
+                                    </div>
+                                    <div class="row g-2 pt-1 border-top border-subtle">
+                                        <div class="col-md-6">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="notify_candidate" id="notifyCandCheck_{{ $stCfg['modal_id'] }}" value="1" checked>
+                                                <label class="form-check-label fs-8 text-body-emphasis" for="notifyCandCheck_{{ $stCfg['modal_id'] }}">
+                                                    <i class="fa-solid fa-user me-1 text-success"></i> Candidate: {{ $itv->jobApplication->email ?? 'N/A' }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="notify_interviewers" id="notifyPanCheck_{{ $stCfg['modal_id'] }}" value="1" checked>
+                                                <label class="form-check-label fs-8 text-body-emphasis" for="notifyPanCheck_{{ $stCfg['modal_id'] }}">
+                                                    <i class="fa-solid fa-users me-1 text-info"></i> Interview Panelists (CC)
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2 pt-2 border-top border-subtle">
+                                        <label class="form-label fs-9 fw-semibold text-body-secondary mb-1"><i class="fa-solid fa-user-plus me-1 text-primary"></i> Add Extra CC Employees (Multi-Select)</label>
+                                        <select name="cc_employees_id[]" class="form-select form-select-sm select-search" data-control="select2" data-placeholder="Select Extra CC Employees..." multiple>
+                                            @foreach($interviewers as $emp)
+                                                <option value="{{ $emp->user_id }}">
+                                                    {{ $emp->first_name }} {{ $emp->last_name }} @if(!empty($emp->employee_id)) (ID: {{ $emp->employee_id }}) @endif
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fs-9 fw-semibold text-body-secondary mb-1">Custom Email Subject</label>
+                                    <input type="text" name="custom_email_subject" class="form-control form-control-sm fs-8" value="{{ old('custom_email_subject') }}" placeholder="{{ $stCfg['default_subject'] }}">
+                                </div>
+
+                                <div class="mb-0">
+                                    <div class="d-flex align-items-center justify-content-between mb-1">
+                                        <label class="form-label fs-9 fw-semibold text-body-secondary mb-0">Email Message Body (WYSIWYG Editor)</label>
+                                        <span class="fs-9 text-muted"><i class="fa-solid fa-wand-magic-sparkles me-1 text-primary"></i> Live Preview</span>
+                                    </div>
+
+                                    <div class="wysiwyg-toolbar border border-bottom-0 rounded-top bg-body-tertiary p-2 d-flex flex-wrap align-items-center gap-1">
+                                        <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Bold" onclick="execWysiwygCmd('bold', this)"><i class="fa-solid fa-bold"></i></button>
+                                        <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Italic" onclick="execWysiwygCmd('italic', this)"><i class="fa-solid fa-italic"></i></button>
+                                        <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Underline" onclick="execWysiwygCmd('underline', this)"><i class="fa-solid fa-underline"></i></button>
+                                        <div class="vr mx-1"></div>
+                                        <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Bullet List" onclick="execWysiwygCmd('insertUnorderedList', this)"><i class="fa-solid fa-list-ul"></i></button>
+                                        <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Numbered List" onclick="execWysiwygCmd('insertOrderedList', this)"><i class="fa-solid fa-list-ol"></i></button>
+                                        <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Heading" onclick="execWysiwygCmd('formatBlock', this, '<h3>')"><i class="fa-solid fa-heading"></i></button>
+                                        <div class="vr mx-1"></div>
+                                        <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Insert Link" onclick="insertWysiwygLink(this)"><i class="fa-solid fa-link"></i></button>
+                                        <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Clear Formatting" onclick="execWysiwygCmd('removeFormat', this)"><i class="fa-solid fa-eraser"></i></button>
+                                        <button type="button" class="btn btn-xs btn-outline-secondary border py-1 px-2 ms-auto" title="Reset Default Template" onclick="resetWysiwygEditor(this)">
+                                            <i class="fa-solid fa-rotate-left me-1"></i> Reset Template
+                                        </button>
+                                    </div>
+
+                                    <div class="wysiwyg-canvas border rounded-bottom p-3 bg-body fs-8 text-body" contenteditable="true" style="min-height: 250px; max-height: 380px; overflow-y: auto; line-height: 1.6;" data-default-template="{{ e($stCfg['default_body']) }}">
+                                        {!! old('custom_email_body', $stCfg['default_body']) !!}
+                                    </div>
+                                    <textarea name="custom_email_body" class="wysiwyg-hidden-input d-none">{{ old('custom_email_body', $stCfg['default_body']) }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" onclick="submitWithLoader(this)" class="btn {{ $stCfg['btn_class'] }} btn-sm fw-bold">{{ $stCfg['btn_label'] }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    @endforeach
 
     <!-- Modal: Edit Scheduled Interview -->
     <div class="modal fade" id="editInterviewModal{{ $itv->job_interview_id }}" tabindex="-1" aria-hidden="true">
@@ -455,6 +626,16 @@
                                                 <i class="fa-solid fa-users me-1 text-info"></i> Interview Panelists (CC)
                                             </label>
                                         </div>
+                                    </div>
+                                    <div class="mt-2 pt-2 border-top border-subtle">
+                                        <label class="form-label fs-9 fw-semibold text-body-secondary mb-1"><i class="fa-solid fa-user-plus me-1 text-warning"></i> Add Extra CC Employees (Multi-Select)</label>
+                                        <select name="cc_employees_id[]" class="form-select form-select-sm select-search" data-control="select2" data-placeholder="Select Extra CC Employees..." multiple>
+                                            @foreach($interviewers as $emp)
+                                                <option value="{{ $emp->user_id }}">
+                                                    {{ $emp->first_name }} {{ $emp->last_name }} @if(!empty($emp->employee_id)) (ID: {{ $emp->employee_id }}) @endif
+                                                </option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -771,6 +952,16 @@
                                             </label>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="mt-2 pt-2 border-top border-subtle">
+                                    <label class="form-label fs-9 fw-semibold text-body-secondary mb-1"><i class="fa-solid fa-user-plus me-1 text-primary"></i> Add Extra CC Employees (Multi-Select)</label>
+                                    <select name="cc_employees_id[]" class="form-select form-select-sm select-search" data-control="select2" data-placeholder="Select Extra CC Employees..." multiple>
+                                        @foreach($interviewers as $emp)
+                                            <option value="{{ $emp->user_id }}" {{ (is_array(old('cc_employees_id')) && in_array($emp->user_id, old('cc_employees_id'))) ? 'selected' : '' }}>
+                                                {{ $emp->first_name }} {{ $emp->last_name }} @if(!empty($emp->employee_id)) (ID: {{ $emp->employee_id }}) @endif
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
 

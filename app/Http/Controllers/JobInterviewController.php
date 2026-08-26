@@ -80,7 +80,13 @@ class JobInterviewController extends Controller
             'next_round_date' => ['nullable', 'date'],
             'interview_time' => ['nullable', 'string', 'max:50'],
             'interviewers_id' => ['nullable'],
-            'remarks' => ['nullable', 'string', 'max:500'],
+            'cc_employees_id' => ['nullable'],
+            'remarks' => ['nullable', 'string', 'max:1000'],
+            'send_email_notification' => ['nullable'],
+            'notify_candidate' => ['nullable'],
+            'notify_interviewers' => ['nullable'],
+            'custom_email_subject' => ['nullable', 'string', 'max:255'],
+            'custom_email_body' => ['nullable', 'string'],
         ]);
 
         $this->recruitmentService->updateInterviewStatus($interview, $request->input('status'), $request->all());
