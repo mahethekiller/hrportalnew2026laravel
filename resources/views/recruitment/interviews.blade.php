@@ -178,7 +178,7 @@
 
 <!-- Modal: Schedule New Interview -->
 <div class="modal fade" id="scheduleInterviewModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <form method="POST" action="{{ route('recruitment-interviews.store') }}">
             @csrf
             <div class="modal-content">
