@@ -62,3 +62,8 @@ These rules represent the absolute constraints of the project. Any deviation fro
 - Table headers (`<thead>`) must have `<th>Actions</th>` as the first column.
 - This ensures zero horizontal scrolling is needed to trigger actions and maximizes HR power-user efficiency.
 
+## 🔍 Rule 9: Searchable Select Dropdowns in Form Modals
+- All modal forms and complex selection fields (e.g. Job Requisition, Candidate, Employee, Department, Designation, Role, Leave Type) must include `class="select-search"` or `data-control="select2"` and a blank default option (`<option value=""></option>`).
+- This automatically activates live search filtering via Select2, ensuring users can instantly search and filter options.
+
+

@@ -220,8 +220,8 @@
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
                             <label class="form-label fs-8 fw-semibold">Target Job Opening Requisition <span class="text-danger">*</span></label>
-                            <select name="job_id" class="form-select form-select-sm" required>
-                                <option value="">Select Job Opening</option>
+                            <select name="job_id" class="form-select form-select-sm select-search" data-control="select2" data-placeholder="Search Job Opening..." required>
+                                <option value=""></option>
                                 @foreach($jobs as $jb)
                                     <option value="{{ $jb->job_id }}">{{ $jb->job_title }} ({{ $jb->job_code }})</option>
                                 @endforeach
@@ -233,8 +233,8 @@
                         </div>
                         <div class="col-md-3">
                             <label class="form-label fs-8 fw-semibold">Department</label>
-                            <select name="department_id" class="form-select form-select-sm">
-                                <option value="">Select Department</option>
+                            <select name="department_id" class="form-select form-select-sm select-search" data-control="select2" data-placeholder="Search Department...">
+                                <option value=""></option>
                                 @foreach($departments as $dept)
                                     <option value="{{ $dept->department_id }}">{{ $dept->department_name }}</option>
                                 @endforeach

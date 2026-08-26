@@ -172,8 +172,8 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label fs-8 fw-semibold">Select Candidate <span class="text-danger">*</span></label>
-                        <select name="application_id" class="form-select form-select-sm" required>
-                            <option value="">Choose Candidate</option>
+                        <select name="application_id" class="form-select form-select-sm select-search" data-control="select2" data-placeholder="Search Candidate..." required>
+                            <option value=""></option>
                             @foreach($applications as $app)
                                 <option value="{{ $app->application_id }}">
                                     {{ $app->candidate_name }} ({{ $app->email }})
@@ -193,8 +193,8 @@
                         </div>
                         <div class="col-6">
                             <label class="form-label fs-8 fw-semibold">Interviewer Panelist</label>
-                            <select name="interviewers_id" class="form-select form-select-sm">
-                                <option value="">Select Interviewer</option>
+                            <select name="interviewers_id" class="form-select form-select-sm select-search" data-control="select2" data-placeholder="Search Interviewer...">
+                                <option value=""></option>
                                 @foreach($interviewers as $emp)
                                     <option value="{{ $emp->user_id }}">{{ $emp->first_name }} {{ $emp->last_name }}</option>
                                 @endforeach
