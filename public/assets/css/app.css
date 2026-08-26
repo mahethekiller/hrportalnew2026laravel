@@ -2,118 +2,118 @@
 :root {
     --sidebar-width: 250px;
     
-    /* PRD Color Tokens (Light Mode) */
-    --canvas: #F4F6F5;
+    /* Corporate Royal Indigo & Slate Tokens (Light Mode) */
+    --canvas: #F8FAFC;
     --surface: #FFFFFF;
     --surface-raised: #FFFFFF;
-    --ink: #16202B;
-    --slate: #5B6B78;
-    --line: #E2E7E5;
+    --ink: #0F172A;
+    --slate: #475569;
+    --line: #E2E8F0;
     
-    --fern: #2F7A63;
-    --fern-active: #24624F;
-    --fern-wash: #E4F0EA;
+    --fern: #4F46E5;
+    --fern-active: #4338CA;
+    --fern-wash: #EEF2FF;
     
-    --marigold: #B07A14;
-    --marigold-wash: #FBF1DC;
+    --marigold: #D97706;
+    --marigold-wash: #FFFBEB;
     
-    --clay: #BE4A3F;
-    --clay-wash: #FBE9E7;
+    --clay: #DC2626;
+    --clay-wash: #FEF2F2;
     
-    --harbor: #3A6EA5;
+    --harbor: #0284C7;
 
-    /* Bootstrap 5.3 Mapped Variables (Fern Action Color) */
-    --bs-primary: #2F7A63;
-    --bs-primary-active: #24624F;
-    --bs-primary-light: #E4F0EA;
-    --bs-primary-rgb: 47, 122, 99;
+    /* Bootstrap 5.3 Mapped Variables (Royal Indigo Action Color) */
+    --bs-primary: #4F46E5;
+    --bs-primary-active: #4338CA;
+    --bs-primary-light: #EEF2FF;
+    --bs-primary-rgb: 79, 70, 229;
     
-    --bs-secondary: #5B6B78;
-    --bs-secondary-light: #F4F6F5;
+    --bs-secondary: #475569;
+    --bs-secondary-light: #F8FAFC;
     
-    --bs-success: #2F7A63;
-    --bs-success-light: #E4F0EA;
+    --bs-success: #10B981;
+    --bs-success-light: #ECFDF5;
     
-    --bs-danger: #BE4A3F;
-    --bs-danger-light: #FBE9E7;
+    --bs-danger: #EF4444;
+    --bs-danger-light: #FEF2F2;
     
-    --bs-warning: #B07A14;
-    --bs-warning-light: #FBF1DC;
+    --bs-warning: #F59E0B;
+    --bs-warning-light: #FFFBEB;
     
-    --bs-info: #3A6EA5;
-    --bs-info-light: #E8F0F8;
+    --bs-info: #06B6D4;
+    --bs-info-light: #ECFEFF;
     
-    --bg-color: #F4F6F5;
-    --text-main: #16202B;
-    --text-muted: #5B6B78;
+    --bg-color: #F8FAFC;
+    --text-main: #0F172A;
+    --text-muted: #475569;
     
     --sidebar-bg: #FFFFFF;
-    --sidebar-color: #5B6B78;
-    --sidebar-hover-bg: #E4F0EA;
-    --sidebar-hover-color: #16202B;
-    --sidebar-active-bg: #E4F0EA;
-    --sidebar-active-color: #2F7A63;
-    --sidebar-border: #E2E7E5;
+    --sidebar-color: #475569;
+    --sidebar-hover-bg: #EEF2FF;
+    --sidebar-hover-color: #0F172A;
+    --sidebar-active-bg: #EEF2FF;
+    --sidebar-active-color: #4F46E5;
+    --sidebar-border: #E2E8F0;
     
     --card-bg: #FFFFFF;
-    --card-border: #E2E7E5;
+    --card-border: #E2E8F0;
     --card-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.05), 0px 1px 2px 0px rgba(0, 0, 0, 0.03);
     
     --input-bg: #FFFFFF;
     --input-border: #CBD5E1;
-    --input-focus-border: #2F7A63;
+    --input-focus-border: #4F46E5;
     
     --nav-bg: rgba(255, 255, 255, 0.9);
 }
 
 [data-bs-theme="dark"] {
-    /* PRD Color Tokens (Dark Mode Canvas) */
-    --canvas: #0E1620;
-    --surface: #17222E;
-    --surface-raised: #1E2B39;
-    --ink: #EDF1F4;
-    --slate: #93A3B1;
-    --line: #2A3846;
+    /* Corporate Royal Indigo & Slate Tokens (Dark Mode Canvas) */
+    --canvas: #0B0F19;
+    --surface: #111827;
+    --surface-raised: #1F2937;
+    --ink: #F9FAFB;
+    --slate: #9CA3AF;
+    --line: #1F2937;
     
-    --fern: #4FA98C;
-    --fern-active: #3C8A71;
-    --fern-wash: #1B3A33;
+    --fern: #6366F1;
+    --fern-active: #4F46E5;
+    --fern-wash: #1E1B4B;
     
-    --marigold: #E8B44A;
-    --marigold-wash: #3A2F17;
+    --marigold: #F59E0B;
+    --marigold-wash: #312E81;
     
-    --clay: #E4796D;
-    --clay-wash: #3B1F1C;
+    --clay: #F87171;
+    --clay-wash: #451A03;
     
-    --harbor: #6FA3D8;
+    --harbor: #38BDF8;
 
     /* Bootstrap 5.3 Mapped Variables (Dark Theme) */
-    --bs-primary: #4FA98C;
-    --bs-primary-active: #3C8A71;
-    --bs-primary-light: #1B3A33;
-    --bs-primary-rgb: 79, 169, 140;
+    --bs-primary: #6366F1;
+    --bs-primary-active: #4F46E5;
+    --bs-primary-light: #1E1B4B;
+    --bs-primary-rgb: 99, 102, 241;
 
-    --bg-color: #0E1620;
-    --text-main: #EDF1F4;
-    --text-muted: #93A3B1;
+    --bg-color: #0B0F19;
+    --text-main: #F9FAFB;
+    --text-muted: #9CA3AF;
     
-    --sidebar-bg: #17222E;
-    --sidebar-color: #93A3B1;
-    --sidebar-hover-bg: #1E2B39;
-    --sidebar-hover-color: #EDF1F4;
-    --sidebar-active-bg: #1B3A33;
-    --sidebar-active-color: #4FA98C;
-    --sidebar-border: #2A3846;
+    --sidebar-bg: #111827;
+    --sidebar-color: #9CA3AF;
+    --sidebar-hover-bg: #1F2937;
+    --sidebar-hover-color: #F9FAFB;
+    --sidebar-active-bg: #1E1B4B;
+    --sidebar-active-color: #6366F1;
+    --sidebar-border: #1F2937;
     
-    --card-bg: #17222E;
-    --card-border: #2A3846;
+    --card-bg: #111827;
+    --card-border: #1F2937;
     --card-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
     
-    --input-bg: #17222E;
-    --input-border: #2A3846;
-    --input-focus-border: #4FA98C;
+    --input-bg: #111827;
+    --input-border: #1F2937;
+    --input-focus-border: #6366F1;
     
-    --nav-bg: rgba(14, 22, 32, 0.9);
+    --nav-bg: rgba(11, 15, 25, 0.9);
 }
 
 /* Typography Tokens & Utilities */
