@@ -251,9 +251,23 @@ class RecruitmentService
 
         if ($employee && !empty($customData['role_id'])) {
             try {
-                $role = \Spatie\Permission\Models\Role::find($customData['role_id']);
+                $roleId = $customData['role_id'];
+                $role = \Spatie\Permission\Models\Role::find($roleId);
+                if (!$role) {
+                    $role = \Spatie\Permission\Models\Role::where('name', $roleId)->first();
+                }
+                if (!$role) {
+                    $portalRole = \App\Models\UserRole::find($roleId);
+                    if ($portalRole) {
+                        $roleName = $portalRole->role_name ?? $portalRole->name ?? '';
+                        $role = \Spatie\Permission\Models\Role::where('name', $roleName)->first();
+                    }
+                }
                 if ($role) {
                     $employee->syncRoles([$role->name]);
+                }
+                if (!empty($portalRole)) {
+                    $employee->update(['user_role_id' => $portalRole->id]);
                 }
             } catch (\Throwable $re) {
                 \Illuminate\Support\Facades\Log::warning("Role sync failed on convert: " . $re->getMessage());

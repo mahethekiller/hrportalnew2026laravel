@@ -28,11 +28,30 @@ class JobInterviewController extends Controller
         $interviewers = $this->employeeService->getActiveEmployees();
         $departments = \App\Models\Department::with('company')->orderBy('department_name')->get();
         $designations = \App\Models\Designation::with('company')->orderBy('designation_name')->get();
+        
+        $roles = collect();
         try {
-            $roles = \Spatie\Permission\Models\Role::orderBy('name')->get();
-        } catch (\Throwable $e) {
-            $roles = collect();
-        }
+            $spatieRoles = \Spatie\Permission\Models\Role::orderBy('name')->get();
+            foreach ($spatieRoles as $r) {
+                $roles->push((object)[
+                    'id' => $r->id,
+                    'name' => $r->name,
+                ]);
+            }
+        } catch (\Throwable $e) {}
+
+        try {
+            $portalRoles = \App\Models\UserRole::orderBy('role_name')->get();
+            foreach ($portalRoles as $pr) {
+                $roleName = $pr->role_name ?? $pr->name ?? '';
+                if (!empty($roleName) && !$roles->contains('name', $roleName)) {
+                    $roles->push((object)[
+                        'id' => $pr->id,
+                        'name' => $roleName,
+                    ]);
+                }
+            }
+        } catch (\Throwable $e) {}
 
         try {
             $defaultTemplate = \App\Models\EmailTemplate::where('template_code', 'candidate_interview_scheduled')->first();
