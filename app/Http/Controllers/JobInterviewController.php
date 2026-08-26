@@ -59,7 +59,14 @@ class JobInterviewController extends Controller
             $defaultTemplate = null;
         }
 
-        return view('recruitment.interviews', compact('interviews', 'applications', 'interviewers', 'defaultTemplate', 'filters', 'departments', 'designations', 'roles'));
+        $summary = [
+            'total_interviews' => \App\Models\JobInterview::count(),
+            'confirmed_count'  => \App\Models\JobInterview::whereIn('status', ['confirmed', 'scheduled', 'Confirmed', 'Scheduled'])->count(),
+            'selected_count'   => \App\Models\JobInterview::whereIn('status', ['selected', 'Selected', 'offeraccepted'])->count(),
+            'converted_count'  => \App\Models\JobInterview::where('convert_to_employee', '!=', 0)->count(),
+        ];
+
+        return view('recruitment.interviews', compact('interviews', 'applications', 'interviewers', 'defaultTemplate', 'filters', 'departments', 'designations', 'roles', 'summary'));
     }
 
     public function store(StoreJobInterviewRequest $request): RedirectResponse

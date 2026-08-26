@@ -20,6 +20,42 @@
         </div>
     </div>
 
+    <!-- Summary KPI Metric Cards Grid -->
+    <div class="row g-3 mb-4">
+        <div class="col-xl-3 col-sm-6">
+            <x-kpi-card 
+                title="Total Scheduled" 
+                :value="($summary['total_interviews'] ?? 0) . ' Interviews'" 
+                icon="fa-solid fa-calendar-days" 
+                variant="primary" 
+            />
+        </div>
+        <div class="col-xl-3 col-sm-6">
+            <x-kpi-card 
+                title="Confirmed / Upcoming" 
+                :value="($summary['confirmed_count'] ?? 0) . ' Candidates'" 
+                icon="fa-solid fa-calendar-check" 
+                variant="info" 
+            />
+        </div>
+        <div class="col-xl-3 col-sm-6">
+            <x-kpi-card 
+                title="Selected / Offered" 
+                :value="($summary['selected_count'] ?? 0) . ' Candidates'" 
+                icon="fa-solid fa-user-check" 
+                variant="warning" 
+            />
+        </div>
+        <div class="col-xl-3 col-sm-6">
+            <x-kpi-card 
+                title="Converted Employees" 
+                :value="($summary['converted_count'] ?? 0) . ' Onboarded'" 
+                icon="fa-solid fa-user-plus" 
+                variant="success" 
+            />
+        </div>
+    </div>
+
     <!-- Interviews Table Card -->
     <div class="card border-0 shadow-sm">
         <div class="card-header border-0 pt-3 bg-light bg-opacity-50">
