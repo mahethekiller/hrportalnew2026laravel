@@ -72,4 +72,10 @@ These rules represent the absolute constraints of the project. Any deviation fro
 - All form inputs inside modals must retain user-entered values using `value="{{ old('field_name') }}"` and retain select option states (`old('field_name') == $val ? 'selected' : ''`).
 - Form validation errors must be rendered both inside the modal body (`@if($errors->any())` alert banner) and inline using `@error('field_name')` directives and `is-invalid` classes.
 
+## 📐 Rule 11: Strict Bootstrap 5 Modal Markup Compliance
+- All modal dialogs across all Blade views must follow strict Bootstrap 5 HTML element hierarchy:
+  - `.modal-dialog` MUST have `.modal-content` as its direct child (`.modal-dialog > .modal-content` or `.modal-dialog > form.modal-content`).
+  - Never place an unstyled `<form>` tag between `.modal-dialog` and `.modal-content` (`.modal-dialog > form > .modal-content` is strictly forbidden). Doing so breaks Bootstrap flexbox width inheritance and causes `modal-lg` and `modal-xl` viewport sizing to collapse back to 500px.
+  - Always use `<form class="modal-content" ...>` or place `<form>` inside `.modal-content` (`.modal-content > form`).
+
 
