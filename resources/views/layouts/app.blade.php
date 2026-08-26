@@ -309,28 +309,42 @@
                     items.forEach(item => {
                         const text = item.textContent.toLowerCase();
                         item.style.display = text.includes(term) ? '' : 'none';
-                    });
-                });
-            // Global Form Submit Lock & Visual Spinner Indicator
-            $(document).on('submit', 'form', function(e) {
-                var $form = $(this);
-                if ($form.attr('data-no-loader') === 'true') return true;
-
-                if ($form.data('is-submitting') === true) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    return false;
-                }
-
-                $form.data('is-submitting', true);
-
-                var $btn = $form.find('button[type="submit"], input[type="submit"]');
-                if ($btn.length) {
-                    $btn.addClass('disabled').css({'pointer-events': 'none', 'opacity': '0.75'});
-                    $btn.html('<i class="fa-solid fa-circle-notch fa-spin me-1"></i> Processing...');
-                }
-            });
+            }
         });
+
+        // Global Form Submit Lock & Visual Spinner Indicator (Native Event Capturing)
+        document.addEventListener('submit', function(e) {
+            const form = e.target;
+            if (!form || form.tagName !== 'FORM') return;
+            if (form.getAttribute('data-no-loader') === 'true') return;
+
+            if (form.dataset.isSubmitting === 'true') {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                return false;
+            }
+
+            form.dataset.isSubmitting = 'true';
+
+            const submitBtns = form.querySelectorAll('button[type="submit"], input[type="submit"]');
+            submitBtns.forEach(btn => {
+                btn.classList.add('disabled');
+                btn.style.pointerEvents = 'none';
+                btn.style.opacity = '0.75';
+                btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin me-1"></i> Processing...';
+            });
+        }, true);
+
+        document.addEventListener('click', function(e) {
+            const btn = e.target.closest('button[type="submit"], input[type="submit"]');
+            if (!btn) return;
+            const form = btn.closest('form');
+            if (form && form.dataset.isSubmitting === 'true') {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                return false;
+            }
+        }, true);
     </script>
 
     <!-- Theme Customizer Offcanvas Drawer -->
