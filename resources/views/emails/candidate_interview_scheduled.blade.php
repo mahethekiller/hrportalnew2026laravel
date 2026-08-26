@@ -75,7 +75,7 @@
             @endif
         </div>
         <div class="footer">
-            This is an automated notification from Antigravity HR Portal.
+            This is an automated notification from {{ $siteName ?? 'HR Portal' }}.
         </div>
     </div>
 </body>

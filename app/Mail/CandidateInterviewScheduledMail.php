@@ -17,6 +17,8 @@ class CandidateInterviewScheduledMail extends Mailable
     public string $customSubject;
     public ?string $customBody;
 
+    public string $siteName;
+
     public function __construct(JobInterview $interview, ?string $customSubject = null, ?string $customBody = null)
     {
         $this->interview = $interview;
@@ -24,45 +26,58 @@ class CandidateInterviewScheduledMail extends Mailable
         $candidateName = $interview->jobApplication->candidate_name ?? 'Candidate';
         $jobTitle = $interview->jobApplication->job->job_title ?? 'Position';
 
+        $siteName = 'Antigravity HR Portal';
+        try {
+            $setting = \App\Models\Setting::first();
+            if ($setting && !empty($setting->application_name)) {
+                $siteName = $setting->application_name;
+            }
+        } catch (\Throwable $e) {}
+        $this->siteName = $siteName;
+
         try {
             $dbTemplate = \App\Models\EmailTemplate::where('template_code', 'candidate_interview_scheduled')->first();
         } catch (\Throwable $e) {
             $dbTemplate = null;
         }
 
+        $panelists = $interview->interviewer_list;
+        $panelistNames = $panelists->isNotEmpty()
+            ? $panelists->map(fn($p) => trim(($p->first_name ?? '') . ' ' . ($p->last_name ?? '')))->implode(', ')
+            : ($interview->interviewer ? trim(($interview->interviewer->first_name ?? '') . ' ' . ($interview->interviewer->last_name ?? '')) : 'Recruitment Panel');
+
+        $remarks = !empty($interview->remarks)
+            ? $interview->remarks
+            : (!empty($interview->description)
+                ? $interview->description
+                : (!empty($interview->jobApplication->application_remarks)
+                    ? $interview->jobApplication->application_remarks
+                    : 'No special remarks provided.'));
+
+        $replacements = [
+            '{candidate_name}' => $candidateName,
+            '{job_title}' => $jobTitle,
+            '{interview_date}' => date('F d, Y (l)', strtotime($interview->interview_date)),
+            '{interview_time}' => $interview->interview_time,
+            '{interview_mode}' => $interview->interview_mode,
+            '{interview_place}' => $interview->interview_place ?? 'Online / Office Room',
+            '{panelists}' => $panelistNames,
+            '{remarks}' => $remarks,
+            '{site_name}' => $siteName,
+            '{application_remarks}' => $remarks,
+        ];
+
         if (!empty($customSubject)) {
-            $this->customSubject = $customSubject;
+            $this->customSubject = str_replace(array_keys($replacements), array_values($replacements), $customSubject);
         } elseif ($dbTemplate && !empty($dbTemplate->subject)) {
-            $this->customSubject = str_replace(
-                ['{candidate_name}', '{job_title}'],
-                [$candidateName, $jobTitle],
-                $dbTemplate->subject
-            );
+            $this->customSubject = str_replace(array_keys($replacements), array_values($replacements), $dbTemplate->subject);
         } else {
             $this->customSubject = "[Interview Invitation] {$candidateName} - {$jobTitle}";
         }
 
-        if (!empty($customBody)) {
-            $this->customBody = $customBody;
-        } elseif ($dbTemplate && !empty($dbTemplate->message)) {
-            $panelists = $interview->interviewer_list;
-            $panelistNames = $panelists->isNotEmpty()
-                ? $panelists->pluck('first_name')->zip($panelists->pluck('last_name'))->map(fn($p) => trim($p[0].' '.$p[1]))->implode(', ')
-                : 'Recruitment Panel';
-
-            $replacements = [
-                '{candidate_name}' => $candidateName,
-                '{job_title}' => $jobTitle,
-                '{interview_date}' => date('F d, Y (l)', strtotime($interview->interview_date)),
-                '{interview_time}' => $interview->interview_time,
-                '{interview_mode}' => $interview->interview_mode,
-                '{interview_place}' => $interview->interview_place ?? 'Online / Office Room',
-                '{panelists}' => $panelistNames,
-                '{remarks}' => $interview->remarks ?? $interview->description ?? 'N/A',
-                '{site_name}' => config('app.name', 'Antigravity HR Portal'),
-            ];
-
-            $this->customBody = str_replace(array_keys($replacements), array_values($replacements), $dbTemplate->message);
+        $rawMessage = !empty($customBody) ? $customBody : ($dbTemplate->message ?? null);
+        if (!empty($rawMessage)) {
+            $this->customBody = str_replace(array_keys($replacements), array_values($replacements), $rawMessage);
         } else {
             $this->customBody = null;
         }
@@ -77,6 +92,7 @@ class CandidateInterviewScheduledMail extends Mailable
                 'application' => $this->interview->jobApplication,
                 'panelists' => $this->interview->interviewer_list,
                 'customBody' => $this->customBody,
+                'siteName' => $this->siteName,
             ]);
     }
 }
