@@ -151,7 +151,13 @@
             // 4. Resolve Font Family
             const fontStack = FONT_FAMILIES[config.font] || FONT_FAMILIES.inter;
             root.style.setProperty('--portal-font-family', fontStack);
-            document.body.style.fontFamily = fontStack;
+            if (document.body) {
+                document.body.style.fontFamily = fontStack;
+            } else {
+                document.addEventListener('DOMContentLoaded', () => {
+                    if (document.body) document.body.style.fontFamily = fontStack;
+                });
+            }
         },
 
         generateCustomProfile: function (hex) {

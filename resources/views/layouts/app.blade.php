@@ -302,6 +302,9 @@
                 searchInput.addEventListener('input', function() {
                     const term = this.value.toLowerCase().trim();
                     const items = document.querySelectorAll('.command-palette-item');
+                    items.forEach(item => {
+                        const text = item.textContent.toLowerCase();
+                        item.style.display = text.includes(term) ? '' : 'none';
                     });
                 });
             }
