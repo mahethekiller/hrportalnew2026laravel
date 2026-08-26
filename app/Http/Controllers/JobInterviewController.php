@@ -44,12 +44,16 @@ class JobInterviewController extends Controller
     {
         $request->validate([
             'status' => ['required', 'string', 'max:50'],
+            'next_round_date' => ['nullable', 'date'],
+            'interview_time' => ['nullable', 'string', 'max:50'],
+            'interviewers_id' => ['nullable'],
+            'remarks' => ['nullable', 'string', 'max:500'],
         ]);
 
-        $this->recruitmentService->updateInterviewStatus($interview, $request->input('status'));
+        $this->recruitmentService->updateInterviewStatus($interview, $request->input('status'), $request->all());
 
         return redirect()->route('recruitment-interviews.index')
-            ->with('success', 'Interview status updated to "' . $request->input('status') . '".');
+            ->with('success', 'Interview status updated to "' . ucfirst($request->input('status')) . '".');
     }
 
     public function convert(\App\Models\JobInterview $interview): RedirectResponse

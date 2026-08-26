@@ -87,11 +87,9 @@
                                                     </form>
                                                 </li>
                                                 <li>
-                                                    <form method="POST" action="{{ route('recruitment-interviews.status', $itv->job_interview_id) }}">
-                                                        @csrf
-                                                        <input type="hidden" name="status" value="nextround">
-                                                        <button type="submit" class="dropdown-item text-info"><i class="fa-solid fa-forward me-2"></i> Next Round</button>
-                                                    </form>
+                                                    <button type="button" class="dropdown-item text-info" data-bs-toggle="modal" data-bs-target="#nextRoundModal{{ $itv->job_interview_id }}">
+                                                        <i class="fa-solid fa-forward me-2"></i> Next Round Schedule...
+                                                    </button>
                                                 </li>
                                                 <li>
                                                     <form method="POST" action="{{ route('recruitment-interviews.status', $itv->job_interview_id) }}">
@@ -110,6 +108,67 @@
                                             </ul>
                                         </div>
                                     </div>
+
+                                    <!-- Modal: Schedule Next Round -->
+                                    <div class="modal fade" id="nextRoundModal{{ $itv->job_interview_id }}" tabindex="-1">
+                                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                                            <form method="POST" action="{{ route('recruitment-interviews.status', $itv->job_interview_id) }}">
+                                                @csrf
+                                                <input type="hidden" name="status" value="nextround">
+                                                <div class="modal-content text-start">
+                                                    <div class="modal-header border-bottom">
+                                                        <h5 class="modal-title fw-bold text-body-emphasis">
+                                                            <i class="fa-solid fa-forward me-2 text-info"></i> Schedule Next Round: {{ $itv->jobApplication->candidate_name ?? 'Candidate' }}
+                                                        </h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        @if($errors->any() && old('next_round_interview_id') == $itv->job_interview_id)
+                                                            <div class="alert alert-danger p-2 fs-8 mb-3">
+                                                                <ul class="mb-0 ps-3">
+                                                                    @foreach($errors->all() as $error)
+                                                                        <li>{{ $error }}</li>
+                                                                    @endforeach
+                                                                </ul>
+                                                            </div>
+                                                        @endif
+                                                        <input type="hidden" name="next_round_interview_id" value="{{ $itv->job_interview_id }}">
+
+                                                        <div class="row g-3 mb-3">
+                                                            <div class="col-md-6">
+                                                                <label class="form-label fs-8 fw-semibold">Next Round Date <span class="text-danger">*</span></label>
+                                                                <input type="date" name="next_round_date" class="form-control form-control-sm" required value="{{ old('next_round_date', !empty($itv->next_round_date) ? $itv->next_round_date : date('Y-m-d', strtotime('+1 day'))) }}">
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label class="form-label fs-8 fw-semibold">Next Round Time <span class="text-danger">*</span></label>
+                                                                <input type="time" name="interview_time" class="form-control form-control-sm" required value="{{ old('interview_time', $itv->interview_time ?? '11:00') }}">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <label class="form-label fs-8 fw-semibold">Next Round Interview Panelists (Multi-Select)</label>
+                                                            <select name="interviewers_id[]" class="form-select form-select-sm select-search" data-control="select2" data-placeholder="Select Interviewers..." multiple>
+                                                                @foreach($interviewers as $emp)
+                                                                    <option value="{{ $emp->user_id }}" {{ in_array($emp->user_id, explode(',', (string) $itv->interviewers_id)) ? 'selected' : '' }}>
+                                                                        {{ $emp->first_name }} {{ $emp->last_name }} @if(!empty($emp->employee_id)) (ID: {{ $emp->employee_id }}) @endif
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <label class="form-label fs-8 fw-semibold">Next Round Evaluation Notes / Remarks</label>
+                                                            <textarea name="remarks" class="form-control form-control-sm" rows="2" placeholder="Key focus areas or evaluation criteria for the next round...">{{ old('remarks', $itv->remarks) }}</textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
+                                                        <button type="submit" class="btn btn-info btn-sm text-white fw-bold">Update & Schedule Next Round</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </td>
                                 <td>
                                     <div class="fw-bold text-gray-900">{{ $itv->jobApplication->candidate_name ?? 'Candidate' }}</div>
@@ -117,6 +176,11 @@
                                 </td>
                                 <td>
                                     <span class="fw-medium text-gray-800">{{ $itv->formatted_interview_date }}</span>
+                                    @if(!empty($itv->next_round_date))
+                                        <div class="fs-9 text-info fw-semibold mt-1">
+                                            <i class="fa-solid fa-forward me-1"></i>Next: {{ date('M d, Y', strtotime($itv->next_round_date)) }}
+                                        </div>
+                                    @endif
                                     <div class="fs-9 text-muted"><i class="fa-regular fa-clock me-1"></i>{{ $itv->interview_time }}</div>
                                 </td>
                                 <td>

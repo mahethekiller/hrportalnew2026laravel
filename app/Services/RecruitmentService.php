@@ -67,9 +67,9 @@ class RecruitmentService
         return $interview;
     }
 
-    public function updateInterviewStatus(JobInterview $interview, string $status): bool
+    public function updateInterviewStatus(JobInterview $interview, string $status, array $extraData = []): bool
     {
-        return $this->interviewRepository->updateStatus($interview, $status);
+        return $this->interviewRepository->updateStatus($interview, $status, $extraData);
     }
 
     public function convertToEmployee(JobInterview $interview): ?\App\Models\Employee

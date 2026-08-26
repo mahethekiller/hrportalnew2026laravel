@@ -64,11 +64,34 @@ class JobInterviewRepository
         return JobInterview::create($data);
     }
 
-    public function updateStatus(JobInterview $interview, string $status): bool
+    public function updateStatus(JobInterview $interview, string $status, array $extraData = []): bool
     {
-        return $interview->update([
+        $updatePayload = [
             'status' => strtolower($status),
             'updated_date' => date('Y-m-d H:i:s'),
-        ]);
+            'updated_by' => auth()->id() ?? 1,
+        ];
+
+        if (!empty($extraData['next_round_date'])) {
+            $updatePayload['next_round_date'] = $extraData['next_round_date'];
+        }
+
+        if (!empty($extraData['interview_time'])) {
+            $updatePayload['interview_time'] = $extraData['interview_time'];
+        }
+
+        if (isset($extraData['interviewers_id'])) {
+            if (is_array($extraData['interviewers_id'])) {
+                $updatePayload['interviewers_id'] = implode(',', array_filter($extraData['interviewers_id']));
+            } else {
+                $updatePayload['interviewers_id'] = (string) $extraData['interviewers_id'];
+            }
+        }
+
+        if (isset($extraData['remarks'])) {
+            $updatePayload['remarks'] = $extraData['remarks'];
+        }
+
+        return $interview->update($updatePayload);
     }
 }
