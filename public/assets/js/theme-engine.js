@@ -73,10 +73,11 @@
     };
 
     const FONT_FAMILIES = {
-        inter: '-apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif',
+        system: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+        inter: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         outfit: '"Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
         roboto: '"Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-        plus_jakarta: '"Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+        plus_jakarta: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
     };
 
     const PortalTheme = {
