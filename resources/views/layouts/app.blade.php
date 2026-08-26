@@ -50,13 +50,78 @@
         $themeService = app(\App\Services\ThemeService::class);
         $activeThemeConfig = $themeService->getThemeConfig();
         $seasonalAccents = $themeService->getSeasonalAccents();
-        $activeAccentKey = $activeThemeConfig['seasonal_accent'] ?? 'off';
-        $activeAccent = $seasonalAccents[$activeAccentKey] ?? null;
+        $activeAccentKey = $activeThemeConfig['seasonal_accent'] ?? 'auto';
+
+        $activeAccent = null;
+
+        // 1. Dynamic Holiday Auto-Sync with Published Holidays Table
+        if ($activeAccentKey !== 'off') {
+            try {
+                if (\Illuminate\Support\Facades\Schema::hasTable('xin_holidays')) {
+                    $today = date('Y-m-d');
+                    $upcomingRange = date('Y-m-d', strtotime('+14 days'));
+
+                    // Check if today is an active published holiday
+                    $todayHoliday = \App\Models\Holiday::where('start_date', '<=', $today)
+                        ->where('end_date', '>=', $today)
+                        ->first();
+
+                    if ($todayHoliday) {
+                        $nameLower = strtolower($todayHoliday->event_name);
+                        $gradient = 'background: linear-gradient(90deg, #B45309 0%, #F59E0B 50%, #B45309 100%); color: #ffffff;';
+                        $icon = 'fa-gift';
+
+                        if (str_contains($nameLower, 'diwali') || str_contains($nameLower, 'deepawali')) {
+                            $gradient = 'background: linear-gradient(90deg, #B45309 0%, #F59E0B 50%, #B45309 100%); color: #ffffff;';
+                            $icon = 'fa-om';
+                        } elseif (str_contains($nameLower, 'independence') || str_contains($nameLower, 'republic')) {
+                            $gradient = 'background: linear-gradient(90deg, #FF671F 0%, #FFFFFF 50%, #046A38 100%); color: #1e293b;';
+                            $icon = 'fa-flag';
+                        } elseif (str_contains($nameLower, 'raksha') || str_contains($nameLower, 'holi')) {
+                            $gradient = 'background: linear-gradient(90deg, #7C3AED 0%, #EC4899 50%, #7C3AED 100%); color: #ffffff;';
+                            $icon = 'fa-wand-magic-sparkles';
+                        }
+
+                        $activeAccent = [
+                            'name' => $todayHoliday->event_name,
+                            'badge' => 'Holiday Today',
+                            'banner_css' => $gradient,
+                            'text' => '🎉 Celebrating ' . $todayHoliday->event_name . '! Warmest wishes & greetings from HR.',
+                            'icon' => $icon,
+                        ];
+                    } else {
+                        // Check upcoming holiday within 14 days
+                        $upcomingHoliday = \App\Models\Holiday::where('start_date', '>', $today)
+                            ->where('start_date', '<=', $upcomingRange)
+                            ->orderBy('start_date', 'asc')
+                            ->first();
+
+                        if ($upcomingHoliday) {
+                            $formattedDate = \Carbon\Carbon::parse($upcomingHoliday->start_date)->format('D, M d');
+                            $activeAccent = [
+                                'name' => $upcomingHoliday->event_name,
+                                'badge' => 'Upcoming Holiday',
+                                'banner_css' => 'background: linear-gradient(90deg, #1E3A8A 0%, #2563EB 50%, #1E3A8A 100%); color: #ffffff;',
+                                'text' => '🗓️ Upcoming Holiday: ' . $upcomingHoliday->event_name . ' on ' . $formattedDate . '! Enjoy the upcoming break.',
+                                'icon' => 'fa-calendar-check',
+                            ];
+                        }
+                    }
+                }
+            } catch (\Throwable $e) {
+                // Ignore in SQLite test environment
+            }
+        }
+
+        // 2. Fallback to manual theme selection if set
+        if (!$activeAccent && isset($seasonalAccents[$activeAccentKey]) && $activeAccentKey !== 'off') {
+            $activeAccent = $seasonalAccents[$activeAccentKey];
+        }
     @endphp
 
-    @if(!empty($activeAccent) && $activeAccentKey !== 'off' && !empty($activeAccent['banner_css']))
+    @if(!empty($activeAccent) && !empty($activeAccent['banner_css']))
         <!-- Seasonal & Festival Banner Overlay -->
-        <div class="py-2 px-4 text-center fs-8 fw-bold z-3 position-relative d-flex align-items-center justify-content-center gap-2" style="{{ $activeAccent['banner_css'] }}">
+        <div class="py-2 px-4 text-center fs-8 fw-bold z-3 position-relative d-flex align-items-center justify-content-center gap-2 shadow-xs" style="{{ $activeAccent['banner_css'] }}">
             <i class="fa-solid {{ $activeAccent['icon'] }} fs-6"></i>
             <span>{{ $activeAccent['text'] }}</span>
             <span class="badge bg-body text-body-emphasis border fs-9 ms-2">{{ $activeAccent['badge'] }}</span>
