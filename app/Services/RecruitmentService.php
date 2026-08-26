@@ -105,6 +105,28 @@ class RecruitmentService
         return $updated;
     }
 
+    public function updateInterview(JobInterview $interview, array $data): bool
+    {
+        if (!empty($data['application_remarks']) && $interview->jobApplication) {
+            $this->applicationRepository->update($interview->jobApplication, [
+                'application_remarks' => $data['application_remarks']
+            ]);
+        }
+
+        $updated = $this->interviewRepository->update($interview, $data);
+
+        if ($updated) {
+            $interview->refresh();
+            $interview->load('jobApplication');
+
+            if (!empty($data['send_email_notification'])) {
+                $this->dispatchInterviewEmail($interview, $data);
+            }
+        }
+
+        return $updated;
+    }
+
     protected function dispatchInterviewEmail(JobInterview $interview, array $options = []): void
     {
         $sendMail = isset($options['send_email_notification'])

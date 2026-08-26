@@ -78,7 +78,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('recruitment-applications', \App\Http\Controllers\JobApplicationController::class)->parameters(['recruitment-applications' => 'application'])->except(['create', 'edit', 'destroy']);
     Route::post('/recruitment-applications/{application}/status', [\App\Http\Controllers\JobApplicationController::class, 'updateStatus'])->name('recruitment-applications.status');
     Route::get('/recruitment-applications/{application}/resume', [\App\Http\Controllers\JobApplicationController::class, 'downloadResume'])->name('recruitment-applications.resume');
-    Route::resource('recruitment-interviews', \App\Http\Controllers\JobInterviewController::class)->except(['create', 'edit', 'update', 'destroy']);
+    Route::resource('recruitment-interviews', \App\Http\Controllers\JobInterviewController::class)->parameters(['recruitment-interviews' => 'interview'])->except(['create', 'edit', 'destroy']);
     Route::post('/recruitment-interviews/{interview}/status', [\App\Http\Controllers\JobInterviewController::class, 'updateStatus'])->name('recruitment-interviews.status');
     Route::post('/recruitment-interviews/{interview}/convert', [\App\Http\Controllers\JobInterviewController::class, 'convert'])->name('recruitment-interviews.convert');
 

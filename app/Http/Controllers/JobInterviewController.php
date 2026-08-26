@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreJobInterviewRequest;
 use App\Services\EmployeeService;
 use App\Services\RecruitmentService;
+use App\Models\JobInterview;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -49,6 +50,27 @@ class JobInterviewController extends Controller
 
         return redirect()->route('recruitment-interviews.index')
             ->with('success', 'Candidate interview scheduled successfully.');
+    }
+
+    public function update(Request $request, JobInterview $interview): RedirectResponse
+    {
+        $request->validate([
+            'interview_mode' => ['required', 'string', 'max:100'],
+            'interview_date' => ['required', 'date'],
+            'interview_time' => ['required', 'string', 'max:50'],
+            'interview_place' => ['nullable', 'string', 'max:255'],
+            'next_round_date' => ['nullable', 'date'],
+            'offered_ctc' => ['nullable', 'numeric', 'min:0'],
+            'interviewers_id' => ['nullable'],
+            'remarks' => ['nullable', 'string', 'max:1000'],
+            'application_remarks' => ['nullable', 'string', 'max:1000'],
+            'status' => ['nullable', 'string', 'max:50'],
+        ]);
+
+        $this->recruitmentService->updateInterview($interview, $request->all());
+
+        return redirect()->route('recruitment-interviews.index')
+            ->with('success', 'Candidate interview details updated successfully.');
     }
 
     public function updateStatus(Request $request, \App\Models\JobInterview $interview): RedirectResponse

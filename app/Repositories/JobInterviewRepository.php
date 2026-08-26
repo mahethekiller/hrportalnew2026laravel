@@ -94,4 +94,29 @@ class JobInterviewRepository
 
         return $interview->update($updatePayload);
     }
+
+    public function update(JobInterview $interview, array $data): bool
+    {
+        $updatePayload = [
+            'updated_date' => date('Y-m-d H:i:s'),
+            'updated_by' => auth()->id() ?? 1,
+        ];
+
+        $fields = ['interview_mode', 'interview_date', 'interview_time', 'interview_place', 'next_round_date', 'offered_ctc', 'remarks', 'description', 'status'];
+        foreach ($fields as $field) {
+            if (isset($data[$field])) {
+                $updatePayload[$field] = $field === 'status' ? strtolower((string) $data[$field]) : $data[$field];
+            }
+        }
+
+        if (isset($data['interviewers_id'])) {
+            if (is_array($data['interviewers_id'])) {
+                $updatePayload['interviewers_id'] = implode(',', array_filter($data['interviewers_id']));
+            } else {
+                $updatePayload['interviewers_id'] = (string) $data['interviewers_id'];
+            }
+        }
+
+        return $interview->update($updatePayload);
+    }
 }

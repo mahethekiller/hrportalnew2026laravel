@@ -61,6 +61,11 @@
                                             <i class="fa-solid fa-eye me-1"></i> View
                                         </button>
 
+                                        <!-- Edit Details Button -->
+                                        <button type="button" class="btn btn-sm btn-outline-warning py-1 px-2 fs-8 rounded-2" data-bs-toggle="modal" data-bs-target="#editInterviewModal{{ $itv->job_interview_id }}" title="Edit Interview Schedule">
+                                            <i class="fa-solid fa-pen-to-square me-1"></i> Edit
+                                        </button>
+
                                         <!-- Convert to Employee Action -->
                                         @if(in_array(strtolower($itv->status), ['confirmed', 'selected', 'offeraccepted']) && $itv->convert_to_employee == 0)
                                             <form method="POST" action="{{ route('recruitment-interviews.convert', $itv->job_interview_id) }}" class="d-inline" onsubmit="return confirm('Convert candidate {{ $itv->jobApplication->candidate_name ?? '' }} to active employee?');">
@@ -328,6 +333,178 @@
                         <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
                         <button type="submit" onclick="submitWithLoader(this)" class="btn btn-info btn-sm text-white fw-bold">Update & Schedule Next Round</button>
                     </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Edit Scheduled Interview -->
+    <div class="modal fade" id="editInterviewModal{{ $itv->job_interview_id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <form method="POST" action="{{ route('recruitment-interviews.update', $itv->job_interview_id) }}" class="modal-content text-start">
+                @csrf
+                @method('PUT')
+                <div class="modal-header border-bottom">
+                    <h5 class="modal-title fw-bold text-body-emphasis">
+                        <i class="fa-solid fa-pen-to-square me-2 text-warning"></i> Edit Interview Schedule: {{ $itv->jobApplication->candidate_name ?? 'Candidate' }}
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    @if($errors->any() && old('edit_interview_id') == $itv->job_interview_id)
+                        <div class="alert alert-danger p-2 fs-8 mb-3">
+                            <ul class="mb-0 ps-3">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    <input type="hidden" name="edit_interview_id" value="{{ $itv->job_interview_id }}">
+
+                    <div class="row g-4">
+                        <!-- Left Column: Interview Details -->
+                        <div class="col-lg-5 border-end pe-lg-4">
+                            <h6 class="fs-8 text-uppercase fw-bold text-warning mb-3"><i class="fa-solid fa-sliders me-2"></i>Interview Schedule Parameters</h6>
+
+                            <div class="mb-3">
+                                <label class="form-label fs-8 fw-semibold">Candidate Application</label>
+                                <input type="text" class="form-control form-control-sm bg-body-tertiary" value="{{ $itv->jobApplication->candidate_name ?? 'N/A' }} ({{ $itv->jobApplication->job->job_title ?? 'N/A' }})" readonly>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fs-8 fw-semibold">Interview Mode <span class="text-danger">*</span></label>
+                                <select name="interview_mode" class="form-select form-select-sm" required>
+                                    <option value="Online Video Call" {{ old('interview_mode', $itv->interview_mode) == 'Online Video Call' ? 'selected' : '' }}>Online Video Call (Google Meet/Teams)</option>
+                                    <option value="In-Person Office" {{ old('interview_mode', $itv->interview_mode) == 'In-Person Office' ? 'selected' : '' }}>In-Person Office Interview</option>
+                                    <option value="Telephonic" {{ old('interview_mode', $itv->interview_mode) == 'Telephonic' ? 'selected' : '' }}>Telephonic Screening</option>
+                                </select>
+                            </div>
+
+                            <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                    <label class="form-label fs-8 fw-semibold">Interview Date <span class="text-danger">*</span></label>
+                                    <input type="date" name="interview_date" class="form-control form-control-sm" required value="{{ old('interview_date', $itv->interview_date) }}">
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label fs-8 fw-semibold">Interview Time <span class="text-danger">*</span></label>
+                                    <input type="time" name="interview_time" class="form-control form-control-sm" required value="{{ old('interview_time', $itv->interview_time ?? '11:00') }}">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fs-8 fw-semibold">Meeting Link / Office Room</label>
+                                <input type="text" name="interview_place" value="{{ old('interview_place', $itv->interview_place) }}" class="form-control form-control-sm" placeholder="e.g. https://meet.google.com/abc-defg-hij or Room 302">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fs-8 fw-semibold">Next Round Date (Optional)</label>
+                                <input type="date" name="next_round_date" value="{{ old('next_round_date', $itv->next_round_date) }}" class="form-control form-control-sm">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fs-8 fw-semibold">Interview Panelists (Multi-Select)</label>
+                                <select name="interviewers_id[]" class="form-select form-select-sm select-search" data-control="select2" data-placeholder="Select Interviewers..." multiple>
+                                    @foreach($interviewers as $emp)
+                                        <option value="{{ $emp->user_id }}" {{ in_array($emp->user_id, explode(',', (string) $itv->interviewers_id)) ? 'selected' : '' }}>
+                                            {{ $emp->first_name }} {{ $emp->last_name }} @if(!empty($emp->employee_id)) (ID: {{ $emp->employee_id }}) @endif
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fs-8 fw-semibold">Offered CTC (₹)</label>
+                                <input type="number" step="0.01" name="offered_ctc" value="{{ old('offered_ctc', $itv->offered_ctc) }}" class="form-control form-control-sm" placeholder="Annual CTC e.g. 600000">
+                            </div>
+
+                            <div class="mb-0">
+                                <label class="form-label fs-8 fw-semibold">Evaluation Remarks / Feedback Notes</label>
+                                <textarea name="remarks" class="form-control form-control-sm" rows="3" placeholder="Candidate evaluation feedback or instructions...">{{ old('remarks', $itv->remarks) }}</textarea>
+                            </div>
+                        </div>
+
+                        <!-- Right Column: Email Invitation Studio & WYSIWYG Editor -->
+                        <div class="col-lg-7 ps-lg-4">
+                            <h6 class="fs-8 text-uppercase fw-bold text-primary mb-3"><i class="fa-solid fa-paper-plane me-2"></i>Updated Email Invitation Studio</h6>
+
+                            <!-- Email Notification Settings -->
+                            <div class="card border border-warning-subtle bg-body-tertiary p-3 rounded-3 mb-3">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <div class="fw-bold fs-8 text-warning">
+                                        <i class="fa-solid fa-paper-plane me-1"></i> Send Updated Email Notification
+                                    </div>
+                                    <div class="form-check form-switch mb-0">
+                                        <input class="form-check-input" type="checkbox" name="send_email_notification" id="sendEmailEditSwitch{{ $itv->job_interview_id }}" value="1">
+                                        <label class="form-check-label fs-9 text-muted fw-semibold" for="sendEmailEditSwitch{{ $itv->job_interview_id }}">Send Mail</label>
+                                    </div>
+                                </div>
+                                <div class="row g-2 pt-1 border-top border-subtle">
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="notify_candidate" id="notifyCandEditCheck{{ $itv->job_interview_id }}" value="1" checked>
+                                            <label class="form-check-label fs-8 text-body-emphasis" for="notifyCandEditCheck{{ $itv->job_interview_id }}">
+                                                <i class="fa-solid fa-user me-1 text-success"></i> Candidate: {{ $itv->jobApplication->email ?? 'N/A' }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="notify_interviewers" id="notifyPanEditCheck{{ $itv->job_interview_id }}" value="1" checked>
+                                            <label class="form-check-label fs-8 text-body-emphasis" for="notifyPanEditCheck{{ $itv->job_interview_id }}">
+                                                <i class="fa-solid fa-users me-1 text-info"></i> Interview Panelists (CC)
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Custom Email Subject -->
+                            <div class="mb-3">
+                                <label class="form-label fs-9 fw-semibold text-body-secondary mb-1">Custom Email Subject</label>
+                                <input type="text" name="custom_email_subject" class="form-control form-control-sm fs-8" value="{{ old('custom_email_subject') }}" placeholder="Default: [Updated Interview] {{ $itv->jobApplication->candidate_name ?? '' }}">
+                            </div>
+
+                            <!-- WYSIWYG Rich Text Editor -->
+                            <div class="mb-0">
+                                <div class="d-flex align-items-center justify-content-between mb-1">
+                                    <label class="form-label fs-9 fw-semibold text-body-secondary mb-0">Email Message Body (WYSIWYG Editor)</label>
+                                    <span class="fs-9 text-muted"><i class="fa-solid fa-wand-magic-sparkles me-1 text-warning"></i> Live Preview</span>
+                                </div>
+
+                                <!-- WYSIWYG Toolbar -->
+                                <div class="wysiwyg-toolbar border border-bottom-0 rounded-top bg-body-tertiary p-2 d-flex flex-wrap align-items-center gap-1">
+                                    <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Bold" onclick="execWysiwygCmd('bold', this)"><i class="fa-solid fa-bold"></i></button>
+                                    <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Italic" onclick="execWysiwygCmd('italic', this)"><i class="fa-solid fa-italic"></i></button>
+                                    <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Underline" onclick="execWysiwygCmd('underline', this)"><i class="fa-solid fa-underline"></i></button>
+                                    <div class="vr mx-1"></div>
+                                    <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Bullet List" onclick="execWysiwygCmd('insertUnorderedList', this)"><i class="fa-solid fa-list-ul"></i></button>
+                                    <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Numbered List" onclick="execWysiwygCmd('insertOrderedList', this)"><i class="fa-solid fa-list-ol"></i></button>
+                                    <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Heading" onclick="execWysiwygCmd('formatBlock', this, '<h3>')"><i class="fa-solid fa-heading"></i></button>
+                                    <div class="vr mx-1"></div>
+                                    <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Insert Link" onclick="insertWysiwygLink(this)"><i class="fa-solid fa-link"></i></button>
+                                    <button type="button" class="btn btn-xs btn-light border py-1 px-2" title="Clear Formatting" onclick="execWysiwygCmd('removeFormat', this)"><i class="fa-solid fa-eraser"></i></button>
+                                    <button type="button" class="btn btn-xs btn-outline-secondary border py-1 px-2 ms-auto" title="Reset Default Template" onclick="resetWysiwygEditor(this)">
+                                        <i class="fa-solid fa-rotate-left me-1"></i> Reset Template
+                                    </button>
+                                </div>
+
+                                <!-- WYSIWYG Canvas -->
+                                @php
+                                    $editDefaultMsg = $defaultTemplate->message ?? '<p>Dear <strong>{candidate_name}</strong>,</p><p>Please note that your interview schedule for <strong>{job_title}</strong> has been updated.</p><div style="background: #f1f5f9; border-left: 4px solid #2563eb; padding: 16px; margin: 20px 0; border-radius: 4px;"><p style="margin: 0 0 8px 0;"><strong>Date:</strong> {interview_date}</p><p style="margin: 0 0 8px 0;"><strong>Time:</strong> {interview_time}</p><p style="margin: 0 0 8px 0;"><strong>Mode:</strong> {interview_mode}</p><p style="margin: 0 0 8px 0;"><strong>Venue / Link:</strong> {interview_place}</p><p style="margin: 0;"><strong>Interviewer Panel:</strong> {panelists}</p></div><p><strong>Instructions / Remarks:</strong></p><p style="background: #fafafa; border-left: 3px solid #cbd5e1; padding: 10px 15px; font-style: italic; color: #334155;">{remarks}</p><p style="margin-top: 25px;">Please confirm your availability for this updated schedule.</p><p>Best regards,<br><strong>Recruitment Team</strong></p>';
+                                @endphp
+
+                                <div class="wysiwyg-canvas border rounded-bottom p-3 bg-body fs-8 text-body" contenteditable="true" style="min-height: 250px; max-height: 380px; overflow-y: auto; line-height: 1.6;" data-default-template="{{ e($editDefaultMsg) }}">
+                                    {!! old('custom_email_body', $editDefaultMsg) !!}
+                                </div>
+                                <textarea name="custom_email_body" class="wysiwyg-hidden-input d-none">{{ old('custom_email_body', $editDefaultMsg) }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" onclick="submitWithLoader(this)" class="btn btn-warning btn-sm text-dark fw-bold">Update Interview Details</button>
+                </div>
             </form>
         </div>
     </div>
@@ -715,11 +892,18 @@
 
             @if($errors->any() || session('error'))
                 var oldNextRoundId = @json(old('next_round_interview_id'));
+                var oldEditId = @json(old('edit_interview_id'));
                 if (oldNextRoundId) {
                     var modalEl = document.getElementById('nextRoundModal' + oldNextRoundId);
                     if (modalEl) {
                         var nrModal = bootstrap.Modal.getOrCreateInstance(modalEl);
                         nrModal.show();
+                    }
+                } else if (oldEditId) {
+                    var modalEl = document.getElementById('editInterviewModal' + oldEditId);
+                    if (modalEl) {
+                        var editModal = bootstrap.Modal.getOrCreateInstance(modalEl);
+                        editModal.show();
                     }
                 } else {
                     var modalEl = document.getElementById('scheduleInterviewModal');

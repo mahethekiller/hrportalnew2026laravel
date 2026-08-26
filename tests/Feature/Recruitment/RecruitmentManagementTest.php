@@ -292,4 +292,43 @@ class RecruitmentManagementTest extends TestCase
             'experience' => '5 Years',
         ]);
     }
+
+    public function test_candidate_interview_can_be_updated(): void
+    {
+        $user = User::factory()->create();
+
+        $application = JobApplication::create([
+            'candidate_name' => 'Test Candidate',
+            'email' => 'test@example.com',
+            'contact_no' => '1234567890',
+            'company' => 1,
+            'application_status' => 'Applied',
+            'show_status' => 1,
+        ]);
+
+        $interview = \App\Models\JobInterview::create([
+            'application_id' => $application->application_id,
+            'interview_mode' => 'Online Video Call',
+            'interview_date' => date('Y-m-d'),
+            'interview_time' => '10:00',
+            'status' => 'pending',
+            'show_status' => 1,
+        ]);
+
+        $response = $this->actingAs($user)->put(route('recruitment-interviews.update', $interview->job_interview_id), [
+            'interview_mode' => 'In-Person Office',
+            'interview_date' => date('Y-m-d', strtotime('+2 days')),
+            'interview_time' => '14:30',
+            'interview_place' => 'Conference Room 401',
+            'remarks' => 'Updated interview parameters',
+        ]);
+
+        $response->assertRedirect(route('recruitment-interviews.index'));
+        $this->assertDatabaseHas('xin_job_interviews', [
+            'job_interview_id' => $interview->job_interview_id,
+            'interview_mode' => 'In-Person Office',
+            'interview_time' => '14:30',
+            'interview_place' => 'Conference Room 401',
+        ]);
+    }
 }
