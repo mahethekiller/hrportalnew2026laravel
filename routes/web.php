@@ -191,6 +191,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/resignation/{id}/experience-certificate', [\App\Http\Controllers\EmployeePortalController::class, 'downloadExperienceCertificate'])->name('resignation.experience_certificate');
         Route::get('/profile-update', [\App\Http\Controllers\EmployeePortalController::class, 'editProfile'])->name('profile-update');
         Route::post('/profile-update', [\App\Http\Controllers\EmployeePortalController::class, 'updateProfile'])->name('profile-update.store');
+        Route::get('/benefits', [\App\Http\Controllers\EmployeePortalController::class, 'benefits'])->name('benefits');
     });
 
     // Departmental No-Dues Clearance Hub Routes

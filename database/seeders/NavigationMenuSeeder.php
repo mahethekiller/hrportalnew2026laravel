@@ -88,6 +88,15 @@ class NavigationMenuSeeder extends Seeder
 
         NavigationMenu::create([
             'parent_id' => $myDayRoot->menu_id,
+            'title' => 'Benefits & Policies',
+            'icon' => 'fa-solid fa-shield-heart',
+            'route_name' => 'my-portal.benefits',
+            'resource_key' => null,
+            'sort_order' => 8,
+        ]);
+
+        NavigationMenu::create([
+            'parent_id' => $myDayRoot->menu_id,
             'title' => 'Support Tickets',
             'icon' => 'fa-solid fa-headset',
             'route_name' => 'support-tickets.index',
