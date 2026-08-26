@@ -34,7 +34,7 @@ class JobApplicationController extends Controller
     public function store(StoreJobApplicationRequest $request): RedirectResponse
     {
         $data = $request->validated();
-        $data['added_by'] = Auth::id() ?? 1;
+        $data['added_by'] = Auth::user()->user_id ?? Auth::id() ?? 1;
 
         if ($request->hasFile('job_resume')) {
             $file = $request->file('job_resume');

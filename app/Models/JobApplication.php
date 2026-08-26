@@ -145,11 +145,11 @@ class JobApplication extends Model
     }
 
     /**
-     * Creator User relation.
+     * Creator Employee relation.
      */
     public function creator(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'added_by', 'id');
+        return $this->belongsTo(Employee::class, 'added_by', 'user_id');
     }
 
     /**
@@ -157,11 +157,16 @@ class JobApplication extends Model
      */
     public function getCreatorNameAttribute(): string
     {
-        if (!empty($this->creator?->name)) {
-            return $this->creator->name;
+        if (!empty($this->creator?->first_name)) {
+            return trim($this->creator->first_name . ' ' . ($this->creator->last_name ?? ''));
         }
 
         if (is_numeric($this->added_by)) {
+            $emp = Employee::where('user_id', $this->added_by)->first();
+            if ($emp) {
+                return trim(($emp->first_name ?? '') . ' ' . ($emp->last_name ?? ''));
+            }
+
             $user = User::find($this->added_by);
             if ($user?->name) {
                 return $user->name;
