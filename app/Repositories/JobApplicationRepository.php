@@ -47,7 +47,7 @@ class JobApplicationRepository
         $data['contact_no'] = !empty($data['contact_no']) ? $data['contact_no'] : 'N/A';
         $data['gender'] = !empty($data['gender']) ? $data['gender'] : 'Male';
         $data['user_id'] = !empty($data['user_id']) ? (int) $data['user_id'] : 0;
-        $data['added_by'] = $data['added_by'] ?? (auth()->check() ? trim((string) (auth()->user()->first_name ?? '') . ' ' . (string) (auth()->user()->last_name ?? '')) : 'System Admin');
+        $data['added_by'] = !empty($data['added_by']) && is_numeric($data['added_by']) ? (int) $data['added_by'] : (auth()->id() ?? 1);
         $data['message'] = $data['message'] ?? '';
         $data['job_resume'] = $data['job_resume'] ?? '';
         $data['source'] = $data['source'] ?? 'Portal Direct';
