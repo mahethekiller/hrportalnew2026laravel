@@ -20,6 +20,23 @@
         </div>
     </div>
 
+    @if($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show mb-4 shadow-sm" role="alert">
+            <div class="d-flex align-items-center">
+                <i class="fa-solid fa-triangle-exclamation me-2 fs-5"></i>
+                <div>
+                    <strong>Submission Failed:</strong>
+                    <ul class="mb-0 ps-3 mt-1 fs-8">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
     <!-- Pipeline Summary Statistics Cards (Maintainable KPI Components) -->
     <div class="row g-3 mb-4">
         <div class="col-xl-3 col-sm-6">

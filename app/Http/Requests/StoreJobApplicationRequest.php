@@ -17,7 +17,7 @@ class StoreJobApplicationRequest extends FormRequest
     {
         return [
             'candidate_name' => ['required', 'string', 'max:200'],
-            'email' => ['required', 'email', 'max:150'],
+            'email' => ['required', 'email', 'max:150', 'unique:xin_job_applications,email'],
             'contact_no' => ['nullable', 'string', 'max:50'],
             'job_id' => ['nullable', 'integer'],
             'gender' => ['nullable', 'string', 'max:20'],
@@ -33,6 +33,13 @@ class StoreJobApplicationRequest extends FormRequest
             'application_status' => ['nullable', 'string', 'max:50'],
             'application_remarks' => ['nullable', 'string', 'max:500'],
             'job_resume' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:10240'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'email.unique' => 'A candidate application with this email address already exists.',
         ];
     }
 }
