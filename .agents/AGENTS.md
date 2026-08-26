@@ -57,3 +57,8 @@ These rules represent the absolute constraints of the project. Any deviation fro
   2. Maintain and document the exact step-by-step deployment instructions in `SERVER_DEPLOYMENT_GUIDE.md` in the project root.
   3. Never drop, truncate, or overwrite existing production database tables or user records.
 
+## ⚡ Rule 8: First-Column Action Buttons in Data Tables
+- All data tables across Blade views (e.g. Clearance Hub, Employee Directory, Resignations, Leave Management, Payroll, Roles) must place Action Buttons (`.btn-group`, action dropdowns, or action icons) in **Column 1** (the very first table column on the left).
+- Table headers (`<thead>`) must have `<th>Actions</th>` as the first column.
+- This ensures zero horizontal scrolling is needed to trigger actions and maximizes HR power-user efficiency.
+

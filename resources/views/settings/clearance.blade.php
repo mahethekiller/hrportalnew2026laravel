@@ -162,66 +162,28 @@
                 <table class="table table-hover align-middle mb-0 border-0">
                     <thead class="table-light">
                         <tr>
-                            <th class="ps-4">Employee</th>
+                            <th class="ps-4" style="min-width: 210px;">Actions</th>
+                            <th>Employee</th>
                             <th>Target LWD</th>
                             <th>Assigned Officers</th>
-                            <th>Clearance Statuses</th>
-                            <th class="pe-4 text-end">Action</th>
+                            <th class="pe-4">Clearance Statuses</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($resignations as $res)
                         <tr>
                             <td class="ps-4">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div class="avatar avatar-sm rounded-circle bg-primary-subtle text-primary fw-bold d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
-                                        {{ strtoupper(substr($res->employee->first_name ?? 'E', 0, 1)) }}
-                                    </div>
-                                    <div>
-                                        <div class="fw-bold text-body-emphasis">{{ $res->employee->first_name ?? '' }} {{ $res->employee->last_name ?? '' }}</div>
-                                        <div class="fs-8 text-body-secondary">ID: {{ $res->employee->employee_id ?? 'N/A' }} | {{ $res->employee->department->department_name ?? 'General' }}</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="fs-8 fw-bold text-danger">{{ $res->resignation_date }}</div>
-                                @if($res->shortfall_days > 0)
-                                    <span class="badge bg-warning-subtle text-warning fs-9">{{ $res->shortfall_days }} Shortfall Day(s)</span>
-                                @endif
-                            </td>
-                            <td>
-                                <div class="fs-8 text-body-secondary">
-                                    <strong>IT:</strong> {{ $res->itPerson ? ($res->itPerson->first_name . ' ' . $res->itPerson->last_name) : 'Unassigned' }}<br>
-                                    <strong>Accounts:</strong> {{ $res->accountPerson ? ($res->accountPerson->first_name . ' ' . $res->accountPerson->last_name) : 'Unassigned' }}<br>
-                                    <strong>HR:</strong> {{ $res->hrPerson ? ($res->hrPerson->first_name . ' ' . $res->hrPerson->last_name) : 'Unassigned' }}
-                                </div>
-                            </td>
-                            <td>
-                                @php
-                                    $mH = $res->getStageStatusHelper((int)$res->manager_status);
-                                    $iH = $res->getStageStatusHelper((int)$res->it_status);
-                                    $aH = $res->getStageStatusHelper((int)$res->account_status);
-                                    $hH = $res->getStageStatusHelper((int)$res->hr_status);
-                                @endphp
-                                <div class="d-flex flex-column gap-1 fs-9">
-                                    <span>Manager: <span class="{{ $mH['class'] }}">{{ $mH['label'] }}</span></span>
-                                    <span>IT: <span class="{{ $iH['class'] }}">{{ $iH['label'] }}</span></span>
-                                    <span>Accounts: <span class="{{ $aH['class'] }}">{{ $aH['label'] }}</span></span>
-                                    <span>HR: <span class="{{ $hH['class'] }}">{{ $hH['label'] }}</span></span>
-                                </div>
-                            </td>
-                            <td class="pe-4 text-end">
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-outline-primary btn-sm fw-bold" data-bs-toggle="modal" data-bs-target="#assignModal_{{ $res->resignation_id }}">
-                                        <i class="fa-solid fa-user-gear me-1"></i> Assign Officers
+                                        <i class="fa-solid fa-user-gear me-1"></i> Assign
                                     </button>
                                     <button type="button" class="btn btn-primary btn-sm fw-bold" data-bs-toggle="modal" data-bs-target="#clearanceModal_{{ $res->resignation_id }}">
-                                        <i class="fa-solid fa-square-check me-1"></i> Update & Send Email
+                                        <i class="fa-solid fa-square-check me-1"></i> Update
                                     </button>
                                     <button type="button" class="btn btn-primary btn-sm dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
                                         <span class="visually-hidden">Toggle Dropdown</span>
                                     </button>
-                                    <ul class="dropdown-menu dropdown-menu-end shadow-sm fs-8">
+                                    <ul class="dropdown-menu shadow-sm fs-8">
                                         <li><h6 class="dropdown-header text-uppercase fs-9 fw-bold">Send / Resend No-Dues Link</h6></li>
                                         <li>
                                             <form method="POST" action="{{ route('clearance.notify', $res->resignation_id) }}">
@@ -245,6 +207,44 @@
                                             </form>
                                         </li>
                                     </ul>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="avatar avatar-sm rounded-circle bg-primary-subtle text-primary fw-bold d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
+                                        {{ strtoupper(substr($res->employee->first_name ?? 'E', 0, 1)) }}
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold text-body-emphasis">{{ $res->employee->first_name ?? '' }} {{ $res->employee->last_name ?? '' }}</div>
+                                        <div class="fs-8 text-body-secondary">ID: {{ $res->employee->employee_id ?? 'N/A' }} | {{ $res->employee->department->department_name ?? 'General' }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="fs-8 fw-bold text-danger">{{ $res->resignation_date }}</div>
+                                @if($res->shortfall_days > 0)
+                                    <span class="badge bg-warning-subtle text-warning fs-9">{{ $res->shortfall_days }} Shortfall Day(s)</span>
+                                @endif
+                            </td>
+                            <td>
+                                <div class="fs-8 text-body-secondary">
+                                    <strong>IT:</strong> {{ $res->itPerson ? ($res->itPerson->first_name . ' ' . $res->itPerson->last_name) : 'Unassigned' }}<br>
+                                    <strong>Accounts:</strong> {{ $res->accountPerson ? ($res->accountPerson->first_name . ' ' . $res->accountPerson->last_name) : 'Unassigned' }}<br>
+                                    <strong>HR:</strong> {{ $res->hrPerson ? ($res->hrPerson->first_name . ' ' . $res->hrPerson->last_name) : 'Unassigned' }}
+                                </div>
+                            </td>
+                            <td class="pe-4">
+                                @php
+                                    $mH = $res->getStageStatusHelper((int)$res->manager_status);
+                                    $iH = $res->getStageStatusHelper((int)$res->it_status);
+                                    $aH = $res->getStageStatusHelper((int)$res->account_status);
+                                    $hH = $res->getStageStatusHelper((int)$res->hr_status);
+                                @endphp
+                                <div class="d-flex flex-column gap-1 fs-9">
+                                    <span>Manager: <span class="{{ $mH['class'] }}">{{ $mH['label'] }}</span></span>
+                                    <span>IT: <span class="{{ $iH['class'] }}">{{ $iH['label'] }}</span></span>
+                                    <span>Accounts: <span class="{{ $aH['class'] }}">{{ $aH['label'] }}</span></span>
+                                    <span>HR: <span class="{{ $hH['class'] }}">{{ $hH['label'] }}</span></span>
                                 </div>
                             </td>
                         </tr>

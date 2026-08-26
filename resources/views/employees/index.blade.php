@@ -202,13 +202,13 @@
                 <table class="table table-hover align-middle mb-0 fs-8">
                     <thead class="bg-body-secondary">
                         <tr>
-                            <th class="ps-4 text-body-secondary fs-9 text-uppercase tracking-wider">Employee ID</th>
+                            <th class="ps-4 text-body-secondary fs-9 text-uppercase tracking-wider" style="min-width: 130px;">Actions</th>
+                            <th class="text-body-secondary fs-9 text-uppercase tracking-wider">Employee ID</th>
                             <th class="text-body-secondary fs-9 text-uppercase tracking-wider">Full Name</th>
                             <th class="text-body-secondary fs-9 text-uppercase tracking-wider">Company</th>
                             <th class="text-body-secondary fs-9 text-uppercase tracking-wider">Department & Designation</th>
                             <th class="text-body-secondary fs-9 text-uppercase tracking-wider">Contact Email</th>
-                            <th class="text-body-secondary fs-9 text-uppercase tracking-wider">Status</th>
-                            <th class="text-end pe-4 text-body-secondary fs-9 text-uppercase tracking-wider">Actions</th>
+                            <th class="pe-4 text-body-secondary fs-9 text-uppercase tracking-wider">Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -220,6 +220,30 @@
                             @endphp
                             <tr>
                                 <td class="ps-4">
+                                    <div class="d-flex align-items-center gap-1">
+                                        <a href="{{ route('employees.show', $emp->id) }}" class="btn btn-primary-subtle text-primary btn-sm p-1 px-2" title="View Profile">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </a>
+                                        @can('edit.employees')
+                                            <a href="{{ route('employees.edit', $emp->id) }}" class="btn btn-warning-subtle text-warning btn-sm p-1 px-2" title="Edit Record">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                        @endcan
+                                        <button class="btn btn-outline-info btn-sm p-1 px-2" onclick="navigator.clipboard.writeText('{{ route('onboarding', md5((string)$emp->user_id)) }}'); toastr.success('Onboarding link copied to clipboard!');" title="Copy Onboarding Link">
+                                            <i class="fa-solid fa-link"></i>
+                                        </button>
+                                        @can('delete.employees')
+                                            <form method="POST" action="{{ route('employees.destroy', $emp->id) }}" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this employee record?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger-subtle text-danger btn-sm p-1 px-2" title="Delete Record">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        @endcan
+                                    </div>
+                                </td>
+                                <td>
                                     <span class="fw-bold text-primary">{{ (!empty($emp->employee_id) && $emp->employee_id !== '0') ? $emp->employee_id : 'EMP-' . sprintf('%04d', $emp->id) }}</span>
                                     <div class="fs-9 text-body-secondary"><i class="fa-solid fa-id-card me-1"></i>Card: {{ $emp->card_no ?? 'N/A' }}</div>
                                 </td>
@@ -252,30 +276,8 @@
                                 <td>
                                     <a href="mailto:{{ $emp->email }}" class="text-body-secondary text-decoration-none">{{ $emp->email }}</a>
                                 </td>
-                                <td>
+                                <td class="pe-4">
                                     <x-status-badge :status="$emp->is_active" pulse="true" />
-                                </td>
-                                <td class="text-end pe-4">
-                                    <button class="btn btn-outline-info btn-sm me-1 p-1 px-2" onclick="navigator.clipboard.writeText('{{ route('onboarding', md5((string)$emp->user_id)) }}'); toastr.success('Onboarding link copied to clipboard!');" title="Copy Onboarding Link">
-                                        <i class="fa-solid fa-link"></i>
-                                    </button>
-                                    <a href="{{ route('employees.show', $emp->id) }}" class="btn btn-primary-subtle text-primary btn-sm me-1 p-1 px-2" title="View Profile">
-                                        <i class="fa-solid fa-eye"></i>
-                                    </a>
-                                    @can('edit.employees')
-                                        <a href="{{ route('employees.edit', $emp->id) }}" class="btn btn-warning-subtle text-warning btn-sm me-1 p-1 px-2" title="Edit Record">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </a>
-                                    @endcan
-                                    @can('delete.employees')
-                                        <form method="POST" action="{{ route('employees.destroy', $emp->id) }}" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this employee record?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger-subtle text-danger btn-sm p-1 px-2" title="Delete Record">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </form>
-                                    @endcan
                                 </td>
                             </tr>
                         @empty
