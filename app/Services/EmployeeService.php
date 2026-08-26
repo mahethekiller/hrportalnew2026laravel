@@ -178,11 +178,11 @@ class EmployeeService
             $data['pin_temp'] = $data['pin_temp'] ?? '';
             $data['pincode'] = $data['pincode'] ?? '';
             $data['corporate_bank_account'] = $data['corporate_bank_account'] ?? '';
-            $data['prob_mail_status'] = $data['prob_mail_status'] ?? 0;
+            $data['prob_mail_status'] = is_numeric($data['prob_mail_status'] ?? null) ? (int)$data['prob_mail_status'] : 0;
             $data['experience'] = is_numeric($data['experience'] ?? null) ? $data['experience'] : 0;
             $data['kra_doc'] = $data['kra_doc'] ?? '';
             $data['kpi_doc'] = $data['kpi_doc'] ?? '';
-            $data['notice_period'] = $data['notice_period'] ?? '';
+            $data['notice_period'] = is_numeric($data['notice_period'] ?? null) ? (int)$data['notice_period'] : 0;
             $data['password'] = Hash::make($data['password'] ?? '12345678');
             $data['is_active'] = $data['is_active'] ?? 1;
 
