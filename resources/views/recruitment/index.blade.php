@@ -291,18 +291,36 @@
 
 @push('js')
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        if (typeof window.initPortalSelect2 === 'function') {
-            window.initPortalSelect2('#createCandidateModal');
+    (function() {
+        function initModalSelect2() {
+            var $modal = $('#createCandidateModal');
+            if (typeof $.fn.select2 !== 'undefined') {
+                $modal.find('.select-search').each(function() {
+                    var $s = $(this);
+                    if ($s.data('select2')) {
+                        try { $s.select2('destroy'); } catch(e) {}
+                    }
+                    $s.select2({
+                        width: '100%',
+                        placeholder: $s.attr('data-placeholder') || 'Search & Select...',
+                        allowClear: true,
+                        dropdownParent: $modal
+                    });
+                });
+            }
         }
-        const candModal = document.getElementById('createCandidateModal');
-        if (candModal) {
-            candModal.addEventListener('shown.bs.modal', function() {
-                if (typeof window.initPortalSelect2 === 'function') {
-                    window.initPortalSelect2(this);
-                }
+
+        $(document).ready(function() {
+            $('#createCandidateModal').on('shown.bs.modal', function() {
+                initModalSelect2();
             });
-        }
-    });
+        });
+
+        document.addEventListener('shown.bs.modal', function(e) {
+            if (e.target && e.target.id === 'createCandidateModal') {
+                initModalSelect2();
+            }
+        });
+    })();
 </script>
 @endpush
