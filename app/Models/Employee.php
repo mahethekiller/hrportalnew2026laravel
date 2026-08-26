@@ -146,7 +146,8 @@ class Employee extends Authenticatable
         'experience',
         'kra_doc',
         'kpi_doc',
-        'notice_period'
+        'notice_period',
+        'created_at',
     ];
 
     public function user()

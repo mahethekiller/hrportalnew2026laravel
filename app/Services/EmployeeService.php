@@ -185,6 +185,10 @@ class EmployeeService
             $data['password'] = Hash::make($data['password'] ?? '12345678');
             $data['is_active'] = $data['is_active'] ?? 1;
 
+            if (\Illuminate\Support\Facades\Schema::hasColumn('xin_employees', 'created_at')) {
+                $data['created_at'] = $data['created_at'] ?? date('Y-m-d H:i:s');
+            }
+
             return $this->repository->create($data);
         });
     }
