@@ -192,6 +192,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/profile-update', [\App\Http\Controllers\EmployeePortalController::class, 'editProfile'])->name('profile-update');
         Route::post('/profile-update', [\App\Http\Controllers\EmployeePortalController::class, 'updateProfile'])->name('profile-update.store');
         Route::get('/benefits', [\App\Http\Controllers\EmployeePortalController::class, 'benefits'])->name('benefits');
+        Route::post('/benefits', [\App\Http\Controllers\EmployeePortalController::class, 'storeBenefitDocument'])->name('benefits.store');
+        Route::delete('/benefits/{id}', [\App\Http\Controllers\EmployeePortalController::class, 'destroyBenefitDocument'])->name('benefits.destroy');
     });
 
     // Departmental No-Dues Clearance Hub Routes

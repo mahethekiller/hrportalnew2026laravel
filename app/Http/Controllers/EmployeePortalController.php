@@ -300,6 +300,68 @@ class EmployeePortalController extends Controller
     }
 
     /**
+     * Store new corporate policy document (HR Upload)
+     */
+    public function storeBenefitDocument(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'file_desc' => 'required|string|max:255',
+            'file_type' => 'nullable|string|max:100',
+            'document'  => 'required|file|mimes:pdf,doc,docx,png,jpg,jpeg|max:10240',
+        ]);
+
+        if ($request->hasFile('document')) {
+            $file = $request->file('document');
+            $ext = strtolower($file->getClientOriginalExtension());
+            $sanitizedTitle = Str::slug($request->input('file_desc'), '_');
+            $fileName = 'Policy_' . $sanitizedTitle . '_' . date('Ymd_His') . '.' . $ext;
+
+            $destinationPath = public_path('uploads/documents');
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+
+            $file->move($destinationPath, $fileName);
+            $bytes = filesize($destinationPath . '/' . $fileName);
+            $formattedSize = $bytes >= 1048576 ? round($bytes / 1048576, 2) . ' MB' : round($bytes / 1024, 2) . ' KB';
+
+            Document::create([
+                'company_id'     => $this->getCompanyId() ?: 1,
+                'file_type'      => $request->input('file_type', 'Policy Handbook'),
+                'file_desc'      => $request->input('file_desc'),
+                'user_id'        => auth()->id() ?? 1,
+                'file_name'      => 'uploads/documents/' . $fileName,
+                'file_extension' => $ext,
+                'file_size'      => $formattedSize,
+                'added_date'     => now()->toDateTimeString(),
+                'added_by'       => auth()->user()->name ?? 'HR Administrator',
+                'active'         => 1,
+            ]);
+
+            return redirect()->route('my-portal.benefits')->with('success', 'Policy document uploaded successfully.');
+        }
+
+        return redirect()->back()->with('error', 'Failed to upload document file.');
+    }
+
+    /**
+     * Delete corporate policy document (HR Delete)
+     */
+    public function destroyBenefitDocument(int $id): RedirectResponse
+    {
+        $doc = Document::findOrFail($id);
+        if (!empty($doc->file_name)) {
+            $fullPath = public_path($doc->file_name);
+            if (file_exists($fullPath)) {
+                @unlink($fullPath);
+            }
+        }
+        $doc->delete();
+
+        return redirect()->route('my-portal.benefits')->with('success', 'Policy document deleted successfully.');
+    }
+
+    /**
      * Employee Candidate Referrals
      */
     public function referrals(): View
