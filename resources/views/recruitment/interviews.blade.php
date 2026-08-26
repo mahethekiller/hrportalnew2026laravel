@@ -188,7 +188,7 @@
 @foreach($interviews as $itv)
     <!-- Modal: Schedule Next Round -->
     <div class="modal fade" id="nextRoundModal{{ $itv->job_interview_id }}" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-xl" style="max-width: 92vw; width: 1180px;">
+        <div class="modal-dialog modal-dialog-centered modal-xl modal-extra-large" style="max-width: 95vw !important; width: 1250px !important;">
             <form method="POST" action="{{ route('recruitment-interviews.status', $itv->job_interview_id) }}">
                 @csrf
                 <input type="hidden" name="status" value="nextround">
@@ -466,7 +466,7 @@
 
 <!-- Modal: Schedule New Interview -->
 <div class="modal fade" id="scheduleInterviewModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-xl" style="max-width: 92vw; width: 1180px;">
+    <div class="modal-dialog modal-dialog-centered modal-xl modal-extra-large" style="max-width: 95vw !important; width: 1250px !important;">
         <form method="POST" action="{{ route('recruitment-interviews.store') }}">
             @csrf
             <div class="modal-content">

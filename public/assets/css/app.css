@@ -818,6 +818,12 @@ h3, .headline-md {
 }
 
 /* Modals */
+.modal-dialog.modal-xl,
+.modal-dialog.modal-extra-large {
+    max-width: 92vw !important;
+    width: 1200px !important;
+}
+
 .modal-content {
     background-color: var(--card-bg) !important;
     border: 1px solid var(--card-border) !important;
