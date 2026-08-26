@@ -617,7 +617,7 @@
                                 <select name="designation_id" class="form-select form-select-sm select-search" data-control="select2" data-placeholder="Select Designation...">
                                     <option value=""></option>
                                     @foreach($designations as $desig)
-                                        <option value="{{ $desig->designation_id ?? $desig->id }}" {{ old('designation_id') == ($desig->designation_id ?? $desig->id) ? 'selected' : '' }}>
+                                        <option value="{{ $desig->designation_id ?? $desig->id }}" data-department-id="{{ $desig->department_id }}" {{ old('designation_id') == ($desig->designation_id ?? $desig->id) ? 'selected' : '' }}>
                                             {{ $desig->name_with_company }}
                                         </option>
                                     @endforeach
@@ -1227,6 +1227,37 @@
                 $(this).find('.wysiwyg-canvas').each(function() {
                     syncWysiwygContent($(this));
                 });
+            });
+
+            $(document).on('change', 'select[name="department_id"]', function() {
+                var $deptSelect = $(this);
+                var selectedDeptId = $deptSelect.val();
+                var $form = $deptSelect.closest('form, .modal-body, .modal-content');
+                var $desigSelect = $form.find('select[name="designation_id"]');
+
+                if ($desigSelect.length) {
+                    var currentDesigVal = $desigSelect.val();
+                    var isValidMatch = false;
+
+                    $desigSelect.find('option').each(function() {
+                        var $opt = $(this);
+                        var optDeptId = $opt.attr('data-department-id');
+                        if (!optDeptId || !selectedDeptId || optDeptId == selectedDeptId) {
+                            $opt.prop('disabled', false).show();
+                            if ($opt.val() == currentDesigVal) {
+                                isValidMatch = true;
+                            }
+                        } else {
+                            $opt.prop('disabled', true).hide();
+                        }
+                    });
+
+                    if (!isValidMatch && selectedDeptId) {
+                        $desigSelect.val('').trigger('change.select2');
+                    } else {
+                        $desigSelect.trigger('change.select2');
+                    }
+                }
             });
 
             @if($errors->any() || session('error'))

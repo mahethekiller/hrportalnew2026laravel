@@ -68,6 +68,7 @@ These rules represent the absolute constraints of the project. Any deviation fro
 ## 🔍 Rule 9: Searchable Select Dropdowns & Multi-Company Disambiguation
 - All modal forms and complex selection fields (e.g. Job Requisition, Candidate, Employee, Department, Designation, Role, Leave Type) must include `class="select-search"` or `data-control="select2"` and a blank default option (`<option value=""></option>`).
 - All Department and Designation select dropdowns must load with `with('company')` and display the associated Company name (`$dept->name_with_company` / `{$dept->department_name} (Company: {$dept->company->name})`), enabling multi-company HR disambiguation.
+- Whenever a Department select dropdown is present alongside a Designation dropdown, the Designation `<option>`s must include `data-department-id="{{ $desig->department_id }}"`, and selecting a Department must dynamically filter available Designation options.
 - This automatically activates live search filtering via Select2, ensuring users can instantly search and filter options.
 
 ## 🛑 Rule 10: In-Modal Error Alerts & Input State Retention
