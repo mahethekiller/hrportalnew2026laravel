@@ -36,7 +36,11 @@ class JobApplicationController extends Controller
         $data['added_by'] = Auth::id() ?? 1;
 
         if ($request->hasFile('job_resume')) {
-            $path = $request->file('job_resume')->store('resumes', 'public');
+            $file = $request->file('job_resume');
+            $candidateSlug = \Illuminate\Support\Str::slug($data['candidate_name'] ?? 'Candidate', '_');
+            $extension = $file->getClientOriginalExtension();
+            $filename = 'Resume_' . $candidateSlug . '_' . date('Ymd_His') . '.' . $extension;
+            $path = $file->storeAs('resumes', $filename, 'public');
             $data['job_resume'] = $path;
         }
 

@@ -34,11 +34,12 @@ These rules represent the absolute constraints of the project. Any deviation fro
   2. Map permissions to roles in `RoleSeeder`.
   3. Ensure a database seed updates these records safely without wiping existing user assignments.
 
-## 💾 Rule 4: Secure File Management
+## 💾 Rule 4: Secure File Management & Descriptive Naming
 - All uploads must be validated against a strict mime-type list (e.g. PDF, PNG, JPG, Docx).
-- File uploads must be stored in private storage (`storage/app/private/` or secure S3/Local disks).
-- Access to uploaded files must be gated by Laravel Policies (e.g. `DocumentPolicy` ensures employees can only view their own documents).
-- Files must never be uploaded directly to `public/` directories without proper authorization checks.
+- All uploaded files must use structured, human-readable file naming with `storeAs()` (e.g. `Resume_Rahul_Sharma_20260826_124950.pdf` or `Clearance_Emp102_20260826.pdf`) instead of random hash strings, enabling easy manual and programmatic file identification.
+- File uploads must be stored in secure storage (`storage/app/private/` or dedicated storage disks).
+- Access to uploaded files must be gated by Laravel Policies (e.g. `DocumentPolicy` ensures employees can only view authorized documents).
+- Files must never be uploaded directly to `public/` root directories without proper authorization checks.
 
 ## ♻️ Rule 5: Zero Duplicate Logic
 - Business logic must reside strictly in **Services**.
