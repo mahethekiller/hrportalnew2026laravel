@@ -326,7 +326,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-info btn-sm text-white fw-bold">Update & Schedule Next Round</button>
+                        <button type="submit" onclick="if(this.form.checkValidity()){ this.disabled=true; this.innerHTML='<i class=\'fa-solid fa-circle-notch fa-spin me-1\'></i> Processing...'; this.form.submit(); }" class="btn btn-info btn-sm text-white fw-bold">Update & Schedule Next Round</button>
                     </div>
             </form>
         </div>
@@ -631,7 +631,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary btn-sm fw-bold">Schedule Interview</button>
+                    <button type="submit" onclick="if(this.form.checkValidity()){ this.disabled=true; this.innerHTML='<i class=\'fa-solid fa-circle-notch fa-spin me-1\'></i> Processing...'; this.form.submit(); }" class="btn btn-primary btn-sm fw-bold">Schedule Interview</button>
                 </div>
         </form>
     </div>
