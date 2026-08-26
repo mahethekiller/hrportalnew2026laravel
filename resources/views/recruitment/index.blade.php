@@ -334,14 +334,31 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
+                    @if($errors->any())
+                        <div class="alert alert-danger alert-dismissible fade show mb-3 p-3 fs-8 border-danger-subtle" role="alert">
+                            <div class="d-flex align-items-center mb-1">
+                                <i class="fa-solid fa-circle-exclamation me-2 fs-6 text-danger"></i>
+                                <strong class="text-danger">Validation Error:</strong>
+                            </div>
+                            <ul class="mb-0 ps-3">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    @endif
+
                     <div class="row g-3 mb-3">
                         <div class="col-md-3">
                             <label class="form-label fs-8 fw-semibold">Candidate Full Name <span class="text-danger">*</span></label>
-                            <input type="text" name="candidate_name" value="{{ old('candidate_name') }}" class="form-control form-control-sm" required placeholder="e.g. Rahul Sharma">
+                            <input type="text" name="candidate_name" value="{{ old('candidate_name') }}" class="form-control form-control-sm @error('candidate_name') is-invalid @enderror" required placeholder="e.g. Rahul Sharma">
+                            @error('candidate_name') <div class="invalid-feedback fs-9">{{ $message }}</div> @enderror
                         </div>
                         <div class="col-md-3">
                             <label class="form-label fs-8 fw-semibold">Email Address <span class="text-danger">*</span></label>
-                            <input type="email" name="email" value="{{ old('email') }}" class="form-control form-control-sm" required placeholder="rahul@example.com">
+                            <input type="email" name="email" value="{{ old('email') }}" class="form-control form-control-sm @error('email') is-invalid @enderror" required placeholder="rahul@example.com">
+                            @error('email') <div class="invalid-feedback fs-9">{{ $message }}</div> @enderror
                         </div>
                         <div class="col-md-3">
                             <label class="form-label fs-8 fw-semibold">Contact Phone Number</label>
