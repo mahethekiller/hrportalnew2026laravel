@@ -66,4 +66,9 @@ These rules represent the absolute constraints of the project. Any deviation fro
 - All modal forms and complex selection fields (e.g. Job Requisition, Candidate, Employee, Department, Designation, Role, Leave Type) must include `class="select-search"` or `data-control="select2"` and a blank default option (`<option value=""></option>`).
 - This automatically activates live search filtering via Select2, ensuring users can instantly search and filter options.
 
+## 🛑 Rule 10: In-Modal Error Alerts & Input State Retention
+- All modal forms across all Blade views must automatically remain/re-open open upon validation error (`@if($errors->any())` script auto-trigger).
+- All form inputs inside modals must retain user-entered values using `value="{{ old('field_name') }}"` and retain select option states (`old('field_name') == $val ? 'selected' : ''`).
+- Form validation errors must be rendered both inside the modal body (`@if($errors->any())` alert banner) and inline using `@error('field_name')` directives and `is-invalid` classes.
+
 
