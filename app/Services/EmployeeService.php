@@ -99,7 +99,7 @@ class EmployeeService
             }
 
             // 2. Hash employee password and resolve non-colliding user_id for xin_employees
-            $targetUserId = $user->id;
+            $targetUserId = $data['user_id'] ?? $user->id;
             if (Employee::where('user_id', $targetUserId)->exists()) {
                 $maxId = (int) DB::table('xin_employees')->max('user_id');
                 $targetUserId = $maxId + 1;
