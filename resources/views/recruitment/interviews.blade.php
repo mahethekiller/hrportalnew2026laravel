@@ -55,7 +55,7 @@
                         @forelse($interviews as $itv)
                             <tr>
                                 <td class="ps-4 text-nowrap">
-                                    <div class="d-inline-flex align-items-center gap-1.5">
+                                    <div class="d-inline-flex align-items-center" style="gap: 6px;">
                                         <!-- View Button (Icon Only) -->
                                         <button type="button" class="btn btn-sm btn-icon btn-light-primary py-1 px-2 fs-8 rounded-2" data-bs-toggle="modal" data-bs-target="#viewInterviewModal{{ $itv->job_interview_id }}" title="View Details">
                                             <i class="fa-solid fa-eye"></i>

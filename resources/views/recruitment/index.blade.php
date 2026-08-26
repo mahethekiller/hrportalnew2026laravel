@@ -122,7 +122,7 @@
                             @endphp
                             <tr>
                                 <td class="ps-4 text-nowrap">
-                                    <div class="d-inline-flex align-items-center gap-1.5">
+                                    <div class="d-inline-flex align-items-center" style="gap: 6px;">
                                         <!-- View Details Button -->
                                         <button type="button" class="btn btn-sm btn-outline-primary px-2.5 rounded-2" data-bs-toggle="modal" data-bs-target="#viewCandidateModal{{ $app->application_id }}" title="View Candidate Profile">
                                             <i class="fa-solid fa-eye"></i>
