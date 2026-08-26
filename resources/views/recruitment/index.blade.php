@@ -235,6 +235,11 @@
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
+                                                    @if(!empty($app->job_resume))
+                                                        <a href="{{ asset('storage/' . $app->job_resume) }}" target="_blank" class="btn btn-outline-primary btn-sm me-auto fw-bold">
+                                                            <i class="fa-solid fa-file-pdf me-1"></i> View / Download Resume Document
+                                                        </a>
+                                                    @endif
                                                     <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                                                 </div>
                                             </div>
@@ -304,7 +309,7 @@
 <!-- Modal: Submit Candidate Profile -->
 <div class="modal fade" id="createCandidateModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-lg">
-        <form method="POST" action="{{ route('recruitment-applications.store') }}">
+        <form method="POST" action="{{ route('recruitment-applications.store') }}" enctype="multipart/form-data">
             @csrf
             <div class="modal-content">
                 <div class="modal-header">
@@ -402,6 +407,12 @@
                     <div class="mb-3">
                         <label class="form-label fs-8 fw-semibold">Application Remarks / Sourcing Notes</label>
                         <textarea name="application_remarks" class="form-control form-control-sm" rows="2" placeholder="Optional recruiter comments or skill summary..."></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fs-8 fw-semibold"><i class="fa-solid fa-paperclip me-1 text-primary"></i> Upload Candidate Resume Document (PDF / DOCX)</label>
+                        <input type="file" name="job_resume" class="form-control form-control-sm" accept=".pdf,.doc,.docx">
+                        <span class="fs-9 text-body-secondary">Max file size: 10MB (Supported formats: .pdf, .doc, .docx)</span>
                     </div>
                 </div>
                 <div class="modal-footer">

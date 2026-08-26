@@ -32,6 +32,7 @@ class StoreJobApplicationRequest extends FormRequest
             'hr_remarks' => ['nullable', 'string', 'max:500'],
             'application_status' => ['nullable', 'string', 'max:50'],
             'application_remarks' => ['nullable', 'string', 'max:500'],
+            'job_resume' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:10240'],
         ];
     }
 }
