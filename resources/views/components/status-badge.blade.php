@@ -22,8 +22,10 @@
     } else {
         $displayLabel = $label ?? ucfirst($rawStatus);
         $resolvedVariant = $variant ?? match(strtolower($rawStatus)) {
-            'active', 'approved', 'paid', 'completed', 'published' => 'success',
-            'pending', 'under review', 'in progress' => 'warning',
+            'active', 'approved', 'paid', 'completed', 'published', 'hired', 'offered' => 'success',
+            'pending', 'under review', 'in progress', 'interview scheduled', 'interview_scheduled' => 'warning',
+            'shortlisted' => 'info',
+            'applied', 'new' => 'primary',
             'rejected', 'cancelled', 'inactive', 'terminated' => 'danger',
             'resigned' => 'info',
             'abscond' => 'dark',
