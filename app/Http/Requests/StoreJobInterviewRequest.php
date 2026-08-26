@@ -17,7 +17,7 @@ class StoreJobInterviewRequest extends FormRequest
     {
         return [
             'application_id' => ['required', 'integer'],
-            'interviewers_id' => ['nullable', 'integer'],
+            'interviewers_id' => ['nullable'],
             'interview_mode' => ['required', 'string', 'max:50'],
             'interview_place' => ['nullable', 'string', 'max:200'],
             'interview_date' => ['required', 'date'],

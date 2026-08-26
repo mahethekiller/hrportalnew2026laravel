@@ -140,4 +140,24 @@ class JobInterview extends Model
     {
         return $this->belongsTo(Employee::class, 'interviewers_id', 'user_id');
     }
+
+    /**
+     * Interviewers Collection Accessor for multi-select interviewers.
+     */
+    public function getInterviewerListAttribute()
+    {
+        if (empty($this->interviewers_id)) {
+            return collect();
+        }
+
+        $ids = is_array($this->interviewers_id)
+            ? $this->interviewers_id
+            : array_filter(array_map('trim', explode(',', (string) $this->interviewers_id)));
+
+        if (empty($ids)) {
+            return collect();
+        }
+
+        return Employee::whereIn('user_id', $ids)->get();
+    }
 }

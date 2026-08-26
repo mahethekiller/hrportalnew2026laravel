@@ -36,6 +36,12 @@ class JobInterviewRepository
         $data['status'] = $data['status'] ?? 'pending';
         $data['job_id'] = !empty($data['job_id']) ? (int) $data['job_id'] : 1;
 
+        if (isset($data['interviewers_id'])) {
+            if (is_array($data['interviewers_id'])) {
+                $data['interviewers_id'] = implode(',', array_filter($data['interviewers_id']));
+            }
+        }
+
         return JobInterview::create($data);
     }
 

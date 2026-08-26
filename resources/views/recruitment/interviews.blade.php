@@ -124,9 +124,23 @@
                                     <div class="fs-9 text-muted">{{ $itv->interview_place ?? 'Online Meeting' }}</div>
                                 </td>
                                 <td>
-                                    <div class="fw-bold text-body-emphasis fs-8">{{ $itv->interviewer ? ($itv->interviewer->first_name . ' ' . $itv->interviewer->last_name) : ($itv->added_by ?? 'Recruiter') }}</div>
-                                    @if(!empty($itv->interviewer?->employee_id))
-                                        <span class="badge bg-secondary-subtle text-body-secondary font-mono fs-9">ID: {{ $itv->interviewer->employee_id }}</span>
+                                    @php
+                                        $panelists = $itv->interviewer_list;
+                                    @endphp
+                                    @if($panelists->isNotEmpty())
+                                        @foreach($panelists as $pan)
+                                            <div class="mb-1">
+                                                <span class="fw-bold text-body-emphasis fs-8">{{ $pan->first_name }} {{ $pan->last_name }}</span>
+                                                @if(!empty($pan->employee_id))
+                                                    <span class="badge bg-secondary-subtle text-body-secondary font-mono fs-9">ID: {{ $pan->employee_id }}</span>
+                                                @endif
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <div class="fw-bold text-body-emphasis fs-8">{{ $itv->interviewer ? ($itv->interviewer->first_name . ' ' . $itv->interviewer->last_name) : ($itv->added_by ?? 'Recruiter') }}</div>
+                                        @if(!empty($itv->interviewer?->employee_id))
+                                            <span class="badge bg-secondary-subtle text-body-secondary font-mono fs-9">ID: {{ $itv->interviewer->employee_id }}</span>
+                                        @endif
                                     @endif
                                 </td>
                                 <td>
@@ -210,11 +224,10 @@
                             </select>
                         </div>
                         <div class="col-6">
-                            <label class="form-label fs-8 fw-semibold">Interviewer Panelist</label>
-                            <select name="interviewers_id" class="form-select form-select-sm select-search" data-control="select2" data-placeholder="Search Interviewer...">
-                                <option value=""></option>
+                            <label class="form-label fs-8 fw-semibold">Interviewer Panelists (Multi-Select)</label>
+                            <select name="interviewers_id[]" class="form-select form-select-sm select-search" data-control="select2" data-placeholder="Select Interviewers..." multiple>
                                 @foreach($interviewers as $emp)
-                                    <option value="{{ $emp->user_id }}" {{ old('interviewers_id') == $emp->user_id ? 'selected' : '' }}>
+                                    <option value="{{ $emp->user_id }}" {{ (is_array(old('interviewers_id')) && in_array($emp->user_id, old('interviewers_id'))) ? 'selected' : '' }}>
                                         {{ $emp->first_name }} {{ $emp->last_name }} @if(!empty($emp->employee_id)) (ID: {{ $emp->employee_id }}) @endif
                                     </option>
                                 @endforeach
