@@ -317,8 +317,10 @@
                 if ($form.attr('data-no-loader') === 'true') return;
                 var $btn = $form.find('button[type="submit"]');
                 if ($btn.length && !$btn.prop('disabled')) {
-                    $btn.prop('disabled', true);
                     $btn.html('<i class="fa-solid fa-circle-notch fa-spin me-1"></i> Processing...');
+                    setTimeout(function() {
+                        $btn.prop('disabled', true);
+                    }, 10);
                 }
             });
         });
