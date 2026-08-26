@@ -26,6 +26,9 @@ class StoreJobInterviewRequest extends FormRequest
             'expected_doj' => ['nullable', 'date'],
             'description' => ['nullable', 'string', 'max:1000'],
             'application_remarks' => ['nullable', 'string', 'max:1000'],
+            'send_email_notification' => ['nullable', 'boolean'],
+            'notify_candidate' => ['nullable', 'boolean'],
+            'notify_interviewers' => ['nullable', 'boolean'],
         ];
     }
 }

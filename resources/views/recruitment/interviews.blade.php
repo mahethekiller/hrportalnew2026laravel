@@ -237,6 +237,40 @@
                             <label class="form-label fs-8 fw-semibold">Next Round Evaluation Notes / Remarks</label>
                             <textarea name="remarks" class="form-control form-control-sm" rows="2" placeholder="Key focus areas or evaluation criteria for the next round...">{{ old('remarks', $itv->remarks) }}</textarea>
                         </div>
+
+                        <!-- Email Notification Settings & Recipient Selection -->
+                        <div class="card border border-info-subtle bg-body-tertiary p-3 rounded-3 mb-2">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <div class="fw-bold fs-8 text-info">
+                                    <i class="fa-solid fa-paper-plane me-1"></i> Send Next Round Email Notification
+                                </div>
+                                <div class="form-check form-switch mb-0">
+                                    <input class="form-check-input" type="checkbox" name="send_email_notification" id="sendEmailNextSwitch{{ $itv->job_interview_id }}" value="1" checked>
+                                    <label class="form-check-label fs-9 text-muted fw-semibold" for="sendEmailNextSwitch{{ $itv->job_interview_id }}">Enable Mail</label>
+                                </div>
+                            </div>
+                            <div class="alert alert-info py-2 px-3 fs-9 mb-2">
+                                <i class="fa-solid fa-circle-info me-1"></i> Mail info: Invitation notice will be sent with updated date & venue details.
+                            </div>
+                            <div class="row g-2 pt-1 border-top border-subtle">
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="notify_candidate" id="notifyCandNextCheck{{ $itv->job_interview_id }}" value="1" checked>
+                                        <label class="form-check-label fs-8 text-body-emphasis" for="notifyCandNextCheck{{ $itv->job_interview_id }}">
+                                            <i class="fa-solid fa-user me-1 text-success"></i> Candidate: {{ $itv->jobApplication->email ?? 'N/A' }}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="notify_interviewers" id="notifyPanNextCheck{{ $itv->job_interview_id }}" value="1" checked>
+                                        <label class="form-check-label fs-8 text-body-emphasis" for="notifyPanNextCheck{{ $itv->job_interview_id }}">
+                                            <i class="fa-solid fa-users me-1 text-info"></i> Interview Panelists (CC)
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
@@ -460,6 +494,37 @@
                     <div class="mb-3">
                         <label class="form-label fs-8 fw-semibold">Candidate Application Remarks / Screening Notes</label>
                         <textarea name="application_remarks" class="form-control form-control-sm" rows="2" placeholder="Optional notes regarding candidate skills, screening summary, or initial feedback...">{{ old('application_remarks') }}</textarea>
+                    </div>
+
+                    <!-- Email Notification Settings & Recipient Selection -->
+                    <div class="card border border-primary-subtle bg-body-tertiary p-3 rounded-3 mb-2">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <div class="fw-bold fs-8 text-primary">
+                                <i class="fa-solid fa-paper-plane me-1"></i> Email Notification Settings
+                            </div>
+                            <div class="form-check form-switch mb-0">
+                                <input class="form-check-input" type="checkbox" name="send_email_notification" id="sendEmailSchedSwitch" value="1" checked>
+                                <label class="form-check-label fs-9 text-muted fw-semibold" for="sendEmailSchedSwitch">Enable Mail</label>
+                            </div>
+                        </div>
+                        <div class="row g-2 pt-1 border-top border-subtle">
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="notify_candidate" id="notifyCandSchedCheck" value="1" checked>
+                                    <label class="form-check-label fs-8 text-body-emphasis" for="notifyCandSchedCheck">
+                                        <i class="fa-solid fa-user me-1 text-success"></i> Send to Candidate Email
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="notify_interviewers" id="notifyPanSchedCheck" value="1" checked>
+                                    <label class="form-check-label fs-8 text-body-emphasis" for="notifyPanSchedCheck">
+                                        <i class="fa-solid fa-users me-1 text-info"></i> Send to Interview Panelists (CC)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">

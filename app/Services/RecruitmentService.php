@@ -68,6 +68,8 @@ class RecruitmentService
             }
         }
 
+        $this->dispatchInterviewEmail($interview, $data);
+
         return $interview;
     }
 
@@ -79,7 +81,49 @@ class RecruitmentService
             ]);
         }
 
-        return $this->interviewRepository->updateStatus($interview, $status, $extraData);
+        $updated = $this->interviewRepository->updateStatus($interview, $status, $extraData);
+
+        if ($updated && in_array(strtolower($status), ['nextround', 'confirmed', 'scheduled'])) {
+            $interview->refresh();
+            $this->dispatchInterviewEmail($interview, $extraData);
+        }
+
+        return $updated;
+    }
+
+    protected function dispatchInterviewEmail(JobInterview $interview, array $options = []): void
+    {
+        $sendMail = isset($options['send_email_notification']) ? (bool) $options['send_email_notification'] : true;
+        if (!$sendMail) {
+            return;
+        }
+
+        $notifyCandidate = isset($options['notify_candidate']) ? (bool) $options['notify_candidate'] : true;
+        $notifyInterviewers = isset($options['notify_interviewers']) ? (bool) $options['notify_interviewers'] : true;
+
+        $candidateEmail = $interview->jobApplication->email ?? null;
+        $panelists = $interview->interviewer_list;
+        $ccEmails = [];
+
+        if ($notifyInterviewers && $panelists->isNotEmpty()) {
+            $ccEmails = array_filter($panelists->pluck('email')->toArray());
+        }
+
+        try {
+            $mailable = new \App\Mail\CandidateInterviewScheduledMail($interview);
+
+            if ($notifyCandidate && !empty($candidateEmail)) {
+                $pendingMail = \Illuminate\Support\Facades\Mail::to($candidateEmail);
+                if (!empty($ccEmails)) {
+                    $pendingMail->cc($ccEmails);
+                }
+                $pendingMail->send($mailable);
+            } elseif ($notifyInterviewers && !empty($ccEmails)) {
+                \Illuminate\Support\Facades\Mail::to($ccEmails)->send($mailable);
+            }
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Failed sending interview notification mail: ' . $e->getMessage());
+        }
     }
 
     public function convertToEmployee(JobInterview $interview): ?\App\Models\Employee

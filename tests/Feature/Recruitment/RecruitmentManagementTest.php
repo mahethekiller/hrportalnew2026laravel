@@ -177,11 +177,15 @@ class RecruitmentManagementTest extends TestCase
             'show_status' => 1,
         ]);
 
+        \Illuminate\Support\Facades\Mail::fake();
+
         $response = $this->actingAs($user)->post(route('recruitment-interviews.store'), [
             'application_id' => $application->application_id,
             'interview_mode' => 'Online Video Call',
             'interview_date' => '2026-08-15',
             'interview_time' => '14:00',
+            'send_email_notification' => 1,
+            'notify_candidate' => 1,
         ]);
 
         $response->assertRedirect(route('recruitment-interviews.index'));
@@ -189,6 +193,10 @@ class RecruitmentManagementTest extends TestCase
             'application_id' => $application->application_id,
             'interview_mode' => 'Online Video Call',
         ]);
+
+        \Illuminate\Support\Facades\Mail::assertSent(\App\Mail\CandidateInterviewScheduledMail::class, function ($mail) use ($application) {
+            return $mail->hasTo($application->email);
+        });
     }
 
     public function test_candidate_can_be_converted_to_employee(): void
