@@ -961,12 +961,6 @@
         </div>
     </div>
 @endforeach
-
-        @if($interviews->hasPages())
-            <div class="card-footer py-3 border-top">
-                {{ $interviews->withQueryString()->links('pagination::bootstrap-5') }}
-            </div>
-        @endif
     </div>
 </div>
 
