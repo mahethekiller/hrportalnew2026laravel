@@ -1,6 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
+@php
+    $canManagePolicies = auth()->check() && (
+        auth()->user()->can('edit.employees') || 
+        auth()->user()->user_role_id == 1 || 
+        in_array(strtolower(auth()->user()->roleRelation->role_name ?? ''), ['administrator', 'hr manager', 'super admin', 'admin', 'hr'])
+    );
+@endphp
 <div class="d-flex flex-column flex-column-fluid">
     <!-- Header Banner -->
     <div class="d-flex align-items-center justify-content-between mb-4">
@@ -8,11 +15,13 @@
             <h1 class="h3 mb-1 fw-bold text-gray-900"><i class="fa-solid fa-shield-heart me-2 text-success"></i> Corporate Benefits & Policy Handbooks</h1>
             <p class="text-muted fs-7 mb-0">Explore health insurance coverage, wellness perks, and download policy handbooks.</p>
         </div>
-        <div>
-            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#uploadPolicyModal">
-                <i class="fa-solid fa-file-circle-plus me-1"></i> Upload Policy Document
-            </button>
-        </div>
+        @if($canManagePolicies)
+            <div>
+                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#uploadPolicyModal">
+                    <i class="fa-solid fa-file-circle-plus me-1"></i> Upload Policy Document
+                </button>
+            </div>
+        @endif
     </div>
 
     <!-- Alert Messages -->
@@ -62,14 +71,16 @@
                                             <i class="fa-solid fa-download"></i>
                                         </a>
 
-                                        <!-- Delete Button -->
-                                        <form method="POST" action="{{ route('my-portal.benefits.destroy', $docId) }}" onsubmit="return confirm('Are you sure you want to delete this policy document?');" class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-outline-danger px-2.5 rounded-2" title="Delete Policy Document">
-                                                <i class="fa-solid fa-trash-can"></i>
-                                            </button>
-                                        </form>
+                                        @if($canManagePolicies)
+                                            <!-- Delete Button -->
+                                            <form method="POST" action="{{ route('my-portal.benefits.destroy', $docId) }}" onsubmit="return confirm('Are you sure you want to delete this policy document?');" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-outline-danger px-2.5 rounded-2" title="Delete Policy Document">
+                                                    <i class="fa-solid fa-trash-can"></i>
+                                                </button>
+                                            </form>
+                                        @endif
                                     </div>
                                 </td>
                                 <td class="fw-bold text-body-emphasis">{{ $doc->file_desc ?? $doc->file_name }}</td>
