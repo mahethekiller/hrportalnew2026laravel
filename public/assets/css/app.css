@@ -2,7 +2,7 @@
 :root {
     --sidebar-width: 250px;
     
-    /* Corporate Royal Indigo & Slate Tokens (Light Mode) */
+    /* Corporate Deep Navy Blue & Slate Tokens (Light Mode) */
     --canvas: #F8FAFC;
     --surface: #FFFFFF;
     --surface-raised: #FFFFFF;
@@ -22,11 +22,11 @@
     
     --harbor: #0284C7;
 
-    /* Bootstrap 5.3 Mapped Variables (Royal Indigo Action Color) */
-    --bs-primary: #4F46E5;
-    --bs-primary-active: #4338CA;
-    --bs-primary-light: #EEF2FF;
-    --bs-primary-rgb: 79, 70, 229;
+    /* Bootstrap 5.3 Mapped Variables (Deep Corporate Navy Blue) */
+    --bs-primary: #1E40AF;
+    --bs-primary-active: #1E3A8A;
+    --bs-primary-light: #EFF6FF;
+    --bs-primary-rgb: 30, 64, 175;
     
     --bs-secondary: #475569;
     --bs-secondary-light: #F8FAFC;
@@ -67,7 +67,7 @@
 }
 
 [data-bs-theme="dark"] {
-    /* Corporate Royal Indigo & Slate Tokens (Dark Mode Canvas) */
+    /* Corporate Deep Navy Blue & Slate Tokens (Dark Mode Canvas) */
     --canvas: #0B0F19;
     --surface: #111827;
     --surface-raised: #1F2937;
@@ -80,7 +80,7 @@
     --fern-wash: var(--bs-primary-light);
     
     --marigold: #F59E0B;
-    --marigold-wash: #312E81;
+    --marigold-wash: #1E3A8A;
     
     --clay: #F87171;
     --clay-wash: #451A03;
@@ -88,10 +88,10 @@
     --harbor: #38BDF8;
 
     /* Bootstrap 5.3 Mapped Variables (Dark Theme) */
-    --bs-primary: #6366F1;
-    --bs-primary-active: #4F46E5;
-    --bs-primary-light: #1E1B4B;
-    --bs-primary-rgb: 99, 102, 241;
+    --bs-primary: #3B82F6;
+    --bs-primary-active: #2563EB;
+    --bs-primary-light: #172554;
+    --bs-primary-rgb: 59, 130, 246;
 
     --bg-color: #0B0F19;
     --text-main: #F9FAFB;
