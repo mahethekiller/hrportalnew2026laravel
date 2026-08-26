@@ -98,11 +98,17 @@ class EmployeeService
                 $user->update(['employee_id' => $empCode]);
             }
 
-            // 2. Hash employee password for legacy auth fields
-            $data['user_id'] = $user->id;
+            // 2. Hash employee password and resolve non-colliding user_id for xin_employees
+            $targetUserId = $user->id;
+            if (Employee::where('user_id', $targetUserId)->exists()) {
+                $maxId = (int) DB::table('xin_employees')->max('user_id');
+                $targetUserId = $maxId + 1;
+            }
+
+            $data['user_id'] = $targetUserId;
             $data['employee_id'] = $empCode;
             $numericCardNo = preg_replace('/\D/', '', (string)($data['card_no'] ?? $empCode));
-            $data['card_no'] = !empty($numericCardNo) ? (int)$numericCardNo : (int)$user->id;
+            $data['card_no'] = !empty($numericCardNo) ? (int)$numericCardNo : (int)$targetUserId;
             $data['username'] = $data['username'] ?? $empCode;
             $data['office_shift_id'] = $data['office_shift_id'] ?? 1;
             $data['user_role_id'] = $data['user_role_id'] ?? 1;
