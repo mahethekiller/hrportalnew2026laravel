@@ -105,6 +105,11 @@
                             @endphp
                             <tr>
                                 <td class="ps-4">
+                                    <!-- View Details Button -->
+                                    <button type="button" class="btn btn-sm btn-light border text-primary py-1 px-2 fs-8 me-1" data-bs-toggle="modal" data-bs-target="#viewCandidateModal{{ $app->application_id }}" title="View Candidate Profile">
+                                        <i class="fa-solid fa-eye me-1"></i> View
+                                    </button>
+
                                     <!-- Stage Update Dropdown -->
                                     <div class="dropdown d-inline">
                                         <button class="btn btn-sm btn-outline-secondary py-1 px-2 fs-8 dropdown-toggle" type="button" data-bs-toggle="dropdown">
@@ -133,6 +138,107 @@
                                                 </form>
                                             </li>
                                         </ul>
+                                    </div>
+
+                                    <!-- Candidate Details Modal -->
+                                    <div class="modal fade" id="viewCandidateModal{{ $app->application_id }}" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header border-bottom">
+                                                    <h5 class="modal-title fw-bold text-body-emphasis">
+                                                        <i class="fa-solid fa-id-card text-primary me-2"></i> {{ $app->candidate_name }}
+                                                    </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                </div>
+                                                <div class="modal-body text-start">
+                                                    <div class="p-3 bg-body-tertiary rounded-3 mb-3 border">
+                                                        <div class="row g-3">
+                                                            <div class="col-md-4">
+                                                                <span class="fs-9 text-body-secondary d-block">Candidate Email</span>
+                                                                <span class="fw-semibold text-body-emphasis">{{ $app->email }}</span>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <span class="fs-9 text-body-secondary d-block">Contact Phone</span>
+                                                                <span class="fw-semibold text-body-emphasis">{{ $app->contact_no ?? 'N/A' }}</span>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <span class="fs-9 text-body-secondary d-block">Gender</span>
+                                                                <span class="badge bg-primary-subtle text-primary">{{ $app->gender ?? 'Male' }}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row g-3 mb-3">
+                                                        <div class="col-md-6">
+                                                            <span class="fs-9 text-body-secondary d-block">Target Job Opening</span>
+                                                            <span class="fw-bold text-body-emphasis">{{ $app->job->job_title ?? 'General Requisition' }}</span>
+                                                            <span class="badge bg-secondary-subtle text-body-secondary font-mono ms-1">{{ $app->job->job_code ?? 'JOB-GEN' }}</span>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <span class="fs-9 text-body-secondary d-block">Department</span>
+                                                            <span class="fw-semibold text-body-emphasis">{{ $app->department->department_name ?? 'N/A' }}</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row g-3 mb-3">
+                                                        <div class="col-md-4">
+                                                            <span class="fs-9 text-body-secondary d-block">Current Employer</span>
+                                                            <span class="fw-semibold text-body-emphasis">{{ $app->current_company ?? 'N/A' }}</span>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <span class="fs-9 text-body-secondary d-block">Current Location</span>
+                                                            <span class="fw-semibold text-body-emphasis">{{ $app->current_location ?? 'N/A' }}</span>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <span class="fs-9 text-body-secondary d-block">Experience</span>
+                                                            <span class="fw-semibold text-body-emphasis">{{ $app->experience ?? 'N/A' }}</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row g-3 mb-3">
+                                                        <div class="col-md-4">
+                                                            <span class="fs-9 text-body-secondary d-block">Current CTC</span>
+                                                            <span class="fw-semibold text-body-emphasis font-mono">{{ $app->current_package ?? 'N/A' }}</span>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <span class="fs-9 text-body-secondary d-block">Expected CTC</span>
+                                                            <span class="fw-semibold text-primary font-mono">{{ $app->expected_package ?? 'N/A' }}</span>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <span class="fs-9 text-body-secondary d-block">Notice Period</span>
+                                                            <span class="fw-semibold text-body-emphasis">{{ $app->notice_period ?? 'N/A' }}</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row g-3 mb-3">
+                                                        <div class="col-md-6">
+                                                            <span class="fs-9 text-body-secondary d-block">Reason to Leave / Change</span>
+                                                            <div class="p-2 bg-body-tertiary rounded fs-8 text-body-emphasis">{{ $app->change_reason ?? 'Not specified' }}</div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <span class="fs-9 text-body-secondary d-block">HR / Recruiter Remarks</span>
+                                                            <div class="p-2 bg-body-tertiary rounded fs-8 text-body-emphasis">{{ $app->hr_remarks ?? 'No remarks added' }}</div>
+                                                        </div>
+                                                    </div>
+
+                                                    @if(!empty($app->application_remarks))
+                                                    <div class="mb-3">
+                                                        <span class="fs-9 text-body-secondary d-block">Sourcing & Application Notes</span>
+                                                        <div class="p-2 bg-body-tertiary rounded fs-8 text-body-emphasis">{{ $app->application_remarks }}</div>
+                                                    </div>
+                                                    @endif
+
+                                                    <div class="d-flex align-items-center justify-content-between pt-2 border-top fs-9 text-body-secondary">
+                                                        <div><i class="fa-solid fa-calendar me-1"></i> CV Sourced: {{ $app->date_cv_sourced ?? date('Y-m-d') }}</div>
+                                                        <div><i class="fa-solid fa-user me-1"></i> Added By: User ID {{ $app->added_by ?? '1' }}</div>
+                                                        <div><x-status-badge :status="$app->application_status ?? 'Applied'" /></div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </td>
                                 <td>
