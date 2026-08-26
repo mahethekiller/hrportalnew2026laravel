@@ -1046,9 +1046,12 @@
     function resetWysiwygEditor(btn) {
         var $box = $(btn).closest('.card-body, .modal-body');
         var $canvas = $box.find('.wysiwyg-canvas');
-        var defaultHtml = $canvas.attr('data-default-template') || '';
-        if (defaultHtml) {
-            $canvas.html(defaultHtml);
+        var rawTemplate = $canvas.attr('data-default-template') || '';
+        if (rawTemplate) {
+            var txt = document.createElement('textarea');
+            txt.innerHTML = rawTemplate;
+            var decodedHtml = txt.value;
+            $canvas.html(decodedHtml);
             syncWysiwygContent($canvas);
         }
     }

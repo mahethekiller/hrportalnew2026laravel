@@ -52,6 +52,7 @@ These rules represent the absolute constraints of the project. Any deviation fro
 - All ticket descriptions, comments, resolution remarks, announcements, and user text inputs must use `App\Traits\HasCleanContent` or `HasCleanContent::sanitizeContent($value, false)` before saving to the database.
 - In Blade views, never output raw database strings containing un-decoded HTML entities (`&lt;p data-start=...`) or raw HTML tags (`<p><br></p>`) inside `<textarea>` inputs or plain text display blocks.
 - Use `{!! $ticket->clean_description !!}` / `{!! $ticket->clean_remarks !!}` for rich view display and `{{ $ticket->plain_remarks }}` / `{{ $ticket->plain_description }}` for `<textarea>` form controls and truncated table snippets.
+- When resetting or populating HTML templates into WYSIWYG canvas elements (`contenteditable="true"`), always decode HTML entities (e.g. using `textarea` element decoding in JS: `txt.innerHTML = rawTemplate; decodedHtml = txt.value;`) before setting `.html()`, preventing raw `&lt;p&gt;` entity strings from rendering as plain text.
 
 ## 🚀 Rule 7: Server Deployment Guide Maintenance
 - Whenever creating or modifying features that require database seeders, configuration changes, permission updates, or background commands:
