@@ -77,6 +77,7 @@ These rules represent the absolute constraints of the project. Any deviation fro
   - `.modal-dialog` MUST have `.modal-content` as its direct child (`.modal-dialog > .modal-content` or `.modal-dialog > form.modal-content`).
   - Never place an unstyled `<form>` tag between `.modal-dialog` and `.modal-content` (`.modal-dialog > form > .modal-content` is strictly forbidden). Doing so breaks Bootstrap flexbox width inheritance and causes `modal-lg` and `modal-xl` viewport sizing to collapse back to 500px.
   - Always use `<form class="modal-content" ...>` or place `<form>` inside `.modal-content` (`.modal-content > form`).
+  - Complex modal forms containing email previews, WYSIWYG editors, or multi-step fields must use `.modal-xl` with a clean 2-Column Side-by-Side Widescreen Studio Layout (`col-lg-5` form parameters on left, `col-lg-7` preview/studio canvas on right).
 
 ## ⏳ Rule 12: Mandatory Form Submit Disabling & Loading Spinner State
 - All form submissions across all Blade views and modal dialogs must automatically disable the primary submit button (`disabled="disabled"`) and display a visual loading spinner indicator (`<i class="fa-solid fa-circle-notch fa-spin me-1"></i> Processing...`).
