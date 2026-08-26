@@ -62,7 +62,8 @@ class RecruitmentService
                 ->where('interview_date', $data['interview_date'] ?? date('Y-m-d'))
                 ->first();
             if ($existing) {
-                return $existing;
+                $formattedDate = date('F d, Y', strtotime($existing->interview_date));
+                throw new \InvalidArgumentException("An interview is already scheduled for this candidate on {$formattedDate}.");
             }
         }
 

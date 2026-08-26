@@ -39,7 +39,13 @@ class JobInterviewController extends Controller
         $data = $request->validated();
         $data['added_by'] = Auth::user()->name ?? 'HR Recruiter';
 
-        $this->recruitmentService->scheduleInterview($data);
+        try {
+            $this->recruitmentService->scheduleInterview($data);
+        } catch (\InvalidArgumentException $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', $e->getMessage());
+        }
 
         return redirect()->route('recruitment-interviews.index')
             ->with('success', 'Candidate interview scheduled successfully.');
