@@ -236,18 +236,37 @@
             window.initPortalSelect2 = function(context) {
                 if (typeof $ === 'undefined' || typeof $.fn.select2 === 'undefined') return;
                 var $targets = context ? $(context).find('.select-search, select.select2, select[data-control="select2"]') : $('.select-search, select.select2, select[data-control="select2"]');
+                
                 $targets.each(function() {
                     var $this = $(this);
-                    if ($this.hasClass('select2-hidden-accessible')) {
+                    var $modal = $this.closest('.modal');
+
+                    // If select is inside a modal that is not currently shown, skip until shown.bs.modal fires
+                    if ($modal.length && !$modal.hasClass('show')) {
                         return;
                     }
+
+                    // Destroy old instance if already initialized to cleanly bind width & dropdown parent
+                    if ($this.data('select2')) {
+                        $this.select2('destroy');
+                    }
+
                     var placeholder = $this.attr('data-placeholder') || $this.attr('placeholder') || 'Search & Select...';
+                    
                     $this.select2({
                         width: '100%',
                         placeholder: placeholder,
                         allowClear: true,
                         minimumResultsForSearch: 0,
-                        dropdownParent: $this.closest('.modal').length ? $this.closest('.modal') : $(document.body)
+                        dropdownParent: $modal.length ? $modal : $(document.body)
+                    });
+
+                    // Ensure search input receives immediate focus on open inside Bootstrap modal
+                    $this.on('select2:open', function() {
+                        setTimeout(function() {
+                            let searchField = document.querySelector('.select2-container--open .select2-search__field');
+                            if (searchField) searchField.focus();
+                        }, 50);
                     });
                 });
             };

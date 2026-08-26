@@ -1248,6 +1248,9 @@ h3, .headline-md {
 .select2-container--default .select2-selection--single .select2-selection__arrow {
     height: 31px !important;
 }
+.select2-container--open {
+    z-index: 1065 !important;
+}
 .select2-dropdown {
     background-color: var(--card-bg, #ffffff) !important;
     border: 1px solid var(--card-border, #e2e7e5) !important;
