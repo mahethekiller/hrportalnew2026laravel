@@ -334,11 +334,7 @@
                                                                     @endforeach
                                                                 </select>
                                                             </div>
-                                                            <div class="col-md-3">
-                                                                <label class="form-label fs-8 fw-semibold">Experience</label>
-                                                                <input type="text" name="experience" value="{{ old('experience', $app->experience) }}" class="form-control form-control-sm">
-                                                            </div>
-                                                            <div class="col-md-3">
+                                                            <div class="col-md-6">
                                                                 <label class="form-label fs-8 fw-semibold">Department</label>
                                                                 <select name="department_id" class="form-select form-select-sm select-search" data-control="select2" data-placeholder="Search Department...">
                                                                     <option value=""></option>
@@ -352,11 +348,15 @@
                                                         </div>
 
                                                         <div class="row g-3 mb-3">
-                                                            <div class="col-md-6">
+                                                            <div class="col-md-4">
+                                                                <label class="form-label fs-8 fw-semibold">Experience (Years)</label>
+                                                                <input type="text" name="experience" value="{{ old('experience', $app->experience) }}" class="form-control form-control-sm" placeholder="e.g. 4 Years">
+                                                            </div>
+                                                            <div class="col-md-4">
                                                                 <label class="form-label fs-8 fw-semibold">Current Employer / Company</label>
                                                                 <input type="text" name="current_company" value="{{ old('current_company', $app->current_company) }}" class="form-control form-control-sm">
                                                             </div>
-                                                            <div class="col-md-6">
+                                                            <div class="col-md-4">
                                                                 <label class="form-label fs-8 fw-semibold">Current Location</label>
                                                                 <input type="text" name="current_location" value="{{ old('current_location', $app->current_location) }}" class="form-control form-control-sm">
                                                             </div>
@@ -531,11 +531,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-md-3">
-                            <label class="form-label fs-8 fw-semibold">Experience</label>
-                            <input type="text" name="experience" value="{{ old('experience') }}" class="form-control form-control-sm" placeholder="e.g. 4.5 Years">
-                        </div>
-                        <div class="col-md-3">
+                        <div class="col-md-6">
                             <label class="form-label fs-8 fw-semibold">Department</label>
                             <select name="department_id" class="form-select form-select-sm select-search" data-control="select2" data-placeholder="Search Department...">
                                 <option value=""></option>
@@ -549,11 +545,15 @@
                     </div>
 
                     <div class="row g-3 mb-3">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <label class="form-label fs-8 fw-semibold">Experience (Years)</label>
+                            <input type="text" name="experience" value="{{ old('experience') }}" class="form-control form-control-sm" placeholder="e.g. 4.5 Years">
+                        </div>
+                        <div class="col-md-4">
                             <label class="form-label fs-8 fw-semibold">Current Employer / Company</label>
                             <input type="text" name="current_company" value="{{ old('current_company') }}" class="form-control form-control-sm" placeholder="e.g. TCS / Infosys">
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label class="form-label fs-8 fw-semibold">Current Location</label>
                             <input type="text" name="current_location" value="{{ old('current_location') }}" class="form-control form-control-sm" placeholder="e.g. Bangalore, India">
                         </div>
