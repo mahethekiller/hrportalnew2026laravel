@@ -78,4 +78,8 @@ These rules represent the absolute constraints of the project. Any deviation fro
   - Never place an unstyled `<form>` tag between `.modal-dialog` and `.modal-content` (`.modal-dialog > form > .modal-content` is strictly forbidden). Doing so breaks Bootstrap flexbox width inheritance and causes `modal-lg` and `modal-xl` viewport sizing to collapse back to 500px.
   - Always use `<form class="modal-content" ...>` or place `<form>` inside `.modal-content` (`.modal-content > form`).
 
+## ⏳ Rule 12: Mandatory Form Submit Disabling & Loading Spinner State
+- All form submissions across all Blade views and modal dialogs must automatically disable the primary submit button (`disabled="disabled"`) and display a visual loading spinner indicator (`<i class="fa-solid fa-circle-notch fa-spin me-1"></i> Processing...`).
+- This is enforced globally via jQuery form submit handlers in `layouts/app.blade.php`, preventing duplicate form submissions and double API calls.
+
 
