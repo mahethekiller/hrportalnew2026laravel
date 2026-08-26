@@ -73,7 +73,7 @@
 
                                         <!-- Status Change Dropdown -->
                                         <div class="dropdown d-inline">
-                                            <button class="btn btn-sm btn-light-secondary py-1 px-2 fs-8 dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                            <button class="btn btn-sm btn-outline-secondary py-1 px-2 fs-8 dropdown-toggle rounded-2" type="button" data-bs-toggle="dropdown">
                                                 Status
                                             </button>
                                             <ul class="dropdown-menu fs-8 shadow border-subtle">
@@ -163,233 +163,6 @@
                                     @endif
                                 </td>
                             </tr>
-
-                            <!-- Modal: Schedule Next Round -->
-                            <div class="modal fade" id="nextRoundModal{{ $itv->job_interview_id }}" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered modal-lg">
-                                    <form method="POST" action="{{ route('recruitment-interviews.status', $itv->job_interview_id) }}">
-                                        @csrf
-                                        <input type="hidden" name="status" value="nextround">
-                                        <div class="modal-content text-start">
-                                            <div class="modal-header border-bottom">
-                                                <h5 class="modal-title fw-bold text-body-emphasis">
-                                                    <i class="fa-solid fa-forward me-2 text-info"></i> Schedule Next Round: {{ $itv->jobApplication->candidate_name ?? 'Candidate' }}
-                                                </h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                @if($errors->any() && old('next_round_interview_id') == $itv->job_interview_id)
-                                                    <div class="alert alert-danger p-2 fs-8 mb-3">
-                                                        <ul class="mb-0 ps-3">
-                                                            @foreach($errors->all() as $error)
-                                                                <li>{{ $error }}</li>
-                                                            @endforeach
-                                                        </ul>
-                                                    </div>
-                                                @endif
-                                                <input type="hidden" name="next_round_interview_id" value="{{ $itv->job_interview_id }}">
-
-                                                <div class="row g-3 mb-3">
-                                                    <div class="col-md-6">
-                                                        <label class="form-label fs-8 fw-semibold">Next Round Date <span class="text-danger">*</span></label>
-                                                        <input type="date" name="next_round_date" class="form-control form-control-sm" required value="{{ old('next_round_date', !empty($itv->next_round_date) ? $itv->next_round_date : date('Y-m-d', strtotime('+1 day'))) }}">
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label class="form-label fs-8 fw-semibold">Next Round Time <span class="text-danger">*</span></label>
-                                                        <input type="time" name="interview_time" class="form-control form-control-sm" required value="{{ old('interview_time', $itv->interview_time ?? '11:00') }}">
-                                                    </div>
-                                                </div>
-
-                                                <div class="mb-3">
-                                                    <label class="form-label fs-8 fw-semibold">Next Round Interview Panelists (Multi-Select)</label>
-                                                    <select name="interviewers_id[]" class="form-select form-select-sm select-search" data-control="select2" data-placeholder="Select Interviewers..." multiple>
-                                                        @foreach($interviewers as $emp)
-                                                            <option value="{{ $emp->user_id }}" {{ in_array($emp->user_id, explode(',', (string) $itv->interviewers_id)) ? 'selected' : '' }}>
-                                                                {{ $emp->first_name }} {{ $emp->last_name }} @if(!empty($emp->employee_id)) (ID: {{ $emp->employee_id }}) @endif
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-
-                                                <div class="mb-3">
-                                                    <label class="form-label fs-8 fw-semibold">Next Round Evaluation Notes / Remarks</label>
-                                                    <textarea name="remarks" class="form-control form-control-sm" rows="2" placeholder="Key focus areas or evaluation criteria for the next round...">{{ old('remarks', $itv->remarks) }}</textarea>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
-                                                <button type="submit" class="btn btn-info btn-sm text-white fw-bold">Update & Schedule Next Round</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-
-                            <!-- Modal: View Interview Details -->
-                            <div class="modal fade" id="viewInterviewModal{{ $itv->job_interview_id }}" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered modal-lg">
-                                    <div class="modal-content text-start border-0 shadow-lg">
-                                        <div class="modal-header bg-body-tertiary border-bottom py-3">
-                                            <div class="d-flex align-items-center gap-2">
-                                                <div class="avatar-sm rounded-circle bg-primary-subtle text-primary fw-bold d-flex align-items-center justify-content-center" style="width:38px; height:38px;">
-                                                    <i class="fa-solid fa-calendar-check fs-6"></i>
-                                                </div>
-                                                <div>
-                                                    <h5 class="modal-title fw-bold text-body-emphasis mb-0">Interview Details</h5>
-                                                    <div class="fs-9 text-body-secondary">Candidate: {{ $itv->jobApplication->candidate_name ?? 'N/A' }}</div>
-                                                </div>
-                                            </div>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                        </div>
-
-                                        <div class="modal-body p-4">
-                                            <div class="row g-4">
-                                                <!-- Candidate Profile -->
-                                                <div class="col-md-6">
-                                                    <div class="card border border-subtle bg-body-tertiary h-100 p-3 rounded-3">
-                                                        <h6 class="fs-8 text-uppercase fw-bold text-primary mb-3"><i class="fa-solid fa-user me-2"></i>Candidate Profile</h6>
-                                                        <div class="mb-2">
-                                                            <span class="fs-9 text-body-secondary d-block">Candidate Name</span>
-                                                            <span class="fw-bold text-body-emphasis fs-7">{{ $itv->jobApplication->candidate_name ?? 'N/A' }}</span>
-                                                        </div>
-                                                        <div class="mb-2">
-                                                            <span class="fs-9 text-body-secondary d-block">Email Address</span>
-                                                            <span class="fw-medium text-body-emphasis fs-8">{{ $itv->jobApplication->email ?? 'N/A' }}</span>
-                                                        </div>
-                                                        <div class="mb-2">
-                                                            <span class="fs-9 text-body-secondary d-block">Phone Number</span>
-                                                            <span class="fw-medium text-body-emphasis fs-8">{{ $itv->jobApplication->phone ?? 'N/A' }}</span>
-                                                        </div>
-                                                        <div class="mb-0">
-                                                            <span class="fs-9 text-body-secondary d-block">Applied Position</span>
-                                                            <span class="badge bg-primary-subtle text-primary fs-8">{{ $itv->jobApplication->job->job_title ?? 'General Position' }}</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <!-- Schedule & Venue -->
-                                                <div class="col-md-6">
-                                                    <div class="card border border-subtle bg-body-tertiary h-100 p-3 rounded-3">
-                                                        <h6 class="fs-8 text-uppercase fw-bold text-info mb-3"><i class="fa-solid fa-clock me-2"></i>Schedule & Venue</h6>
-                                                        <div class="mb-2">
-                                                            <span class="fs-9 text-body-secondary d-block">Interview Date</span>
-                                                            <span class="fw-bold text-body-emphasis fs-7">{{ $itv->formatted_interview_date }}</span>
-                                                        </div>
-                                                        <div class="mb-2">
-                                                            <span class="fs-9 text-body-secondary d-block">Interview Time</span>
-                                                            <span class="fw-medium text-body-emphasis fs-8"><i class="fa-regular fa-clock me-1 text-primary"></i>{{ $itv->interview_time }}</span>
-                                                        </div>
-                                                        @if(!empty($itv->next_round_date))
-                                                            <div class="mb-2">
-                                                                <span class="fs-9 text-body-secondary d-block">Next Round Schedule</span>
-                                                                <span class="badge bg-info-subtle text-info fs-8"><i class="fa-solid fa-forward me-1"></i>{{ date('M d, Y', strtotime($itv->next_round_date)) }}</span>
-                                                            </div>
-                                                        @endif
-                                                        <div class="mb-0">
-                                                            <span class="fs-9 text-body-secondary d-block">Mode / Venue</span>
-                                                            <span class="fw-medium text-body-emphasis fs-8">{{ $itv->interview_mode }} ({{ $itv->interview_place ?? 'Online Meeting' }})</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <!-- Panelists & Status -->
-                                                <div class="col-12">
-                                                    <div class="card border border-subtle p-3 rounded-3">
-                                                        <div class="row g-3">
-                                                            <div class="col-md-6">
-                                                                <span class="fs-9 text-body-secondary d-block mb-1">Assigned Interviewer Panelists</span>
-                                                                @php $panelists = $itv->interviewer_list; @endphp
-                                                                @if($panelists->isNotEmpty())
-                                                                    @foreach($panelists as $pan)
-                                                                        <div class="d-inline-flex align-items-center gap-1 me-2 mb-1">
-                                                                            <span class="badge bg-light border text-body-emphasis fs-8"><i class="fa-solid fa-user-check me-1 text-success"></i>{{ $pan->first_name }} {{ $pan->last_name }} @if(!empty($pan->employee_id))(ID: {{ $pan->employee_id }})@endif</span>
-                                                                        </div>
-                                                                    @endforeach
-                                                                @else
-                                                                    <span class="fw-medium text-body-emphasis fs-8">{{ $itv->interviewer ? ($itv->interviewer->first_name . ' ' . $itv->interviewer->last_name) : ($itv->added_by ?? 'Recruiter') }}</span>
-                                                                @endif
-                                                            </div>
-
-                                                            <div class="col-md-3 col-6">
-                                                                <span class="fs-9 text-body-secondary d-block mb-1">Offered CTC</span>
-                                                                <span class="font-monospace fw-bold text-success fs-7">{{ $itv->offered_ctc ?? '--' }}</span>
-                                                            </div>
-
-                                                            <div class="col-md-3 col-6">
-                                                                <span class="fs-9 text-body-secondary d-block mb-1">Current Status</span>
-                                                                <span class="badge {{ $itv->status_badge_class }} fs-8">{{ $itv->status_label }}</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <!-- Remarks -->
-                                                @if(!empty($itv->remarks) || !empty($itv->description))
-                                                    <div class="col-12">
-                                                        <div class="card border border-subtle bg-body-tertiary p-3 rounded-3">
-                                                            <h6 class="fs-8 text-uppercase fw-bold text-body-secondary mb-2"><i class="fa-solid fa-comment-dots me-2"></i>Evaluation Notes & Remarks</h6>
-                                                            <p class="mb-0 fs-8 text-body-emphasis text-break" style="white-space: pre-wrap;">{{ $itv->remarks ?? $itv->description }}</p>
-                                                        </div>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-
-                                        <div class="modal-footer bg-body-tertiary border-top py-2">
-                                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                                <td>
-                                    <div class="fw-bold text-gray-900">{{ $itv->jobApplication->candidate_name ?? 'Candidate' }}</div>
-                                    <div class="fs-9 text-muted">{{ $itv->jobApplication->email ?? '' }}</div>
-                                </td>
-                                <td>
-                                    <span class="fw-medium text-gray-800">{{ $itv->formatted_interview_date }}</span>
-                                    @if(!empty($itv->next_round_date))
-                                        <div class="fs-9 text-info fw-semibold mt-1">
-                                            <i class="fa-solid fa-forward me-1"></i>Next: {{ date('M d, Y', strtotime($itv->next_round_date)) }}
-                                        </div>
-                                    @endif
-                                    <div class="fs-9 text-muted"><i class="fa-regular fa-clock me-1"></i>{{ $itv->interview_time }}</div>
-                                </td>
-                                <td>
-                                    <span class="badge badge-light-primary text-uppercase fs-9">{{ $itv->interview_mode }}</span>
-                                    <div class="fs-9 text-muted">{{ $itv->interview_place ?? 'Online Meeting' }}</div>
-                                </td>
-                                <td>
-                                    @php
-                                        $panelists = $itv->interviewer_list;
-                                    @endphp
-                                    @if($panelists->isNotEmpty())
-                                        @foreach($panelists as $pan)
-                                            <div class="mb-1">
-                                                <span class="fw-bold text-body-emphasis fs-8">{{ $pan->first_name }} {{ $pan->last_name }}</span>
-                                                @if(!empty($pan->employee_id))
-                                                    <span class="badge bg-secondary-subtle text-body-secondary font-mono fs-9">ID: {{ $pan->employee_id }}</span>
-                                                @endif
-                                            </div>
-                                        @endforeach
-                                    @else
-                                        <div class="fw-bold text-body-emphasis fs-8">{{ $itv->interviewer ? ($itv->interviewer->first_name . ' ' . $itv->interviewer->last_name) : ($itv->added_by ?? 'Recruiter') }}</div>
-                                        @if(!empty($itv->interviewer?->employee_id))
-                                            <span class="badge bg-secondary-subtle text-body-secondary font-mono fs-9">ID: {{ $itv->interviewer->employee_id }}</span>
-                                        @endif
-                                    @endif
-                                </td>
-                                <td>
-                                    <span class="font-monospace text-success fw-bold">{{ $itv->offered_ctc ?? '--' }}</span>
-                                </td>
-                                <td class="pe-4">
-                                    <span class="badge {{ $itv->status_badge_class }}">
-                                        {{ $itv->status_label }}
-                                    </span>
-                                    @if($itv->convert_to_employee != 0)
-                                        <div class="mt-1"><span class="badge badge-light-success fs-9"><i class="fa-solid fa-user-check me-1"></i>Converted</span></div>
-                                    @endif
-                                </td>
-                            </tr>
                         @empty
                             <tr>
                                 <td colspan="7" class="text-center py-5 text-muted">
@@ -402,6 +175,195 @@
                 </table>
             </div>
         </div>
+
+        @if($interviews->hasPages())
+            <div class="card-footer py-3 border-top">
+                {{ $interviews->withQueryString()->links('pagination::bootstrap-5') }}
+            </div>
+        @endif
+    </div>
+</div>
+
+<!-- Dynamic Modals for Row Actions -->
+@foreach($interviews as $itv)
+    <!-- Modal: Schedule Next Round -->
+    <div class="modal fade" id="nextRoundModal{{ $itv->job_interview_id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <form method="POST" action="{{ route('recruitment-interviews.status', $itv->job_interview_id) }}">
+                @csrf
+                <input type="hidden" name="status" value="nextround">
+                <div class="modal-content text-start">
+                    <div class="modal-header border-bottom">
+                        <h5 class="modal-title fw-bold text-body-emphasis">
+                            <i class="fa-solid fa-forward me-2 text-info"></i> Schedule Next Round: {{ $itv->jobApplication->candidate_name ?? 'Candidate' }}
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        @if($errors->any() && old('next_round_interview_id') == $itv->job_interview_id)
+                            <div class="alert alert-danger p-2 fs-8 mb-3">
+                                <ul class="mb-0 ps-3">
+                                    @foreach($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                        <input type="hidden" name="next_round_interview_id" value="{{ $itv->job_interview_id }}">
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fs-8 fw-semibold">Next Round Date <span class="text-danger">*</span></label>
+                                <input type="date" name="next_round_date" class="form-control form-control-sm" required value="{{ old('next_round_date', !empty($itv->next_round_date) ? $itv->next_round_date : date('Y-m-d', strtotime('+1 day'))) }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fs-8 fw-semibold">Next Round Time <span class="text-danger">*</span></label>
+                                <input type="time" name="interview_time" class="form-control form-control-sm" required value="{{ old('interview_time', $itv->interview_time ?? '11:00') }}">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fs-8 fw-semibold">Next Round Interview Panelists (Multi-Select)</label>
+                            <select name="interviewers_id[]" class="form-select form-select-sm select-search" data-control="select2" data-placeholder="Select Interviewers..." multiple>
+                                @foreach($interviewers as $emp)
+                                    <option value="{{ $emp->user_id }}" {{ in_array($emp->user_id, explode(',', (string) $itv->interviewers_id)) ? 'selected' : '' }}>
+                                        {{ $emp->first_name }} {{ $emp->last_name }} @if(!empty($emp->employee_id)) (ID: {{ $emp->employee_id }}) @endif
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fs-8 fw-semibold">Next Round Evaluation Notes / Remarks</label>
+                            <textarea name="remarks" class="form-control form-control-sm" rows="2" placeholder="Key focus areas or evaluation criteria for the next round...">{{ old('remarks', $itv->remarks) }}</textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-info btn-sm text-white fw-bold">Update & Schedule Next Round</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: View Interview Details -->
+    <div class="modal fade" id="viewInterviewModal{{ $itv->job_interview_id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content text-start border-0 shadow-lg">
+                <div class="modal-header bg-body-tertiary border-bottom py-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="avatar-sm rounded-circle bg-primary-subtle text-primary fw-bold d-flex align-items-center justify-content-center" style="width:38px; height:38px;">
+                            <i class="fa-solid fa-calendar-check fs-6"></i>
+                        </div>
+                        <div>
+                            <h5 class="modal-title fw-bold text-body-emphasis mb-0">Interview Details</h5>
+                            <div class="fs-9 text-body-secondary">Candidate: {{ $itv->jobApplication->candidate_name ?? 'N/A' }}</div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body p-4">
+                    <div class="row g-4">
+                        <!-- Candidate Profile -->
+                        <div class="col-md-6">
+                            <div class="card border border-subtle bg-body-tertiary h-100 p-3 rounded-3">
+                                <h6 class="fs-8 text-uppercase fw-bold text-primary mb-3"><i class="fa-solid fa-user me-2"></i>Candidate Profile</h6>
+                                <div class="mb-2">
+                                    <span class="fs-9 text-body-secondary d-block">Candidate Name</span>
+                                    <span class="fw-bold text-body-emphasis fs-7">{{ $itv->jobApplication->candidate_name ?? 'N/A' }}</span>
+                                </div>
+                                <div class="mb-2">
+                                    <span class="fs-9 text-body-secondary d-block">Email Address</span>
+                                    <span class="fw-medium text-body-emphasis fs-8">{{ $itv->jobApplication->email ?? 'N/A' }}</span>
+                                </div>
+                                <div class="mb-2">
+                                    <span class="fs-9 text-body-secondary d-block">Phone Number</span>
+                                    <span class="fw-medium text-body-emphasis fs-8">{{ $itv->jobApplication->phone ?? 'N/A' }}</span>
+                                </div>
+                                <div class="mb-0">
+                                    <span class="fs-9 text-body-secondary d-block">Applied Position</span>
+                                    <span class="badge bg-primary-subtle text-primary fs-8">{{ $itv->jobApplication->job->job_title ?? 'General Position' }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Schedule & Venue -->
+                        <div class="col-md-6">
+                            <div class="card border border-subtle bg-body-tertiary h-100 p-3 rounded-3">
+                                <h6 class="fs-8 text-uppercase fw-bold text-info mb-3"><i class="fa-solid fa-clock me-2"></i>Schedule & Venue</h6>
+                                <div class="mb-2">
+                                    <span class="fs-9 text-body-secondary d-block">Interview Date</span>
+                                    <span class="fw-bold text-body-emphasis fs-7">{{ $itv->formatted_interview_date }}</span>
+                                </div>
+                                <div class="mb-2">
+                                    <span class="fs-9 text-body-secondary d-block">Interview Time</span>
+                                    <span class="fw-medium text-body-emphasis fs-8"><i class="fa-regular fa-clock me-1 text-primary"></i>{{ $itv->interview_time }}</span>
+                                </div>
+                                @if(!empty($itv->next_round_date))
+                                    <div class="mb-2">
+                                        <span class="fs-9 text-body-secondary d-block">Next Round Schedule</span>
+                                        <span class="badge bg-info-subtle text-info fs-8"><i class="fa-solid fa-forward me-1"></i>{{ date('M d, Y', strtotime($itv->next_round_date)) }}</span>
+                                    </div>
+                                @endif
+                                <div class="mb-0">
+                                    <span class="fs-9 text-body-secondary d-block">Mode / Venue</span>
+                                    <span class="fw-medium text-body-emphasis fs-8">{{ $itv->interview_mode }} ({{ $itv->interview_place ?? 'Online Meeting' }})</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Panelists & Status -->
+                        <div class="col-12">
+                            <div class="card border border-subtle p-3 rounded-3">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <span class="fs-9 text-body-secondary d-block mb-1">Assigned Interviewer Panelists</span>
+                                        @php $panelists = $itv->interviewer_list; @endphp
+                                        @if($panelists->isNotEmpty())
+                                            @foreach($panelists as $pan)
+                                                <div class="d-inline-flex align-items-center gap-1 me-2 mb-1">
+                                                    <span class="badge bg-light border text-body-emphasis fs-8"><i class="fa-solid fa-user-check me-1 text-success"></i>{{ $pan->first_name }} {{ $pan->last_name }} @if(!empty($pan->employee_id))(ID: {{ $pan->employee_id }})@endif</span>
+                                                </div>
+                                            @endforeach
+                                        @else
+                                            <span class="fw-medium text-body-emphasis fs-8">{{ $itv->interviewer ? ($itv->interviewer->first_name . ' ' . $itv->interviewer->last_name) : ($itv->added_by ?? 'Recruiter') }}</span>
+                                        @endif
+                                    </div>
+
+                                    <div class="col-md-3 col-6">
+                                        <span class="fs-9 text-body-secondary d-block mb-1">Offered CTC</span>
+                                        <span class="font-monospace fw-bold text-success fs-7">{{ $itv->offered_ctc ?? '--' }}</span>
+                                    </div>
+
+                                    <div class="col-md-3 col-6">
+                                        <span class="fs-9 text-body-secondary d-block mb-1">Current Status</span>
+                                        <span class="badge {{ $itv->status_badge_class }} fs-8">{{ $itv->status_label }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Remarks -->
+                        @if(!empty($itv->remarks) || !empty($itv->description))
+                            <div class="col-12">
+                                <div class="card border border-subtle bg-body-tertiary p-3 rounded-3">
+                                    <h6 class="fs-8 text-uppercase fw-bold text-body-secondary mb-2"><i class="fa-solid fa-comment-dots me-2"></i>Evaluation Notes & Remarks</h6>
+                                    <p class="mb-0 fs-8 text-body-emphasis text-break" style="white-space: pre-wrap;">{{ $itv->remarks ?? $itv->description }}</p>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="modal-footer bg-body-tertiary border-top py-2">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+@endforeach
 
         @if($interviews->hasPages())
             <div class="card-footer py-3 border-top">
