@@ -476,7 +476,16 @@
                     <h5 class="modal-title"><i class="fa-solid fa-plus me-2 text-primary"></i> Schedule Candidate Interview</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
+                    @if(session('error'))
+                        <div class="alert alert-danger alert-dismissible fade show mb-3 p-3 fs-8 border-danger-subtle" role="alert">
+                            <div class="d-flex align-items-center">
+                                <i class="fa-solid fa-circle-exclamation me-2 fs-6 text-danger"></i>
+                                <div><strong class="text-danger">Scheduling Error:</strong> {{ session('error') }}</div>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    @endif
+
                     @if($errors->any())
                         <div class="alert alert-danger alert-dismissible fade show mb-3 p-3 fs-8 border-danger-subtle" role="alert">
                             <div class="d-flex align-items-center mb-1">
@@ -703,7 +712,7 @@
                 });
             });
 
-            @if($errors->any())
+            @if($errors->any() || session('error'))
                 var oldNextRoundId = @json(old('next_round_interview_id'));
                 if (oldNextRoundId) {
                     var modalEl = document.getElementById('nextRoundModal' + oldNextRoundId);
