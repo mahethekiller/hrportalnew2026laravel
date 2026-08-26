@@ -207,17 +207,25 @@
                 </div>
                 <div class="modal-body">
                     <div class="row g-3 mb-3">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label class="form-label fs-8 fw-semibold">Candidate Full Name <span class="text-danger">*</span></label>
                             <input type="text" name="candidate_name" class="form-control form-control-sm" required placeholder="e.g. Rahul Sharma">
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label class="form-label fs-8 fw-semibold">Email Address <span class="text-danger">*</span></label>
                             <input type="email" name="email" class="form-control form-control-sm" required placeholder="rahul@example.com">
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label class="form-label fs-8 fw-semibold">Contact Phone Number</label>
                             <input type="text" name="contact_no" class="form-control form-control-sm" placeholder="e.g. +91 9876543210">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fs-8 fw-semibold">Gender</label>
+                            <select name="gender" class="form-select form-select-sm">
+                                <option value="Male" selected>Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
                         </div>
                     </div>
 
