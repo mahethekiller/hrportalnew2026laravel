@@ -59,47 +59,7 @@ class EmployeeService
                 ? $data['employee_id']
                 : (!empty($data['username']) ? $data['username'] : 'EMP-' . sprintf('%04d', rand(100, 9999)));
 
-            // 1. Create or resolve root User
-            $user = User::create([
-                'name' => trim(($data['first_name'] ?? '') . ' ' . ($data['last_name'] ?? '')),
-                'first_name' => $data['first_name'] ?? 'Admin',
-                'last_name' => $data['last_name'] ?? 'User',
-                'username' => $data['username'] ?? $empCode,
-                'employee_id' => $empCode,
-                'user_role_id' => $data['user_role_id'] ?? 1,
-                'user_type' => is_numeric($data['user_type'] ?? null) ? (int)$data['user_type'] : 1,
-                'company_name' => $data['company_name'] ?? 'Antigravity Corp',
-                'company_logo' => 'logo.png',
-                'profile_photo' => 'photo.jpg',
-                'profile_background' => 'bg.jpg',
-                'contact_number' => $data['contact_no'] ?? '1234567890',
-                'gender' => $data['gender'] ?? 'Male',
-                'address_1' => $data['address'] ?? '123 Main St',
-                'address_2' => '',
-                'city' => 'Anytown',
-                'state' => 'State',
-                'zipcode' => '12345',
-                'country' => 1,
-                'last_login_date' => now()->toDateTimeString(),
-                'last_login_ip' => '127.0.0.1',
-                'is_logged_in' => 0,
-                'is_active' => 1,
-                'user_role' => 'Employee',
-                'company_id' => $data['company_id'] ?? 1,
-                'designation_id' => $data['designation_id'] ?? 1,
-                'department_id' => $data['department_id'] ?? 1,
-                'email' => $data['email'],
-                'password' => Hash::make($data['password'] ?? '12345678'),
-            ]);
-
-            // Update empCode with user id if generated
-            if (empty($data['employee_id']) || $data['employee_id'] === '0') {
-                $empCode = 'EMP-' . sprintf('%04d', $user->id);
-                $user->update(['employee_id' => $empCode]);
-            }
-
-            // 2. Hash employee password and resolve non-colliding user_id for xin_employees
-            $targetUserId = $data['user_id'] ?? $user->id;
+            $targetUserId = $data['user_id'] ?? rand(10000, 99999);
             if (Employee::where('user_id', $targetUserId)->exists()) {
                 $maxId = (int) DB::table('xin_employees')->max('user_id');
                 $targetUserId = $maxId + 1;
