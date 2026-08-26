@@ -60,10 +60,10 @@ These rules represent the absolute constraints of the project. Any deviation fro
   2. Maintain and document the exact step-by-step deployment instructions in `SERVER_DEPLOYMENT_GUIDE.md` in the project root.
   3. Never drop, truncate, or overwrite existing production database tables or user records.
 
-## ⚡ Rule 8: First-Column Action Buttons in Data Tables
-- All data tables across Blade views (e.g. Clearance Hub, Employee Directory, Resignations, Leave Management, Payroll, Roles) must place Action Buttons (`.btn-group`, action dropdowns, or action icons) in **Column 1** (the very first table column on the left).
-- Table headers (`<thead>`) must have `<th>Actions</th>` as the first column.
-- This ensures zero horizontal scrolling is needed to trigger actions and maximizes HR power-user efficiency.
+## ⚡ Rule 8: First-Column Icon-Only Action Buttons & Explicit Spacing
+- All data tables across Blade views (e.g. Clearance Hub, Employee Directory, Resignations, Leave Management, Payroll, Recruitment Candidates, Scheduled Interviews) must place Action Buttons in **Column 1** (the very first table column on the left with `<th>Actions</th>`).
+- **Icon-Only Controls**: Action buttons inside table rows must be clean, compact **icon-only buttons** (e.g. `<button class="btn btn-sm btn-outline-primary px-2.5 rounded-2" title="View Profile"><i class="fa-solid fa-eye"></i></button>`) equipped with descriptive HTML `title` tooltips. Do not use plain text labels inside table row action buttons.
+- **Explicit Button Spacing**: Never wrap action buttons in merged `.btn-group` containers (which force buttons to glue together without margins). Always wrap action buttons in `<div class="d-inline-flex align-items-center" style="gap: 6px;">` so every button maintains individual rounded borders (`rounded-2`) and distinct 6px spacing between icons.
 
 ## 🔍 Rule 9: Searchable Select Dropdowns & Multi-Company Disambiguation
 - All modal forms and complex selection fields (e.g. Job Requisition, Candidate, Employee, Department, Designation, Role, Leave Type) must include `class="select-search"` or `data-control="select2"` and a blank default option (`<option value=""></option>`).
