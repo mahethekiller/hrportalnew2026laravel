@@ -49,6 +49,15 @@ class Designation extends Model
         return $this->belongsTo(Company::class, 'company_id');
     }
 
+    /**
+     * Name with Company Accessor.
+     */
+    public function getNameWithCompanyAttribute(): string
+    {
+        $comp = $this->company ? ($this->company->name ?? $this->company->trading_name ?? '') : '';
+        return $this->designation_name . ($comp ? " (Company: {$comp})" : '');
+    }
+
     public function employeeContracts()
     {
         return $this->hasMany(EmployeeContract::class, 'designation_id');

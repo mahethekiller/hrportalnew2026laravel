@@ -606,7 +606,7 @@
                                     <option value=""></option>
                                     @foreach($departments as $dept)
                                         <option value="{{ $dept->department_id ?? $dept->id }}" {{ old('department_id', $itv->jobApplication->department_id ?? '') == ($dept->department_id ?? $dept->id) ? 'selected' : '' }}>
-                                            {{ $dept->department_name ?? $dept->name }}
+                                            {{ $dept->name_with_company }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -618,7 +618,7 @@
                                     <option value=""></option>
                                     @foreach($designations as $desig)
                                         <option value="{{ $desig->designation_id ?? $desig->id }}" {{ old('designation_id') == ($desig->designation_id ?? $desig->id) ? 'selected' : '' }}>
-                                            {{ $desig->designation_name ?? $desig->title }}
+                                            {{ $desig->name_with_company }}
                                         </option>
                                     @endforeach
                                 </select>

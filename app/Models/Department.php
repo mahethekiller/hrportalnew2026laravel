@@ -44,6 +44,15 @@ class Department extends Model
         return $this->belongsTo(Company::class, 'company_id');
     }
 
+    /**
+     * Name with Company Accessor.
+     */
+    public function getNameWithCompanyAttribute(): string
+    {
+        $comp = $this->company ? ($this->company->name ?? $this->company->trading_name ?? '') : '';
+        return $this->department_name . ($comp ? " (Company: {$comp})" : '');
+    }
+
     public function employee()
     {
         return $this->belongsTo(Employee::class, 'employee_id');

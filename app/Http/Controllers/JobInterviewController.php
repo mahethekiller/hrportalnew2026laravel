@@ -26,8 +26,8 @@ class JobInterviewController extends Controller
         $interviews = $this->recruitmentService->getInterviewsPaginated($filters);
         $applications = $this->recruitmentService->getApplicationsPaginated([], 200);
         $interviewers = $this->employeeService->getActiveEmployees();
-        $departments = \App\Models\Department::orderBy('department_name')->get();
-        $designations = \App\Models\Designation::orderBy('designation_name')->get();
+        $departments = \App\Models\Department::with('company')->orderBy('department_name')->get();
+        $designations = \App\Models\Designation::with('company')->orderBy('designation_name')->get();
         try {
             $roles = \Spatie\Permission\Models\Role::orderBy('name')->get();
         } catch (\Throwable $e) {
