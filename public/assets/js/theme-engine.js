@@ -8,22 +8,22 @@
 
     const COLOR_PROFILES = {
         fern: {
-            name: 'Fern Emerald',
-            primary_light: '#2F7A63',
-            primary_dark: '#4FA98C',
-            primary_active: '#24624F',
-            primary_wash_light: '#E4F0EA',
-            primary_wash_dark: '#1B3A33',
-            rgb: '47, 122, 99',
+            name: 'Corporate Navy Blue',
+            primary_light: '#1E40AF',
+            primary_dark: '#3B82F6',
+            primary_active: '#1E3A8A',
+            primary_wash_light: '#EFF6FF',
+            primary_wash_dark: '#172554',
+            rgb: '30, 64, 175',
         },
         sapphire: {
             name: 'Sapphire Corporate',
-            primary_light: '#2563EB',
-            primary_dark: '#60A5FA',
-            primary_active: '#1D4ED8',
+            primary_light: '#1E40AF',
+            primary_dark: '#3B82F6',
+            primary_active: '#1E3A8A',
             primary_wash_light: '#EFF6FF',
-            primary_wash_dark: '#1E3A8A',
-            rgb: '37, 99, 235',
+            primary_wash_dark: '#172554',
+            rgb: '30, 64, 175',
         },
         violet: {
             name: 'Royal Violet',
@@ -97,8 +97,8 @@
             const systemDefault = window.SYSTEM_THEME_CONFIG || {};
 
             return {
-                profile: localStorage.getItem('portal_theme_profile') || systemDefault.theme_color_profile || 'fern',
-                customHex: localStorage.getItem('portal_custom_hex') || systemDefault.custom_primary_hex || '#2F7A63',
+                profile: localStorage.getItem('portal_theme_profile') || systemDefault.theme_color_profile || 'sapphire',
+                customHex: localStorage.getItem('portal_custom_hex') || systemDefault.custom_primary_hex || '#1E40AF',
                 mode: localStorage.getItem('portal_theme_mode') || systemDefault.theme_mode || 'light',
                 font: localStorage.getItem('portal_font_family') || systemDefault.font_family || 'inter',
                 sidebar: localStorage.getItem('portal_sidebar_style') || systemDefault.sidebar_style || 'default',
@@ -120,7 +120,7 @@
             if (!profileData && config.profile === 'custom') {
                 profileData = this.generateCustomProfile(config.customHex);
             } else if (!profileData) {
-                profileData = COLOR_PROFILES.fern;
+                profileData = COLOR_PROFILES.sapphire;
             }
 
             const primaryColor = resolvedMode === 'dark' ? profileData.primary_dark : profileData.primary_light;
@@ -158,9 +158,9 @@
             if (hex.length === 3) {
                 hex = hex.split('').map(c => c + c).join('');
             }
-            const r = parseInt(hex.substring(0, 2), 16) || 47;
-            const g = parseInt(hex.substring(2, 4), 16) || 122;
-            const b = parseInt(hex.substring(4, 6), 16) || 99;
+            const r = parseInt(hex.substring(0, 2), 16) || 30;
+            const g = parseInt(hex.substring(2, 4), 16) || 64;
+            const b = parseInt(hex.substring(4, 6), 16) || 175;
 
             return {
                 name: 'Custom Profile',

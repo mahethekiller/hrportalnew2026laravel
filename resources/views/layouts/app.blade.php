@@ -17,11 +17,11 @@
     <link href="{{ asset('assets/vendor/apexcharts/apexcharts.css') }}" rel="stylesheet">
 
     <!-- Custom Theme Styling -->
-    <link href="{{ asset('assets/css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/app.css') }}?v={{ @filemtime(public_path('assets/css/app.css')) }}" rel="stylesheet">
     @stack('css')
 
     <!-- Pre-load Dark Theme & Color Profile Engine -->
-    <script src="{{ asset('assets/js/theme-engine.js') }}"></script>
+    <script src="{{ asset('assets/js/theme-engine.js') }}?v={{ @filemtime(public_path('assets/js/theme-engine.js')) }}"></script>
 </head>
 <body class="bg-body-secondary">
     @php
