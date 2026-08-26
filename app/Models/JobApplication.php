@@ -145,6 +145,33 @@ class JobApplication extends Model
     }
 
     /**
+     * Creator User relation.
+     */
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'added_by', 'id');
+    }
+
+    /**
+     * Creator Name Accessor.
+     */
+    public function getCreatorNameAttribute(): string
+    {
+        if (!empty($this->creator?->name)) {
+            return $this->creator->name;
+        }
+
+        if (is_numeric($this->added_by)) {
+            $user = User::find($this->added_by);
+            if ($user?->name) {
+                return $user->name;
+            }
+        }
+
+        return !empty($this->added_by) ? (string) $this->added_by : 'System Admin';
+    }
+
+    /**
      * Interviews relation.
      */
     public function interviews(): HasMany

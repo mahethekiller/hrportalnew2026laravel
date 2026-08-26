@@ -247,7 +247,7 @@
 
                                                     <div class="d-flex align-items-center justify-content-between pt-2 border-top fs-9 text-body-secondary">
                                                         <div><i class="fa-solid fa-calendar me-1"></i> CV Sourced: {{ $app->date_cv_sourced ?? date('Y-m-d') }}</div>
-                                                        <div><i class="fa-solid fa-user me-1"></i> Added By: User ID {{ $app->added_by ?? '1' }}</div>
+                                                        <div><i class="fa-solid fa-user me-1"></i> Added By: <strong class="text-body-emphasis">{{ $app->creator_name }}</strong></div>
                                                         <div><x-status-badge :status="$app->application_status ?? 'Applied'" /></div>
                                                     </div>
                                                 </div>
