@@ -44,12 +44,12 @@
         <div class="col-md-4">
             <div class="card border-0 shadow-sm rounded-3">
                 <div class="card-body p-3 d-flex align-items-center gap-3">
-                    <div class="rounded-3 bg-success-subtle text-success p-3 d-flex align-items-center justify-content-center">
+                    <div class="rounded-3 bg-primary-subtle text-primary p-3 d-flex align-items-center justify-content-center">
                         <i class="fa-solid fa-circle-check fs-4"></i>
                     </div>
                     <div>
                         <div class="fs-8 text-body-secondary fw-semibold">Fully Cleared / Relieved</div>
-                        <div class="fs-4 fw-bold text-success">{{ $completedClearances }}</div>
+                        <div class="fs-4 fw-bold text-primary">{{ $completedClearances }}</div>
                     </div>
                 </div>
             </div>

@@ -591,6 +591,25 @@ h3, .headline-md {
     color: #FFFFFF !important;
 }
 
+/* Primary Utility Class Overrides */
+.text-primary {
+    color: var(--bs-primary) !important;
+}
+
+.bg-primary {
+    background-color: var(--bs-primary) !important;
+    color: #FFFFFF !important;
+}
+
+.bg-primary-subtle {
+    background-color: var(--bs-primary-light) !important;
+    color: var(--bs-primary) !important;
+}
+
+.text-primary-emphasis {
+    color: var(--bs-primary-active) !important;
+}
+
 /* Light Mode High-Contrast Text Color Helpers */
 .text-gray-900 { color: #0F172A !important; }
 .text-gray-800 { color: #1E293B !important; }
