@@ -74,6 +74,24 @@ class JobApplicationRepository
         return JobApplication::create($data);
     }
 
+    public function update(JobApplication $application, array $data): bool
+    {
+        if (isset($data['company'])) {
+            $data['company'] = !empty($data['company']) && is_numeric($data['company']) ? (int) $data['company'] : 1;
+        }
+        if (isset($data['job_id'])) {
+            $data['job_id'] = !empty($data['job_id']) ? (int) $data['job_id'] : $application->job_id;
+        }
+        if (isset($data['department_id'])) {
+            $data['department_id'] = !empty($data['department_id']) ? (int) $data['department_id'] : $application->department_id;
+        }
+
+        $data['updated_date'] = date('Y-m-d H:i:s');
+        $data['updated_by'] = auth()->id() ?? 1;
+
+        return $application->update($data);
+    }
+
     public function updateStatus(JobApplication $application, string $status, ?string $remarks = null): bool
     {
         return $application->update([

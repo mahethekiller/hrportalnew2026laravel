@@ -43,6 +43,11 @@ class RecruitmentService
         return $this->applicationRepository->create($data);
     }
 
+    public function updateApplication(JobApplication $application, array $data): bool
+    {
+        return $this->applicationRepository->update($application, $data);
+    }
+
     public function updateApplicationStatus(JobApplication $application, string $status, ?string $remarks = null): bool
     {
         return $this->applicationRepository->updateStatus($application, $status, $remarks);

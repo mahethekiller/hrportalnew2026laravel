@@ -238,4 +238,39 @@ class RecruitmentManagementTest extends TestCase
         $getResponse = $this->actingAs($user)->getJson(route('api.v1.job-applications.index'));
         $getResponse->assertStatus(200);
     }
+
+    public function test_candidate_application_can_be_updated(): void
+    {
+        $user = User::factory()->create();
+
+        $application = JobApplication::create([
+            'candidate_name' => 'Original Candidate',
+            'email' => 'original@example.com',
+            'contact_no' => '1234567890',
+            'gender' => 'Male',
+            'company' => 1,
+            'application_status' => 'Applied',
+            'show_status' => 1,
+        ]);
+
+        $response = $this->actingAs($user)->put(route('recruitment-applications.update', $application->application_id), [
+            'candidate_name' => 'Updated Candidate Name',
+            'email' => 'updated@example.com',
+            'contact_no' => '9876543210',
+            'gender' => 'Female',
+            'experience' => '5 Years',
+            'current_company' => 'New Tech Corp',
+            'current_package' => '10 LPA',
+            'expected_package' => '15 LPA',
+        ]);
+
+        $response->assertRedirect(route('recruitment-applications.index'));
+        $this->assertDatabaseHas('xin_job_applications', [
+            'application_id' => $application->application_id,
+            'candidate_name' => 'Updated Candidate Name',
+            'email' => 'updated@example.com',
+            'gender' => 'Female',
+            'experience' => '5 Years',
+        ]);
+    }
 }

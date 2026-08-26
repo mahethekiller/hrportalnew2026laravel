@@ -75,7 +75,7 @@ Route::middleware('auth')->group(function () {
     // Recruitment Routes
     Route::resource('recruitment-job-codes', \App\Http\Controllers\JobCodeController::class)->parameters(['recruitment-job-codes' => 'jobCode'])->except(['create', 'edit', 'destroy']);
     Route::resource('recruitment-job-posts', \App\Http\Controllers\JobPostController::class)->parameters(['recruitment-job-posts' => 'jobPost'])->except(['create', 'edit', 'destroy']);
-    Route::resource('recruitment-applications', \App\Http\Controllers\JobApplicationController::class)->except(['create', 'edit', 'update', 'destroy']);
+    Route::resource('recruitment-applications', \App\Http\Controllers\JobApplicationController::class)->parameters(['recruitment-applications' => 'application'])->except(['create', 'edit', 'destroy']);
     Route::post('/recruitment-applications/{application}/status', [\App\Http\Controllers\JobApplicationController::class, 'updateStatus'])->name('recruitment-applications.status');
     Route::get('/recruitment-applications/{application}/resume', [\App\Http\Controllers\JobApplicationController::class, 'downloadResume'])->name('recruitment-applications.resume');
     Route::resource('recruitment-interviews', \App\Http\Controllers\JobInterviewController::class)->except(['create', 'edit', 'update', 'destroy']);

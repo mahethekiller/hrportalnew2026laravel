@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreJobApplicationRequest;
+use App\Http\Requests\UpdateJobApplicationRequest;
 use App\Models\Department;
 use App\Models\JobApplication;
 use App\Services\RecruitmentService;
@@ -48,6 +49,25 @@ class JobApplicationController extends Controller
 
         return redirect()->route('recruitment-applications.index')
             ->with('success', 'Candidate application for "' . $application->candidate_name . '" submitted successfully.');
+    }
+
+    public function update(UpdateJobApplicationRequest $request, JobApplication $application): RedirectResponse
+    {
+        $data = $request->validated();
+
+        if ($request->hasFile('job_resume')) {
+            $file = $request->file('job_resume');
+            $candidateSlug = \Illuminate\Support\Str::slug($data['candidate_name'] ?? $application->candidate_name, '_');
+            $extension = $file->getClientOriginalExtension();
+            $filename = 'Resume_' . $candidateSlug . '_' . date('Ymd_His') . '.' . $extension;
+            $path = $file->storeAs('resumes', $filename, 'public');
+            $data['job_resume'] = $path;
+        }
+
+        $this->recruitmentService->updateApplication($application, $data);
+
+        return redirect()->route('recruitment-applications.index')
+            ->with('success', 'Candidate profile for "' . $application->candidate_name . '" updated successfully.');
     }
 
     public function updateStatus(Request $request, JobApplication $application): RedirectResponse

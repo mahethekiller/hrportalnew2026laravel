@@ -127,6 +127,11 @@
                                         <i class="fa-solid fa-eye me-1"></i> View
                                     </button>
 
+                                    <!-- Edit Candidate Button -->
+                                    <button type="button" class="btn btn-sm btn-light border text-warning py-1 px-2 fs-8 me-1" data-bs-toggle="modal" data-bs-target="#editCandidateModal{{ $app->application_id }}" title="Edit Candidate Profile">
+                                        <i class="fa-solid fa-pen-to-square me-1"></i> Edit
+                                    </button>
+
                                     <!-- Stage Update Dropdown -->
                                     <div class="dropdown d-inline">
                                         <button class="btn btn-sm btn-outline-secondary py-1 px-2 fs-8 dropdown-toggle" type="button" data-bs-toggle="dropdown">
@@ -260,6 +265,146 @@
                                                     <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Modal: Edit Candidate Profile -->
+                                    <div class="modal fade" id="editCandidateModal{{ $app->application_id }}" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                                            <form method="POST" action="{{ route('recruitment-applications.update', $app->application_id) }}" enctype="multipart/form-data">
+                                                @csrf
+                                                @method('PUT')
+                                                <div class="modal-content">
+                                                    <div class="modal-header border-bottom">
+                                                        <h5 class="modal-title fw-bold text-body-emphasis">
+                                                            <i class="fa-solid fa-user-pen me-2 text-warning"></i> Edit Candidate Profile: {{ $app->candidate_name }}
+                                                        </h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                    </div>
+                                                    <div class="modal-body text-start">
+                                                        @if($errors->any() && old('edit_application_id') == $app->application_id)
+                                                            <div class="alert alert-danger alert-dismissible fade show mb-3 p-3 fs-8 border-danger-subtle" role="alert">
+                                                                <div class="d-flex align-items-center mb-1">
+                                                                    <i class="fa-solid fa-circle-exclamation me-2 fs-6 text-danger"></i>
+                                                                    <strong class="text-danger">Update Error:</strong>
+                                                                </div>
+                                                                <ul class="mb-0 ps-3">
+                                                                    @foreach($errors->all() as $error)
+                                                                        <li>{{ $error }}</li>
+                                                                    @endforeach
+                                                                </ul>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                                            </div>
+                                                        @endif
+
+                                                        <input type="hidden" name="edit_application_id" value="{{ $app->application_id }}">
+
+                                                        <div class="row g-3 mb-3">
+                                                            <div class="col-md-3">
+                                                                <label class="form-label fs-8 fw-semibold">Candidate Full Name <span class="text-danger">*</span></label>
+                                                                <input type="text" name="candidate_name" value="{{ old('candidate_name', $app->candidate_name) }}" class="form-control form-control-sm" required>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <label class="form-label fs-8 fw-semibold">Email Address <span class="text-danger">*</span></label>
+                                                                <input type="email" name="email" value="{{ old('email', $app->email) }}" class="form-control form-control-sm" required>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <label class="form-label fs-8 fw-semibold">Contact Phone Number</label>
+                                                                <input type="text" name="contact_no" value="{{ old('contact_no', $app->contact_no) }}" class="form-control form-control-sm">
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <label class="form-label fs-8 fw-semibold">Gender</label>
+                                                                <select name="gender" class="form-select form-select-sm">
+                                                                    <option value="Male" {{ old('gender', $app->gender ?? 'Male') == 'Male' ? 'selected' : '' }}>Male</option>
+                                                                    <option value="Female" {{ old('gender', $app->gender) == 'Female' ? 'selected' : '' }}>Female</option>
+                                                                    <option value="Other" {{ old('gender', $app->gender) == 'Other' ? 'selected' : '' }}>Other</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row g-3 mb-3">
+                                                            <div class="col-md-6">
+                                                                <label class="form-label fs-8 fw-semibold">Target Job Opening Requisition <span class="text-danger">*</span></label>
+                                                                <select name="job_id" class="form-select form-select-sm select-search" data-control="select2" data-placeholder="Search Job Opening..." required>
+                                                                    <option value=""></option>
+                                                                    @foreach($jobs as $jb)
+                                                                        <option value="{{ $jb->job_id }}" {{ old('job_id', $app->job_id) == $jb->job_id ? 'selected' : '' }}>{{ $jb->job_title }} ({{ $jb->job_code }})</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <label class="form-label fs-8 fw-semibold">Experience</label>
+                                                                <input type="text" name="experience" value="{{ old('experience', $app->experience) }}" class="form-control form-control-sm">
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <label class="form-label fs-8 fw-semibold">Department</label>
+                                                                <select name="department_id" class="form-select form-select-sm select-search" data-control="select2" data-placeholder="Search Department...">
+                                                                    <option value=""></option>
+                                                                    @foreach($departments as $dept)
+                                                                        <option value="{{ $dept->department_id }}" {{ old('department_id', $app->department_id) == $dept->department_id ? 'selected' : '' }}>
+                                                                            {{ $dept->department_name }} @if(!empty($dept->company)) ({{ $dept->company->name }}) @endif
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row g-3 mb-3">
+                                                            <div class="col-md-6">
+                                                                <label class="form-label fs-8 fw-semibold">Current Employer / Company</label>
+                                                                <input type="text" name="current_company" value="{{ old('current_company', $app->current_company) }}" class="form-control form-control-sm">
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label class="form-label fs-8 fw-semibold">Current Location</label>
+                                                                <input type="text" name="current_location" value="{{ old('current_location', $app->current_location) }}" class="form-control form-control-sm">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row g-3 mb-3">
+                                                            <div class="col-md-4">
+                                                                <label class="form-label fs-8 fw-semibold">Current Package (CTC)</label>
+                                                                <input type="text" name="current_package" value="{{ old('current_package', $app->current_package) }}" class="form-control form-control-sm">
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <label class="form-label fs-8 fw-semibold">Expected Package (CTC)</label>
+                                                                <input type="text" name="expected_package" value="{{ old('expected_package', $app->expected_package) }}" class="form-control form-control-sm">
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <label class="form-label fs-8 fw-semibold">Notice Period</label>
+                                                                <input type="text" name="notice_period" value="{{ old('notice_period', $app->notice_period) }}" class="form-control form-control-sm">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row g-3 mb-3">
+                                                            <div class="col-md-6">
+                                                                <label class="form-label fs-8 fw-semibold">Reason to Leave / Change</label>
+                                                                <input type="text" name="change_reason" value="{{ old('change_reason', $app->change_reason) }}" class="form-control form-control-sm">
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label class="form-label fs-8 fw-semibold">HR / Recruiter Remarks</label>
+                                                                <input type="text" name="hr_remarks" value="{{ old('hr_remarks', $app->hr_remarks) }}" class="form-control form-control-sm">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <label class="form-label fs-8 fw-semibold">Application Remarks / Sourcing Notes</label>
+                                                            <textarea name="application_remarks" class="form-control form-control-sm" rows="2">{{ old('application_remarks', $app->application_remarks) }}</textarea>
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <label class="form-label fs-8 fw-semibold"><i class="fa-solid fa-paperclip me-1 text-primary"></i> Upload / Replace Candidate Resume Document</label>
+                                                            <input type="file" name="job_resume" class="form-control form-control-sm" accept=".pdf,.doc,.docx">
+                                                            @if(!empty($app->job_resume))
+                                                                <div class="fs-9 text-success mt-1"><i class="fa-solid fa-circle-check me-1"></i> Current file: {{ basename($app->job_resume) }}</div>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
+                                                        <button type="submit" class="btn btn-warning btn-sm fw-bold">Update Candidate Profile</button>
+                                                    </div>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </td>
@@ -462,9 +607,8 @@
 @push('js')
 <script>
     (function() {
-        function initModalSelect2() {
-            var $modal = $('#createCandidateModal');
-            if (typeof $.fn.select2 !== 'undefined') {
+        function initModalSelect2($modal) {
+            if (typeof $.fn.select2 !== 'undefined' && $modal && $modal.length) {
                 $modal.find('.select-search').each(function() {
                     var $s = $(this);
                     if ($s.data('select2')) {
@@ -481,22 +625,26 @@
         }
 
         $(document).ready(function() {
-            $('#createCandidateModal').on('shown.bs.modal', function() {
-                initModalSelect2();
-            });
-
             @if($errors->any())
-                var modalEl = document.getElementById('createCandidateModal');
-                if (modalEl) {
-                    var candModal = bootstrap.Modal.getOrCreateInstance(modalEl);
-                    candModal.show();
-                }
+                @if(old('edit_application_id'))
+                    var editEl = document.getElementById('editCandidateModal{{ old('edit_application_id') }}');
+                    if (editEl) {
+                        var editModal = bootstrap.Modal.getOrCreateInstance(editEl);
+                        editModal.show();
+                    }
+                @else
+                    var modalEl = document.getElementById('createCandidateModal');
+                    if (modalEl) {
+                        var candModal = bootstrap.Modal.getOrCreateInstance(modalEl);
+                        candModal.show();
+                    }
+                @endif
             @endif
         });
 
         document.addEventListener('shown.bs.modal', function(e) {
-            if (e.target && e.target.id === 'createCandidateModal') {
-                initModalSelect2();
+            if (e.target && e.target.classList.contains('modal')) {
+                initModalSelect2($(e.target));
             }
         });
     })();
