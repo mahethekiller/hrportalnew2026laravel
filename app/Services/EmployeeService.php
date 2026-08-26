@@ -115,7 +115,7 @@ class EmployeeService
             $data['e_status'] = is_numeric($data['e_status'] ?? null) ? (int)$data['e_status'] : 1;
             $data['marital_status'] = $data['marital_status'] ?? 'Single';
             $data['contact_no'] = $data['contact_no'] ?? '0000000000';
-            $data['salary'] = $data['salary'] ?? 0;
+            $data['salary'] = is_numeric($data['salary'] ?? ($data['basic_salary'] ?? null)) ? ($data['salary'] ?? $data['basic_salary']) : 0;
             $data['manager_id'] = $data['manager_id'] ?? 0;
             $data['sub_manager_id'] = $data['sub_manager_id'] ?? 0;
             $data['sub_department'] = $data['sub_department'] ?? 0;
@@ -179,7 +179,7 @@ class EmployeeService
             $data['pincode'] = $data['pincode'] ?? '';
             $data['corporate_bank_account'] = $data['corporate_bank_account'] ?? '';
             $data['prob_mail_status'] = $data['prob_mail_status'] ?? 0;
-            $data['experience'] = $data['experience'] ?? '';
+            $data['experience'] = is_numeric($data['experience'] ?? null) ? $data['experience'] : 0;
             $data['kra_doc'] = $data['kra_doc'] ?? '';
             $data['kpi_doc'] = $data['kpi_doc'] ?? '';
             $data['notice_period'] = $data['notice_period'] ?? '';
