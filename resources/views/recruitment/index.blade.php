@@ -105,7 +105,7 @@
                 <table class="table table-hover align-middle mb-0 gs-4 fs-7">
                     <thead class="bg-body-secondary text-body-secondary fw-bold text-uppercase fs-9">
                         <tr>
-                            <th class="ps-4" style="min-width: 90px;">Actions</th>
+                            <th class="ps-4 text-nowrap" style="min-width: 185px;">Actions</th>
                             <th>Candidate</th>
                             <th>Applied Requisition</th>
                             <th>Current Company</th>
@@ -121,22 +121,23 @@
                                 $isStalled = ($daysInStage >= 7 && !in_array($app->application_status, ['Hired', 'Rejected']));
                             @endphp
                             <tr>
-                                <td class="ps-4">
-                                    <!-- View Details Button -->
-                                    <button type="button" class="btn btn-sm btn-light border text-primary py-1 px-2 fs-8 me-1" data-bs-toggle="modal" data-bs-target="#viewCandidateModal{{ $app->application_id }}" title="View Candidate Profile">
-                                        <i class="fa-solid fa-eye me-1"></i> View
-                                    </button>
-
-                                    <!-- Edit Candidate Button -->
-                                    <button type="button" class="btn btn-sm btn-light border text-warning py-1 px-2 fs-8 me-1" data-bs-toggle="modal" data-bs-target="#editCandidateModal{{ $app->application_id }}" title="Edit Candidate Profile">
-                                        <i class="fa-solid fa-pen-to-square me-1"></i> Edit
-                                    </button>
-
-                                    <!-- Stage Update Dropdown -->
-                                    <div class="dropdown d-inline">
-                                        <button class="btn btn-sm btn-outline-secondary py-1 px-2 fs-8 dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                            Stage
+                                <td class="ps-4 text-nowrap">
+                                    <div class="d-inline-flex align-items-center gap-1">
+                                        <!-- View Details Button -->
+                                        <button type="button" class="btn btn-sm btn-outline-primary py-1 px-2 fs-8 rounded-2" data-bs-toggle="modal" data-bs-target="#viewCandidateModal{{ $app->application_id }}" title="View Candidate Profile">
+                                            <i class="fa-solid fa-eye me-1"></i> View
                                         </button>
+
+                                        <!-- Edit Candidate Button -->
+                                        <button type="button" class="btn btn-sm btn-outline-warning py-1 px-2 fs-8 rounded-2" data-bs-toggle="modal" data-bs-target="#editCandidateModal{{ $app->application_id }}" title="Edit Candidate Profile">
+                                            <i class="fa-solid fa-pen-to-square me-1"></i> Edit
+                                        </button>
+
+                                        <!-- Stage Update Dropdown -->
+                                        <div class="dropdown d-inline">
+                                            <button class="btn btn-sm btn-outline-secondary py-1 px-2 fs-8 dropdown-toggle rounded-2" type="button" data-bs-toggle="dropdown">
+                                                Stage
+                                            </button>
                                         <ul class="dropdown-menu fs-8 shadow border-subtle">
                                             <li>
                                                 <form method="POST" action="{{ route('recruitment-applications.status', $app->application_id) }}">
