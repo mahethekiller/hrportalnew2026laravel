@@ -67,7 +67,7 @@ class EmployeeService
                 'username' => $data['username'] ?? $empCode,
                 'employee_id' => $empCode,
                 'user_role_id' => $data['user_role_id'] ?? 1,
-                'user_type' => 'employee',
+                'user_type' => is_numeric($data['user_type'] ?? null) ? (int)$data['user_type'] : 1,
                 'company_name' => $data['company_name'] ?? 'Antigravity Corp',
                 'company_logo' => 'logo.png',
                 'profile_photo' => 'photo.jpg',
