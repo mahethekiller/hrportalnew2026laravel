@@ -189,11 +189,10 @@
     <!-- Modal: Schedule Next Round -->
     <div class="modal fade" id="nextRoundModal{{ $itv->job_interview_id }}" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
-            <form method="POST" action="{{ route('recruitment-interviews.status', $itv->job_interview_id) }}">
+            <form method="POST" action="{{ route('recruitment-interviews.status', $itv->job_interview_id) }}" class="modal-content text-start">
                 @csrf
                 <input type="hidden" name="status" value="nextround">
-                <div class="modal-content text-start">
-                    <div class="modal-header border-bottom">
+                <div class="modal-header border-bottom">
                         <h5 class="modal-title fw-bold text-body-emphasis">
                             <i class="fa-solid fa-forward me-2 text-info"></i> Schedule Next Round: {{ $itv->jobApplication->candidate_name ?? 'Candidate' }}
                         </h5>
@@ -324,7 +323,6 @@
                         <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-info btn-sm text-white fw-bold">Update & Schedule Next Round</button>
                     </div>
-                </div>
             </form>
         </div>
     </div>
@@ -467,9 +465,8 @@
 <!-- Modal: Schedule New Interview -->
 <div class="modal fade" id="scheduleInterviewModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-xl">
-        <form method="POST" action="{{ route('recruitment-interviews.store') }}">
+        <form method="POST" action="{{ route('recruitment-interviews.store') }}" class="modal-content">
             @csrf
-            <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title"><i class="fa-solid fa-plus me-2 text-primary"></i> Schedule Candidate Interview</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -631,7 +628,6 @@
                     <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary btn-sm fw-bold">Schedule Interview</button>
                 </div>
-            </div>
         </form>
     </div>
 </div>
