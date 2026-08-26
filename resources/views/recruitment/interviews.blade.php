@@ -42,7 +42,7 @@
                 <table class="table table-hover align-middle mb-0 gs-4 fs-7">
                     <thead class="table-light text-muted fw-bold text-uppercase fs-9">
                         <tr>
-                            <th class="ps-4" style="min-width: 140px;">Actions</th>
+                            <th class="ps-4 text-nowrap" style="min-width: 195px;">Actions</th>
                             <th>Candidate</th>
                             <th>Interview Date & Time</th>
                             <th>Mode / Location</th>
@@ -54,13 +54,18 @@
                     <tbody>
                         @forelse($interviews as $itv)
                             <tr>
-                                <td class="ps-4">
+                                <td class="ps-4 text-nowrap">
                                     <div class="d-inline-flex gap-1 align-items-center">
+                                        <!-- View Details Button -->
+                                        <button type="button" class="btn btn-sm btn-outline-primary py-1 px-2 fs-8 rounded-2" data-bs-toggle="modal" data-bs-target="#viewInterviewModal{{ $itv->job_interview_id }}" title="View Interview Details">
+                                            <i class="fa-solid fa-eye me-1"></i> View
+                                        </button>
+
                                         <!-- Convert to Employee Action -->
                                         @if(in_array(strtolower($itv->status), ['confirmed', 'selected', 'offeraccepted']) && $itv->convert_to_employee == 0)
                                             <form method="POST" action="{{ route('recruitment-interviews.convert', $itv->job_interview_id) }}" class="d-inline" onsubmit="return confirm('Convert candidate {{ $itv->jobApplication->candidate_name ?? '' }} to active employee?');">
                                                 @csrf
-                                                <button type="submit" class="btn btn-sm btn-success py-1 px-2 fs-8" title="Convert to Active Employee">
+                                                <button type="submit" class="btn btn-sm btn-success py-1 px-2 fs-8 rounded-2" title="Convert to Active Employee">
                                                     <i class="fa-solid fa-user-plus me-1"></i> Convert
                                                 </button>
                                             </form>
@@ -167,6 +172,120 @@
                                                     </div>
                                                 </div>
                                             </form>
+                                    <!-- Modal: View Interview Details -->
+                                    <div class="modal fade" id="viewInterviewModal{{ $itv->job_interview_id }}" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                                            <div class="modal-content text-start border-0 shadow-lg">
+                                                <div class="modal-header bg-body-tertiary border-bottom py-3">
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <div class="avatar-sm rounded-circle bg-primary-subtle text-primary fw-bold d-flex align-items-center justify-content-center" style="width:38px; height:38px;">
+                                                            <i class="fa-solid fa-calendar-check fs-6"></i>
+                                                        </div>
+                                                        <div>
+                                                            <h5 class="modal-title fw-bold text-body-emphasis mb-0">Interview Details</h5>
+                                                            <div class="fs-9 text-body-secondary">Candidate: {{ $itv->jobApplication->candidate_name ?? 'N/A' }}</div>
+                                                        </div>
+                                                    </div>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                </div>
+
+                                                <div class="modal-body p-4">
+                                                    <div class="row g-4">
+                                                        <!-- Candidate Profile -->
+                                                        <div class="col-md-6">
+                                                            <div class="card border border-subtle bg-body-tertiary h-100 p-3 rounded-3">
+                                                                <h6 class="fs-8 text-uppercase fw-bold text-primary mb-3"><i class="fa-solid fa-user me-2"></i>Candidate Profile</h6>
+                                                                <div class="mb-2">
+                                                                    <span class="fs-9 text-body-secondary d-block">Candidate Name</span>
+                                                                    <span class="fw-bold text-body-emphasis fs-7">{{ $itv->jobApplication->candidate_name ?? 'N/A' }}</span>
+                                                                </div>
+                                                                <div class="mb-2">
+                                                                    <span class="fs-9 text-body-secondary d-block">Email Address</span>
+                                                                    <span class="fw-medium text-body-emphasis fs-8">{{ $itv->jobApplication->email ?? 'N/A' }}</span>
+                                                                </div>
+                                                                <div class="mb-2">
+                                                                    <span class="fs-9 text-body-secondary d-block">Phone Number</span>
+                                                                    <span class="fw-medium text-body-emphasis fs-8">{{ $itv->jobApplication->phone ?? 'N/A' }}</span>
+                                                                </div>
+                                                                <div class="mb-0">
+                                                                    <span class="fs-9 text-body-secondary d-block">Applied Position</span>
+                                                                    <span class="badge bg-primary-subtle text-primary fs-8">{{ $itv->jobApplication->job->job_title ?? 'General Position' }}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Schedule & Venue -->
+                                                        <div class="col-md-6">
+                                                            <div class="card border border-subtle bg-body-tertiary h-100 p-3 rounded-3">
+                                                                <h6 class="fs-8 text-uppercase fw-bold text-info mb-3"><i class="fa-solid fa-clock me-2"></i>Schedule & Venue</h6>
+                                                                <div class="mb-2">
+                                                                    <span class="fs-9 text-body-secondary d-block">Interview Date</span>
+                                                                    <span class="fw-bold text-body-emphasis fs-7">{{ $itv->formatted_interview_date }}</span>
+                                                                </div>
+                                                                <div class="mb-2">
+                                                                    <span class="fs-9 text-body-secondary d-block">Interview Time</span>
+                                                                    <span class="fw-medium text-body-emphasis fs-8"><i class="fa-regular fa-clock me-1 text-primary"></i>{{ $itv->interview_time }}</span>
+                                                                </div>
+                                                                @if(!empty($itv->next_round_date))
+                                                                    <div class="mb-2">
+                                                                        <span class="fs-9 text-body-secondary d-block">Next Round Schedule</span>
+                                                                        <span class="badge bg-info-subtle text-info fs-8"><i class="fa-solid fa-forward me-1"></i>{{ date('M d, Y', strtotime($itv->next_round_date)) }}</span>
+                                                                    </div>
+                                                                @endif
+                                                                <div class="mb-0">
+                                                                    <span class="fs-9 text-body-secondary d-block">Mode / Venue</span>
+                                                                    <span class="fw-medium text-body-emphasis fs-8">{{ $itv->interview_mode }} ({{ $itv->interview_place ?? 'Online Meeting' }})</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Panelists & Status -->
+                                                        <div class="col-12">
+                                                            <div class="card border border-subtle p-3 rounded-3">
+                                                                <div class="row g-3">
+                                                                    <div class="col-md-6">
+                                                                        <span class="fs-9 text-body-secondary d-block mb-1">Assigned Interviewer Panelists</span>
+                                                                        @php $panelists = $itv->interviewer_list; @endphp
+                                                                        @if($panelists->isNotEmpty())
+                                                                            @foreach($panelists as $pan)
+                                                                                <div class="d-inline-flex align-items-center gap-1 me-2 mb-1">
+                                                                                    <span class="badge bg-light border text-body-emphasis fs-8"><i class="fa-solid fa-user-check me-1 text-success"></i>{{ $pan->first_name }} {{ $pan->last_name }} @if(!empty($pan->employee_id))(ID: {{ $pan->employee_id }})@endif</span>
+                                                                                </div>
+                                                                            @endforeach
+                                                                        @else
+                                                                            <span class="fw-medium text-body-emphasis fs-8">{{ $itv->interviewer ? ($itv->interviewer->first_name . ' ' . $itv->interviewer->last_name) : ($itv->added_by ?? 'Recruiter') }}</span>
+                                                                        @endif
+                                                                    </div>
+
+                                                                    <div class="col-md-3 col-6">
+                                                                        <span class="fs-9 text-body-secondary d-block mb-1">Offered CTC</span>
+                                                                        <span class="font-monospace fw-bold text-success fs-7">{{ $itv->offered_ctc ?? '--' }}</span>
+                                                                    </div>
+
+                                                                    <div class="col-md-3 col-6">
+                                                                        <span class="fs-9 text-body-secondary d-block mb-1">Current Status</span>
+                                                                        <span class="badge {{ $itv->status_badge_class }} fs-8">{{ $itv->status_label }}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Remarks -->
+                                                        @if(!empty($itv->remarks) || !empty($itv->description))
+                                                            <div class="col-12">
+                                                                <div class="card border border-subtle bg-body-tertiary p-3 rounded-3">
+                                                                    <h6 class="fs-8 text-uppercase fw-bold text-body-secondary mb-2"><i class="fa-solid fa-comment-dots me-2"></i>Evaluation Notes & Remarks</h6>
+                                                                    <p class="mb-0 fs-8 text-body-emphasis text-break" style="white-space: pre-wrap;">{{ $itv->remarks ?? $itv->description }}</p>
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+
+                                                <div class="modal-footer bg-body-tertiary border-top py-2">
+                                                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </td>
