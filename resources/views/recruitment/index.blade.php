@@ -337,22 +337,22 @@
                     <div class="row g-3 mb-3">
                         <div class="col-md-3">
                             <label class="form-label fs-8 fw-semibold">Candidate Full Name <span class="text-danger">*</span></label>
-                            <input type="text" name="candidate_name" class="form-control form-control-sm" required placeholder="e.g. Rahul Sharma">
+                            <input type="text" name="candidate_name" value="{{ old('candidate_name') }}" class="form-control form-control-sm" required placeholder="e.g. Rahul Sharma">
                         </div>
                         <div class="col-md-3">
                             <label class="form-label fs-8 fw-semibold">Email Address <span class="text-danger">*</span></label>
-                            <input type="email" name="email" class="form-control form-control-sm" required placeholder="rahul@example.com">
+                            <input type="email" name="email" value="{{ old('email') }}" class="form-control form-control-sm" required placeholder="rahul@example.com">
                         </div>
                         <div class="col-md-3">
                             <label class="form-label fs-8 fw-semibold">Contact Phone Number</label>
-                            <input type="text" name="contact_no" class="form-control form-control-sm" placeholder="e.g. +91 9876543210">
+                            <input type="text" name="contact_no" value="{{ old('contact_no') }}" class="form-control form-control-sm" placeholder="e.g. +91 9876543210">
                         </div>
                         <div class="col-md-3">
                             <label class="form-label fs-8 fw-semibold">Gender</label>
                             <select name="gender" class="form-select form-select-sm">
-                                <option value="Male" selected>Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Other">Other</option>
+                                <option value="Male" {{ old('gender', 'Male') == 'Male' ? 'selected' : '' }}>Male</option>
+                                <option value="Female" {{ old('gender') == 'Female' ? 'selected' : '' }}>Female</option>
+                                <option value="Other" {{ old('gender') == 'Other' ? 'selected' : '' }}>Other</option>
                             </select>
                         </div>
                     </div>
@@ -363,20 +363,20 @@
                             <select name="job_id" class="form-select form-select-sm select-search" data-control="select2" data-placeholder="Search Job Opening..." required>
                                 <option value=""></option>
                                 @foreach($jobs as $jb)
-                                    <option value="{{ $jb->job_id }}">{{ $jb->job_title }} ({{ $jb->job_code }})</option>
+                                    <option value="{{ $jb->job_id }}" {{ old('job_id') == $jb->job_id ? 'selected' : '' }}>{{ $jb->job_title }} ({{ $jb->job_code }})</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-md-3">
                             <label class="form-label fs-8 fw-semibold">Experience</label>
-                            <input type="text" name="experience" class="form-control form-control-sm" placeholder="e.g. 4.5 Years">
+                            <input type="text" name="experience" value="{{ old('experience') }}" class="form-control form-control-sm" placeholder="e.g. 4.5 Years">
                         </div>
                         <div class="col-md-3">
                             <label class="form-label fs-8 fw-semibold">Department</label>
                             <select name="department_id" class="form-select form-select-sm select-search" data-control="select2" data-placeholder="Search Department...">
                                 <option value=""></option>
                                 @foreach($departments as $dept)
-                                    <option value="{{ $dept->department_id }}">
+                                    <option value="{{ $dept->department_id }}" {{ old('department_id') == $dept->department_id ? 'selected' : '' }}>
                                         {{ $dept->department_name }} @if(!empty($dept->company)) ({{ $dept->company->name }}) @endif
                                     </option>
                                 @endforeach
@@ -387,43 +387,43 @@
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
                             <label class="form-label fs-8 fw-semibold">Current Employer / Company</label>
-                            <input type="text" name="current_company" class="form-control form-control-sm" placeholder="e.g. TCS / Infosys">
+                            <input type="text" name="current_company" value="{{ old('current_company') }}" class="form-control form-control-sm" placeholder="e.g. TCS / Infosys">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fs-8 fw-semibold">Current Location</label>
-                            <input type="text" name="current_location" class="form-control form-control-sm" placeholder="e.g. Bangalore, India">
+                            <input type="text" name="current_location" value="{{ old('current_location') }}" class="form-control form-control-sm" placeholder="e.g. Bangalore, India">
                         </div>
                     </div>
 
                     <div class="row g-3 mb-3">
                         <div class="col-md-4">
                             <label class="form-label fs-8 fw-semibold">Current Package (CTC)</label>
-                            <input type="text" name="current_package" class="form-control form-control-sm" placeholder="e.g. $60,000 / 8 LPA">
+                            <input type="text" name="current_package" value="{{ old('current_package') }}" class="form-control form-control-sm" placeholder="e.g. $60,000 / 8 LPA">
                         </div>
                         <div class="col-md-4">
                             <label class="form-label fs-8 fw-semibold">Expected Package (CTC)</label>
-                            <input type="text" name="expected_package" class="form-control form-control-sm" placeholder="e.g. $80,000 / 12 LPA">
+                            <input type="text" name="expected_package" value="{{ old('expected_package') }}" class="form-control form-control-sm" placeholder="e.g. $80,000 / 12 LPA">
                         </div>
                         <div class="col-md-4">
                             <label class="form-label fs-8 fw-semibold">Notice Period</label>
-                            <input type="text" name="notice_period" class="form-control form-control-sm" placeholder="e.g. 30 Days / Immediate">
+                            <input type="text" name="notice_period" value="{{ old('notice_period') }}" class="form-control form-control-sm" placeholder="e.g. 30 Days / Immediate">
                         </div>
                     </div>
 
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
                             <label class="form-label fs-8 fw-semibold">Reason to Leave / Change</label>
-                            <input type="text" name="change_reason" class="form-control form-control-sm" placeholder="e.g. Career Growth / Better Opportunity">
+                            <input type="text" name="change_reason" value="{{ old('change_reason') }}" class="form-control form-control-sm" placeholder="e.g. Career Growth / Better Opportunity">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fs-8 fw-semibold">HR / Recruiter Remarks</label>
-                            <input type="text" name="hr_remarks" class="form-control form-control-sm" placeholder="Internal HR assessment notes...">
+                            <input type="text" name="hr_remarks" value="{{ old('hr_remarks') }}" class="form-control form-control-sm" placeholder="Internal HR assessment notes...">
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fs-8 fw-semibold">Application Remarks / Sourcing Notes</label>
-                        <textarea name="application_remarks" class="form-control form-control-sm" rows="2" placeholder="Optional recruiter comments or skill summary..."></textarea>
+                        <textarea name="application_remarks" class="form-control form-control-sm" rows="2" placeholder="Optional recruiter comments or skill summary...">{{ old('application_remarks') }}</textarea>
                     </div>
 
                     <div class="mb-3">
@@ -467,6 +467,14 @@
             $('#createCandidateModal').on('shown.bs.modal', function() {
                 initModalSelect2();
             });
+
+            @if($errors->any())
+                var modalEl = document.getElementById('createCandidateModal');
+                if (modalEl) {
+                    var candModal = bootstrap.Modal.getOrCreateInstance(modalEl);
+                    candModal.show();
+                }
+            @endif
         });
 
         document.addEventListener('shown.bs.modal', function(e) {
