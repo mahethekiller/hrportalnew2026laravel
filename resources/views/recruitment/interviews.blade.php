@@ -347,16 +347,24 @@
 
         $(document).ready(function() {
             @if($errors->any())
-                var modalEl = document.getElementById('scheduleInterviewModal');
-                if (modalEl) {
-                    var intvModal = bootstrap.Modal.getOrCreateInstance(modalEl);
-                    intvModal.show();
-                }
+                @if(old('next_round_interview_id'))
+                    var modalEl = document.getElementById('nextRoundModal{{ old('next_round_interview_id') }}');
+                    if (modalEl) {
+                        var nrModal = bootstrap.Modal.getOrCreateInstance(modalEl);
+                        nrModal.show();
+                    }
+                @else
+                    var modalEl = document.getElementById('scheduleInterviewModal');
+                    if (modalEl) {
+                        var intvModal = bootstrap.Modal.getOrCreateInstance(modalEl);
+                        intvModal.show();
+                    }
+                @endif
             @endif
         });
 
         document.addEventListener('shown.bs.modal', function(e) {
-            if (e.target && e.target.id === 'scheduleInterviewModal') {
+            if (e.target) {
                 initModalSelect2($(e.target));
             }
         });
