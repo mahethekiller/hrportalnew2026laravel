@@ -218,6 +218,31 @@
                                         </div>
                                     </div>
                                 </td>
+                                <td>
+                                    <span class="badge badge-light-primary font-monospace fs-8">{{ $jb->job_code ?? 'JOB-000' }}</span>
+                                </td>
+                                <td>
+                                    <div class="fw-bold text-gray-900">{{ $jb->job_title }}</div>
+                                    <div class="fs-9 text-muted">{{ $jb->department ?? 'General Department' }}</div>
+                                </td>
+                                <td>
+                                    <span class="badge badge-light-info text-uppercase fs-9">{{ $jb->job_type ?? 'Full Time' }}</span>
+                                    <div class="fs-9 text-muted"><i class="fa-solid fa-location-dot me-1"></i>{{ $jb->job_location ?? 'On-Site' }}</div>
+                                </td>
+                                <td>
+                                    <span class="font-monospace fw-bold text-primary">{{ $jb->job_vacancy }} Positions</span>
+                                </td>
+                                <td>
+                                    <span class="fs-8 text-gray-800">{{ $jb->minimum_experience ?? '0' }} - {{ $jb->maximum_experience ?? '5' }} Yrs</span>
+                                </td>
+                                <td>
+                                    <span class="fw-medium text-gray-800">{{ $jb->formatted_closing_date }}</span>
+                                </td>
+                                <td class="pe-4">
+                                    <span class="badge {{ $jb->status_badge_class }}">
+                                        {{ $jb->status_label }}
+                                    </span>
+                                </td>
                             </tr>
                         @empty
                             <tr>

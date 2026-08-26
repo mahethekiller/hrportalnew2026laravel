@@ -88,13 +88,13 @@
                 <table class="table table-hover align-middle mb-0 gs-4 fs-7">
                     <thead class="bg-body-secondary text-body-secondary fw-bold text-uppercase fs-9">
                         <tr>
-                            <th class="ps-4">Candidate</th>
+                            <th class="ps-4" style="min-width: 90px;">Actions</th>
+                            <th>Candidate</th>
                             <th>Applied Requisition</th>
                             <th>Current Company</th>
                             <th>Experience</th>
                             <th>CTC Range</th>
-                            <th>Stage Status</th>
-                            <th class="text-end pe-4">Actions</th>
+                            <th class="pe-4">Stage Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -105,6 +105,37 @@
                             @endphp
                             <tr>
                                 <td class="ps-4">
+                                    <!-- Stage Update Dropdown -->
+                                    <div class="dropdown d-inline">
+                                        <button class="btn btn-sm btn-outline-secondary py-1 px-2 fs-8 dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                            Stage
+                                        </button>
+                                        <ul class="dropdown-menu fs-8 shadow border-subtle">
+                                            <li>
+                                                <form method="POST" action="{{ route('recruitment-applications.status', $app->application_id) }}">
+                                                    @csrf
+                                                    <input type="hidden" name="status" value="Shortlisted">
+                                                    <button type="submit" class="dropdown-item text-primary"><i class="fa-solid fa-user-check me-2"></i> Shortlist Candidate</button>
+                                                </form>
+                                            </li>
+                                            <li>
+                                                <form method="POST" action="{{ route('recruitment-applications.status', $app->application_id) }}">
+                                                    @csrf
+                                                    <input type="hidden" name="status" value="Hired">
+                                                    <button type="submit" class="dropdown-item text-success"><i class="fa-solid fa-award me-2"></i> Mark Hired / Offer</button>
+                                                </form>
+                                            </li>
+                                            <li>
+                                                <form method="POST" action="{{ route('recruitment-applications.status', $app->application_id) }}">
+                                                    @csrf
+                                                    <input type="hidden" name="status" value="Rejected">
+                                                    <button type="submit" class="dropdown-item text-danger"><i class="fa-solid fa-ban me-2"></i> Reject Candidate</button>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                                <td>
                                     <div class="d-flex align-items-center">
                                         <div class="avatar-md rounded-circle me-2 bg-primary-subtle text-primary fw-bold fs-7 d-flex align-items-center justify-content-center" style="width:36px; height:36px;">
                                             {{ substr($app->candidate_name ?? 'C', 0, 1) }}
@@ -136,39 +167,8 @@
                                 <td>
                                     <div class="fs-8 font-mono text-body-emphasis">{{ $app->current_package ?? '--' }} / <strong>{{ $app->expected_package ?? '--' }}</strong></div>
                                 </td>
-                                <td>
+                                <td class="pe-4">
                                     <x-status-badge :status="$app->application_status ?? 'Applied'" :pulse="$isStalled" />
-                                </td>
-                                <td class="text-end pe-4">
-                                    <!-- Stage Update Dropdown -->
-                                    <div class="dropdown d-inline">
-                                        <button class="btn btn-sm btn-outline-secondary py-1 px-2 fs-8 dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                            Stage
-                                        </button>
-                                        <ul class="dropdown-menu dropdown-menu-end fs-8 shadow border-subtle">
-                                            <li>
-                                                <form method="POST" action="{{ route('recruitment-applications.status', $app->application_id) }}">
-                                                    @csrf
-                                                    <input type="hidden" name="status" value="Shortlisted">
-                                                    <button type="submit" class="dropdown-item text-primary"><i class="fa-solid fa-user-check me-2"></i> Shortlist Candidate</button>
-                                                </form>
-                                            </li>
-                                            <li>
-                                                <form method="POST" action="{{ route('recruitment-applications.status', $app->application_id) }}">
-                                                    @csrf
-                                                    <input type="hidden" name="status" value="Hired">
-                                                    <button type="submit" class="dropdown-item text-success"><i class="fa-solid fa-award me-2"></i> Mark Hired / Offer</button>
-                                                </form>
-                                            </li>
-                                            <li>
-                                                <form method="POST" action="{{ route('recruitment-applications.status', $app->application_id) }}">
-                                                    @csrf
-                                                    <input type="hidden" name="status" value="Rejected">
-                                                    <button type="submit" class="dropdown-item text-danger"><i class="fa-solid fa-ban me-2"></i> Reject Candidate</button>
-                                                </form>
-                                            </li>
-                                        </ul>
-                                    </div>
                                 </td>
                             </tr>
                         @empty

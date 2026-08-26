@@ -101,6 +101,23 @@
                                         </div>
                                     </div>
                                 </td>
+                                <td>
+                                    <span class="badge badge-light-primary font-monospace fs-8">{{ $jc->job_code }}</span>
+                                </td>
+                                <td>
+                                    <div class="fw-bold text-gray-900">{{ $jc->position }}</div>
+                                </td>
+                                <td>
+                                    <span class="fs-8 text-gray-800">{{ $jc->added_by ?? 'Recruiter' }}</span>
+                                </td>
+                                <td>
+                                    <span class="fs-8 text-gray-800">{{ $jc->added_date ?? '--' }}</span>
+                                </td>
+                                <td class="pe-4">
+                                    <span class="badge {{ $jc->status_badge_class }}">
+                                        {{ $jc->status_label }}
+                                    </span>
+                                </td>
                             </tr>
                         @empty
                             <tr>
