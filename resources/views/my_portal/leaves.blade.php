@@ -154,7 +154,7 @@
                                 $statusVal = (int) $leave->status;
                                 $isApproved = in_array($leave->status, [2, 'Approved', '2'], true);
                                 $isRejected = in_array($leave->status, [3, 'Rejected', '3'], true);
-                                $isPending = in_array($leave->status, [1, 'Pending', '1'], true) || (!$isApproved && !isRejected);
+                                $isPending = in_array($leave->status, [1, 'Pending', '1'], true) || (!$isApproved && !$isRejected);
 
                                 $statusClass = $isApproved ? 'approved' : ($isRejected ? 'rejected' : 'pending');
 
