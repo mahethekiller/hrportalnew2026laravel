@@ -48,7 +48,7 @@
                                     <span class="font-monospace text-success fw-bold">₹{{ number_format((float)($pm->net_salary ?? 0), 2) }}</span>
                                 </td>
                                 <td>
-                                    <span class="fs-8 text-gray-800">{{ $pm->payment_date ?? '--' }}</span>
+                                    <span class="fs-8 text-gray-800"><x-human-date :value="$pm->payment_date" /></span>
                                 </td>
                                 <td>
                                     <span class="badge badge-light-success">Paid</span>

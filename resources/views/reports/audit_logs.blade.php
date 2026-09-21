@@ -63,7 +63,7 @@
                                     <span class="fs-8 text-gray-900">{{ $lg->updates ?? 'Employee profile modification record' }}</span>
                                 </td>
                                 <td>
-                                    <span class="fs-8 text-gray-800">{{ $lg->updated_date ?? $lg->created_at ?? '--' }}</span>
+                                    <span class="fs-8 text-gray-800"><x-human-date :value="$lg->updated_date ?? $lg->created_at" :time="true" /></span>
                                 </td>
                             </tr>
                         @empty

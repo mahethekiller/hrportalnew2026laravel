@@ -48,7 +48,7 @@
                                     <span class="badge badge-light-secondary font-monospace fs-9">{{ substr($wh->secret_key ?? 'whsec_123', 0, 10) }}...</span>
                                 </td>
                                 <td>
-                                    <span class="fs-8 text-gray-800">{{ $wh->created_at ?? '--' }}</span>
+                                    <span class="fs-8 text-gray-800"><x-human-date :value="$wh->created_at" /></span>
                                 </td>
                                 <td>
                                     <span class="badge {{ $wh->status_badge_class }}">

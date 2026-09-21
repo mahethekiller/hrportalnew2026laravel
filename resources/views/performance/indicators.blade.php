@@ -65,7 +65,7 @@
                                     <span class="badge badge-light-info font-monospace fs-8">{{ $ind->team_work ?? 4 }}.0 / 5.0</span>
                                 </td>
                                 <td>
-                                    <span class="text-gray-700 fs-8">{{ $ind->created_at ?? date('Y-m-d') }}</span>
+                                    <span class="text-gray-700 fs-8"><x-human-date :value="$ind->created_at ?? date('Y-m-d')" /></span>
                                 </td>
                             </tr>
                         @empty

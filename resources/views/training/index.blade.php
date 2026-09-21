@@ -133,8 +133,8 @@
                                     <span class="text-gray-800 fs-8"><i class="fa-solid fa-user-tie me-1 text-muted"></i>{{ $sn->trainer ? $sn->trainer->full_name : 'External Trainer' }}</span>
                                 </td>
                                 <td>
-                                    <span class="fw-medium text-gray-800 fs-8">{{ $sn->start_date }}</span>
-                                    <div class="fs-9 text-muted">to {{ $sn->finish_date }}</div>
+                                    <span class="fw-medium text-gray-800 fs-8"><x-human-date :value="$sn->start_date" /></span>
+                                    <div class="fs-9 text-muted">to <x-human-date :value="$sn->finish_date" /></div>
                                 </td>
                                 <td>
                                     <span class="font-monospace text-success fw-bold">{{ $sn->formatted_cost }}</span>

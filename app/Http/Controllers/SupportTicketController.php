@@ -22,18 +22,28 @@ class SupportTicketController extends Controller
     {
         $this->authorizeAccess();
 
-        $query = SupportTicket::with(['employee', 'department']);
+        $baseQuery = SupportTicket::query();
 
         // Non-admin/HR users can only see their own tickets
         if (!Gate::allows('view.support_tickets')) {
-            $query->where('employee_id', auth()->id());
+            $baseQuery->where('employee_id', auth()->id());
         }
 
+        // Compute KPI stats across all tickets in user's permitted scope
+        $stats = [
+            'total' => (clone $baseQuery)->count(),
+            'open' => (clone $baseQuery)->where('ticket_status', '1')->count(),
+            'on_hold' => (clone $baseQuery)->where('ticket_status', '3')->count(),
+            'closed' => (clone $baseQuery)->where('ticket_status', '2')->count(),
+        ];
+
+        $query = (clone $baseQuery)->with(['employee', 'department.company']);
+
         // Apply filters
-        if ($request->filled('status')) {
+        if ($request->filled('status') && $request->status !== 'all') {
             $query->where('ticket_status', $request->status);
         }
-        if ($request->filled('priority')) {
+        if ($request->filled('priority') && $request->priority !== 'all') {
             $p = strtolower((string)$request->priority);
             $pMap = [
                 'low' => ['1', 'low'],
@@ -48,11 +58,20 @@ class SupportTicketController extends Controller
             $values = $pMap[$p] ?? [$request->priority];
             $query->whereIn('ticket_priority', $values);
         }
+        if ($request->filled('search')) {
+            $s = trim($request->search);
+            $query->where(function($q) use ($s) {
+                $q->where('ticket_code', 'like', "%{$s}%")
+                  ->orWhere('subject', 'like', "%{$s}%")
+                  ->orWhere('description', 'like', "%{$s}%");
+            });
+        }
 
         $keyName = (new \App\Models\SupportTicket)->getKeyName();
-        $tickets = $query->orderBy($keyName, 'desc')->paginate(10);
+        $tickets = $query->orderBy($keyName, 'desc')->paginate(15)->withQueryString();
+        $departments = Department::with('company')->orderBy('department_name')->get();
 
-        return view('support_tickets.index', compact('tickets'));
+        return view('support_tickets.index', compact('tickets', 'stats', 'departments'));
     }
 
     /**
@@ -60,7 +79,7 @@ class SupportTicketController extends Controller
      */
     public function create(): View
     {
-        $departments = Department::orderBy('id', 'asc')->get();
+        $departments = Department::with('company')->orderBy('department_name')->get();
         return view('support_tickets.create', compact('departments'));
     }
 
@@ -72,7 +91,7 @@ class SupportTicketController extends Controller
         $request->validate([
             'subject' => 'required|string|max:255',
             'department_id' => 'required|exists:xin_departments,department_id',
-            'ticket_priority' => 'required|string|in:low,medium,high,critical',
+            'ticket_priority' => 'required|string|in:low,medium,high,critical,1,2,3,4',
             'description' => 'required|string',
             'attachment' => 'nullable|file|max:5120',
         ]);
@@ -97,16 +116,22 @@ class SupportTicketController extends Controller
             'created_at' => date('d-m-Y H:i:s'),
         ]);
 
-        // Process Attachment
+        // Process Attachment with Rule 4 human-readable naming
         if ($request->hasFile('attachment')) {
             $file = $request->file('attachment');
-            $fileName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads/tickets'), $fileName);
+            $safeName = Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME), '_') ?: 'doc';
+            $ext = $file->getClientOriginalExtension();
+            $fileName = 'Ticket_' . $ticket->ticket_code . '_' . $safeName . '_' . date('Ymd_His') . '.' . $ext;
+
+            $dest = public_path('uploads/tickets');
+            if (!file_exists($dest)) {
+                mkdir($dest, 0755, true);
+            }
+            $file->move($dest, $fileName);
 
             TicketAttachment::create([
                 'ticket_id' => $ticket->ticket_id,
-                'upload_by' => auth()->id(),
-                'file_title' => 'Original Attachment',
+                'file_title' => $file->getClientOriginalName(),
                 'file_description' => 'Attached during ticket submission',
                 'attachment_file' => 'uploads/tickets/' . $fileName,
                 'created_at' => date('d-m-Y H:i:s'),

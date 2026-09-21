@@ -424,7 +424,7 @@
                                                     </span>
                                                 @endif
                                             </div>
-                                            <div class="fs-9 text-body-secondary">{{ $app->email }} | {{ $app->contact_no }}</div>
+                                            <div class="fs-9 text-body-secondary">{{ $app->email }} &bull; Applied: <x-human-date :value="$app->created_at" /></div>
                                         </div>
                                     </div>
                                 </td>

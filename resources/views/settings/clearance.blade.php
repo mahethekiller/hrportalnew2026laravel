@@ -221,7 +221,7 @@
                                 </div>
                             </td>
                             <td>
-                                <div class="fs-8 fw-bold text-danger">{{ $res->resignation_date }}</div>
+                                <div class="fs-8 fw-bold text-danger"><x-human-date :value="$res->resignation_date" /></div>
                                 @if($res->shortfall_days > 0)
                                     <span class="badge bg-warning-subtle text-warning fs-9">{{ $res->shortfall_days }} Shortfall Day(s)</span>
                                 @endif

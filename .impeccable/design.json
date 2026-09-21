@@ -1,0 +1,251 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-17T09:05:00Z",
+  "title": "Design System: Antigravity HR Portal",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Corporate Navy Blue",
+        "canonical": "#1E40AF",
+        "tonalRamp": ["#0F172A", "#1E293B", "#1E3A8A", "#1E40AF", "#2563EB", "#3B82F6", "#93C5FD", "#EFF6FF"]
+      },
+      "secondary": {
+        "role": "secondary",
+        "displayName": "Executive Slate",
+        "canonical": "#475569",
+        "tonalRamp": ["#0F172A", "#1E293B", "#334155", "#475569", "#64748B", "#94A3B8", "#CBD5E1", "#F8FAFC"]
+      },
+      "success": {
+        "role": "success",
+        "displayName": "Emerald Green",
+        "canonical": "#10B981",
+        "tonalRamp": ["#064E3B", "#065F46", "#047857", "#059669", "#10B981", "#34D399", "#A7F3D0", "#ECFDF5"]
+      },
+      "danger": {
+        "role": "danger",
+        "displayName": "Crimson Red",
+        "canonical": "#EF4444",
+        "tonalRamp": ["#450A0A", "#7F1D1D", "#991B1B", "#DC2626", "#EF4444", "#F87171", "#FCA5A5", "#FEF2F2"]
+      },
+      "warning": {
+        "role": "warning",
+        "displayName": "Amber Marigold",
+        "canonical": "#F59E0B",
+        "tonalRamp": ["#451A03", "#78350F", "#92400E", "#B45309", "#D97706", "#F59E0B", "#FCD34D", "#FFFBEB"]
+      },
+      "info": {
+        "role": "info",
+        "displayName": "Cyan Harbor",
+        "canonical": "#06B6D4",
+        "tonalRamp": ["#164E63", "#155E75", "#0E7490", "#0891B2", "#06B6D4", "#22D3EE", "#67E8F9", "#ECFEFF"]
+      },
+      "violet": {
+        "role": "accent",
+        "displayName": "Royal Violet",
+        "canonical": "#7C3AED",
+        "tonalRamp": ["#2E1065", "#3B0764", "#581C87", "#6D28D9", "#7C3AED", "#8B5CF6", "#C4B5FD", "#F5F3FF"]
+      },
+      "purple": {
+        "role": "accent",
+        "displayName": "Imperial Purple",
+        "canonical": "#9333EA",
+        "tonalRamp": ["#3B0764", "#581C87", "#7E22CE", "#9333EA", "#A855F7", "#C084FC", "#E9D5FF", "#FAF5FF"]
+      },
+      "emerald": {
+        "role": "accent",
+        "displayName": "Deep Emerald",
+        "canonical": "#059669",
+        "tonalRamp": ["#022C22", "#064E3B", "#065F46", "#047857", "#059669", "#10B981", "#6EE7B7", "#ECFDF5"]
+      },
+      "forest-green": {
+        "role": "accent",
+        "displayName": "Forest Green",
+        "canonical": "#2F7A63",
+        "tonalRamp": ["#0F2820", "#183D32", "#235B4A", "#2F7A63", "#3C9B7E", "#5BC3A3", "#A1E3CF", "#E6F7F2"]
+      },
+      "saffron": {
+        "role": "seasonal",
+        "displayName": "Festive Saffron",
+        "canonical": "#FF671F",
+        "tonalRamp": ["#4D1C00", "#732A00", "#A83E00", "#D64F00", "#FF671F", "#FF8547", "#FFB38A", "#FFF1EB"]
+      },
+      "deep-green": {
+        "role": "seasonal",
+        "displayName": "National Deep Green",
+        "canonical": "#046A38",
+        "tonalRamp": ["#011F10", "#02361D", "#034E2A", "#046A38", "#068848", "#0BAF5E", "#42D98F", "#E6FAF0"]
+      },
+      "pink": {
+        "role": "seasonal",
+        "displayName": "Festive Pink",
+        "canonical": "#EC4899",
+        "tonalRamp": ["#500724", "#700B33", "#831843", "#9D174D", "#BE185D", "#DB2777", "#EC4899", "#FDF2F8"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display Title",
+        "purpose": "Portal hero headers and executive reporting titles."
+      },
+      "headline": {
+        "displayName": "Section Headline",
+        "purpose": "Major section titles and dashboard metric card headers."
+      },
+      "title": {
+        "displayName": "Card & Subtitle",
+        "purpose": "Module subtitles and modal dialog titles."
+      },
+      "body": {
+        "displayName": "Compact Body",
+        "purpose": "Standard table cells, form labels, and descriptive text."
+      },
+      "label": {
+        "displayName": "Table & Badge Label",
+        "purpose": "Uppercased table column headers, metadata chips, and badge text."
+      }
+    },
+    "shadows": [
+      {
+        "name": "card-rest",
+        "value": "0px 1px 3px 0px rgba(0, 0, 0, 0.05), 0px 1px 2px 0px rgba(0, 0, 0, 0.03)",
+        "purpose": "Subtle ground plane anchor for dashboard metric cards and data containers."
+      },
+      {
+        "name": "card-hover",
+        "value": "0px 4px 12px rgba(0, 0, 0, 0.05)",
+        "purpose": "Gentle lift confirming interactive card affordance."
+      },
+      {
+        "name": "button-primary",
+        "value": "0 2px 4px rgba(79, 70, 229, 0.25)",
+        "purpose": "High-tactile micro-shadow accentuating primary action buttons."
+      },
+      {
+        "name": "overlay-modal",
+        "value": "0px 10px 30px rgba(0, 0, 0, 0.15)",
+        "purpose": "High-depth elevation floating above the workspace."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-standard",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Default easing for micro-interactions."
+      },
+      {
+        "name": "duration-fast",
+        "value": "0.15s",
+        "purpose": "Button, nav link, and hover state transitions."
+      },
+      {
+        "name": "duration-moderate",
+        "value": "0.25s",
+        "purpose": "Sidebar expansion and accordion transitions."
+      }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "576px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "992px" },
+      { "name": "xl", "value": "1200px" },
+      { "name": "xxl", "value": "1400px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Action Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Executive high-tactile primary submit and action button.",
+      "html": "<button class=\"ds-btn-primary\"><svg class=\"ds-icon\" viewBox=\"0 0 20 20\" fill=\"currentColor\"><path fill-rule=\"evenodd\" d=\"M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z\" clip-rule=\"evenodd\"/></svg><span>Save Changes</span></button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 6px; background-color: #1E40AF; color: #FFFFFF; font-size: 0.85rem; font-weight: 500; padding: 0.45rem 0.95rem; border: 1px solid #1E40AF; border-radius: 8px; box-shadow: 0 2px 4px rgba(79, 70, 229, 0.25); cursor: pointer; transition: all 0.15s ease-in-out; } .ds-btn-primary:hover { background-color: #1E3A8A; border-color: #1E3A8A; box-shadow: 0 4px 10px rgba(79, 70, 229, 0.35); } .ds-btn-primary:focus-visible { outline: 2px solid #3B82F6; outline-offset: 2px; } .ds-icon { width: 14px; height: 14px; }"
+    },
+    {
+      "name": "Subtle Light Button",
+      "kind": "button",
+      "refersTo": "button-light-secondary",
+      "description": "Subtle secondary control with slate border and soft hover wash.",
+      "html": "<button class=\"ds-btn-secondary\"><span>Cancel</span></button>",
+      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 6px; background-color: #F1F5F9; color: #334155; font-size: 0.85rem; font-weight: 500; padding: 0.45rem 0.95rem; border: 1px solid #CBD5E1; border-radius: 8px; cursor: pointer; transition: all 0.15s ease-in-out; } .ds-btn-secondary:hover { background-color: #E2E8F0; border-color: #94A3B8; color: #0F172A; } .ds-btn-secondary:focus-visible { outline: 2px solid #64748B; outline-offset: 2px; }"
+    },
+    {
+      "name": "First-Column Action Group",
+      "kind": "custom",
+      "refersTo": "table-action-group",
+      "description": "Mandatory Column 1 icon-only table row action controls with explicit 6px spacing.",
+      "html": "<div class=\"ds-action-group\"><button class=\"ds-action-btn\" title=\"View Record\"><svg viewBox=\"0 0 20 20\" fill=\"currentColor\"><path d=\"M10 12a2 2 0 100-4 2 2 0 000 4z\"/><path fill-rule=\"evenodd\" d=\"M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z\" clip-rule=\"evenodd\"/></svg></button><button class=\"ds-action-btn\" title=\"Edit Record\"><svg viewBox=\"0 0 20 20\" fill=\"currentColor\"><path d=\"M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z\"/></svg></button></div>",
+      "css": ".ds-action-group { display: inline-flex; align-items: center; gap: 6px; } .ds-action-btn { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; padding: 0; background: transparent; border: 1px solid #CBD5E1; border-radius: 6px; color: #1E40AF; cursor: pointer; transition: all 0.15s ease-in-out; } .ds-action-btn svg { width: 14px; height: 14px; } .ds-action-btn:hover { background-color: #EFF6FF; border-color: #1E40AF; color: #1E40AF; transform: translateY(-1px); }"
+    },
+    {
+      "name": "Status Badge (Success)",
+      "kind": "chip",
+      "refersTo": "badge-success",
+      "description": "High-contrast semantic status pill with soft pastel wash background.",
+      "html": "<span class=\"ds-badge-success\"><span class=\"ds-badge-dot\"></span>Approved</span>",
+      "css": ".ds-badge-success { display: inline-flex; align-items: center; gap: 5px; background-color: #ECFDF5; color: #047857; font-size: 0.75rem; font-weight: 600; padding: 0.3rem 0.6rem; border-radius: 6px; line-height: 1.2; border: 1px solid rgba(16, 185, 129, 0.2); } .ds-badge-dot { width: 6px; height: 6px; border-radius: 50%; background-color: #10B981; }"
+    },
+    {
+      "name": "Metric Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Executive dashboard metric card with 10px radius and crisp 1px border.",
+      "html": "<div class=\"ds-card\"><div class=\"ds-card-header\"><span class=\"ds-card-title\">Total Headcount</span><span class=\"ds-card-tag\">Active</span></div><div class=\"ds-card-body\"><div class=\"ds-metric-value\">1,428</div><div class=\"ds-metric-sub\"><span class=\"ds-growth\">+4.2%</span> vs last quarter</div></div></div>",
+      "css": ".ds-card { background-color: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 10px; box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.05); transition: box-shadow 0.2s ease-in-out; } .ds-card:hover { box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05); } .ds-card-header { display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 1.15rem; border-bottom: 1px solid #E2E8F0; } .ds-card-title { font-size: 0.95rem; font-weight: 600; color: #0F172A; } .ds-card-tag { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; color: #475569; letter-spacing: 0.04em; } .ds-card-body { padding: 1.15rem; } .ds-metric-value { font-size: 1.75rem; font-weight: 700; color: #0F172A; font-variant-numeric: tabular-nums; line-height: 1.2; } .ds-metric-sub { font-size: 0.8rem; color: #475569; margin-top: 4px; } .ds-growth { color: #10B981; font-weight: 600; }"
+    },
+    {
+      "name": "Searchable Input Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Compact form input with 8px radius and subtle focus glow.",
+      "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"Search employees by name, ID, or department...\"/>",
+      "css": ".ds-input { width: 100%; box-sizing: border-box; background-color: #FFFFFF; border: 1px solid #CBD5E1; color: #0F172A; border-radius: 8px; padding: 0.45rem 0.85rem; font-size: 0.85rem; transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; } .ds-input:focus { outline: none; border-color: #1E40AF; box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.15); } .ds-input::placeholder { color: #94A3B8; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Executive Command Center",
+    "overview": "The Antigravity HR Portal is an enterprise workforce management platform engineered for executive precision, dense operational efficiency, and instantaneous cognitive scanning. Designed with an austere, high-contrast visual architecture inspired by Metronic and modern executive terminals, it balances data density with visual calm. The interface prioritizes structured tabular data, instant visual status recognition, and frictionless multi-company organizational management.\n\nRather than decorative excess or novelty animations, the system draws its visual authority from razor-sharp typography, deliberate 1px structural borders, and purposeful contrast tokens. Both Light Mode (#F8FAFC canvas) and Dark Mode (#0B0F19 canvas via data-bs-theme=\"dark\") are first-class citizens, ensuring seamless 24/7 readability for HR administrators, managers, and executives.",
+    "keyCharacteristics": [
+      "High-Density Information Architecture: Compact typography (0.85rem base), structured 6-8px padding rhythms, and tabular numeric figures (tabular-nums) optimized for large employee rosters, payroll matrices, and recruitment pipelines.",
+      "Bi-Modal High-Contrast Legibility: Full dynamic contrast compliance across all cards, tables, select2 pills, and modals in both Light and Dark themes with zero low-contrast text.",
+      "Ergonomic First-Column Table Actions: Icon-only action buttons consolidated in the first table column with explicit 6px spacing for predictable, rapid administrative interaction.",
+      "Zero-Flicker Multi-Company Disambiguation: Deep contextual clarity across departments, designations, and employee branches."
+    ],
+    "rules": [
+      {
+        "name": "The Wash Pair Rule",
+        "section": "colors",
+        "body": "Semantic status colors must never be rendered as solid high-saturation backgrounds behind long text. Always pair a vibrant text accent with its corresponding 10-15% opacity pastel wash (.badge-light-primary, .badge-light-success, .badge-light-danger)."
+      },
+      {
+        "name": "The Zero Hardcoded White Rule",
+        "section": "colors",
+        "body": "Never use hardcoded #FFFFFF or bg-white classes in template markup without theme-aware tokens (--card-bg, bg-body, or [data-bs-theme=\"dark\"] overrides). Every surface must respond instantly to theme changes."
+      },
+      {
+        "name": "The Tabular Figure Rule",
+        "section": "typography",
+        "body": "All currency amounts, leave day counts, attendance percentages, and metric figures must enforce font-variant-numeric: tabular-nums to prevent column jitter and align figures strictly along vertical axes."
+      },
+      {
+        "name": "The Border-First Elevation Rule",
+        "section": "elevation",
+        "body": "Elevation must never substitute for perimeter definition. Every elevated card, dropdown, and modal must retain its 1px structural border regardless of shadow presence."
+      }
+    ],
+    "dos": [
+      "Do place data table action buttons in Column 1 as compact, icon-only buttons with explicit 6px gaps (style=\"gap: 6px;\").",
+      "Do format numbers, dates, salaries, and counts with tabular-nums for rock-solid tabular alignment.",
+      "Do append company context to Department and Designation dropdowns ($dept->department_name . ' (Company: ' . $dept->company->name . ')').",
+      "Do provide instant loading feedback on submit buttons (submitWithLoader(this) or .btn-loader with <i class=\"fa-solid fa-circle-notch fa-spin me-1\"></i> Processing...).",
+      "Do ensure every interactive element and text label maintains high-contrast visibility under both light mode and data-bs-theme=\"dark\"."
+    ],
+    "donts": [
+      "Don't use glued .btn-group containers for table row actions; always preserve individual rounded borders with distinct 6px spacing.",
+      "Don't hardcode light-only background colors (bg-white, #F1F5F9) or dark-only text colors (#0F172A) without [data-bs-theme=\"dark\"] override mappings.",
+      "Don't place an unstyled <form> tag directly between .modal-dialog and .modal-content (violates Bootstrap 5 modal hierarchy and collapses modal widths).",
+      "Don't output raw un-decoded HTML entities or HTML markup inside <textarea> inputs or plain text table snippets.",
+      "Don't introduce external CDN scripts or Tailwind CSS utilities; stick strictly to local Bootstrap 5.3 assets and assets/css/app.css."
+    ]
+  }
+}

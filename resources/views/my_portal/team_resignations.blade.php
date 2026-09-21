@@ -64,8 +64,8 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="fs-8 fw-semibold text-body-emphasis">{{ $res->notice_date }}</td>
-                            <td class="fs-8 fw-bold text-danger">{{ $res->resignation_date }}</td>
+                            <td class="fs-8 fw-semibold text-body-emphasis"><x-human-date :value="$res->notice_date" /></td>
+                            <td class="fs-8 fw-bold text-danger"><x-human-date :value="$res->resignation_date" /></td>
                             <td class="fs-8 text-body-secondary">{{ $res->employee->notice_period_months ?? 1 }} Month(s)</td>
                             <td class="pe-4">
                                 @php $mgrHelper = $res->getStageStatusHelper((int) $res->manager_status); @endphp
@@ -92,13 +92,13 @@
                                                         <div class="fs-8 text-body-secondary">Employee Name:</div>
                                                         <div class="fw-bold text-body-emphasis mb-2">{{ $res->employee->first_name ?? '' }} {{ $res->employee->last_name ?? '' }}</div>
                                                         <div class="fs-8 text-body-secondary">Notice Date:</div>
-                                                        <div class="fw-bold text-body-emphasis">{{ $res->notice_date }}</div>
+                                                        <div class="fw-bold text-body-emphasis"><x-human-date :value="$res->notice_date" /></div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="fs-8 text-body-secondary">Configured Notice Period:</div>
                                                         <div class="fw-bold text-body-emphasis mb-2">{{ $res->employee->notice_period_months ?? 1 }} Month(s)</div>
                                                         <div class="fs-8 text-body-secondary">Requested LWD:</div>
-                                                        <div class="fw-bold text-danger">{{ $res->resignation_date }}</div>
+                                                        <div class="fw-bold text-danger"><x-human-date :value="$res->resignation_date" /></div>
                                                     </div>
                                                 </div>
                                             </div>

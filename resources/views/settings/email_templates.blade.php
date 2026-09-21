@@ -20,12 +20,7 @@
         </div>
     </div>
 
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm mb-4" role="alert">
-            <i class="fa-solid fa-circle-check me-2"></i> {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
+
 
     <!-- Dynamic Placeholders Helper Box -->
     <div class="card border-0 shadow-sm mb-4 bg-body-tertiary">
@@ -86,11 +81,11 @@
 
                                     <!-- Modal: Edit Template -->
                                     <div class="modal fade text-start" id="editTemplateModal{{ $tpl->template_id }}" tabindex="-1" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                                        <div class="modal-dialog modal-dialog-centered modal-xl">
                                             <form method="POST" action="{{ route('email-templates.update', $tpl->template_id) }}">
                                                 @csrf
                                                 @method('PUT')
-                                                <div class="modal-content">
+                                                <div class="modal-content border-0 shadow">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title fw-bold"><i class="fa-solid fa-pen me-2 text-primary"></i> Edit Template: {{ $tpl->name }}</h5>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -113,13 +108,21 @@
                                                             <input type="text" name="subject" class="form-control form-control-sm" required value="{{ $tpl->subject }}">
                                                         </div>
                                                         <div class="mb-3">
-                                                            <label class="form-label fs-8 fw-semibold">Email Body HTML / Plain Content <span class="text-danger">*</span></label>
-                                                            <textarea name="message" class="form-control form-control-sm font-monospace" rows="8" required>{{ $tpl->message }}</textarea>
+                                                            <label class="form-label fs-8 fw-semibold">Email Body HTML / Rich Content <span class="text-danger">*</span></label>
+                                                            <x-wysiwyg-editor 
+                                                                :id="'template_editor_' . $tpl->template_id" 
+                                                                name="message" 
+                                                                :value="$tpl->message" 
+                                                                height="320px"
+                                                                :tokens="['{employee_name}', '{company_name}', '{leave_type}', '{from}', '{to}', '{start_date}', '{end_date}', '{reason}', '{status}', '{remarks}', '{ticket_code}', '{site_name}', '{site_url}', '{action_url}']" 
+                                                            />
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
-                                                        <button type="submit" class="btn btn-primary btn-sm fw-bold">Update Template</button>
+                                                        <button type="submit" class="btn btn-primary btn-sm fw-bold">
+                                                            <i class="fa-solid fa-save me-1"></i> Update Template
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </form>

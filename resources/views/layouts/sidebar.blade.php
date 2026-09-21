@@ -2,10 +2,10 @@
     <!-- Sidebar Header / Brand Logo -->
     <div class="d-flex align-items-center justify-content-between p-3 border-bottom border-secondary-subtle">
         <a href="{{ route('dashboard') }}" class="d-flex align-items-center text-decoration-none text-body-emphasis gap-2">
-            <i class="fa-solid fa-layer-group text-primary fs-3"></i>
+            <img src="{{ asset('assets/images/portal_logo_transparent.png') }}" alt="{{ $systemSetting->application_name ?? 'i2u2 HR Portal' }}" style="max-height: 38px; width: auto; object-fit: contain;">
             <div class="d-flex flex-column">
-                <span class="fs-6 fw-bold text-gray-900 leading-none">{{ $systemSetting->application_name ?? 'Antigravity HR' }}</span>
-                <span class="fs-9 text-gray-500 fw-semibold">Enterprise Portal</span>
+                <span class="fs-6 fw-bold text-body-emphasis leading-none">{{ $systemSetting->application_name ?? 'i2u2 Portal' }}</span>
+                <span class="fs-9 text-body-secondary fw-semibold">Enterprise HR</span>
             </div>
         </a>
         <button class="btn btn-outline-secondary btn-sm d-lg-none" type="button" onclick="toggleSidebar()">

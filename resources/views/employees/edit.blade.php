@@ -25,7 +25,7 @@
     </div>
 </div>
 
-<form id="employeeEditForm" method="POST" action="{{ route('employees.update', $employee->id) }}" enctype="multipart/form-data">
+<form id="employeeEditForm" method="POST" action="{{ route('employees.update', $employee->id) }}" enctype="multipart/form-data" novalidate>
     @csrf
     @method('PUT')
 
@@ -406,7 +406,7 @@
         <div class="d-flex align-items-center gap-2 ms-auto">
             <a href="{{ route('employees.index') }}" class="btn btn-outline-secondary btn-sm fw-bold">Cancel</a>
             @can('edit.employees')
-                <button type="submit" class="btn btn-primary btn-sm fw-bold shadow-sm px-4">
+                <button type="submit" class="btn btn-primary btn-sm fw-bold shadow-sm px-4 submit-loader">
                     <i class="fa-solid fa-floppy-disk me-1"></i> Update Employee Record
                 </button>
             @endcan

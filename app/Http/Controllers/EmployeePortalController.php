@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Announcement;
+use App\Models\Company;
 use App\Models\Document;
 use App\Models\EmpTodayAttendance;
 use App\Models\Employee;
@@ -74,7 +75,14 @@ class EmployeePortalController extends Controller
         $keyName = (new EmployeeLeave)->getKeyName();
         $leaves = EmployeeLeave::where('employee_id', $employeeId)->orderBy($keyName, 'desc')->paginate(10);
 
-        return view('my_portal.leaves', compact('leaves'));
+        $stats = [
+            'total' => EmployeeLeave::where('employee_id', $employeeId)->count(),
+            'approved' => EmployeeLeave::where('employee_id', $employeeId)->where(function($q) { $q->where('status', 2)->orWhere('status', 'Approved'); })->count(),
+            'pending' => EmployeeLeave::where('employee_id', $employeeId)->where(function($q) { $q->where('status', 1)->orWhere('status', 'Pending'); })->count(),
+            'rejected' => EmployeeLeave::where('employee_id', $employeeId)->where(function($q) { $q->where('status', 3)->orWhere('status', 'Rejected'); })->count(),
+        ];
+
+        return view('my_portal.leaves', compact('leaves', 'stats'));
     }
 
     public function storeLeave(Request $request): RedirectResponse
@@ -90,25 +98,22 @@ class EmployeePortalController extends Controller
         $data = [
             'company_id' => $this->getCompanyId(),
             'employee_id' => $this->getEmployeeId(),
+            'leave_type_id' => (int) ($request->leave_type_id ?? 1),
+            'from_date' => (string) $request->from_date,
+            'to_date' => (string) $request->to_date,
             'reason' => \App\Traits\HasCleanContent::sanitizeContent($request->reason, false),
             'status' => 1,
+            'start_duration' => 'Full',
+            'end_duration' => 'Full',
+            'casual_deducted' => 0.00,
+            'earned_deducted' => 0.00,
+            'remarks' => '',
+            'applied_on' => date('Y-m-d H:i:s'),
+            'manager_id' => auth()->user()?->manager_id ?? $this->getEmployeeId(),
+            'created_at' => date('Y-m-d H:i:s'),
         ];
 
-        if (Schema::hasColumn($table, 'leave_type_id')) $data['leave_type_id'] = (int) ($request->leave_type_id ?? 1);
-        if (Schema::hasColumn($table, 'from_date')) $data['from_date'] = (string) $request->from_date;
-        if (Schema::hasColumn($table, 'to_date')) $data['to_date'] = (string) $request->to_date;
-        if (Schema::hasColumn($table, 'start_date')) $data['start_date'] = (string) $request->from_date;
-        if (Schema::hasColumn($table, 'end_date')) $data['end_date'] = (string) $request->to_date;
-        if (Schema::hasColumn($table, 'start_duration')) $data['start_duration'] = 'Full';
-        if (Schema::hasColumn($table, 'end_duration')) $data['end_duration'] = 'Full';
-        if (Schema::hasColumn($table, 'casual_deducted')) $data['casual_deducted'] = 0.00;
-        if (Schema::hasColumn($table, 'earned_deducted')) $data['earned_deducted'] = 0.00;
-        if (Schema::hasColumn($table, 'remarks')) $data['remarks'] = '';
-        if (Schema::hasColumn($table, 'applied_on')) $data['applied_on'] = date('Y-m-d H:i:s');
-        if (Schema::hasColumn($table, 'manager_id')) $data['manager_id'] = auth()->user()?->manager_id ?? $this->getEmployeeId();
-        if (Schema::hasColumn($table, 'created_at')) $data['created_at'] = date('Y-m-d H:i:s');
-
-        EmployeeLeave::create($data);
+        app(\App\Services\LeaveApplicationService::class)->applyForLeave($data);
 
         return redirect()->back()->with('success', 'Leave application submitted successfully!');
     }
@@ -183,9 +188,27 @@ class EmployeePortalController extends Controller
             }
         }
 
+        $statsBaseQuery = clone $query;
+        $totalLogs = (clone $statsBaseQuery)->count();
+        $presentLogs = (clone $statsBaseQuery)->where(function ($sq) {
+            $sq->whereNotNull('check_in_time')
+               ->orWhereNotNull('check_in_datetime');
+        })->count();
+        $absentLogs = (clone $statsBaseQuery)->where(function ($sq) {
+            $sq->whereNull('check_in_time')
+               ->whereNull('check_in_datetime');
+        })->count();
+
+        $stats = [
+            'total' => $totalLogs,
+            'present' => $presentLogs,
+            'absent' => $absentLogs,
+            'rate' => $totalLogs > 0 ? round(($presentLogs / $totalLogs) * 100) : 100,
+        ];
+
         $attendanceLogs = $query->orderBy('punch_date', 'desc')->orderBy('id', 'desc')->paginate(15)->appends($request->all());
 
-        return view('my_portal.attendance', compact('attendanceLogs', 'employee'));
+        return view('my_portal.attendance', compact('attendanceLogs', 'employee', 'stats'));
     }
 
     /**
@@ -276,15 +299,41 @@ class EmployeePortalController extends Controller
     /**
      * Corporate Benefits & Policies Page
      */
-    public function benefits(): View
+    public function benefits(Request $request): View
     {
         $table = (new Document)->getTable();
         $keyName = (new Document)->getKeyName();
+        $empCompanyId = $this->getCompanyId();
 
-        $query = Document::where('company_id', $this->getCompanyId());
+        $user = auth()->user();
+        $isSuperAdmin = $user && (
+            $user->user_role_id == 1 ||
+            strtolower($user->roleRelation->role_name ?? '') === 'super admin' ||
+            ($user->roleRelation->role_access ?? '') === 'all'
+        );
+
+        $query = Document::query();
 
         if (Schema::hasColumn($table, 'active')) {
             $query->where('active', 1);
+        }
+
+        // Strict company scoping:
+        // Regular employees and company staff view ONLY their company's files (or organization-wide files).
+        // Super Admin views all by default, or filters by specific company if requested.
+        if (!$isSuperAdmin) {
+            $query->where(function ($q) use ($empCompanyId) {
+                $q->where('company_id', (string)$empCompanyId)
+                  ->orWhereRaw('FIND_IN_SET(?, company_id)', [$empCompanyId])
+                  ->orWhere('company_id', '0');
+            });
+        } elseif ($request->filled('company_id') && $request->input('company_id') !== 'all') {
+            $filterCid = (int)$request->input('company_id');
+            $query->where(function ($q) use ($filterCid) {
+                $q->where('company_id', (string)$filterCid)
+                  ->orWhereRaw('FIND_IN_SET(?, company_id)', [$filterCid])
+                  ->orWhere('company_id', '0');
+            });
         }
 
         if (Schema::hasColumn($table, 'created_at')) {
@@ -296,7 +345,26 @@ class EmployeePortalController extends Controller
         }
 
         $documents = $query->get();
-        return view('my_portal.benefits', compact('documents'));
+        $companies = Company::orderBy('name')->get();
+        $companiesMap = $companies->pluck('name', 'company_id')->toArray();
+        $currentCompanyName = $companiesMap[$empCompanyId] ?? 'Company #' . $empCompanyId;
+
+        $stats = [
+            'total' => $documents->count(),
+            'handbooks' => $documents->filter(fn($d) => stripos(($d->file_type ?? '') . ' ' . ($d->file_desc ?? ''), 'handbook') !== false || stripos(($d->file_type ?? ''), 'policy') !== false)->count(),
+            'insurance' => $documents->filter(fn($d) => stripos(($d->file_type ?? '') . ' ' . ($d->file_desc ?? ''), 'insurance') !== false || stripos(($d->file_type ?? '') . ' ' . ($d->file_desc ?? ''), 'health') !== false)->count(),
+            'latest' => $documents->first()?->added_date ? \Carbon\Carbon::parse($documents->first()->added_date)->format('M d, Y') : 'Active',
+        ];
+
+        return view('my_portal.benefits', compact(
+            'documents', 
+            'companies', 
+            'companiesMap', 
+            'isSuperAdmin', 
+            'empCompanyId', 
+            'currentCompanyName',
+            'stats'
+        ));
     }
 
     /**
@@ -307,8 +375,18 @@ class EmployeePortalController extends Controller
         $request->validate([
             'file_desc' => 'required|string|max:255',
             'file_type' => 'nullable|string|max:100',
+            'company_id' => 'nullable',
+            'company_ids' => 'nullable|array',
             'document'  => 'required|file|mimes:pdf,doc,docx,png,jpg,jpeg|max:10240',
         ]);
+
+        $user = auth()->user();
+        $isSuperAdmin = $user && (
+            $user->user_role_id == 1 ||
+            strtolower($user->roleRelation->role_name ?? '') === 'super admin' ||
+            ($user->roleRelation->role_access ?? '') === 'all'
+        );
+        $empCompanyId = $this->getCompanyId();
 
         if ($request->hasFile('document')) {
             $file = $request->file('document');
@@ -325,8 +403,18 @@ class EmployeePortalController extends Controller
             $bytes = filesize($destinationPath . '/' . $fileName);
             $formattedSize = $bytes >= 1048576 ? round($bytes / 1048576, 2) . ' MB' : round($bytes / 1024, 2) . ' KB';
 
+            // Multi-company resolution
+            $compInput = $request->input('company_ids') ?: $request->input('company_id');
+            if (!$isSuperAdmin && empty($compInput)) {
+                $targetCompany = (string)$empCompanyId;
+            } elseif (is_array($compInput)) {
+                $targetCompany = in_array('0', $compInput) || in_array('', $compInput) ? '0' : implode(',', array_filter($compInput));
+            } else {
+                $targetCompany = ($compInput !== null && $compInput !== '' && $compInput !== 'all') ? (string)$compInput : (string)$empCompanyId;
+            }
+
             Document::create([
-                'company_id'     => $this->getCompanyId() ?: 1,
+                'company_id'     => $targetCompany ?: (string)$empCompanyId,
                 'file_type'      => $request->input('file_type', 'Policy Handbook'),
                 'file_desc'      => $request->input('file_desc'),
                 'user_id'        => auth()->id() ?? 1,
@@ -373,6 +461,9 @@ class EmployeePortalController extends Controller
         $refKey = $ref->getKeyName();
 
         $query = Referral::query();
+        if (Schema::hasColumn($table, 'job_id')) {
+            $query->with('job');
+        }
 
         if (Schema::hasColumn($table, 'added_by')) {
             $query->where('added_by', $employeeId)->orWhere('added_by', $userId);
@@ -383,7 +474,14 @@ class EmployeePortalController extends Controller
         $referrals = $query->orderBy($refKey, 'desc')->get();
         $openJobs = JobPost::latest()->get();
 
-        return view('my_portal.referrals', compact('referrals', 'openJobs'));
+        $stats = [
+            'total' => $referrals->count(),
+            'pending' => $referrals->filter(fn($r) => in_array($r->status, ['Pending', 'Submitted', '1', 1]))->count(),
+            'interviewing' => $referrals->filter(fn($r) => in_array($r->status, ['Interviewing', 'Shortlisted', 'Screening', 'In Progress']))->count(),
+            'hired' => $referrals->filter(fn($r) => in_array($r->status, ['Hired', 'Approved', '2', 2]))->count(),
+        ];
+
+        return view('my_portal.referrals', compact('referrals', 'openJobs', 'stats'));
     }
 
     public function storeReferral(Request $request): RedirectResponse
@@ -399,7 +497,8 @@ class EmployeePortalController extends Controller
         $resumePath = '';
         if ($request->hasFile('resume')) {
             $file = $request->file('resume');
-            $fileName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $safeName = \Illuminate\Support\Str::slug($request->name, '_') ?: 'candidate';
+            $fileName = 'Resume_' . $safeName . '_' . date('Ymd_His') . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('uploads/referrals'), $fileName);
             $resumePath = 'uploads/referrals/' . $fileName;
         }
@@ -689,7 +788,7 @@ class EmployeePortalController extends Controller
         }));
 
         EmployeeDataUpdate::updateOrCreate(
-            ['user_id' => auth()->id(), 'acceptance' => 0],
+            ['user_id' => auth()->id()],
             $saveData
         );
 
@@ -819,7 +918,7 @@ class EmployeePortalController extends Controller
         }));
 
         EmployeeDataUpdate::updateOrCreate(
-            ['user_id' => $employee->user_id, 'acceptance' => 0],
+            ['user_id' => $employee->user_id],
             $saveData
         );
 

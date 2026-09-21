@@ -65,6 +65,6 @@ class Referral extends Model
         if (Schema::hasColumn($table, 'job_id')) {
             return $this->belongsTo(JobPost::class, 'job_id');
         }
-        return null;
+        return $this->belongsTo(JobPost::class, 'referral_id', 'job_id')->whereRaw('1 = 0');
     }
 }

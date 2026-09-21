@@ -59,7 +59,7 @@
                                     </div>
                                 </td>
                                 <td class="pe-4">
-                                    <span class="fs-8 text-gray-800">{{ $rl->created_at ?? '--' }}</span>
+                                    <span class="fs-8 text-gray-800"><x-human-date :value="$rl->created_at" /></span>
                                 </td>
                             </tr>
                         @empty

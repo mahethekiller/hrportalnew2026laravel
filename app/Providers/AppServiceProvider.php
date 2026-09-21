@@ -24,6 +24,27 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
         Paginator::useBootstrapFive();
 
+        // Dynamically apply System Timezone from Settings
+        try {
+            if (Schema::hasTable('xin_system_setting')) {
+                $systemTimezone = \App\Models\SystemSetting::value('system_timezone') ?? config('app.timezone', 'Asia/Kolkata');
+                if (!empty($systemTimezone) && in_array($systemTimezone, \DateTimeZone::listIdentifiers())) {
+                    date_default_timezone_set($systemTimezone);
+                    config(['app.timezone' => $systemTimezone]);
+                }
+            }
+        } catch (\Throwable $e) {
+            // Fallback gracefully during early CLI setup or migrations
+        }
+
+        \Illuminate\Support\Facades\Blade::directive('humanDate', function ($expression) {
+            return "<?php echo \App\Helpers\DateHelper::format($expression); ?>";
+        });
+
+        \Illuminate\Support\Facades\Blade::directive('humanDateTime', function ($expression) {
+            return "<?php echo \App\Helpers\DateHelper::formatDateTime($expression); ?>";
+        });
+
         \Illuminate\Support\Facades\Gate::before(function ($user, $ability) {
             if ($user && method_exists($user, 'roleRelation')) {
                 $role = $user->roleRelation;

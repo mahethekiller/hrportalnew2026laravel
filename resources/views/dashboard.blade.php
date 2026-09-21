@@ -109,7 +109,7 @@
         <div class="card h-100">
             <div class="card-header">
                 <h3 class="card-title">Team Performance Index</h3>
-                <span class="badge badge-light-success">Excellent</span>
+                <span class="badge badge-soft badge-success">Excellent</span>
             </div>
             <div class="card-body d-flex flex-column align-items-center justify-content-center">
                 <div id="performanceGaugeChart" style="min-height: 240px; width: 100%;"></div>
@@ -158,7 +158,7 @@
                                 </td>
                                 <td>Annual Leave</td>
                                 <td>3 Days (Jul 28 - Jul 30)</td>
-                                <td><span class="badge badge-light-warning">Pending Approval</span></td>
+                                <td><span class="badge badge-soft badge-warning">Pending Approval</span></td>
                                 <td class="text-end">
                                     <button class="btn btn-light-success btn-sm me-1"><i class="fa-solid fa-check"></i></button>
                                     <button class="btn btn-light-danger btn-sm"><i class="fa-solid fa-xmark"></i></button>
@@ -178,12 +178,13 @@
                                 </td>
                                 <td>Sick Leave</td>
                                 <td>1 Day (Jul 27)</td>
-                                <td><span class="badge badge-light-warning">Pending Approval</span></td>
+                                <td><span class="badge badge-soft badge-warning">Pending Approval</span></td>
                                 <td class="text-end">
                                     <button class="btn btn-light-success btn-sm me-1"><i class="fa-solid fa-check"></i></button>
                                     <button class="btn btn-light-danger btn-sm"><i class="fa-solid fa-xmark"></i></button>
                                 </td>
                             </tr>
+
                         </tbody>
                     </table>
                 </div>
@@ -313,7 +314,7 @@
                     }
                 }
             },
-            colors: ['#17C653'],
+            colors: ['#10B981'],
             labels: ['Efficiency']
         };
         new ApexCharts(document.querySelector("#performanceGaugeChart"), gaugeOptions).render();

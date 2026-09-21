@@ -7,19 +7,20 @@
     'badgeTrend' => 'up',
 ])
 
-<div class="card border-0 shadow-sm rounded-3 p-3 bg-body-tertiary dashboard-card h-100">
-    <div class="d-flex align-items-center justify-content-between">
+<div class="card bg-base-100 border border-base-300 shadow-sm rounded-box p-4 h-full transition hover:shadow-md">
+    <div class="flex items-center justify-between">
         <div>
-            <span class="text-body-secondary fs-9 fw-semibold d-block text-uppercase tracking-wider">{{ $title }}</span>
-            <h3 class="fw-bolder text-body-emphasis mb-0 mt-1">{{ $value }}</h3>
+            <span class="text-xs font-semibold uppercase tracking-wider text-base-content/70 block">{{ $title }}</span>
+            <div class="text-2xl font-bold text-base-content tabular-nums my-1">{{ $value }}</div>
             @if($badgeText)
-                <span class="badge bg-{{ $variant }}-subtle text-{{ $variant }} fw-bold fs-9 mt-1">
-                    <i class="fa-solid fa-arrow-{{ $badgeTrend === 'up' ? 'up' : 'down' }} me-1"></i>{{ $badgeText }}
+                <span class="badge badge-soft badge-{{ $variant }} text-xs font-bold gap-1 mt-1">
+                    <i class="fa-solid fa-arrow-{{ $badgeTrend === 'up' ? 'up' : 'down' }}"></i>
+                    <span>{{ $badgeText }}</span>
                 </span>
             @endif
         </div>
-        <div class="avatar-md rounded-circle bg-{{ $variant }}-subtle text-{{ $variant }} d-flex align-items-center justify-content-center p-3" style="width: 52px; height: 52px;">
-            <i class="{{ $icon }} fs-4"></i>
+        <div class="w-12 h-12 rounded-full flex items-center justify-center bg-{{ $variant }}/10 text-{{ $variant }} text-xl shrink-0">
+            <i class="{{ $icon }}"></i>
         </div>
     </div>
 </div>

@@ -27,12 +27,15 @@ class GenericPortalMail extends Mailable
 
     public function envelope(): Envelope
     {
+        $systemSetting = \App\Models\SystemSetting::first();
+        $appName = $this->appName ?? $systemSetting?->application_name ?? config('app.name', 'I2U2 Portal');
+
         $envelope = new Envelope(
             subject: $this->mailSubject
         );
 
         if ($this->fromEmail) {
-            $envelope->from = new Address($this->fromEmail, $this->fromName ?? config('app.name', 'Antigravity HR Portal'));
+            $envelope->from = new Address($this->fromEmail, $this->fromName ?? $appName);
         }
 
         return $envelope;
@@ -40,6 +43,11 @@ class GenericPortalMail extends Mailable
 
     public function content(): Content
     {
+        $systemSetting = \App\Models\SystemSetting::first();
+        $appName = $this->appName ?? $systemSetting?->application_name ?? config('app.name', 'I2U2 Portal');
+        $footerText = $systemSetting?->footer_text ?? ('© ' . date('Y') . ' ' . $appName . '. All rights reserved.');
+        $supportEmail = $systemSetting?->support_email ?? 'support@i2k2.com';
+
         return new Content(
             view: 'emails.email_layout',
             with: [
@@ -47,7 +55,10 @@ class GenericPortalMail extends Mailable
                 'content' => $this->htmlContent,
                 'actionUrl' => $this->actionUrl,
                 'actionText' => $this->actionText,
-                'appName' => $this->appName ?? config('app.name', 'Antigravity HR Portal'),
+                'appName' => $appName,
+                'footerText' => $footerText,
+                'supportEmail' => $supportEmail,
+                'logoUrl' => asset('assets/images/portal_logo_120h.png'),
             ]
         );
     }

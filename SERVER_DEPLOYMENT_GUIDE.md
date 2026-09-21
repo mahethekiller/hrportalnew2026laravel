@@ -34,6 +34,12 @@ php artisan db:seed --class=PermissionSeeder
 php artisan db:seed --class=RoleSeeder
 ```
 
+#### C. Seed Canonical Leave Types
+Synchronizes the 11 canonical leave categories into `xin_leave_type` (matching legacy IDs 1-11) non-destructively:
+```bash
+php artisan db:seed --class=LeaveTypeSeeder
+```
+
 ---
 
 ### 3. Clear & Rebuild Production Caches

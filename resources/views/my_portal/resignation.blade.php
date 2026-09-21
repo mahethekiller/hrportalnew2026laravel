@@ -91,7 +91,7 @@
                             </div>
                         @else
                             <div class="alert alert-info border-0 mb-0 fs-8">
-                                <i class="fa-solid fa-info-circle me-1"></i> Resignation notice already submitted on <strong>{{ $resignation->notice_date }}</strong>.
+                                <i class="fa-solid fa-info-circle me-1"></i> Resignation notice already submitted on <strong><x-human-date :value="$resignation->notice_date" /></strong>.
                             </div>
                         @endif
                     </form>
@@ -131,8 +131,8 @@
                                 </div>
                                 <div class="col-md-6 text-md-end mt-2 mt-md-0">
                                     <div class="fs-8 text-body-secondary">
-                                        Notice Date: <strong>{{ $resignation->notice_date }}</strong><br>
-                                        Confirmed LWD: <strong class="text-danger">{{ $resignation->resignation_date }}</strong>
+                                        Notice Date: <strong><x-human-date :value="$resignation->notice_date" /></strong><br>
+                                        Confirmed LWD: <strong class="text-danger"><x-human-date :value="$resignation->resignation_date" /></strong>
                                         @if($resignation->shortfall_days > 0)
                                             <div class="text-warning fs-9 fw-bold">Shortfall: {{ $resignation->shortfall_days }} Day(s)</div>
                                         @endif

@@ -111,7 +111,7 @@
                                     <span class="fs-8 text-gray-800">{{ $jc->added_by ?? 'Recruiter' }}</span>
                                 </td>
                                 <td>
-                                    <span class="fs-8 text-gray-800">{{ $jc->added_date ?? '--' }}</span>
+                                    <span class="fs-8 text-gray-800"><x-human-date :value="$jc->added_date" /></span>
                                 </td>
                                 <td class="pe-4">
                                     <span class="badge {{ $jc->status_badge_class }}">

@@ -42,6 +42,28 @@ class LeaveApplication extends Model
         3 => 'Rejected',
     ];
 
+    public const LEAVE_TYPES = [
+        1 => 'Casual Leave',
+        2 => 'Earned Leave',
+        3 => 'RH',
+        4 => 'COMP OFF',
+        5 => 'Maternity',
+        6 => 'Paternity',
+        7 => 'Marriage',
+        8 => 'WORK FROM HOME',
+        9 => 'Covid leave',
+        10 => 'Bereavement Leave',
+        11 => 'LWP',
+    ];
+
+    /**
+     * Leave Type Name Accessor.
+     */
+    public function getLeaveTypeNameAttribute(): string
+    {
+        return self::LEAVE_TYPES[(int) $this->leave_type_id] ?? ($this->leaveType->type_name ?? 'Leave');
+    }
+
     /**
      * Primary Key Accessor.
      */

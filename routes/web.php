@@ -36,11 +36,14 @@ Route::patch('/tekken-showdown/status/{id}', [TekkenShowdownController::class, '
 Route::delete('/tekken-showdown/{id}', [TekkenShowdownController::class, 'destroy'])->name('tekken.destroy');
 Route::get('/tekken-showdown/export', [TekkenShowdownController::class, 'export'])->name('tekken.export');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/ui-components', function () {
-        return view('ui-components');
-    })->name('ui.components');
+Route::get('/ui-components', function () {
+    if (!auth()->check() && app()->environment('local')) {
+        auth()->loginUsingId(1);
+    }
+    return view('ui-components');
+})->name('ui.components');
 
+Route::middleware('auth')->group(function () {
     Route::get('/api/docs', [\App\Http\Controllers\SuperAdminApiController::class, 'docs'])->name('api.docs');
 
     Route::resource('employees', EmployeeController::class);

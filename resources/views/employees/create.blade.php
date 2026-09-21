@@ -16,7 +16,7 @@
     </div>
 </div>
 
-<form method="POST" action="{{ route('employees.store') }}" enctype="multipart/form-data">
+<form method="POST" action="{{ route('employees.store') }}" enctype="multipart/form-data" novalidate>
     @csrf
 
     <!-- Nav Tabs for Form Categorization -->
@@ -382,7 +382,7 @@
 
     <div class="d-flex justify-content-end gap-2 mb-5">
         <a href="{{ route('employees.index') }}" class="btn btn-outline-secondary btn-sm">Cancel</a>
-        <button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-floppy-disk me-1"></i>Save Full Employee Record</button>
+        <button type="submit" class="btn btn-primary btn-sm submit-loader"><i class="fa-solid fa-floppy-disk me-1"></i>Save Full Employee Record</button>
     </div>
 </form>
 @endsection

@@ -115,6 +115,7 @@
                 resolvedMode = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
             }
             document.documentElement.setAttribute('data-bs-theme', resolvedMode);
+            document.documentElement.setAttribute('data-theme', resolvedMode === 'dark' ? 'portal-dark' : 'portal-light');
 
             // 2. Resolve Color Profile
             let profileData = COLOR_PROFILES[config.profile];

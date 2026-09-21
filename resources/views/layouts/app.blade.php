@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-bs-theme="light">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme="portal-light" data-bs-theme="light">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>@yield('title', 'HR Portal') - {{ $systemSetting->application_name ?? 'Antigravity HR' }}</title>
+
+    <!-- Tailwind CSS 4 & daisyUI 5 (Local Vite Bundle) -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <!-- Local Vendor CSS Assets -->
     <link href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -16,25 +19,137 @@
     <link href="{{ asset('assets/vendor/select2/css/select2.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/vendor/apexcharts/apexcharts.css') }}" rel="stylesheet">
 
-    <!-- Custom Theme Styling -->
+    <!-- Custom Theme Styling Bridge -->
     <link href="{{ asset('assets/css/app.css') }}?v={{ @filemtime(public_path('assets/css/app.css')) }}" rel="stylesheet">
     @stack('css')
 
     <!-- Pre-load Dark Theme & Color Profile Engine -->
     <script src="{{ asset('assets/js/theme-engine.js') }}?v={{ @filemtime(public_path('assets/js/theme-engine.js')) }}"></script>
 
-    <!-- Global Form Submit Helper -->
+    <!-- Global Form Submit Helper & Smart Multi-Tab/Hidden Validation Engine -->
     <script>
+        // Check if an element is hidden from user interaction
+        function isElementHidden(el) {
+            if (!el) return true;
+            return (el.offsetParent === null) || 
+                   window.getComputedStyle(el).display === 'none' || 
+                   window.getComputedStyle(el).visibility === 'hidden' ||
+                   el.closest('.tab-pane:not(.active), .collapse:not(.show), [style*="display: none"]');
+        }
+
+        // Auto-activate tab pane or collapse containing a specific element
+        window.revealElementContainer = function(el) {
+            if (!el) return false;
+            let revealed = false;
+
+            // 1. Reveal Bootstrap / daisyUI Tab Pane
+            const tabPane = el.closest('.tab-pane');
+            if (tabPane && (!tabPane.classList.contains('active') || !tabPane.classList.contains('show'))) {
+                const tabId = tabPane.getAttribute('id');
+                if (tabId) {
+                    const tabBtn = document.querySelector(
+                        `button[data-bs-target="#${tabId}"], button[data-target="#${tabId}"], a[data-bs-target="#${tabId}"], a[data-target="#${tabId}"], a[href="#${tabId}"]`
+                    );
+                    if (tabBtn) {
+                        if (typeof bootstrap !== 'undefined' && bootstrap.Tab) {
+                            bootstrap.Tab.getOrCreateInstance(tabBtn).show();
+                        } else if (typeof $ !== 'undefined' && $(tabBtn).tab) {
+                            $(tabBtn).tab('show');
+                        } else {
+                            tabBtn.click();
+                        }
+                        revealed = true;
+                    } else {
+                        // Fallback: force active class
+                        const tabContent = tabPane.closest('.tab-content');
+                        if (tabContent) {
+                            tabContent.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active', 'show'));
+                        }
+                        tabPane.classList.add('active', 'show');
+                        revealed = true;
+                    }
+                }
+            }
+
+            // 2. Reveal Bootstrap Collapse / Accordion
+            const collapseEl = el.closest('.collapse:not(.show)');
+            if (collapseEl) {
+                if (typeof bootstrap !== 'undefined' && bootstrap.Collapse) {
+                    bootstrap.Collapse.getOrCreateInstance(collapseEl).show();
+                } else {
+                    collapseEl.classList.add('show');
+                }
+                revealed = true;
+            }
+
+            return revealed;
+        };
+
+        // Comprehensive Form Validation that safely reveals hidden tabs first
+        let isRevealingInvalid = false;
+        window.validateFormWithTabs = function(form) {
+            if (!form) return true;
+
+            const controls = form.querySelectorAll('input, select, textarea');
+            for (let i = 0; i < controls.length; i++) {
+                const control = controls[i];
+                if (control.disabled || control.type === 'hidden' || control.type === 'submit' || control.type === 'button') continue;
+
+                if (!control.checkValidity()) {
+                    if (!isRevealingInvalid) {
+                        isRevealingInvalid = true;
+                        window.revealElementContainer(control);
+                        setTimeout(() => {
+                            try { control.focus(); } catch (err) {}
+                            isRevealingInvalid = false;
+                        }, 120);
+                    }
+                    return false;
+                }
+            }
+            return true;
+        };
+
+        // Universal handler for native HTML5 'invalid' event to prevent "not focusable" console crashes
+        let isHandlingInvalid = false;
+        document.addEventListener('invalid', function(e) {
+            const el = e.target;
+            if (!el) return;
+
+            // If the element is hidden (inside inactive tab or closed collapse)
+            if (isElementHidden(el)) {
+                // Suppress browser's default focus attempt on hidden element
+                e.preventDefault();
+
+                if (isHandlingInvalid) return;
+                isHandlingInvalid = true;
+
+                // Reveal its container
+                window.revealElementContainer(el);
+
+                // Focus after reveal without re-triggering validation loop
+                setTimeout(() => {
+                    try { el.focus(); } catch (err) {}
+                    isHandlingInvalid = false;
+                }, 150);
+            }
+        }, true);
+
+        // Global Form Submit Helper
         window.submitWithLoader = function(btn) {
             if (!btn) return;
             const form = btn.closest('form');
-            if (form && form.checkValidity()) {
-                btn.disabled = true;
-                btn.classList.add('disabled');
-                btn.style.pointerEvents = 'none';
-                btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin me-1"></i> Processing...';
-                form.submit();
+            if (!form) return;
+
+            if (!window.validateFormWithTabs(form)) {
+                return false;
             }
+
+            btn.disabled = true;
+            btn.classList.add('disabled');
+            btn.style.pointerEvents = 'none';
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin me-1"></i> Processing...';
+            form.submit();
         };
 
         document.addEventListener('click', function(e) {
@@ -43,6 +158,40 @@
                 window.submitWithLoader(btn);
             }
         }, true);
+
+        // daisyUI Native <dialog> Modal Click Bridge
+        document.addEventListener('click', function(e) {
+            const trigger = e.target.closest('[data-bs-toggle="modal"], [data-toggle="modal"]');
+            if (trigger) {
+                const targetSelector = trigger.getAttribute('data-bs-target') || trigger.getAttribute('data-target') || trigger.getAttribute('href');
+                if (targetSelector && targetSelector.startsWith('#')) {
+                    const modal = document.querySelector(targetSelector);
+                    if (modal && typeof modal.showModal === 'function') {
+                        e.preventDefault();
+                        modal.showModal();
+                    }
+                }
+            }
+            const dismiss = e.target.closest('[data-bs-dismiss="modal"], [data-dismiss="modal"]');
+            if (dismiss) {
+                const modal = dismiss.closest('dialog.modal, .modal');
+                if (modal && typeof modal.close === 'function') {
+                    e.preventDefault();
+                    modal.close();
+                }
+            }
+        }, true);
+
+        // Auto-initialize Select2 when daisyUI <dialog.modal> opens
+        if (typeof HTMLDialogElement !== 'undefined') {
+            const origShowModal = HTMLDialogElement.prototype.showModal;
+            HTMLDialogElement.prototype.showModal = function() {
+                origShowModal.apply(this, arguments);
+                if (typeof window.initPortalSelect2 === 'function') {
+                    window.initPortalSelect2(this);
+                }
+            };
+        }
     </script>
 </head>
 <body class="bg-body-secondary">
@@ -142,12 +291,15 @@
         </div>
     @endif
 
-    <div class="d-flex">
+    <div class="d-flex position-relative">
         <!-- Sidebar Navigation -->
         @include('layouts.sidebar')
 
+        <!-- Mobile Sidebar Backdrop Overlay -->
+        <div id="sidebarBackdrop" class="sidebar-backdrop d-none" onclick="toggleSidebar()"></div>
+
         <!-- Main Content Area -->
-        <div id="main-content" class="d-flex flex-column">
+        <div id="main-content" class="d-flex flex-column flex-grow-1">
             <!-- Navigation Header -->
             <nav class="navbar navbar-expand navbar-light bg-body border-bottom px-4 py-2 sticky-top">
                 <div class="container-fluid p-0">
@@ -200,14 +352,16 @@
             <!-- Main Page View Content -->
             <div class="container-fluid p-4">
                 @if (session('success'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <i class="fa-solid fa-circle-check me-2"></i>{{ session('success') }}
+                    <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm mb-4 d-flex align-items-center gap-2" role="alert">
+                        <i class="fa-solid fa-circle-check fs-5 text-success"></i>
+                        <div class="flex-grow-1 fs-8 fw-medium">{{ session('success') }}</div>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
                 @if (session('error'))
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <i class="fa-solid fa-circle-exclamation me-2"></i>{{ session('error') }}
+                    <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm mb-4 d-flex align-items-center gap-2" role="alert">
+                        <i class="fa-solid fa-circle-exclamation fs-5 text-danger"></i>
+                        <div class="flex-grow-1 fs-8 fw-medium">{{ session('error') }}</div>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
@@ -287,7 +441,14 @@
     <!-- Base Layout Controls Script -->
     <script>
         function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('show');
+            const sidebar = document.getElementById('sidebar');
+            const backdrop = document.getElementById('sidebarBackdrop');
+            if (sidebar) {
+                sidebar.classList.toggle('show');
+                if (backdrop) {
+                    backdrop.classList.toggle('d-none', !sidebar.classList.contains('show'));
+                }
+            }
         }
 
         function toggleTheme() {
@@ -296,6 +457,7 @@
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
             
             html.setAttribute('data-bs-theme', newTheme);
+            html.setAttribute('data-theme', newTheme === 'dark' ? 'portal-dark' : 'portal-light');
             localStorage.setItem('theme', newTheme);
             updateThemeIcons(newTheme);
         }
@@ -353,6 +515,15 @@
             const currentTheme = document.documentElement.getAttribute('data-bs-theme');
             updateThemeIcons(currentTheme);
             window.initPortalSelect2();
+
+            // Auto-reveal tab pane containing any server-side validation errors
+            const firstError = document.querySelector('.is-invalid, .invalid-feedback:not(:empty)');
+            if (firstError && typeof window.revealElementContainer === 'function') {
+                window.revealElementContainer(firstError);
+                setTimeout(() => {
+                    try { firstError.focus(); } catch(err) {}
+                }, 100);
+            }
         });
 
         // Native Vanilla JS & jQuery Bootstrap 5 Event Listeners
@@ -394,14 +565,22 @@
                     items.forEach(item => {
                         const text = item.textContent.toLowerCase();
                         item.style.display = text.includes(term) ? '' : 'none';
+                    });
+                });
             }
-        });
 
         // Global Form Submit Lock & Visual Spinner Indicator (Native Event Capturing)
         document.addEventListener('submit', function(e) {
             const form = e.target;
             if (!form || form.tagName !== 'FORM') return;
             if (form.getAttribute('data-no-loader') === 'true') return;
+
+            // Pre-validate form and safely reveal any hidden/inactive tabs containing invalid controls
+            if (typeof window.validateFormWithTabs === 'function' && !window.validateFormWithTabs(form)) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                return false;
+            }
 
             if (form.dataset.isSubmitting === 'true') {
                 e.preventDefault();
@@ -436,5 +615,6 @@
     @include('layouts.theme_customizer')
 
     @stack('js')
+    @stack('scripts')
 </body>
 </html>

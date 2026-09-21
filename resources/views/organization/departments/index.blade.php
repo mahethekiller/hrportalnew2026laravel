@@ -11,7 +11,7 @@
         <p class="text-body-secondary small mb-0">Organize company teams, department heads, and functional divisions.</p>
     </div>
     <div class="col-md-5 text-md-end mt-3 mt-md-0">
-        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#createDepartmentModal">
+        <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('createDepartmentModal').showModal()">
             <i class="fa-solid fa-plus me-1"></i>Add Department
         </button>
     </div>
@@ -28,7 +28,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <select name="company_id" class="form-select">
+                <select name="company_id" class="form-select select-search">
                     <option value="">All Companies</option>
                     @foreach($companies as $comp)
                         <option value="{{ $comp->id }}" {{ request('company_id') == $comp->id ? 'selected' : '' }}>{{ $comp->name }}</option>
@@ -54,16 +54,55 @@
             <table class="table table-hover align-middle mb-0">
                 <thead>
                     <tr>
+                        <th class="ps-4" style="width: 110px;">Actions</th>
                         <th>Department Name</th>
                         <th>Company Entity</th>
                         <th>Department Head / Lead</th>
-                        <th>Status</th>
-                        <th class="text-end">Actions</th>
+                        <th class="pe-4">Status</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($departments as $dept)
                         <tr>
+                            <td class="ps-4">
+                                <div class="d-inline-flex align-items-center" style="gap: 6px;">
+                                    <button type="button" class="btn btn-sm btn-outline-primary px-2.5 rounded-2" title="Edit Department" onclick="document.getElementById('editDepartmentModal{{ $dept->id }}').showModal()">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </button>
+                                    <form method="POST" action="{{ route('departments.destroy', $dept->id) }}" class="d-inline" onsubmit="return confirm('Delete this department?');">
+                                        @csrf @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-outline-danger px-2.5 rounded-2" title="Delete Department">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+
+                                <!-- Edit Department Modal (Rule 11) -->
+                                <x-form-modal id="editDepartmentModal{{ $dept->id }}" title="Edit Department: {{ $dept->department_name }}" :action="route('departments.update', $dept->id)" method="PUT" submitText="Save Changes" submitVariant="primary">
+                                    <div class="mb-3">
+                                        <label class="form-label fs-8 fw-semibold">Department Name <span class="text-danger">*</span></label>
+                                        <input type="text" name="department_name" class="form-control form-control-sm @error('department_name') is-invalid @enderror" required value="{{ old('department_name', $dept->department_name) }}">
+                                        @error('department_name')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fs-8 fw-semibold">Company Entity</label>
+                                        <select name="company_id" class="form-select form-select-sm select-search">
+                                            @foreach($companies as $comp)
+                                                <option value="{{ $comp->id }}" {{ old('company_id', $dept->company_id) == $comp->id ? 'selected' : '' }}>{{ $comp->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fs-8 fw-semibold">Status</label>
+                                        <select name="status" class="form-select form-select-sm">
+                                            <option value="1" {{ old('status', $dept->status ?? 1) == 1 ? 'selected' : '' }}>Active</option>
+                                            <option value="0" {{ old('status', $dept->status ?? 1) == 0 ? 'selected' : '' }}>Disabled</option>
+                                        </select>
+                                    </div>
+                                </x-form-modal>
+                            </td>
                             <td>
                                 <div class="fw-bold text-body-emphasis">{{ $dept->department_name }}</div>
                             </td>
@@ -74,25 +113,19 @@
                                 @if($dept->employee)
                                     <span class="fw-medium text-body-emphasis"><i class="fa-solid fa-user-tie text-primary me-1"></i>{{ $dept->employee->first_name }} {{ $dept->employee->last_name }}</span>
                                 @else
-                                    <span class="text-muted">Unassigned</span>
+                                    <span class="text-body-secondary">Unassigned</span>
                                 @endif
                             </td>
-                            <td>
+                            <td class="pe-4">
                                 @if($dept->status ?? true)
                                     <span class="badge badge-light-success"><i class="fa-solid fa-circle-check me-1"></i>Active</span>
                                 @else
                                     <span class="badge badge-light-secondary">Disabled</span>
                                 @endif
                             </td>
-                            <td class="text-end">
-                                <form method="POST" action="{{ route('departments.destroy', $dept->id) }}" class="d-inline" onsubmit="return confirm('Delete this department?');">
-                                    @csrf @method('DELETE')
-                                    <button type="submit" class="btn btn-light-danger btn-sm" title="Delete Department"><i class="fa-solid fa-trash"></i></button>
-                                </form>
-                            </td>
                         </tr>
                     @empty
-                        <tr><td colspan="5" class="text-center py-4 text-muted">No departments created yet.</td></tr>
+                        <tr><td colspan="5" class="text-center py-4 text-body-secondary">No departments created yet.</td></tr>
                     @endforelse
                 </tbody>
             </table>
@@ -105,33 +138,22 @@
     @endif
 </div>
 
-<!-- Modal: Create Department -->
-<div class="modal fade" id="createDepartmentModal" tabindex="-1">
-    <div class="modal-dialog">
-        <form method="POST" action="{{ route('departments.store') }}">
-            @csrf
-            <div class="modal-content">
-                <div class="modal-header"><h5 class="modal-title">Create New Department</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="label-sm mb-1">Department Name *</label>
-                        <input type="text" name="department_name" class="form-control" required placeholder="e.g. Human Resources / Engineering">
-                    </div>
-                    <div class="mb-3">
-                        <label class="label-sm mb-1">Company Entity</label>
-                        <select name="company_id" class="form-select">
-                            @foreach($companies as $comp)
-                                <option value="{{ $comp->id }}">{{ $comp->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Create Department</button>
-                </div>
-            </div>
-        </form>
+<!-- Modal: Create Department (Rule 10 & 11) -->
+<x-form-modal id="createDepartmentModal" title="Create New Department" :action="route('departments.store')" submitText="Create Department" submitVariant="primary">
+    <div class="mb-3">
+        <label class="form-label fs-8 fw-semibold">Department Name <span class="text-danger">*</span></label>
+        <input type="text" name="department_name" class="form-control form-control-sm @error('department_name') is-invalid @enderror" required placeholder="e.g. Human Resources / Engineering" value="{{ old('department_name') }}">
+        @error('department_name')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
     </div>
-</div>
+    <div class="mb-3">
+        <label class="form-label fs-8 fw-semibold">Company Entity</label>
+        <select name="company_id" class="form-select form-select-sm select-search">
+            @foreach($companies as $comp)
+                <option value="{{ $comp->id }}" {{ old('company_id') == $comp->id ? 'selected' : '' }}>{{ $comp->name }}</option>
+            @endforeach
+        </select>
+    </div>
+</x-form-modal>
 @endsection

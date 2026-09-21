@@ -77,7 +77,7 @@
                                 @endphp
                                 <span class="badge {{ $sBadge }} text-capitalize px-2 py-1 fs-9">{{ $statusName }}</span>
                             </td>
-                            <td>{{ $tk->created_at }}</td>
+                            <td><x-human-date :value="$tk->created_at" :time="true" /></td>
                             <td class="text-end pe-4">
                                 <a href="{{ route('admin-tickets.show', $tk->ticket_id) }}" class="btn btn-sm btn-light-primary py-1 px-2 fs-9">
                                     <i class="fa-solid fa-eye me-1"></i> View Ticket

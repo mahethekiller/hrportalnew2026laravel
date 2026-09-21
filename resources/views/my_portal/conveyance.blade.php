@@ -34,7 +34,7 @@
                         <tr>
                             <td class="ps-4 fw-bold text-gray-900">{{ $clm->visit_place }}</td>
                             <td><span class="badge bg-light text-dark border">{{ $clm->travel_type }}</span></td>
-                            <td>{{ $clm->start_date }} to {{ $clm->end_date }}</td>
+                            <td><x-human-date :value="$clm->start_date" /> to <x-human-date :value="$clm->end_date" /></td>
                             <td class="fw-bold text-success">${{ number_format((float) $clm->expected_budget, 2) }}</td>
                             <td><span class="badge bg-soft-warning text-warning">{{ $clm->status }}</span></td>
                         </tr>

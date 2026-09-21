@@ -43,7 +43,7 @@
                             <td class="fw-bold text-body-emphasis">
                                 {{ $leave->employee ? $leave->employee->first_name . ' ' . $leave->employee->last_name : 'Employee #' . $leave->employee_id }}
                             </td>
-                            <td>{{ $leave->from_date }} to {{ $leave->to_date }}</td>
+                            <td><x-human-date :value="$leave->from_date" /> to <x-human-date :value="$leave->to_date" /></td>
                             <td>{{ Str::limit($leave->reason, 40) }}</td>
                             <td class="pe-4">
                                 @if($leave->status == 2)

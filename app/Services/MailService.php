@@ -44,7 +44,7 @@ class MailService
                         'username' => env('MAIL_USERNAME', ''),
                         'password' => env('MAIL_PASSWORD', ''),
                         'from_address' => env('MAIL_FROM_ADDRESS', 'noreply@company.com'),
-                        'from_name' => env('MAIL_FROM_NAME', 'Antigravity HR Portal'),
+                        'from_name' => env('MAIL_FROM_NAME', 'I2U2 Portal'),
                         'is_default' => true,
                         'is_active' => true,
                     ]
@@ -200,7 +200,7 @@ class MailService
         Config::set('mail.mailers.smtp.username', $profileData['username'] ?? '');
         Config::set('mail.mailers.smtp.password', $profileData['password'] ?? '');
         Config::set('mail.from.address', $profileData['from_address'] ?? 'noreply@company.com');
-        Config::set('mail.from.name', $profileData['from_name'] ?? 'Antigravity HR Portal');
+        Config::set('mail.from.name', $profileData['from_name'] ?? (\App\Models\SystemSetting::value('application_name') ?? 'I2U2 Portal'));
     }
 
     /**
@@ -248,7 +248,7 @@ class MailService
             'username' => env('MAIL_USERNAME', ''),
             'password' => env('MAIL_PASSWORD', ''),
             'from_address' => env('MAIL_FROM_ADDRESS', 'noreply@company.com'),
-            'from_name' => env('MAIL_FROM_NAME', 'Antigravity HR Portal'),
+            'from_name' => env('MAIL_FROM_NAME', 'I2U2 Portal'),
         ];
     }
 
@@ -321,8 +321,11 @@ class MailService
         $rawMessage = $template ? $template->message : ($replacements['{message}'] ?? '');
 
         // Standard Replacements
-        $replacements['{site_name}'] = config('app.name', 'Antigravity HR Portal');
-        $replacements['{site_url}'] = url('/');
+        $portalName = \App\Models\SystemSetting::value('application_name') ?? config('app.name', 'I2U2 Portal');
+        $replacements['{site_name}'] = $portalName;
+        $replacements['{portal_name}'] = $portalName;
+        $replacements['{company_name}'] = $replacements['{company_name}'] ?? $portalName;
+        $replacements['{site_url}'] = url('/') . '/';
 
         $parsedSubject = $this->parsePlaceholders($rawSubject, $replacements);
         $parsedMessage = $this->parsePlaceholders($rawMessage, $replacements);
@@ -352,7 +355,8 @@ class MailService
                 actionUrl: $actionUrl,
                 actionText: $actionText,
                 fromEmail: $smtpProfile['from_address'] ?? null,
-                fromName: $smtpProfile['from_name'] ?? null
+                fromName: $smtpProfile['from_name'] ?? $portalName,
+                appName: $portalName
             );
 
             $mailCall = Mail::to($primaryRecipients);
@@ -370,8 +374,8 @@ class MailService
                 'to_emails' => $allTo,
                 'sent_date' => date('Y-m-d H:i:s'),
                 'mail_type' => $moduleKey,
-                'mail_type_id' => $template ? $template->template_id : null,
-                'user_id' => $userId,
+                'mail_type_id' => $template ? (int) $template->template_id : 0,
+                'user_id' => (int) ($userId ?: (auth()->id() ?: 1)),
                 'show_status' => 1,
             ]);
 

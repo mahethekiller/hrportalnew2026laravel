@@ -26,7 +26,7 @@
                         </div>
                         <div>
                             <h6 class="mb-0 fw-bold text-gray-900">{{ $adminTicket->employee ? $adminTicket->employee->first_name . ' ' . $adminTicket->employee->last_name : 'System User' }}</h6>
-                            <span class="text-muted fs-9">Logged on {{ $adminTicket->created_at }}</span>
+                            <span class="text-muted fs-9">Logged on <x-human-date :value="$adminTicket->created_at" :time="true" /></span>
                         </div>
                     </div>
                     <div>

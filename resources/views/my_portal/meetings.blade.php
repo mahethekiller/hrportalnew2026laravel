@@ -34,7 +34,7 @@
                         <tr>
                             <td class="ps-4 fw-bold text-gray-900">{{ $mtg->meeting_title }}</td>
                             <td><span class="badge bg-light-primary text-primary border">{{ $mtg->room_name }}</span></td>
-                            <td>{{ $mtg->meeting_date }}</td>
+                            <td><x-human-date :value="$mtg->meeting_date" /></td>
                             <td>{{ $mtg->meeting_time }}</td>
                             <td>{{ Str::limit($mtg->note, 40) }}</td>
                         </tr>

@@ -36,7 +36,7 @@
                             <td><span class="badge bg-light text-dark border">{{ $dc->document_type }}</span></td>
                             <td>{{ $dc->file_size }}</td>
                             <td><span class="badge bg-soft-info text-info">{{ $dc->status }}</span></td>
-                            <td>{{ $dc->added_date }}</td>
+                            <td><x-human-date :value="$dc->added_date" /></td>
                         </tr>
                     @empty
                         <tr>

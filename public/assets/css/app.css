@@ -633,91 +633,489 @@ h3, .headline-md {
     color: #FFFFFF !important;
 }
 
-/* Metronic High-Contrast Subtle Badges (100% Legibility in Light & Dark Mode) */
+/* ==========================================================================
+   daisyUI 5 Badge Palette & Unified Legacy Color Mapping (WCAG AAA)
+   Ensures daisyUI badge-soft, badge-primary/secondary/accent/neutral/info/
+   success/warning/error/purple, outline, dash, ghost, and legacy 
+   badge-light-* / bg-*-subtle / bg-* seamlessly match with high contrast.
+   ========================================================================== */
 .badge {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
+    gap: 0.35rem !important;
     font-weight: 600 !important;
     border-radius: 6px !important;
-    padding: 0.3rem 0.6rem !important;
+    padding: 0.25rem 0.55rem !important;
     font-size: 0.75rem !important;
-    line-height: 1.2 !important;
+    line-height: 1.25 !important;
+    height: fit-content !important;
+    min-height: 1.4rem !important;
+    white-space: nowrap !important;
+    vertical-align: middle !important;
+    transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out, border-color 0.15s ease-in-out !important;
 }
 
-.badge-light-primary, .badge-primary-light {
-    background-color: #E8F3FF !important;
-    color: #0056C6 !important;
-    border: 1px solid #BCE0FF !important;
+/* Badge Size Modifiers */
+.badge-xs {
+    min-height: 1.15rem !important;
+    font-size: 0.65rem !important;
+    padding: 0.125rem 0.375rem !important;
+    gap: 0.2rem !important;
+}
+.badge-sm, .fs-9 {
+    min-height: 1.25rem !important;
+    font-size: 0.7rem !important;
+    padding: 0.175rem 0.45rem !important;
+    gap: 0.25rem !important;
+}
+.badge-md, .fs-8 {
+    min-height: 1.4rem !important;
+    font-size: 0.75rem !important;
+    padding: 0.25rem 0.55rem !important;
+    gap: 0.35rem !important;
+}
+.badge-lg, .fs-7 {
+    min-height: 1.75rem !important;
+    font-size: 0.85rem !important;
+    padding: 0.35rem 0.75rem !important;
+    gap: 0.4rem !important;
+}
+.badge-xl {
+    min-height: 2rem !important;
+    font-size: 0.95rem !important;
+    padding: 0.45rem 1rem !important;
+    gap: 0.5rem !important;
 }
 
-.badge-light-success, .badge-success-light {
-    background-color: #DFFFEA !important;
-    color: #0A722C !important;
-    border: 1px solid #A3F7BF !important;
+/* --------------------------------------------------------------------------
+   1. SOFT BADGES (Light Mode Default - WCAG AAA Contrast)
+   -------------------------------------------------------------------------- */
+/* Primary (Corporate Navy) */
+.badge-soft.badge-primary,
+.badge-light-primary,
+.badge-primary-light,
+.badge.bg-primary-subtle {
+    background-color: #EFF6FF !important;
+    color: #1E40AF !important;
+    border: 1px solid #BFDBFE !important;
 }
 
-.badge-light-danger, .badge-danger-light {
-    background-color: #FFEEF3 !important;
-    color: #C5002C !important;
-    border: 1px solid #FFC2D1 !important;
-}
-
-.badge-light-warning, .badge-warning-light {
-    background-color: #FFF8DD !important;
-    color: #7A5E00 !important;
-    border: 1px solid #FFE885 !important;
-}
-
-.badge-light-info, .badge-info-light {
-    background-color: #F8F5FF !important;
-    color: #4C0FA8 !important;
-    border: 1px solid #E1D4FF !important;
-}
-
-.badge-light-secondary, .badge-light-dark, .badge-light {
+/* Secondary (Executive Slate) */
+.badge-soft.badge-secondary,
+.badge-light-secondary,
+.badge-secondary-light,
+.badge.bg-secondary-subtle,
+.badge.bg-body-secondary {
     background-color: #F1F5F9 !important;
-    color: #1E293B !important;
+    color: #334155 !important;
     border: 1px solid #CBD5E1 !important;
 }
 
-[data-bs-theme="dark"] .badge-light-primary {
-    background-color: rgba(27, 132, 255, 0.2) !important;
-    color: #60A5FA !important;
-    border: 1px solid rgba(27, 132, 255, 0.4) !important;
+/* Success (Emerald Green - WCAG AAA 7.4:1 contrast with Emerald-800) */
+.badge-soft.badge-success,
+.badge-light-success,
+.badge-success-light,
+.badge.bg-success-subtle {
+    background-color: #ECFDF5 !important;
+    color: #065F46 !important;
+    border: 1px solid #A7F3D0 !important;
 }
 
-[data-bs-theme="dark"] .badge-light-success {
-    background-color: rgba(23, 198, 83, 0.2) !important;
-    color: #4ADE80 !important;
-    border: 1px solid rgba(23, 198, 83, 0.4) !important;
+/* Warning (Amber Marigold - WCAG AAA 7.2:1 contrast with Amber-800) */
+.badge-soft.badge-warning,
+.badge-light-warning,
+.badge-warning-light,
+.badge.bg-warning-subtle {
+    background-color: #FFFBEB !important;
+    color: #92400E !important;
+    border: 1px solid #FDE68A !important;
 }
 
-[data-bs-theme="dark"] .badge-light-danger {
-    background-color: rgba(248, 40, 90, 0.2) !important;
-    color: #F87171 !important;
-    border: 1px solid rgba(248, 40, 90, 0.4) !important;
+/* Error / Danger (Crimson Red - WCAG AAA 6.5:1 contrast with Red-800) */
+.badge-soft.badge-error,
+.badge-soft.badge-danger,
+.badge-light-danger,
+.badge-light-error,
+.badge-danger-light,
+.badge.bg-danger-subtle {
+    background-color: #FEF2F2 !important;
+    color: #991B1B !important;
+    border: 1px solid #FECACA !important;
 }
 
-[data-bs-theme="dark"] .badge-light-warning {
-    background-color: rgba(241, 188, 0, 0.2) !important;
-    color: #FACC15 !important;
-    border: 1px solid rgba(241, 188, 0, 0.4) !important;
+/* Info (Sky Blue - WCAG AAA 7.1:1 contrast with Sky-800) */
+.badge-soft.badge-info,
+.badge-light-info,
+.badge-info-light,
+.badge.bg-info-subtle {
+    background-color: #F0F9FF !important;
+    color: #075985 !important;
+    border: 1px solid #BAE6FD !important;
 }
 
-[data-bs-theme="dark"] .badge-light-info {
-    background-color: rgba(114, 57, 234, 0.2) !important;
-    color: #C084FC !important;
-    border: 1px solid rgba(114, 57, 234, 0.4) !important;
+/* Accent (Teal / Cyan) */
+.badge-soft.badge-accent,
+.badge-light-accent {
+    background-color: #ECFEFF !important;
+    color: #0E7490 !important;
+    border: 1px solid #A5F3FC !important;
 }
 
-[data-bs-theme="dark"] .badge-light-secondary,
-[data-bs-theme="dark"] .badge-light-dark,
-[data-bs-theme="dark"] .badge-light {
-    background-color: #334155 !important;
-    color: #F8FAFC !important;
+/* Neutral (Dark Slate / Charcoal) */
+.badge-soft.badge-neutral,
+.badge-light-dark,
+.badge-light-neutral {
+    background-color: #F8FAFC !important;
+    color: #0F172A !important;
+    border: 1px solid #CBD5E1 !important;
+}
+
+/* Purple / Royal Violet (Executive Leadership & Training) */
+.badge-soft.badge-purple,
+.badge-light-purple,
+.badge-purple-light,
+.badge-purple {
+    background-color: #F5F3FF !important;
+    color: #6D28D9 !important;
+    border: 1px solid #DDD6FE !important;
+}
+
+/* Default soft badge fallback */
+.badge-soft:not([class*="badge-primary"]):not([class*="badge-secondary"]):not([class*="badge-success"]):not([class*="badge-warning"]):not([class*="badge-error"]):not([class*="badge-danger"]):not([class*="badge-info"]):not([class*="badge-accent"]):not([class*="badge-neutral"]):not([class*="badge-purple"]) {
+    background-color: #F1F5F9 !important;
+    color: #334155 !important;
+    border: 1px solid #CBD5E1 !important;
+}
+
+/* --------------------------------------------------------------------------
+   2. SOLID BADGES (Light Mode Default)
+   -------------------------------------------------------------------------- */
+.badge-primary,
+.badge.bg-primary {
+    background-color: #1E40AF !important;
+    color: #FFFFFF !important;
+    border: 1px solid #1E40AF !important;
+}
+
+.badge-secondary,
+.badge.bg-secondary {
+    background-color: #475569 !important;
+    color: #FFFFFF !important;
     border: 1px solid #475569 !important;
 }
+
+.badge-success,
+.badge.bg-success {
+    background-color: #059669 !important;
+    color: #FFFFFF !important;
+    border: 1px solid #059669 !important;
+}
+
+.badge-warning,
+.badge.bg-warning {
+    background-color: #D97706 !important;
+    color: #FFFFFF !important;
+    border: 1px solid #D97706 !important;
+}
+
+.badge-error,
+.badge-danger,
+.badge.bg-danger {
+    background-color: #DC2626 !important;
+    color: #FFFFFF !important;
+    border: 1px solid #DC2626 !important;
+}
+
+.badge-info,
+.badge.bg-info {
+    background-color: #0284C7 !important;
+    color: #FFFFFF !important;
+    border: 1px solid #0284C7 !important;
+}
+
+.badge-accent {
+    background-color: #0891B2 !important;
+    color: #FFFFFF !important;
+    border: 1px solid #0891B2 !important;
+}
+
+.badge-neutral,
+.badge.bg-dark {
+    background-color: #0F172A !important;
+    color: #F8FAFC !important;
+    border: 1px solid #0F172A !important;
+}
+
+.badge.bg-light {
+    background-color: #F1F5F9 !important;
+    color: #334155 !important;
+    border: 1px solid #CBD5E1 !important;
+}
+
+/* --------------------------------------------------------------------------
+   3. OUTLINE & DASH BADGES (Light Mode Default)
+   -------------------------------------------------------------------------- */
+.badge-outline {
+    background-color: transparent !important;
+    border-width: 1px !important;
+}
+.badge-outline.badge-primary { color: #1E40AF !important; border-color: #1E40AF !important; }
+.badge-outline.badge-secondary { color: #475569 !important; border-color: #475569 !important; }
+.badge-outline.badge-success { color: #059669 !important; border-color: #059669 !important; }
+.badge-outline.badge-warning { color: #B45309 !important; border-color: #B45309 !important; }
+.badge-outline.badge-error,
+.badge-outline.badge-danger { color: #DC2626 !important; border-color: #DC2626 !important; }
+.badge-outline.badge-info { color: #0284C7 !important; border-color: #0284C7 !important; }
+.badge-outline.badge-accent { color: #0891B2 !important; border-color: #0891B2 !important; }
+.badge-outline.badge-neutral { color: #0F172A !important; border-color: #0F172A !important; }
+.badge-outline.badge-purple { color: #7C3AED !important; border-color: #7C3AED !important; }
+
+.badge-dash {
+    background-color: transparent !important;
+    border-style: dashed !important;
+    border-width: 1px !important;
+}
+.badge-dash.badge-primary { color: #1E40AF !important; border-color: #1E40AF !important; }
+.badge-dash.badge-secondary { color: #475569 !important; border-color: #475569 !important; }
+.badge-dash.badge-success { color: #059669 !important; border-color: #059669 !important; }
+.badge-dash.badge-warning { color: #B45309 !important; border-color: #B45309 !important; }
+.badge-dash.badge-error,
+.badge-dash.badge-danger { color: #DC2626 !important; border-color: #DC2626 !important; }
+.badge-dash.badge-info { color: #0284C7 !important; border-color: #0284C7 !important; }
+.badge-dash.badge-accent { color: #0891B2 !important; border-color: #0891B2 !important; }
+.badge-dash.badge-neutral { color: #0F172A !important; border-color: #0F172A !important; }
+.badge-dash.badge-purple { color: #7C3AED !important; border-color: #7C3AED !important; }
+
+.badge-ghost {
+    background-color: transparent !important;
+    color: inherit !important;
+    border: 1px solid transparent !important;
+}
+.badge-ghost:hover {
+    background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+/* --------------------------------------------------------------------------
+   4. DARK MODE OVERRIDES (portal-dark & data-bs-theme="dark")
+   -------------------------------------------------------------------------- */
+[data-theme="portal-dark"] .badge-soft.badge-primary,
+[data-theme="portal-dark"] .badge-light-primary,
+[data-theme="portal-dark"] .badge.bg-primary-subtle,
+[data-bs-theme="dark"] .badge-soft.badge-primary,
+[data-bs-theme="dark"] .badge-light-primary,
+[data-bs-theme="dark"] .badge.bg-primary-subtle {
+    background-color: rgba(59, 130, 246, 0.18) !important;
+    color: #93C5FD !important;
+    border: 1px solid rgba(59, 130, 246, 0.35) !important;
+}
+
+[data-theme="portal-dark"] .badge-soft.badge-secondary,
+[data-theme="portal-dark"] .badge-light-secondary,
+[data-theme="portal-dark"] .badge.bg-secondary-subtle,
+[data-theme="portal-dark"] .badge.bg-body-secondary,
+[data-bs-theme="dark"] .badge-soft.badge-secondary,
+[data-bs-theme="dark"] .badge-light-secondary,
+[data-bs-theme="dark"] .badge.bg-secondary-subtle,
+[data-bs-theme="dark"] .badge.bg-body-secondary {
+    background-color: rgba(156, 163, 175, 0.18) !important;
+    color: #E2E8F0 !important;
+    border: 1px solid rgba(156, 163, 175, 0.35) !important;
+}
+
+[data-theme="portal-dark"] .badge-soft.badge-success,
+[data-theme="portal-dark"] .badge-light-success,
+[data-theme="portal-dark"] .badge.bg-success-subtle,
+[data-bs-theme="dark"] .badge-soft.badge-success,
+[data-bs-theme="dark"] .badge-light-success,
+[data-bs-theme="dark"] .badge.bg-success-subtle {
+    background-color: rgba(52, 211, 153, 0.18) !important;
+    color: #6EE7B7 !important;
+    border: 1px solid rgba(52, 211, 153, 0.35) !important;
+}
+
+[data-theme="portal-dark"] .badge-soft.badge-warning,
+[data-theme="portal-dark"] .badge-light-warning,
+[data-theme="portal-dark"] .badge.bg-warning-subtle,
+[data-bs-theme="dark"] .badge-soft.badge-warning,
+[data-bs-theme="dark"] .badge-light-warning,
+[data-bs-theme="dark"] .badge.bg-warning-subtle {
+    background-color: rgba(251, 191, 36, 0.18) !important;
+    color: #FDE047 !important;
+    border: 1px solid rgba(251, 191, 36, 0.35) !important;
+}
+
+[data-theme="portal-dark"] .badge-soft.badge-error,
+[data-theme="portal-dark"] .badge-soft.badge-danger,
+[data-theme="portal-dark"] .badge-light-danger,
+[data-theme="portal-dark"] .badge-light-error,
+[data-theme="portal-dark"] .badge.bg-danger-subtle,
+[data-bs-theme="dark"] .badge-soft.badge-error,
+[data-bs-theme="dark"] .badge-soft.badge-danger,
+[data-bs-theme="dark"] .badge-light-danger,
+[data-bs-theme="dark"] .badge-light-error,
+[data-bs-theme="dark"] .badge.bg-danger-subtle {
+    background-color: rgba(248, 113, 113, 0.18) !important;
+    color: #FCA5A5 !important;
+    border: 1px solid rgba(248, 113, 113, 0.35) !important;
+}
+
+[data-theme="portal-dark"] .badge-soft.badge-info,
+[data-theme="portal-dark"] .badge-light-info,
+[data-theme="portal-dark"] .badge.bg-info-subtle,
+[data-bs-theme="dark"] .badge-soft.badge-info,
+[data-bs-theme="dark"] .badge-light-info,
+[data-bs-theme="dark"] .badge.bg-info-subtle {
+    background-color: rgba(56, 189, 248, 0.18) !important;
+    color: #7DD3FC !important;
+    border: 1px solid rgba(56, 189, 248, 0.35) !important;
+}
+
+[data-theme="portal-dark"] .badge-soft.badge-accent,
+[data-theme="portal-dark"] .badge-light-accent,
+[data-bs-theme="dark"] .badge-soft.badge-accent,
+[data-bs-theme="dark"] .badge-light-accent {
+    background-color: rgba(6, 182, 212, 0.18) !important;
+    color: #67E8F9 !important;
+    border: 1px solid rgba(6, 182, 212, 0.35) !important;
+}
+
+[data-theme="portal-dark"] .badge-soft.badge-neutral,
+[data-theme="portal-dark"] .badge-light-dark,
+[data-theme="portal-dark"] .badge-light-neutral,
+[data-bs-theme="dark"] .badge-soft.badge-neutral,
+[data-bs-theme="dark"] .badge-light-dark,
+[data-bs-theme="dark"] .badge-light-neutral {
+    background-color: rgba(30, 41, 59, 0.7) !important;
+    color: #F8FAFC !important;
+    border: 1px solid rgba(71, 85, 105, 0.5) !important;
+}
+
+[data-theme="portal-dark"] .badge-soft.badge-purple,
+[data-theme="portal-dark"] .badge-light-purple,
+[data-theme="portal-dark"] .badge-purple,
+[data-bs-theme="dark"] .badge-soft.badge-purple,
+[data-bs-theme="dark"] .badge-light-purple,
+[data-bs-theme="dark"] .badge-purple {
+    background-color: rgba(168, 85, 247, 0.18) !important;
+    color: #D8B4FE !important;
+    border: 1px solid rgba(168, 85, 247, 0.35) !important;
+}
+
+[data-theme="portal-dark"] .badge-soft:not([class*="badge-primary"]):not([class*="badge-secondary"]):not([class*="badge-success"]):not([class*="badge-warning"]):not([class*="badge-error"]):not([class*="badge-danger"]):not([class*="badge-info"]):not([class*="badge-accent"]):not([class*="badge-neutral"]):not([class*="badge-purple"]),
+[data-bs-theme="dark"] .badge-soft:not([class*="badge-primary"]):not([class*="badge-secondary"]):not([class*="badge-success"]):not([class*="badge-warning"]):not([class*="badge-error"]):not([class*="badge-danger"]):not([class*="badge-info"]):not([class*="badge-accent"]):not([class*="badge-neutral"]):not([class*="badge-purple"]) {
+    background-color: rgba(156, 163, 175, 0.18) !important;
+    color: #E2E8F0 !important;
+    border: 1px solid rgba(156, 163, 175, 0.35) !important;
+}
+
+/* Dark Mode Solid Badges */
+[data-theme="portal-dark"] .badge-primary,
+[data-theme="portal-dark"] .badge.bg-primary,
+[data-bs-theme="dark"] .badge-primary,
+[data-bs-theme="dark"] .badge.bg-primary {
+    background-color: #2563EB !important;
+    color: #FFFFFF !important;
+    border-color: #2563EB !important;
+}
+
+[data-theme="portal-dark"] .badge-secondary,
+[data-theme="portal-dark"] .badge.bg-secondary,
+[data-bs-theme="dark"] .badge-secondary,
+[data-bs-theme="dark"] .badge.bg-secondary {
+    background-color: #475569 !important;
+    color: #FFFFFF !important;
+    border-color: #475569 !important;
+}
+
+[data-theme="portal-dark"] .badge-success,
+[data-theme="portal-dark"] .badge.bg-success,
+[data-bs-theme="dark"] .badge-success,
+[data-bs-theme="dark"] .badge.bg-success {
+    background-color: #059669 !important;
+    color: #FFFFFF !important;
+    border-color: #059669 !important;
+}
+
+[data-theme="portal-dark"] .badge-warning,
+[data-theme="portal-dark"] .badge.bg-warning,
+[data-bs-theme="dark"] .badge-warning,
+[data-bs-theme="dark"] .badge.bg-warning {
+    background-color: #D97706 !important;
+    color: #FFFFFF !important;
+    border-color: #D97706 !important;
+}
+
+[data-theme="portal-dark"] .badge-error,
+[data-theme="portal-dark"] .badge-danger,
+[data-theme="portal-dark"] .badge.bg-danger,
+[data-bs-theme="dark"] .badge-error,
+[data-bs-theme="dark"] .badge-danger,
+[data-bs-theme="dark"] .badge.bg-danger {
+    background-color: #DC2626 !important;
+    color: #FFFFFF !important;
+    border-color: #DC2626 !important;
+}
+
+[data-theme="portal-dark"] .badge-info,
+[data-theme="portal-dark"] .badge.bg-info,
+[data-bs-theme="dark"] .badge-info,
+[data-bs-theme="dark"] .badge.bg-info {
+    background-color: #0284C7 !important;
+    color: #FFFFFF !important;
+    border-color: #0284C7 !important;
+}
+
+[data-theme="portal-dark"] .badge.bg-dark,
+[data-bs-theme="dark"] .badge.bg-dark {
+    background-color: #1E293B !important;
+    color: #F8FAFC !important;
+    border-color: #334155 !important;
+}
+
+[data-theme="portal-dark"] .badge.bg-light,
+[data-bs-theme="dark"] .badge.bg-light {
+    background-color: #1F2937 !important;
+    color: #E2E8F0 !important;
+    border-color: #374151 !important;
+}
+
+/* Dark Mode Outline Badges */
+[data-theme="portal-dark"] .badge-outline.badge-primary,
+[data-bs-theme="dark"] .badge-outline.badge-primary { color: #93C5FD !important; border-color: #3B82F6 !important; }
+
+[data-theme="portal-dark"] .badge-outline.badge-secondary,
+[data-bs-theme="dark"] .badge-outline.badge-secondary { color: #E2E8F0 !important; border-color: #94A3B8 !important; }
+
+[data-theme="portal-dark"] .badge-outline.badge-success,
+[data-bs-theme="dark"] .badge-outline.badge-success { color: #6EE7B7 !important; border-color: #34D399 !important; }
+
+[data-theme="portal-dark"] .badge-outline.badge-warning,
+[data-bs-theme="dark"] .badge-outline.badge-warning { color: #FDE047 !important; border-color: #FBBF24 !important; }
+
+[data-theme="portal-dark"] .badge-outline.badge-error,
+[data-theme="portal-dark"] .badge-outline.badge-danger,
+[data-bs-theme="dark"] .badge-outline.badge-error,
+[data-bs-theme="dark"] .badge-outline.badge-danger { color: #FCA5A5 !important; border-color: #F87171 !important; }
+
+[data-theme="portal-dark"] .badge-outline.badge-info,
+[data-bs-theme="dark"] .badge-outline.badge-info { color: #7DD3FC !important; border-color: #38BDF8 !important; }
+
+[data-theme="portal-dark"] .badge-outline.badge-accent,
+[data-bs-theme="dark"] .badge-outline.badge-accent { color: #67E8F9 !important; border-color: #06B6D4 !important; }
+
+[data-theme="portal-dark"] .badge-outline.badge-neutral,
+[data-bs-theme="dark"] .badge-outline.badge-neutral { color: #F8FAFC !important; border-color: #475569 !important; }
+
+[data-theme="portal-dark"] .badge-outline.badge-purple,
+[data-bs-theme="dark"] .badge-outline.badge-purple { color: #D8B4FE !important; border-color: #A855F7 !important; }
+
+/* Dark Mode Ghost Badges */
+[data-theme="portal-dark"] .badge-ghost:hover,
+[data-bs-theme="dark"] .badge-ghost:hover {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
 
 /* Drag & Drop File Upload Box */
 .dropzone-box {
@@ -1340,76 +1738,1123 @@ h3, .headline-md {
     color: #94a3b8 !important;
 }
 
-/* Custom Status Badge Palette (Light & Dark Mode Compliant - High Contrast) */
-.badge-light-primary {
+/* Custom Status Badge Palette (daisyUI 5 & Legacy Bridge - High Contrast) */
+.badge-soft.badge-primary,
+.badge-light-primary,
+.badge-primary-light,
+.badge.bg-primary-subtle {
     background-color: #dbeafe !important;
     color: #1d4ed8 !important;
     border: 1px solid #bfdbfe !important;
 }
-.badge-light-success {
+.badge-soft.badge-success,
+.badge-light-success,
+.badge.bg-success-subtle {
     background-color: #dcfce7 !important;
     color: #15803d !important;
     border: 1px solid #bbf7d0 !important;
 }
-.badge-light-warning {
+.badge-soft.badge-warning,
+.badge-light-warning,
+.badge.bg-warning-subtle {
     background-color: #fef3c7 !important;
     color: #b45309 !important;
     border: 1px solid #fde68a !important;
 }
-.badge-light-danger {
+.badge-soft.badge-error,
+.badge-soft.badge-danger,
+.badge-light-danger,
+.badge.bg-danger-subtle {
     background-color: #fee2e2 !important;
     color: #b91c1c !important;
     border: 1px solid #fca5a5 !important;
 }
-.badge-light-info {
+.badge-soft.badge-info,
+.badge-light-info,
+.badge.bg-info-subtle {
     background-color: #cff4fc !important;
     color: #0e7490 !important;
     border: 1px solid #99f6e4 !important;
 }
-.badge-light-purple {
+.badge-light-purple,
+.badge-purple {
     background-color: #f3e8ff !important;
     color: #6b21a8 !important;
     border: 1px solid #e9d5ff !important;
 }
-.badge-light-secondary {
+.badge-soft.badge-secondary,
+.badge-light-secondary,
+.badge.bg-secondary-subtle,
+.badge.bg-body-secondary {
     background-color: #f1f5f9 !important;
     color: #334155 !important;
     border: 1px solid #cbd5e1 !important;
 }
 
-[data-bs-theme="dark"] .badge-light-primary {
+[data-bs-theme="dark"] .badge-soft.badge-primary,
+[data-bs-theme="dark"] .badge-light-primary,
+[data-bs-theme="dark"] .badge.bg-primary-subtle,
+[data-theme="portal-dark"] .badge-soft.badge-primary,
+[data-theme="portal-dark"] .badge-light-primary,
+[data-theme="portal-dark"] .badge.bg-primary-subtle {
     background-color: rgba(59, 130, 246, 0.25) !important;
     color: #93c5fd !important;
     border-color: rgba(59, 130, 246, 0.4) !important;
 }
-[data-bs-theme="dark"] .badge-light-success {
+[data-bs-theme="dark"] .badge-soft.badge-success,
+[data-bs-theme="dark"] .badge-light-success,
+[data-bs-theme="dark"] .badge.bg-success-subtle,
+[data-theme="portal-dark"] .badge-soft.badge-success,
+[data-theme="portal-dark"] .badge-light-success,
+[data-theme="portal-dark"] .badge.bg-success-subtle {
     background-color: rgba(16, 185, 129, 0.25) !important;
     color: #6ee7b7 !important;
     border-color: rgba(16, 185, 129, 0.4) !important;
 }
-[data-bs-theme="dark"] .badge-light-warning {
+[data-bs-theme="dark"] .badge-soft.badge-warning,
+[data-bs-theme="dark"] .badge-light-warning,
+[data-bs-theme="dark"] .badge.bg-warning-subtle,
+[data-theme="portal-dark"] .badge-soft.badge-warning,
+[data-theme="portal-dark"] .badge-light-warning,
+[data-theme="portal-dark"] .badge.bg-warning-subtle {
     background-color: rgba(245, 158, 11, 0.25) !important;
     color: #fde047 !important;
     border-color: rgba(245, 158, 11, 0.4) !important;
 }
-[data-bs-theme="dark"] .badge-light-danger {
+[data-bs-theme="dark"] .badge-soft.badge-error,
+[data-bs-theme="dark"] .badge-soft.badge-danger,
+[data-bs-theme="dark"] .badge-light-danger,
+[data-bs-theme="dark"] .badge.bg-danger-subtle,
+[data-theme="portal-dark"] .badge-soft.badge-error,
+[data-theme="portal-dark"] .badge-soft.badge-danger,
+[data-theme="portal-dark"] .badge-light-danger,
+[data-theme="portal-dark"] .badge.bg-danger-subtle {
     background-color: rgba(239, 68, 68, 0.25) !important;
     color: #fca5a5 !important;
     border-color: rgba(239, 68, 68, 0.4) !important;
 }
-[data-bs-theme="dark"] .badge-light-info {
+[data-bs-theme="dark"] .badge-soft.badge-info,
+[data-bs-theme="dark"] .badge-light-info,
+[data-bs-theme="dark"] .badge.bg-info-subtle,
+[data-theme="portal-dark"] .badge-soft.badge-info,
+[data-theme="portal-dark"] .badge-light-info,
+[data-theme="portal-dark"] .badge.bg-info-subtle {
     background-color: rgba(6, 182, 212, 0.25) !important;
     color: #67e8f9 !important;
     border-color: rgba(6, 182, 212, 0.4) !important;
 }
-[data-bs-theme="dark"] .badge-light-purple {
+[data-bs-theme="dark"] .badge-light-purple,
+[data-bs-theme="dark"] .badge-purple,
+[data-theme="portal-dark"] .badge-light-purple,
+[data-theme="portal-dark"] .badge-purple {
     background-color: rgba(168, 85, 247, 0.25) !important;
     color: #d8b4fe !important;
     border-color: rgba(168, 85, 247, 0.4) !important;
 }
-[data-bs-theme="dark"] .badge-light-secondary {
+[data-bs-theme="dark"] .badge-soft.badge-secondary,
+[data-bs-theme="dark"] .badge-light-secondary,
+[data-bs-theme="dark"] .badge.bg-secondary-subtle,
+[data-theme="portal-dark"] .badge-soft.badge-secondary,
+[data-theme="portal-dark"] .badge-light-secondary,
+[data-theme="portal-dark"] .badge.bg-secondary-subtle {
     background-color: rgba(148, 163, 184, 0.25) !important;
     color: #e2e8f0 !important;
     border-color: rgba(148, 163, 184, 0.4) !important;
 }
 
+/* ==========================================================================
+   Responsive Shell Layout & Mobile Navigation Drawer (Operate Mode)
+   ========================================================================== */
+@media (max-width: 991.98px) {
+    #sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.25);
+        z-index: 1050;
+    }
+    
+    #sidebar.show {
+        transform: translateX(0);
+    }
+    
+    #main-content {
+        margin-left: 0 !important;
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    .sidebar-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(15, 23, 42, 0.55);
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+        z-index: 1040;
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    [data-bs-theme="dark"] .sidebar-backdrop {
+        background-color: rgba(0, 0, 0, 0.75);
+    }
+
+    /* Mobile Header & Content Paddings */
+    .navbar {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    .container-fluid.p-4 {
+        padding: 1rem !important;
+    }
+
+    /* Mobile Announcement & Metric Wrapping */
+    .announcement-banner {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 0.75rem !important;
+    }
+}
+
+/* Fluid responsive table wrapper to prevent horizontal blowouts */
+.table-responsive {
+    border-radius: 8px;
+    border: 1px solid var(--card-border, #e2e8f0);
+    margin-bottom: 1rem;
+    scrollbar-width: thin;
+}
+
+[data-bs-theme="dark"] .table-responsive {
+    border-color: #334155;
+}
+
+/* ==========================================================================
+   Comprehensive Modal Bridge (Bootstrap 5 + daisyUI 5 Full Compatibility)
+   ========================================================================== */
+
+/* 1. Backdrop Layer (Bootstrap vs daisyUI scoped) */
+body > .modal-backdrop,
+div.modal-backdrop {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 1050 !important;
+}
+
+body > .modal-backdrop.show,
+div.modal-backdrop.show {
+    background-color: rgba(15, 23, 42, 0.65) !important;
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+    opacity: 1 !important;
+}
+
+/* daisyUI internal modal-backdrop inside dialog (clickable dismiss area) */
+dialog.modal .modal-backdrop,
+form.modal-backdrop {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 1 !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+dialog.modal .modal-backdrop button,
+form.modal-backdrop button {
+    width: 100% !important;
+    height: 100% !important;
+    background: transparent !important;
+    border: none !important;
+    cursor: pointer !important;
+    color: transparent !important;
+    outline: none !important;
+    display: block !important;
+}
+
+/* Ensure .modal-box is elevated above daisyUI's internal backdrop */
+.modal-box {
+    position: relative !important;
+    z-index: 10 !important;
+    background-color: var(--surface, #FFFFFF) !important;
+    color: var(--text-main, #0F172A) !important;
+    border: 1px solid var(--line, #E2E8F0) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+    max-height: calc(100vh - 4rem) !important;
+    overflow-y: auto !important;
+}
+
+/* 2. Bootstrap Modal Active State (.show) */
+.modal.show,
+div.modal.show,
+.modal.fade.show {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 1055 !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    background-color: transparent !important;
+}
+
+/* Ensure modal-dialog and modal-content inside .modal.show are fully visible */
+.modal.show .modal-dialog,
+div.modal.show .modal-dialog,
+.modal.fade.show .modal-dialog {
+    position: relative !important;
+    z-index: 1056 !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    margin: 1.75rem auto !important;
+    transform: none !important;
+}
+
+.modal.show .modal-content,
+div.modal.show .modal-content,
+.modal.fade.show .modal-content {
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    position: relative !important;
+    z-index: 1057 !important;
+}
+
+/* 3. daisyUI Native <dialog.modal> Active State */
+dialog.modal {
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: 100vw !important;
+    max-height: 100vh !important;
+    inset: 0 !important;
+    position: fixed !important;
+    z-index: 1060 !important;
+}
+
+dialog.modal::backdrop {
+    background-color: rgba(15, 23, 42, 0.65) !important;
+}
+
+dialog.modal:not([open]):not(.modal-open):not(.show) {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+dialog.modal[open],
+dialog.modal.modal-open,
+dialog.modal.show {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    opacity: 1 !important;
+    background-color: rgba(15, 23, 42, 0.65) !important;
+    z-index: 1060 !important;
+}
+
+/* Ensure .modal-box inside open dialog is visible */
+dialog.modal[open] > .modal-box,
+dialog.modal.modal-open > .modal-box,
+dialog.modal.show > .modal-box,
+.modal.show > .modal-box {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    translate: 0 !important;
+    scale: 1 !important;
+}
+
+/* 4. Closed Modal State */
+.modal:not(.show):not([open]):not(.modal-open) {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+
+
+/* Legacy Bootstrap Modal Bridge (Seamless daisyUI Alignment) */
+.modal-content {
+    background-color: var(--surface, #FFFFFF) !important;
+    color: var(--text-main, #0F172A) !important;
+    border: 1px solid var(--line, #E2E8F0) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+    overflow: hidden !important;
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--line, #E2E8F0) !important;
+    background-color: var(--canvas, #F8FAFC) !important;
+    padding: 1rem 1.25rem !important;
+}
+
+.modal-title {
+    color: var(--text-main, #0F172A) !important;
+    font-weight: 600 !important;
+    font-size: 1.05rem !important;
+}
+
+.modal-body {
+    padding: 1.25rem !important;
+    color: var(--text-main, #0F172A) !important;
+    max-height: calc(80vh - 8rem) !important;
+    overflow-y: auto !important;
+}
+
+.modal-footer {
+    border-top: 1px solid var(--line, #E2E8F0) !important;
+    background-color: var(--canvas, #F8FAFC) !important;
+    padding: 0.85rem 1.25rem !important;
+}
+
+/* Dark Mode Modals */
+[data-theme="portal-dark"] .modal-box,
+[data-bs-theme="dark"] .modal-box,
+[data-theme="portal-dark"] .modal-content,
+[data-bs-theme="dark"] .modal-content {
+    background-color: #111827 !important;
+    color: #F9FAFB !important;
+    border-color: #1F2937 !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6) !important;
+}
+
+[data-theme="portal-dark"] .modal-header,
+[data-bs-theme="dark"] .modal-header {
+    background-color: #0B0F19 !important;
+    border-color: #1F2937 !important;
+    color: #F9FAFB !important;
+}
+
+[data-theme="portal-dark"] .modal-title,
+[data-bs-theme="dark"] .modal-title {
+    color: #F9FAFB !important;
+}
+
+[data-theme="portal-dark"] .modal-body,
+[data-bs-theme="dark"] .modal-body {
+    color: #F9FAFB !important;
+}
+
+[data-theme="portal-dark"] .modal-footer,
+[data-bs-theme="dark"] .modal-footer {
+    background-color: #0B0F19 !important;
+    border-color: #1F2937 !important;
+}
+
+[data-theme="portal-dark"] .btn-close,
+[data-bs-theme="dark"] .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%) !important;
+}
+
+/* ==========================================================================
+   Forms, Inputs, Checkboxes & Controls (High Contrast & Theme Compliance)
+   ========================================================================== */
+.form-control,
+.form-select,
+.input,
+.textarea,
+.select {
+    background-color: var(--input-bg, #FFFFFF) !important;
+    border: 1px solid var(--input-border, #CBD5E1) !important;
+    color: var(--text-main, #0F172A) !important;
+    border-radius: 8px !important;
+    padding: 0.45rem 0.85rem !important;
+    font-size: 0.85rem !important;
+    line-height: 1.45 !important;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out !important;
+}
+
+.form-control:focus,
+.form-select:focus,
+.input:focus,
+.textarea:focus,
+.select:focus {
+    border-color: var(--bs-primary, #1E40AF) !important;
+    box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.15) !important;
+    outline: none !important;
+}
+
+.form-control::placeholder,
+.input::placeholder,
+.textarea::placeholder {
+    color: #94A3B8 !important;
+    opacity: 0.8 !important;
+}
+
+/* Form Select Option Elements (Crucial for Windows Dark Mode) */
+select option,
+.form-select option {
+    background-color: #FFFFFF !important;
+    color: #0F172A !important;
+}
+
+[data-theme="portal-dark"] select option,
+[data-theme="portal-dark"] .form-select option,
+[data-bs-theme="dark"] select option,
+[data-bs-theme="dark"] .form-select option {
+    background-color: #111827 !important;
+    color: #F9FAFB !important;
+}
+
+/* Form Labels */
+.form-label,
+.label-text {
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    color: var(--text-muted, #475569) !important;
+    margin-bottom: 0.35rem !important;
+    display: inline-block !important;
+    letter-spacing: 0.02em !important;
+}
+
+[data-theme="portal-dark"] .form-label,
+[data-theme="portal-dark"] .label-text,
+[data-bs-theme="dark"] .form-label,
+[data-bs-theme="dark"] .label-text {
+    color: #CBD5E1 !important;
+}
+
+/* Input Groups */
+.input-group-text {
+    background-color: #F8FAFC !important;
+    border: 1px solid #CBD5E1 !important;
+    color: #475569 !important;
+    border-radius: 8px !important;
+    font-size: 0.85rem !important;
+}
+
+[data-theme="portal-dark"] .input-group-text,
+[data-bs-theme="dark"] .input-group-text {
+    background-color: #1F2937 !important;
+    border-color: #334155 !important;
+    color: #94A3B8 !important;
+}
+
+/* Checkboxes & Radios */
+.form-check-input,
+.checkbox,
+.radio {
+    background-color: #FFFFFF !important;
+    border: 1px solid #CBD5E1 !important;
+    transition: all 0.15s ease-in-out !important;
+    cursor: pointer !important;
+}
+
+.form-check-input:checked,
+.checkbox:checked,
+.radio:checked {
+    background-color: var(--bs-primary, #1E40AF) !important;
+    border-color: var(--bs-primary, #1E40AF) !important;
+}
+
+.form-check-label {
+    font-size: 0.85rem !important;
+    color: var(--text-main, #0F172A) !important;
+    cursor: pointer !important;
+}
+
+[data-theme="portal-dark"] .form-check-input,
+[data-theme="portal-dark"] .checkbox,
+[data-theme="portal-dark"] .radio,
+[data-bs-theme="dark"] .form-check-input,
+[data-bs-theme="dark"] .checkbox,
+[data-bs-theme="dark"] .radio {
+    background-color: #111827 !important;
+    border-color: #334155 !important;
+}
+
+[data-theme="portal-dark"] .form-check-input:checked,
+[data-theme="portal-dark"] .checkbox:checked,
+[data-theme="portal-dark"] .radio:checked,
+[data-bs-theme="dark"] .form-check-input:checked,
+[data-bs-theme="dark"] .checkbox:checked,
+[data-bs-theme="dark"] .radio:checked {
+    background-color: #3B82F6 !important;
+    border-color: #3B82F6 !important;
+}
+
+[data-theme="portal-dark"] .form-check-label,
+[data-bs-theme="dark"] .form-check-label {
+    color: #F9FAFB !important;
+}
+
+/* Dark Mode Form Inputs */
+[data-theme="portal-dark"] .form-control,
+[data-theme="portal-dark"] .form-select,
+[data-theme="portal-dark"] .input,
+[data-theme="portal-dark"] .textarea,
+[data-theme="portal-dark"] .select,
+[data-bs-theme="dark"] .form-control,
+[data-bs-theme="dark"] .form-select,
+[data-bs-theme="dark"] .input,
+[data-bs-theme="dark"] .textarea,
+[data-bs-theme="dark"] .select {
+    background-color: #111827 !important;
+    border-color: #1F2937 !important;
+    color: #F9FAFB !important;
+}
+
+[data-theme="portal-dark"] .form-control:focus,
+[data-theme="portal-dark"] .form-select:focus,
+[data-theme="portal-dark"] .input:focus,
+[data-theme="portal-dark"] .textarea:focus,
+[data-theme="portal-dark"] .select:focus,
+[data-bs-theme="dark"] .form-control:focus,
+[data-bs-theme="dark"] .form-select:focus,
+[data-bs-theme="dark"] .input:focus,
+[data-bs-theme="dark"] .textarea:focus,
+[data-bs-theme="dark"] .select:focus {
+    border-color: #3B82F6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25) !important;
+}
+
+[data-theme="portal-dark"] .form-control::placeholder,
+[data-theme="portal-dark"] .input::placeholder,
+[data-theme="portal-dark"] .textarea::placeholder,
+[data-bs-theme="dark"] .form-control::placeholder,
+[data-bs-theme="dark"] .input::placeholder,
+[data-bs-theme="dark"] .textarea::placeholder {
+    color: #64748B !important;
+}
+
+/* Form Validation States */
+.is-invalid,
+.input-error {
+    border-color: #DC2626 !important;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15) !important;
+}
+
+.invalid-feedback {
+    color: #DC2626 !important;
+    font-size: 0.75rem !important;
+    font-weight: 500 !important;
+    margin-top: 0.25rem !important;
+}
+
+[data-theme="portal-dark"] .is-invalid,
+[data-theme="portal-dark"] .input-error,
+[data-bs-theme="dark"] .is-invalid,
+[data-bs-theme="dark"] .input-error {
+    border-color: #F87171 !important;
+    box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.25) !important;
+}
+
+[data-theme="portal-dark"] .invalid-feedback,
+[data-bs-theme="dark"] .invalid-feedback {
+    color: #FCA5A5 !important;
+}
+
+/* ==========================================================================
+   Select2 Searchable Dropdowns (Rule 9 & Dark Mode Contrast Compliance)
+   ========================================================================== */
+.select2-container--default .select2-selection--single {
+    background-color: var(--input-bg, #FFFFFF) !important;
+    border: 1px solid var(--input-border, #CBD5E1) !important;
+    border-radius: 8px !important;
+    height: 38px !important;
+    padding: 4px 8px !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: var(--text-main, #0F172A) !important;
+    font-size: 0.85rem !important;
+    line-height: 28px !important;
+    padding-left: 2px !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 36px !important;
+    right: 6px !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow b {
+    border-color: #64748B transparent transparent transparent !important;
+}
+
+.select2-container--default .select2-selection--multiple {
+    background-color: var(--input-bg, #FFFFFF) !important;
+    border: 1px solid var(--input-border, #CBD5E1) !important;
+    border-radius: 8px !important;
+    min-height: 38px !important;
+    padding: 3px 6px !important;
+}
+
+/* Multi-select Pills (.select2-selection__choice) - Explicit AGENTS.md Rule */
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background-color: #EFF6FF !important;
+    color: #1E40AF !important;
+    border: 1px solid #BFDBFE !important;
+    border-radius: 6px !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    padding: 2px 8px !important;
+    margin: 2px 4px !important;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    color: #1E40AF !important;
+    margin-right: 4px !important;
+    font-weight: 700 !important;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+    color: #1E3A8A !important;
+}
+
+/* Select2 Dropdown Overlay */
+.select2-dropdown {
+    background-color: #FFFFFF !important;
+    border: 1px solid #CBD5E1 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15) !important;
+    overflow: hidden !important;
+    z-index: 1060 !important;
+}
+
+.select2-search--dropdown .select2-search__field {
+    background-color: #F8FAFC !important;
+    border: 1px solid #CBD5E1 !important;
+    border-radius: 6px !important;
+    color: #0F172A !important;
+    padding: 6px 10px !important;
+    font-size: 0.85rem !important;
+    outline: none !important;
+}
+
+.select2-results__option {
+    padding: 7px 12px !important;
+    font-size: 0.85rem !important;
+    color: #0F172A !important;
+    transition: background-color 0.1s ease-in-out !important;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #EFF6FF !important;
+    color: #1E40AF !important;
+}
+
+.select2-container--default .select2-results__option[aria-selected="true"] {
+    background-color: #F1F5F9 !important;
+    color: #334155 !important;
+    font-weight: 600 !important;
+}
+
+/* Dark Mode Select2 Overrides */
+[data-theme="portal-dark"] .select2-container--default .select2-selection--single,
+[data-bs-theme="dark"] .select2-container--default .select2-selection--single,
+[data-theme="portal-dark"] .select2-container--default .select2-selection--multiple,
+[data-bs-theme="dark"] .select2-container--default .select2-selection--multiple {
+    background-color: #111827 !important;
+    border-color: #1F2937 !important;
+    color: #F9FAFB !important;
+}
+
+[data-theme="portal-dark"] .select2-container--default .select2-selection--single .select2-selection__rendered,
+[data-bs-theme="dark"] .select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #F9FAFB !important;
+}
+
+[data-theme="portal-dark"] .select2-container--default .select2-selection--single .select2-selection__arrow b,
+[data-bs-theme="dark"] .select2-container--default .select2-selection--single .select2-selection__arrow b {
+    border-color: #94A3B8 transparent transparent transparent !important;
+}
+
+/* Inverted Multi-select Pills in Dark Mode (Rule in AGENTS.md) */
+[data-theme="portal-dark"] .select2-container--default .select2-selection--multiple .select2-selection__choice,
+[data-bs-theme="dark"] .select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background-color: rgba(59, 130, 246, 0.2) !important;
+    color: #93C5FD !important;
+    border: 1px solid rgba(59, 130, 246, 0.4) !important;
+}
+
+[data-theme="portal-dark"] .select2-container--default .select2-selection--multiple .select2-selection__choice__remove,
+[data-bs-theme="dark"] .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    color: #93C5FD !important;
+}
+
+[data-theme="portal-dark"] .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover,
+[data-bs-theme="dark"] .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+    color: #FFFFFF !important;
+}
+
+[data-theme="portal-dark"] .select2-dropdown,
+[data-bs-theme="dark"] .select2-dropdown {
+    background-color: #1F2937 !important;
+    border-color: #334155 !important;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6) !important;
+}
+
+[data-theme="portal-dark"] .select2-search--dropdown .select2-search__field,
+[data-bs-theme="dark"] .select2-search--dropdown .select2-search__field {
+    background-color: #111827 !important;
+    border-color: #334155 !important;
+    color: #F9FAFB !important;
+}
+
+[data-theme="portal-dark"] .select2-results__option,
+[data-bs-theme="dark"] .select2-results__option {
+    color: #F9FAFB !important;
+}
+
+[data-theme="portal-dark"] .select2-container--default .select2-results__option--highlighted[aria-selected],
+[data-bs-theme="dark"] .select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: rgba(59, 130, 246, 0.25) !important;
+    color: #FFFFFF !important;
+}
+
+[data-theme="portal-dark"] .select2-container--default .select2-results__option[aria-selected="true"],
+[data-bs-theme="dark"] .select2-container--default .select2-results__option[aria-selected="true"] {
+    background-color: #374151 !important;
+    color: #F9FAFB !important;
+}
+
+/* ==========================================================================
+   WYSIWYG Editor Canvas (AGENTS.md Dark/Light Inversion Rule)
+   ========================================================================== */
+.wysiwyg-canvas,
+.note-editor .note-editable {
+    background-color: #FFFFFF !important;
+    color: #0F172A !important;
+    border: 1px solid #CBD5E1 !important;
+    border-radius: 8px !important;
+    min-height: 160px;
+    padding: 0.85rem !important;
+}
+
+.note-editor.note-frame {
+    border: 1px solid #CBD5E1 !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+}
+
+.note-toolbar {
+    background-color: #F8FAFC !important;
+    border-bottom: 1px solid #CBD5E1 !important;
+}
+
+[data-theme="portal-dark"] .wysiwyg-canvas,
+[data-theme="portal-dark"] .note-editor .note-editable,
+[data-bs-theme="dark"] .wysiwyg-canvas,
+[data-bs-theme="dark"] .note-editor .note-editable {
+    background-color: #111827 !important;
+    color: #F9FAFB !important;
+    border-color: #1F2937 !important;
+}
+
+[data-theme="portal-dark"] .note-editor.note-frame,
+[data-bs-theme="dark"] .note-editor.note-frame {
+    border-color: #1F2937 !important;
+}
+
+[data-theme="portal-dark"] .note-toolbar,
+[data-bs-theme="dark"] .note-toolbar {
+    background-color: #0B0F19 !important;
+    border-bottom-color: #1F2937 !important;
+}
+
+/* ==========================================================================
+   Comprehensive Modal Bridge (Bootstrap 5 + daisyUI 5 Full Compatibility)
+   ========================================================================== */
+
+/* 1. Backdrop Layer (Scoped Bootstrap & daisyUI) */
+body > .modal-backdrop,
+div.modal-backdrop {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 1050 !important;
+    background-color: rgba(15, 23, 42, 0.65) !important;
+}
+
+body > .modal-backdrop.show,
+div.modal-backdrop.show {
+    opacity: 1 !important;
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+}
+
+/* daisyUI internal modal backdrop form (transparent click-to-close) */
+dialog.modal .modal-backdrop,
+form.modal-backdrop {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 1 !important;
+    background: transparent !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+dialog.modal .modal-backdrop button,
+form.modal-backdrop button {
+    width: 100% !important;
+    height: 100% !important;
+    cursor: pointer !important;
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+}
+
+/* 2. Bootstrap Modal Active State (.show) */
+.modal.show,
+div.modal.show,
+.modal.fade.show {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 1055 !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    background-color: transparent !important;
+}
+
+/* Ensure modal-dialog and modal-content inside .modal.show are fully visible */
+.modal.show .modal-dialog,
+div.modal.show .modal-dialog,
+.modal.fade.show .modal-dialog {
+    position: relative !important;
+    z-index: 1056 !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    margin: 1.75rem auto !important;
+    transform: none !important;
+}
+
+.modal.show .modal-content,
+div.modal.show .modal-content,
+.modal.fade.show .modal-content {
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    position: relative !important;
+    z-index: 1057 !important;
+}
+
+/* 3. daisyUI Native <dialog.modal> Active State */
+dialog.modal {
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: 100vw !important;
+    max-height: 100vh !important;
+    inset: 0 !important;
+    position: fixed !important;
+    z-index: 1060 !important;
+}
+
+dialog.modal::backdrop {
+    background-color: rgba(15, 23, 42, 0.65) !important;
+}
+
+dialog.modal:not([open]):not(.modal-open):not(.show) {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+dialog.modal[open],
+dialog.modal.modal-open,
+dialog.modal.show {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    opacity: 1 !important;
+    background-color: rgba(15, 23, 42, 0.65) !important;
+    z-index: 1060 !important;
+}
+
+/* Ensure .modal-box inside open dialog is visible */
+dialog.modal[open] > .modal-box,
+dialog.modal.modal-open > .modal-box,
+dialog.modal.show > .modal-box,
+.modal.show > .modal-box {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    translate: 0 !important;
+    scale: 1 !important;
+}
+
+.modal-box,
+dialog.modal .modal-box {
+    position: relative !important;
+    z-index: 10 !important;
+    background-color: var(--color-base-100, #FFFFFF);
+    color: var(--color-base-content, #0F172A);
+    border: 1px solid var(--color-base-300, #E2E8F0);
+    border-radius: 0.75rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
+}
+
+/* 4. Closed Modal State */
+div.modal:not(.show):not(.modal-open) {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+/* Legacy Bootstrap Modal Bridge (Seamless daisyUI Alignment) */
+.modal-content {
+    background-color: var(--color-base-100, #FFFFFF) !important;
+    color: var(--color-base-content, #0F172A) !important;
+    border: 1px solid var(--color-base-300, #E2E8F0) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+    overflow: hidden;
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--color-base-300, #E2E8F0) !important;
+    background-color: var(--color-base-200, #F8FAFC) !important;
+    padding: 1rem 1.25rem !important;
+}
+
+.modal-title {
+    color: var(--color-base-content, #0F172A) !important;
+    font-weight: 600 !important;
+    font-size: 1.05rem !important;
+}
+
+.modal-body {
+    padding: 1.25rem !important;
+    color: var(--color-base-content, #0F172A) !important;
+    max-height: calc(80vh - 8rem);
+    overflow-y: auto;
+}
+
+.modal-footer {
+    border-top: 1px solid var(--color-base-300, #E2E8F0) !important;
+    background-color: var(--color-base-200, #F8FAFC) !important;
+    padding: 0.85rem 1.25rem !important;
+}
+
+/* Dark Mode Modals */
+[data-theme="portal-dark"] .modal-box,
+[data-bs-theme="dark"] .modal-box,
+[data-theme="portal-dark"] .modal-content,
+[data-bs-theme="dark"] .modal-content {
+    background-color: #111827 !important;
+    color: #F9FAFB !important;
+    border-color: #1F2937 !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6) !important;
+}
+
+[data-theme="portal-dark"] .modal-header,
+[data-bs-theme="dark"] .modal-header {
+    background-color: #0B0F19 !important;
+    border-color: #1F2937 !important;
+    color: #F9FAFB !important;
+}
+
+[data-theme="portal-dark"] .modal-title,
+[data-bs-theme="dark"] .modal-title {
+    color: #F9FAFB !important;
+}
+
+[data-theme="portal-dark"] .modal-body,
+[data-bs-theme="dark"] .modal-body {
+    color: #F9FAFB !important;
+}
+
+[data-theme="portal-dark"] .modal-footer,
+[data-bs-theme="dark"] .modal-footer {
+    background-color: #0B0F19 !important;
+    border-color: #1F2937 !important;
+}
+
+[data-theme="portal-dark"] .btn-close,
+[data-bs-theme="dark"] .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%) !important;
+}
+
+/* ==========================================================================
+   Comprehensive Tab System Bridge (Fix daisyUI .tab-content hiding Bootstrap tabs)
+   ========================================================================== */
+.tab-content,
+div.tab-content,
+#employeeFormTabContent,
+#profileTabsContent,
+#employeeEditTabContent,
+#attendanceTabContent,
+#profileUpdateTabsContent,
+#onboardingTabsContent {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    order: unset !important;
+    width: 100% !important;
+    height: auto !important;
+    border: none !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+}
+
+/* Bootstrap tab-pane active visibility rules */
+.tab-content > .tab-pane,
+div.tab-content > .tab-pane {
+    display: none !important;
+    visibility: hidden;
+}
+
+.tab-content > .tab-pane.active,
+.tab-content > .tab-pane.show.active,
+div.tab-content > .tab-pane.active,
+div.tab-content > .tab-pane.show.active {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.tab-content > .tab-pane.fade {
+    transition: opacity 0.15s linear;
+}
+
+.tab-content > .tab-pane.fade:not(.show) {
+    opacity: 0 !important;
+    display: none !important;
+}
+
+/* Retain daisyUI internal tabs if used inside .tabs */
+.tabs > .tab-content:not(.tab-pane) {
+    display: none;
+}
+:is(.tabs > .tab:checked, .tabs > .tab:is(label:has(:checked)), .tabs > .tab.tab-active, .tabs > .tab[aria-selected="true"]) + .tab-content {
+    display: block !important;
+}

@@ -15,6 +15,8 @@ class Holiday extends Model
      * @var string
      */
     protected $table = 'xin_holidays';
+    protected $primaryKey = 'holiday_id';
+    public $timestamps = false;
 
     /**
      * The attributes that are mass assignable.

@@ -18,7 +18,7 @@
 <div class="row mb-4 align-items-center">
     <div class="col-sm-8">
         <h4 class="mb-0 text-body-emphasis fw-bold"><i class="fa-solid fa-bullhorn me-2 text-primary"></i> {{ $announcement->title }}</h4>
-        <p class="text-body-secondary fs-8 mb-0">Published on {{ $announcement->created_at ?? 'N/A' }}</p>
+        <p class="text-body-secondary fs-8 mb-0">Published on <x-human-date :value="$announcement->created_at" :time="true" /></p>
     </div>
     <div class="col-sm-4 text-sm-end mt-2 mt-sm-0">
         <a href="{{ route('announcements.index') }}" class="btn btn-outline-secondary btn-sm fw-bold">

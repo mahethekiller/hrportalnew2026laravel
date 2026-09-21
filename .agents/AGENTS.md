@@ -20,11 +20,11 @@ These rules represent the absolute constraints of the project. Any deviation fro
 - Do not create migrations to rebuild tables.
 - If a model is missing relationships or has incorrect properties, refactor it carefully rather than rewriting it.
 
-## 📦 Rule 2: Zero CDNs & Tailwind CSS
-- All CSS, JS, and font files must be stored locally under the `public/assets/` directory.
+## 📦 Rule 2: Zero CDNs & Modern Component Architecture (Tailwind CSS 4 & daisyUI 5)
+- All CSS, JS, and font files must be built locally via Vite (`resources/css/app.css`) or stored locally under `public/assets/`.
 - No remote content delivery networks (CDNs) are allowed.
-- The UI framework is Bootstrap 5.3.
-- Tailwind CSS, Flowbite, and Alpine.js are strictly forbidden.
+- The primary UI framework is Tailwind CSS v4 paired with the daisyUI v5 component library (replacing legacy Bootstrap 5.3).
+- Flowbite and remote CDN imports remain strictly forbidden.
 
 ## 🛡️ Rule 3: Dynamic Spatie Permissions
 - Do not hardcode permissions or roles anywhere in controllers or blade files.
@@ -48,9 +48,13 @@ These rules represent the absolute constraints of the project. Any deviation fro
 - Shared functions must be placed in reusable **Traits** or **Helpers**.
 - If two modules require similar components (like a profile widget or file uploader), create a reusable Blade Component instead of duplicating HTML.
 
-## 🧹 Rule 6: Mandatory Content Sanitization & Clean Text Rendering
-- All ticket descriptions, comments, resolution remarks, announcements, and user text inputs must use `App\Traits\HasCleanContent` or `HasCleanContent::sanitizeContent($value, false)` before saving to the database.
-- In Blade views, never output raw database strings containing un-decoded HTML entities (`&lt;p data-start=...`) or raw HTML tags (`<p><br></p>`) inside `<textarea>` inputs or plain text display blocks.
+## 🧹 Rule 6: Mandatory Content Sanitization & Clean Text Rendering (WYSIWYG Standard)
+- **Mandatory WYSIWYG Editor Component**: All rich text inputs across the portal (Notification Email Templates, Company Announcements, Job Postings/Requisitions, Offer Letters, Ticket Resolutions/Responses, Policy Documents) must use the reusable `<x-wysiwyg-editor>` component instead of raw `<textarea>` tags.
+  - Usage: `<x-wysiwyg-editor name="field_name" :value="$model->content" :tokens="['{token1}', '{token2}']" height="300px" />`
+  - The component provides a full formatting toolbar (bold, italic, underline, strike, headings, lists, justify, links), HTML source code view toggle, dynamic placeholder token chips, and dark/light mode compatibility.
+  - Plain `<textarea>` inputs must strictly be limited to single-line or short plain-text inputs (e.g. Leave reason, brief decline comment, postal address) where HTML formatting is disallowed.
+- **Sanitization on Save**: All ticket descriptions, comments, resolution remarks, announcements, and user rich text inputs must use `App\Traits\HasCleanContent` or `HasCleanContent::sanitizeContent($value, false)` before saving to the database.
+- **Clean Display & Decoding**: In Blade views, never output raw database strings containing un-decoded HTML entities (`&lt;p data-start=...`) or raw HTML tags (`<p><br></p>`) inside `<textarea>` inputs or plain text display blocks.
 - Use `{!! $ticket->clean_description !!}` / `{!! $ticket->clean_remarks !!}` for rich view display and `{{ $ticket->plain_remarks }}` / `{{ $ticket->plain_description }}` for `<textarea>` form controls and truncated table snippets.
 - When resetting or populating HTML templates into WYSIWYG canvas elements (`contenteditable="true"`), always decode HTML entities (e.g. using `textarea` element decoding in JS: `txt.innerHTML = rawTemplate; decodedHtml = txt.value;`) before setting `.html()`, preventing raw `&lt;p&gt;` entity strings from rendering as plain text.
 
@@ -76,12 +80,11 @@ These rules represent the absolute constraints of the project. Any deviation fro
 - All form inputs inside modals must retain user-entered values using `value="{{ old('field_name') }}"`, retain select option states (`old('field_name') == $val ? 'selected' : ''`), and retain checkbox states (`old('field_name', '1') == '1' ? 'checked' : ''`).
 - Form validation/exception errors must be rendered directly inside the modal body (`@if(session('error'))` / `@if($errors->any())` alert banners) and inline using `@error('field_name')` directives and `is-invalid` classes.
 
-## 📐 Rule 11: Strict Bootstrap 5 Modal Markup Compliance
-- All modal dialogs across all Blade views must follow strict Bootstrap 5 HTML element hierarchy:
-  - `.modal-dialog` MUST have `.modal-content` as its direct child (`.modal-dialog > .modal-content` or `.modal-dialog > form.modal-content`).
-  - Never place an unstyled `<form>` tag between `.modal-dialog` and `.modal-content` (`.modal-dialog > form > .modal-content` is strictly forbidden). Doing so breaks Bootstrap flexbox width inheritance and causes `modal-lg` and `modal-xl` viewport sizing to collapse back to 500px.
-  - Always use `<form class="modal-content" ...>` or place `<form>` inside `.modal-content` (`.modal-content > form`).
-  - Complex modal forms containing email previews, WYSIWYG editors, or multi-step fields must use `.modal-xl` with a clean 2-Column Side-by-Side Widescreen Studio Layout (`col-lg-5` form parameters on left, `col-lg-7` preview/studio canvas on right).
+## 📐 Rule 11: Strict Modal Markup & daisyUI Dialog Compliance
+- All modal dialogs must use standard daisyUI HTML `<dialog class="modal">` hierarchy or compliant wrappers:
+  - `<dialog id="..." class="modal">` MUST have `<div class="modal-box">` as its direct structural child.
+  - Complex modal forms containing email previews, WYSIWYG editors, or multi-step fields must use `.modal-box.max-w-5xl` with a clean 2-Column Side-by-Side Widescreen Studio Layout (`col-span-5` form parameters on left, `col-span-7` preview/studio canvas on right).
+  - During the migration bridge, any legacy Bootstrap modals must maintain `.modal-dialog > .modal-content` without intermediate unstyled `<form>` tags.
 
 ## ⏳ Rule 12: Mandatory Form Submit Disabling & Loading Spinner State
 - All form submissions across all Blade views and modal dialogs must automatically disable the primary submit button (`disabled="disabled"`) and display a visual loading spinner indicator (`<i class="fa-solid fa-circle-notch fa-spin me-1"></i> Processing...`).

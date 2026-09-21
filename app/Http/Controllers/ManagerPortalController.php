@@ -67,10 +67,19 @@ class ManagerPortalController extends Controller
             'remarks' => 'nullable|string',
         ]);
 
-        $leave->update([
-            'status' => $request->status,
-            'remarks' => $request->remarks ?? '',
-        ]);
+        $leaveModel = \App\Models\LeaveApplication::find($leave->getKey());
+        if ($leaveModel) {
+            app(\App\Services\LeaveApplicationService::class)->updateStatus(
+                $leaveModel,
+                (int) $request->status,
+                $request->remarks
+            );
+        } else {
+            $leave->update([
+                'status' => $request->status,
+                'remarks' => $request->remarks ?? '',
+            ]);
+        }
 
         $statusLabel = $request->status == 2 ? 'Approved' : 'Rejected';
         return redirect()->back()->with('success', "Team leave application has been {$statusLabel}.");

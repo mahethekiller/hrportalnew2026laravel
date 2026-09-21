@@ -32,15 +32,25 @@ class LeaveApplicationService
 
     public function applyForLeave(array $data): LeaveApplication
     {
-        $data['company_id'] = $data['company_id'] ?? 1;
         $data['employee_id'] = $data['employee_id'] ?? (\Auth::user()->employee->user_id ?? \Auth::id());
+        $employee = \App\Models\Employee::find($data['employee_id']);
+        if ($employee) {
+            $data['company_id'] = $data['company_id'] ?? ($employee->company_id ?: 1);
+            if (empty($data['manager_id']) && !empty($employee->manager_id)) {
+                $data['manager_id'] = $employee->manager_id;
+            }
+        } else {
+            $data['company_id'] = $data['company_id'] ?? 1;
+        }
+
         $data['status'] = $data['status'] ?? LeaveApplication::STATUS_PENDING;
         $data['applied_on'] = $data['applied_on'] ?? date('Y-m-d H:i:s');
-        $data['created_at'] = date('Y-m-d H:i:s');
-        $data['start_duration'] = $data['start_duration'] ?? 'full_day';
-        $data['end_duration'] = $data['end_duration'] ?? 'full_day';
-        $data['casual_deducted'] = $data['casual_deducted'] ?? 0;
-        $data['earned_deducted'] = $data['earned_deducted'] ?? 0;
+        $data['created_at'] = $data['created_at'] ?? date('Y-m-d H:i:s');
+        $data['start_duration'] = $data['start_duration'] ?? 'Full';
+        $data['end_duration'] = $data['end_duration'] ?? 'Full';
+        $data['casual_deducted'] = $data['casual_deducted'] ?? '0.00';
+        $data['earned_deducted'] = $data['earned_deducted'] ?? '0.00';
+        $data['remarks'] = $data['remarks'] ?? '';
 
         $leave = $this->repository->create($data);
 
@@ -48,15 +58,25 @@ class LeaveApplicationService
         try {
             $leave->load(['employee', 'leaveType', 'company', 'manager']);
             $employeeName = $leave->employee ? ($leave->employee->first_name . ' ' . $leave->employee->last_name) : 'Employee';
-            $recipientEmail = $leave->manager && $leave->manager->email ? $leave->manager->email : ($leave->employee->email ?? null);
+            
+            $toEmails = [];
+            if ($leave->manager && filter_var($leave->manager->email, FILTER_VALIDATE_EMAIL)) {
+                $toEmails[] = trim($leave->manager->email);
+            }
+            if ($leave->employee && filter_var($leave->employee->email, FILTER_VALIDATE_EMAIL)) {
+                $toEmails[] = trim($leave->employee->email);
+            }
+            $toEmails = array_unique(array_filter($toEmails));
 
-            if ($recipientEmail) {
+            if (!empty($toEmails)) {
                 $this->mailService->sendTemplateEmail(
                     templateCode: 'code3',
-                    toEmails: $recipientEmail,
+                    toEmails: $toEmails,
                     replacements: [
                         '{employee_name}' => $employeeName,
-                        '{leave_type}' => $leave->leaveType->type_name ?? 'Leave',
+                        '{leave_type}' => $leave->leave_type_name,
+                        '{from}' => $leave->from_date,
+                        '{to}' => $leave->to_date,
                         '{start_date}' => $leave->from_date,
                         '{end_date}' => $leave->to_date,
                         '{reason}' => $leave->reason ?? '',
@@ -64,7 +84,7 @@ class LeaveApplicationService
                     ],
                     moduleKey: 'leave',
                     companyId: (int) $leave->company_id,
-                    actionUrl: route('leave-applications.index'),
+                    actionUrl: route('leaves.index'),
                     actionText: 'Review Leave Application',
                     userId: (int) $leave->employee_id
                 );
@@ -102,7 +122,9 @@ class LeaveApplicationService
                         toEmails: $employeeEmail,
                         replacements: [
                             '{employee_name}' => $leaveApplication->employee->first_name . ' ' . $leaveApplication->employee->last_name,
-                            '{leave_type}' => $leaveApplication->leaveType->type_name ?? 'Leave',
+                            '{leave_type}' => $leaveApplication->leave_type_name,
+                            '{from}' => $leaveApplication->from_date,
+                            '{to}' => $leaveApplication->to_date,
                             '{start_date}' => $leaveApplication->from_date,
                             '{end_date}' => $leaveApplication->to_date,
                             '{status}' => $statusLabel,
@@ -111,8 +133,8 @@ class LeaveApplicationService
                         ],
                         moduleKey: 'leave',
                         companyId: (int) $leaveApplication->company_id,
-                        actionUrl: route('my-leaves.index'),
-                        actionText: 'View My Leaves',
+                        actionUrl: route('leaves.index'),
+                        actionText: 'View Leaves',
                         userId: (int) $leaveApplication->employee_id
                     );
                 }
