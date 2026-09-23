@@ -83,6 +83,13 @@
                 <option value="outfit">Outfit / Geometric Premium</option>
                 <option value="roboto">Roboto / Precision Technical</option>
                 <option value="plus_jakarta">Plus Jakarta Sans / Friendly Modern</option>
+                <option value="syne_mono">Syne Mono / Quirky Editorial Art</option>
+                <option value="comfortaa">Comfortaa / Smooth Bubbly Rounded</option>
+                <option value="fredoka">Fredoka / Casual Game UI (Roblox & Mobile)</option>
+                <option value="sniglet">Sniglet / Cozy Craft & Farming Sim</option>
+                <option value="luckiest_guy">Luckiest Guy / 50s Comic & Arcade Victory</option>
+                <option value="chewy">Chewy / Bouncy Cartoon Game</option>
+                <option value="silkscreen">Silkscreen / 8-Bit Pixel Retro Arcade</option>
             </select>
         </div>
 

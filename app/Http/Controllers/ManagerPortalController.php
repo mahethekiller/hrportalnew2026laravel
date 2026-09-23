@@ -23,38 +23,115 @@ class ManagerPortalController extends Controller
     public function index(): View
     {
         $managerId = $this->getManagerId();
-        $teamMembers = Employee::where('manager_id', $managerId)->orWhere('department_id', auth()->user()?->department_id)->get();
-        $teamIds = $teamMembers->pluck('employee_id')->toArray();
+        $teamMembers = Employee::with(['designation', 'department'])
+            ->where(function($q) use ($managerId) {
+                $q->where('manager_id', $managerId);
+                if (auth()->user()?->department_id) {
+                    $q->orWhere('department_id', auth()->user()->department_id);
+                }
+            })
+            ->where('is_active', 1)
+            ->get();
 
-        $pendingLeaves = EmployeeLeave::whereIn('employee_id', $teamIds)->where('status', 1)->get();
-        $recentAppraisals = PerformanceAppraisal::whereIn('employee_id', $teamIds)->latest()->take(5)->get();
+        $teamIds = array_unique(array_filter(array_merge(
+            $teamMembers->pluck('user_id')->toArray(),
+            $teamMembers->pluck('employee_id')->toArray()
+        )));
 
-        return view('manager_portal.index', compact('teamMembers', 'pendingLeaves', 'recentAppraisals'));
+        $pendingLeaves = EmployeeLeave::with('employee')->whereIn('employee_id', $teamIds)->where('status', 1)->latest()->take(6)->get();
+        $recentAppraisals = PerformanceAppraisal::with('employee')->whereIn('employee_id', $teamIds)->latest()->take(5)->get();
+
+        $stats = [
+            'total_team' => $teamMembers->count(),
+            'pending_leaves' => EmployeeLeave::whereIn('employee_id', $teamIds)->where('status', 1)->count(),
+            'pending_profiles' => EmployeeDataUpdate::where('acceptance', 0)->count(),
+            'pending_resignations' => \App\Models\EmployeeResignation::where(function($q) use ($managerId, $teamIds) {
+                $q->where('manager_id', $managerId)->orWhereIn('employee_id', $teamIds);
+            })->where('manager_status', 0)->count(),
+        ];
+
+        return view('manager_portal.index', compact('teamMembers', 'pendingLeaves', 'recentAppraisals', 'stats'));
     }
 
     /**
      * Team Attendance & Timesheet Logs
      */
-    public function teamAttendance(): View
+    public function teamAttendance(Request $request): View
     {
         $managerId = $this->getManagerId();
-        $teamMembers = Employee::where('manager_id', $managerId)->orWhere('department_id', auth()->user()?->department_id)->get();
+        $teamMembers = Employee::with(['designation', 'department'])
+            ->where(function($q) use ($managerId) {
+                $q->where('manager_id', $managerId);
+                if (auth()->user()?->department_id) {
+                    $q->orWhere('department_id', auth()->user()->department_id);
+                }
+            })
+            ->where('is_active', 1)
+            ->get();
 
-        return view('manager_portal.team_attendance', compact('teamMembers'));
+        $selectedDate = $request->input('date', date('Y-m-d'));
+
+        // Query attendance records for selected date
+        $attendances = \App\Models\EmpTodayAttendance::query()
+            ->whereDate('check_in_datetime', $selectedDate)
+            ->orWhereDate('punch_date', $selectedDate)
+            ->get();
+
+        $stats = [
+            'total_team' => $teamMembers->count(),
+            'present' => $attendances->count(),
+            'absent' => max(0, $teamMembers->count() - $attendances->count()),
+        ];
+
+        return view('manager_portal.team_attendance', compact('teamMembers', 'attendances', 'selectedDate', 'stats'));
     }
 
     /**
      * Team Leave Approval Hub
      */
-    public function teamLeaves(): View
+    public function teamLeaves(Request $request): View
     {
         $managerId = $this->getManagerId();
-        $teamIds = Employee::where('manager_id', $managerId)->orWhere('department_id', auth()->user()?->department_id)->pluck('employee_id')->toArray();
+        $teamMembers = Employee::where('manager_id', $managerId);
+        if (auth()->user()?->department_id) {
+            $teamMembers->orWhere('department_id', auth()->user()->department_id);
+        }
+        $teamIds = array_unique(array_filter(array_merge(
+            $teamMembers->pluck('user_id')->toArray(),
+            $teamMembers->pluck('employee_id')->toArray()
+        )));
+
+        $baseQuery = EmployeeLeave::query()->whereIn('employee_id', $teamIds);
+
+        $stats = [
+            'total' => (clone $baseQuery)->count(),
+            'pending' => (clone $baseQuery)->where('status', 1)->count(),
+            'approved' => (clone $baseQuery)->where('status', 2)->count(),
+            'rejected' => (clone $baseQuery)->where('status', 3)->count(),
+        ];
+
+        $query = (clone $baseQuery)->with(['employee.designation', 'employee.department']);
+
+        if ($request->filled('status') && $request->status !== 'all') {
+            $query->where('status', (int) $request->status);
+        }
+
+        if ($request->filled('search')) {
+            $term = trim($request->search);
+            $query->where(function($q) use ($term) {
+                $q->where('reason', 'like', "%{$term}%")
+                  ->orWhereHas('employee', function($sq) use ($term) {
+                      $sq->where('first_name', 'like', "%{$term}%")
+                        ->orWhere('last_name', 'like', "%{$term}%")
+                        ->orWhere('employee_id', 'like', "%{$term}%");
+                  });
+            });
+        }
 
         $keyName = (new EmployeeLeave)->getKeyName();
-        $leaves = EmployeeLeave::with('employee')->whereIn('employee_id', $teamIds)->orderBy($keyName, 'desc')->paginate(15);
+        $leaves = $query->orderBy($keyName, 'desc')->paginate(15)->withQueryString();
 
-        return view('manager_portal.team_leaves', compact('leaves'));
+        return view('manager_portal.team_leaves', compact('leaves', 'stats'));
     }
 
     /**
@@ -64,7 +141,7 @@ class ManagerPortalController extends Controller
     {
         $request->validate([
             'status' => 'required|integer|in:2,3', // 2 = Approved, 3 = Rejected
-            'remarks' => 'nullable|string',
+            'remarks' => 'nullable|string|max:1000',
         ]);
 
         $leaveModel = \App\Models\LeaveApplication::find($leave->getKey());
@@ -88,28 +165,68 @@ class ManagerPortalController extends Controller
     /**
      * Team Performance Appraisals
      */
-    public function teamPerformance(): View
+    public function teamPerformance(Request $request): View
     {
         $managerId = $this->getManagerId();
-        $teamIds = Employee::where('manager_id', $managerId)->orWhere('department_id', auth()->user()?->department_id)->pluck('employee_id')->toArray();
+        $teamMembers = Employee::where('manager_id', $managerId);
+        if (auth()->user()?->department_id) {
+            $teamMembers->orWhere('department_id', auth()->user()->department_id);
+        }
+        $teamIds = array_unique(array_filter(array_merge(
+            $teamMembers->pluck('user_id')->toArray(),
+            $teamMembers->pluck('employee_id')->toArray()
+        )));
 
         $keyName = (new PerformanceAppraisal)->getKeyName();
-        $appraisals = PerformanceAppraisal::with('employee')->whereIn('employee_id', $teamIds)->orderBy($keyName, 'desc')->get();
+        $query = PerformanceAppraisal::with(['employee.designation', 'employee.department'])
+            ->whereIn('employee_id', $teamIds);
 
-        return view('manager_portal.team_performance', compact('appraisals'));
+        if ($request->filled('year')) {
+            $query->where('appraisal_year', $request->year);
+        }
+
+        $appraisals = $query->orderBy($keyName, 'desc')->paginate(15)->withQueryString();
+
+        $allTeamAppraisals = PerformanceAppraisal::whereIn('employee_id', $teamIds)->get();
+
+        $stats = [
+            'total_reviews' => $allTeamAppraisals->count(),
+            'high_performers' => $allTeamAppraisals->filter(fn($appr) => (float)$appr->overall_rating >= 4.0)->count(),
+            'team_size' => count($teamIds),
+        ];
+
+        return view('manager_portal.team_performance', compact('appraisals', 'stats'));
     }
 
     /**
      * List of pending profile update requests
      */
-    public function pendingProfileUpdates(): View
+    public function pendingProfileUpdates(Request $request): View
     {
         if (!auth()->user()->can('edit.employees')) {
             abort(403, 'Unauthorized. This queue is restricted to HR Managers and Super Admins only.');
         }
 
-        $updates = EmployeeDataUpdate::with('user')->where('acceptance', 0)->latest('id')->paginate(15);
-        return view('manager_portal.profile_approvals.index', compact('updates'));
+        $baseQuery = EmployeeDataUpdate::query();
+
+        $stats = [
+            'pending' => (clone $baseQuery)->where('acceptance', 0)->count(),
+            'approved' => (clone $baseQuery)->where('acceptance', 1)->count(),
+            'rejected' => (clone $baseQuery)->where('acceptance', 2)->count(),
+            'total' => (clone $baseQuery)->count(),
+        ];
+
+        $query = (clone $baseQuery)->with(['user.designation', 'user.department']);
+
+        if ($request->filled('status') && $request->status !== 'all') {
+            $query->where('acceptance', (int) $request->status);
+        } else {
+            // Default to pending
+            $query->where('acceptance', 0);
+        }
+
+        $updates = $query->latest('id')->paginate(15)->withQueryString();
+        return view('manager_portal.profile_approvals.index', compact('updates', 'stats'));
     }
 
     /**

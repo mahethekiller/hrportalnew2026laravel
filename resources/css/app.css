@@ -1,6 +1,40 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+/* Local Typography Font Families (Rule 2 Zero-CDN Compliance) */
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+
+@import "@fontsource/outfit/400.css";
+@import "@fontsource/outfit/500.css";
+@import "@fontsource/outfit/600.css";
+@import "@fontsource/outfit/700.css";
+
+@import "@fontsource/roboto/400.css";
+@import "@fontsource/roboto/500.css";
+@import "@fontsource/roboto/700.css";
+
+@import "@fontsource/plus-jakarta-sans/400.css";
+@import "@fontsource/plus-jakarta-sans/500.css";
+@import "@fontsource/plus-jakarta-sans/600.css";
+@import "@fontsource/plus-jakarta-sans/700.css";
+
+/* Funky & Casual Gaming Fonts (Zero-CDN Local Bundle) */
+@import "@fontsource/syne-mono/400.css";
+@import "@fontsource/comfortaa/400.css";
+@import "@fontsource/comfortaa/700.css";
+@import "@fontsource/fredoka/400.css";
+@import "@fontsource/fredoka/600.css";
+@import "@fontsource/fredoka/700.css";
+@import "@fontsource/sniglet/400.css";
+@import "@fontsource/sniglet/800.css";
+@import "@fontsource/luckiest-guy/400.css";
+@import "@fontsource/chewy/400.css";
+@import "@fontsource/silkscreen/400.css";
+@import "@fontsource/silkscreen/700.css";
+
 @theme {
   --color-corporate-navy: #1E40AF;
   --color-executive-slate: #475569;

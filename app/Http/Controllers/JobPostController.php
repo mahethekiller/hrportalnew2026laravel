@@ -23,7 +23,7 @@ class JobPostController extends Controller
         $filters = $request->only(['search', 'status']);
         $jobs = $this->jobPostService->getJobPostsPaginated($filters);
         $summary = $this->jobPostService->getSummaryStats();
-        $departments = Department::orderBy('department_name')->get();
+        $departments = Department::with('company')->orderBy('department_name')->get();
         $jobCodes = \App\Models\JobCode::orderBy('job_code')->get();
 
         return view('recruitment.jobs', compact('jobs', 'summary', 'departments', 'jobCodes', 'filters'));

@@ -40,16 +40,19 @@ class EmployeeDocumentService
             $data['document_file'] = $filename;
         }
 
-        $data['document_id'] = $data['document_id'] ?? 1;
+        unset($data['document_id']);
         $data['document_type_id'] = $data['document_type_id'] ?? 1;
+
         $data['is_alert'] = $data['is_alert'] ?? 0;
         $data['description'] = $data['description'] ?? '';
         $data['notification_email'] = $data['notification_email'] ?? '';
         $data['document_file'] = $data['document_file'] ?? '';
         $data['date_of_expiry'] = $data['date_of_expiry'] ?? date('Y-m-d');
+        $data['created_at'] = $data['created_at'] ?? date('d-m-Y h:i:s');
 
         return $this->repository->create($data);
     }
+
 
     public function updateDocument(EmployeeDocument $document, array $data): bool
     {

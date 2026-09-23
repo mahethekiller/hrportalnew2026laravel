@@ -21,7 +21,13 @@ class JobCodeController extends Controller
         $filters = $request->only(['search', 'status']);
         $jobCodes = $this->jobCodeRepository->getPaginated($filters);
 
-        return view('recruitment.job_codes', compact('jobCodes', 'filters'));
+        $summary = [
+            'total' => \App\Models\JobCode::count(),
+            'active' => \App\Models\JobCode::whereIn('status', ['active', '1'])->count(),
+            'inactive' => \App\Models\JobCode::whereIn('status', ['inactive', '0'])->count(),
+        ];
+
+        return view('recruitment.job_codes', compact('jobCodes', 'filters', 'summary'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -29,7 +35,7 @@ class JobCodeController extends Controller
         $request->validate([
             'job_code' => ['required', 'string', 'max:100'],
             'position' => ['required', 'string', 'max:255'],
-            'status' => ['nullable', 'integer'],
+            'status' => ['nullable', 'string', 'max:50'],
         ]);
 
         $data = $request->only(['job_code', 'position', 'status']);

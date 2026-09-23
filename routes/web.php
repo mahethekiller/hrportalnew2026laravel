@@ -47,6 +47,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/api/docs', [\App\Http\Controllers\SuperAdminApiController::class, 'docs'])->name('api.docs');
 
     Route::resource('employees', EmployeeController::class);
+    Route::post('/employees/{employee}/kra', [EmployeeController::class, 'uploadKra'])->name('employees.upload-kra');
+    Route::post('/employees/{employee}/kpi', [EmployeeController::class, 'uploadKpi'])->name('employees.upload-kpi');
     Route::resource('departments', DepartmentController::class);
     Route::resource('designations', DesignationController::class);
     Route::resource('companies', CompanyController::class);
@@ -191,6 +193,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/team-resignations', [\App\Http\Controllers\EmployeePortalController::class, 'teamResignations'])->name('team_resignations');
         Route::post('/team-resignations/{id}', [\App\Http\Controllers\EmployeePortalController::class, 'respondResignation'])->name('team_resignations.respond');
         Route::get('/resignation/{id}/relieving-letter', [\App\Http\Controllers\EmployeePortalController::class, 'downloadRelievingLetter'])->name('resignation.relieving_letter');
+        Route::get('/resignation/{id}/relieving', [\App\Http\Controllers\EmployeePortalController::class, 'downloadRelievingLetter'])->name('resignation.relieving');
         Route::get('/resignation/{id}/experience-certificate', [\App\Http\Controllers\EmployeePortalController::class, 'downloadExperienceCertificate'])->name('resignation.experience_certificate');
         Route::get('/profile-update', [\App\Http\Controllers\EmployeePortalController::class, 'editProfile'])->name('profile-update');
         Route::post('/profile-update', [\App\Http\Controllers\EmployeePortalController::class, 'updateProfile'])->name('profile-update.store');

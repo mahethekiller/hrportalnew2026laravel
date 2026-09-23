@@ -17,18 +17,27 @@ class HrTicketController extends Controller
      */
     public function index(Request $request): View
     {
-        $query = HrTicket::with(['employee', 'company']);
+        $baseQuery = HrTicket::query();
 
         // Non-HR/Admin users can only view their own logged tickets
         if (!Gate::allows('view.hr_tickets')) {
-            $query->where('employee_id', auth()->id());
+            $baseQuery->where('employee_id', auth()->id());
         }
 
-        if ($request->filled('status')) {
+        $stats = [
+            'total' => (clone $baseQuery)->count(),
+            'open' => (clone $baseQuery)->where('ticket_status', '1')->count(),
+            'closed' => (clone $baseQuery)->where('ticket_status', '2')->count(),
+            'on_hold' => (clone $baseQuery)->where('ticket_status', '3')->count(),
+        ];
+
+        $query = (clone $baseQuery)->with(['employee', 'company']);
+
+        if ($request->filled('status') && $request->status !== 'all') {
             $query->where('ticket_status', $request->status);
         }
 
-        if ($request->filled('priority')) {
+        if ($request->filled('priority') && $request->priority !== 'all') {
             $p = strtolower((string)$request->priority);
             $pMap = [
                 'low' => ['1', 'low'],
@@ -44,10 +53,19 @@ class HrTicketController extends Controller
             $query->whereIn('ticket_priority', $values);
         }
 
-        $keyName = (new \App\Models\SupportTicket)->getKeyName();
-        $tickets = $query->orderBy($keyName, 'desc')->paginate(15);
+        if ($request->filled('search')) {
+            $search = trim($request->search);
+            $query->where(function($q) use ($search) {
+                $q->where('ticket_code', 'like', "%{$search}%")
+                  ->orWhere('subject', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
 
-        return view('hr_tickets.index', compact('tickets'));
+        $tickets = $query->orderBy('ticket_id', 'desc')->paginate(15)->withQueryString();
+        $companies = Company::orderBy('name', 'asc')->get();
+
+        return view('hr_tickets.index', compact('tickets', 'stats', 'companies'));
     }
 
     /**

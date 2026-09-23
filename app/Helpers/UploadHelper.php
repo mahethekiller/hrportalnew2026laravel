@@ -65,15 +65,27 @@ class UploadHelper
     /**
      * Store uploaded file into public/uploads/{type} using legacy naming convention.
      */
-    public static function upload(UploadedFile $file, string $type, ?string $prefix = null): string
+    public static function upload($file, $type = 'documents', ?string $prefix = null): string
     {
-        $targetDir = public_path('uploads/' . trim($type, '/'));
+        // Support inverted arguments gracefully if type was passed first
+        if (is_string($file) && $type instanceof UploadedFile) {
+            $temp = $file;
+            $file = $type;
+            $type = $temp;
+        }
+
+        if (!$file instanceof UploadedFile) {
+            throw new \InvalidArgumentException('Argument $file must be an instance of Illuminate\Http\UploadedFile.');
+        }
+
+        $typeStr = is_string($type) ? $type : 'documents';
+        $targetDir = public_path('uploads/' . trim($typeStr, '/'));
 
         if (!File::isDirectory($targetDir)) {
             File::makeDirectory($targetDir, 0755, true);
         }
 
-        $prefixName = $prefix ? preg_replace('/[^a-zA-Z0-9_]/', '', $prefix) : $type;
+        $prefixName = $prefix ? preg_replace('/[^a-zA-Z0-9_]/', '', $prefix) : $typeStr;
         $extension = $file->getClientOriginalExtension() ?: 'png';
         $generatedName = $prefixName . '_' . time() . '_' . substr(md5(uniqid()), 0, 6) . '.' . $extension;
 

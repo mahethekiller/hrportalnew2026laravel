@@ -26,24 +26,51 @@ class EmployeeDocument extends Model
     public $timestamps = false;
 
     /**
+     * Default model attributes for MySQL legacy non-null columns.
+      *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'document_type_id' => 1,
+        'title' => '',
+        'notification_email' => '',
+        'is_alert' => 0,
+        'description' => '',
+        'document_file' => '',
+    ];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'document_id',
         'employee_id',
         'document_type_id',
         'date_of_expiry',
+
         'title',
         'notification_email',
         'is_alert',
         'description',
-        'document_file'
+        'document_file',
+        'created_at',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->created_at)) {
+                $model->created_at = date('d-m-Y h:i:s');
+            }
+        });
+    }
 
     public function document()
     {
+
         return $this->belongsTo(Document::class, 'document_id');
     }
 

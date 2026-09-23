@@ -1,214 +1,310 @@
+@php
+    $errors = $errors ?? new \Illuminate\Support\ViewErrorBag;
+@endphp
+
 @extends('layouts.app')
 
 @section('title', 'Scheduled Candidate Interviews')
 
 @section('content')
-<div class="d-flex flex-column flex-column-fluid">
-    <!-- Header Banner -->
-    <div class="d-flex align-items-center justify-content-between mb-4">
+<div class="container-fluid px-0">
+    <!-- Header Title Banner (Matching /recruitment-applications) -->
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
         <div>
-            <h1 class="h3 mb-1 fw-bold text-gray-900">Scheduled Candidate Interviews</h1>
-            <p class="text-muted fs-7 mb-0">Manage interview schedules, panel assignments, and candidate evaluation rounds.</p>
+            <div class="d-flex align-items-center gap-2 mb-1">
+                <span class="badge bg-primary-subtle text-primary fw-semibold px-2.5 py-1 fs-9 rounded-pill">
+                    <i class="fa-solid fa-calendar-days me-1"></i> Talent Acquisition
+                </span>
+                <span class="text-body-secondary fs-9">• Scheduled Candidate Interviews</span>
+            </div>
+            <h4 class="mb-0 text-body-emphasis fw-bolder tracking-tight">Scheduled Candidate Interviews</h4>
+            <p class="text-body-secondary fs-8 mb-0">Manage interview schedules, panel assignments, candidate rounds, and employee onboarding conversions.</p>
         </div>
-        <div class="d-flex gap-2">
-            <a href="{{ route('recruitment-applications.index') }}" class="btn btn-light-secondary btn-sm">
-                <i class="fa-solid fa-arrow-left me-1"></i> Back to Candidate Pipeline
+        <div class="d-flex align-items-center gap-2">
+            <a href="{{ route('recruitment-applications.index') }}" class="btn btn-sm btn-body border text-body-emphasis shadow-xs fw-semibold px-3 py-2 rounded-2">
+                <i class="fa-solid fa-users me-1.5 text-primary"></i> Candidate Pipeline
             </a>
-            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#scheduleInterviewModal">
-                <i class="fa-solid fa-plus me-1"></i> Schedule New Interview
+            <a href="{{ route('recruitment-job-posts.index') }}" class="btn btn-sm btn-body border text-body-emphasis shadow-xs fw-semibold px-3 py-2 rounded-2">
+                <i class="fa-solid fa-briefcase me-1.5 text-info"></i> Job Posts
+            </a>
+            <button type="button" class="btn btn-sm btn-primary fw-semibold px-3 py-2 rounded-2 shadow-xs" data-bs-toggle="modal" data-bs-target="#scheduleInterviewModal">
+                <i class="fa-solid fa-plus me-1.5"></i> Schedule Interview
             </button>
         </div>
     </div>
 
-    <!-- Summary KPI Metric Cards Grid -->
+    <!-- 4 Telemetry Metrics Cards (Matching /recruitment-applications exact pattern) -->
     <div class="row g-3 mb-4">
-        <div class="col-xl-3 col-sm-6">
-            <x-kpi-card 
-                title="Total Scheduled" 
-                :value="($summary['total_interviews'] ?? 0) . ' Interviews'" 
-                icon="fa-solid fa-calendar-days" 
-                variant="primary" 
-            />
-        </div>
-        <div class="col-xl-3 col-sm-6">
-            <x-kpi-card 
-                title="Confirmed / Upcoming" 
-                :value="($summary['confirmed_count'] ?? 0) . ' Candidates'" 
-                icon="fa-solid fa-calendar-check" 
-                variant="info" 
-            />
-        </div>
-        <div class="col-xl-3 col-sm-6">
-            <x-kpi-card 
-                title="Selected / Offered" 
-                :value="($summary['selected_count'] ?? 0) . ' Candidates'" 
-                icon="fa-solid fa-user-check" 
-                variant="warning" 
-            />
-        </div>
-        <div class="col-xl-3 col-sm-6">
-            <x-kpi-card 
-                title="Converted Employees" 
-                :value="($summary['converted_count'] ?? 0) . ' Onboarded'" 
-                icon="fa-solid fa-user-plus" 
-                variant="success" 
-            />
-        </div>
-    </div>
-
-    <!-- Interviews Table Card -->
-    <div class="card border-0 shadow-sm">
-        <div class="card-header border-0 pt-3 bg-light bg-opacity-50">
-            <form method="GET" action="{{ route('recruitment-interviews.index') }}" class="row g-2 align-items-center w-100">
-                <div class="col-md-8">
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-text bg-white border-end-0"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
-                        <input type="text" name="search" class="form-control form-control-sm border-start-0" placeholder="Search candidate name or email..." value="{{ request('search') }}">
+        <!-- Total Scheduled -->
+        <div class="col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm rounded-3 p-3 bg-body-tertiary h-100 position-relative overflow-hidden">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <span class="text-body-secondary fs-9 fw-bold text-uppercase tracking-wider">Total Scheduled</span>
+                        <h3 class="fw-bolder text-body-emphasis mb-1 mt-1">{{ $summary['total_interviews'] ?? 0 }}</h3>
+                        <span class="fs-9 text-body-secondary">Candidate interview sessions</span>
+                    </div>
+                    <div class="avatar-md rounded-3 bg-primary-subtle text-primary d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                        <i class="fa-solid fa-calendar-days fs-5"></i>
                     </div>
                 </div>
-                <div class="col-md-4 text-end d-flex gap-2 justify-content-end">
-                    <button type="submit" class="btn btn-primary btn-sm px-3"><i class="fa-solid fa-filter me-1"></i> Filter</button>
-                    <a href="{{ route('recruitment-interviews.index') }}" class="btn btn-light-secondary btn-sm px-3"><i class="fa-solid fa-rotate-left me-1"></i> Reset</a>
-                </div>
-            </form>
-        </div>
-
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0 gs-4 fs-7">
-                    <thead class="table-light text-muted fw-bold text-uppercase fs-9">
-                        <tr>
-                            <th class="ps-4 text-nowrap" style="width: 140px;">Actions</th>
-                            <th>Candidate</th>
-                            <th>Interview Date & Time</th>
-                            <th>Mode / Location</th>
-                            <th>Interviewer Panel</th>
-                            <th>Offered CTC</th>
-                            <th class="pe-4">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($interviews as $itv)
-                            <tr>
-                                <td class="ps-4 text-nowrap">
-                                    <div class="d-inline-flex align-items-center" style="gap: 6px;">
-                                        <!-- View Button (Icon Only) -->
-                                        <button type="button" class="btn btn-sm btn-icon btn-light-primary py-1 px-2 fs-8 rounded-2" data-bs-toggle="modal" data-bs-target="#viewInterviewModal{{ $itv->job_interview_id }}" title="View Details">
-                                            <i class="fa-solid fa-eye"></i>
-                                        </button>
-
-                                        <!-- Edit Button (Icon Only) -->
-                                        <button type="button" class="btn btn-sm btn-icon btn-light-warning py-1 px-2 fs-8 rounded-2" data-bs-toggle="modal" data-bs-target="#editInterviewModal{{ $itv->job_interview_id }}" title="Edit Schedule">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </button>
-
-                                        <!-- Convert to Employee Action (Opens Onboarding Modal) -->
-                                        @if(in_array(strtolower($itv->status), ['confirmed', 'selected', 'offeraccepted']) && $itv->convert_to_employee == 0)
-                                            <button type="button" class="btn btn-sm btn-icon btn-light-success py-1 px-2 fs-8 rounded-2" data-bs-toggle="modal" data-bs-target="#convertModal{{ $itv->job_interview_id }}" title="Onboard & Convert to Active Employee">
-                                                <i class="fa-solid fa-user-plus"></i>
-                                            </button>
-                                        @endif
-
-                                        <!-- Status Change Dropdown (Icon Only) -->
-                                        <div class="dropdown d-inline">
-                                            <button class="btn btn-sm btn-icon btn-light-secondary py-1 px-2 fs-8 rounded-2" type="button" data-bs-toggle="dropdown" title="Change Status / Options">
-                                                <i class="fa-solid fa-ellipsis-vertical"></i>
-                                            </button>
-                                            <ul class="dropdown-menu fs-8 shadow-sm border-subtle py-2">
-                                                <li><h6 class="dropdown-header text-uppercase fs-9 fw-bold text-muted px-3 py-1 mb-0">Change Status</h6></li>
-                                                <li>
-                                                    <button type="button" class="dropdown-item py-1.5 px-3 text-success" data-bs-toggle="modal" data-bs-target="#statusModal_{{ $itv->job_interview_id }}_confirmed">
-                                                        <i class="fa-solid fa-check-circle me-2 text-success"></i> Mark Confirmed...
-                                                    </button>
-                                                </li>
-                                                <li>
-                                                    <button type="button" class="dropdown-item py-1.5 px-3 text-primary" data-bs-toggle="modal" data-bs-target="#statusModal_{{ $itv->job_interview_id }}_selected">
-                                                        <i class="fa-solid fa-user-check me-2 text-primary"></i> Mark Selected...
-                                                    </button>
-                                                </li>
-                                                <li>
-                                                    <button type="button" class="dropdown-item py-1.5 px-3 text-info" data-bs-toggle="modal" data-bs-target="#nextRoundModal{{ $itv->job_interview_id }}">
-                                                        <i class="fa-solid fa-forward me-2 text-info"></i> Schedule Next Round...
-                                                    </button>
-                                                </li>
-                                                <li>
-                                                    <button type="button" class="dropdown-item py-1.5 px-3 text-warning" data-bs-toggle="modal" data-bs-target="#statusModal_{{ $itv->job_interview_id }}_onhold">
-                                                        <i class="fa-solid fa-pause-circle me-2 text-warning"></i> Mark On Hold...
-                                                    </button>
-                                                </li>
-                                                <li>
-                                                    <button type="button" class="dropdown-item py-1.5 px-3 text-danger" data-bs-toggle="modal" data-bs-target="#statusModal_{{ $itv->job_interview_id }}_rejected">
-                                                        <i class="fa-solid fa-ban me-2 text-danger"></i> Mark Rejected...
-                                                    </button>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="fw-bold text-gray-900">{{ $itv->jobApplication->candidate_name ?? 'Candidate' }}</div>
-                                    <div class="fs-9 text-muted">{{ $itv->jobApplication->email ?? '' }}</div>
-                                </td>
-                                <td>
-                                    <span class="fw-medium text-gray-800">{{ $itv->formatted_interview_date }}</span>
-                                    @if(!empty($itv->next_round_date))
-                                        <div class="fs-9 text-info fw-semibold mt-1">
-                                            <i class="fa-solid fa-forward me-1"></i>Next: {{ date('M d, Y', strtotime($itv->next_round_date)) }}
-                                        </div>
-                                    @endif
-                                    <div class="fs-9 text-muted"><i class="fa-regular fa-clock me-1"></i>{{ $itv->interview_time }}</div>
-                                </td>
-                                <td>
-                                    <span class="badge badge-light-primary text-uppercase fs-9">{{ $itv->interview_mode }}</span>
-                                    <div class="fs-9 text-muted">{{ $itv->interview_place ?? 'Online Meeting' }}</div>
-                                </td>
-                                <td>
-                                    @php
-                                        $panelists = $itv->interviewer_list;
-                                    @endphp
-                                    @if($panelists->isNotEmpty())
-                                        @foreach($panelists as $pan)
-                                            <div class="mb-1">
-                                                <span class="fw-bold text-body-emphasis fs-8">{{ $pan->first_name }} {{ $pan->last_name }}</span>
-                                                @if(!empty($pan->employee_id))
-                                                    <span class="badge bg-secondary-subtle text-body-secondary font-mono fs-9">ID: {{ $pan->employee_id }}</span>
-                                                @endif
-                                            </div>
-                                        @endforeach
-                                    @else
-                                        <div class="fw-bold text-body-emphasis fs-8">{{ $itv->interviewer ? ($itv->interviewer->first_name . ' ' . $itv->interviewer->last_name) : ($itv->added_by ?? 'Recruiter') }}</div>
-                                        @if(!empty($itv->interviewer?->employee_id))
-                                            <span class="badge bg-secondary-subtle text-body-secondary font-mono fs-9">ID: {{ $itv->interviewer->employee_id }}</span>
-                                        @endif
-                                    @endif
-                                </td>
-                                <td>
-                                    <span class="font-monospace text-success fw-bold">{{ $itv->offered_ctc ?? '--' }}</span>
-                                </td>
-                                <td class="pe-4">
-                                    <span class="badge {{ $itv->status_badge_class }}">
-                                        {{ $itv->status_label }}
-                                    </span>
-                                    @if($itv->convert_to_employee != 0)
-                                        <div class="mt-1"><span class="badge badge-light-purple fs-9"><i class="fa-solid fa-user-check me-1"></i>Converted</span></div>
-                                    @endif
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="7" class="text-center py-5 text-muted">
-                                    <i class="fa-solid fa-calendar-xmark fs-2 mb-2 d-block text-muted"></i>
-                                    No scheduled candidate interviews found.
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                <div class="position-absolute bottom-0 start-0 end-0 bg-primary" style="height: 3px;"></div>
             </div>
         </div>
 
+        <!-- Confirmed / Upcoming -->
+        <div class="col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm rounded-3 p-3 bg-body-tertiary h-100 position-relative overflow-hidden">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <span class="text-body-secondary fs-9 fw-bold text-uppercase tracking-wider">Confirmed / Upcoming</span>
+                        <h3 class="fw-bolder text-info mb-1 mt-1">{{ $summary['confirmed_count'] ?? 0 }}</h3>
+                        <span class="fs-9 text-body-secondary">Confirmed round attendance</span>
+                    </div>
+                    <div class="avatar-md rounded-3 bg-info-subtle text-info d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                        <i class="fa-solid fa-calendar-check fs-5"></i>
+                    </div>
+                </div>
+                <div class="position-absolute bottom-0 start-0 end-0 bg-info" style="height: 3px;"></div>
+            </div>
+        </div>
+
+        <!-- Selected / Offered -->
+        <div class="col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm rounded-3 p-3 bg-body-tertiary h-100 position-relative overflow-hidden">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <span class="text-body-secondary fs-9 fw-bold text-uppercase tracking-wider">Selected / Offered</span>
+                        <h3 class="fw-bolder text-warning mb-1 mt-1">{{ $summary['selected_count'] ?? 0 }}</h3>
+                        <span class="fs-9 text-body-secondary">Evaluated & offer extended</span>
+                    </div>
+                    <div class="avatar-md rounded-3 bg-warning-subtle text-warning d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                        <i class="fa-solid fa-user-check fs-5"></i>
+                    </div>
+                </div>
+                <div class="position-absolute bottom-0 start-0 end-0 bg-warning" style="height: 3px;"></div>
+            </div>
+        </div>
+
+        <!-- Converted Employees -->
+        <div class="col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm rounded-3 p-3 bg-body-tertiary h-100 position-relative overflow-hidden">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <span class="text-body-secondary fs-9 fw-bold text-uppercase tracking-wider">Converted Employees</span>
+                        <h3 class="fw-bolder text-success mb-1 mt-1">{{ $summary['converted_count'] ?? 0 }}</h3>
+                        <span class="fs-9 text-body-secondary">Fully onboarded to payroll</span>
+                    </div>
+                    <div class="avatar-md rounded-3 bg-success-subtle text-success d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                        <i class="fa-solid fa-user-plus fs-5"></i>
+                    </div>
+                </div>
+                <div class="position-absolute bottom-0 start-0 end-0 bg-success" style="height: 3px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Toolbar & Search Bar (Matching /recruitment-applications exact pattern) -->
+    <div class="card border-0 shadow-sm rounded-3 bg-body-tertiary mb-4">
+        <div class="card-body p-3">
+            <form method="GET" action="{{ route('recruitment-interviews.index') }}" class="row g-2 align-items-center">
+                <!-- Search Input -->
+                <div class="col-lg-5 col-md-6">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-body text-body-secondary border-end-0">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </span>
+                        <input type="text" name="search" class="form-control bg-body text-body-emphasis border-start-0" placeholder="Search candidate name or email..." value="{{ request('search') }}">
+                    </div>
+                </div>
+
+                <!-- Status Filter -->
+                <div class="col-lg-3 col-md-6">
+                    <select name="status" class="form-select form-select-sm bg-body text-body-emphasis" onchange="this.form.submit()">
+                        <option value="">All Interview Statuses</option>
+                        <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending / Scheduled</option>
+                        <option value="confirmed" {{ request('status') === 'confirmed' ? 'selected' : '' }}>Confirmed</option>
+                        <option value="selected" {{ request('status') === 'selected' ? 'selected' : '' }}>Selected / Offered</option>
+                        <option value="nextround" {{ request('status') === 'nextround' ? 'selected' : '' }}>Next Round</option>
+                        <option value="onhold" {{ request('status') === 'onhold' ? 'selected' : '' }}>On Hold</option>
+                        <option value="rejected" {{ request('status') === 'rejected' ? 'selected' : '' }}>Rejected</option>
+                    </select>
+                </div>
+
+                <!-- Actions -->
+                <div class="col-lg-4 col-md-12 d-flex gap-1.5 justify-content-end">
+                    <button type="submit" class="btn btn-sm btn-primary px-3 fw-semibold rounded-2 w-100">
+                        <i class="fa-solid fa-filter me-1"></i> Filter
+                    </button>
+                    @if(request()->filled('search') || request()->filled('status'))
+                        <a href="{{ route('recruitment-interviews.index') }}" class="btn btn-sm btn-outline-secondary px-2.5 rounded-2" title="Reset Filters">
+                            <i class="fa-solid fa-rotate-left"></i>
+                        </a>
+                    @endif
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Table Roster (Matching /recruitment-applications exact pattern) -->
+    <div class="card border-0 shadow-sm rounded-3 overflow-hidden bg-body-tertiary mb-4">
+        <!-- Table Header -->
+        <div class="card-header border-0 bg-transparent py-3 d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <div class="avatar-xs rounded-2 bg-primary-subtle text-primary d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                    <i class="fa-solid fa-calendar-check fs-7"></i>
+                </div>
+                <h6 class="card-title mb-0 fw-bold text-body-emphasis">Scheduled Interviews Roster</h6>
+                <span class="badge bg-secondary-subtle text-secondary rounded-pill ms-2 fs-9">{{ $interviews->total() }} total</span>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light border-bottom">
+                    <tr>
+                        <th class="ps-3 text-nowrap" style="width: 140px;">Actions</th>
+                        <th>Candidate</th>
+                        <th>Interview Date & Time</th>
+                        <th>Mode / Location</th>
+                        <th>Interviewer Panel</th>
+                        <th>Offered CTC</th>
+                        <th class="pe-3 text-end">Status</th>
+                    </tr>
+                </thead>
+                <tbody class="border-top-0">
+                    @forelse($interviews as $itv)
+                        <tr>
+                            <td class="ps-3 text-nowrap">
+                                <div class="d-inline-flex align-items-center" style="gap: 6px;">
+                                    <!-- View Button (Icon Only) -->
+                                    <button type="button" class="btn btn-sm btn-outline-primary px-2.5 rounded-2" data-bs-toggle="modal" data-bs-target="#viewInterviewModal{{ $itv->job_interview_id }}" title="View Dossier">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </button>
+
+                                    <!-- Edit Button (Icon Only) -->
+                                    <button type="button" class="btn btn-sm btn-outline-warning px-2.5 rounded-2" data-bs-toggle="modal" data-bs-target="#editInterviewModal{{ $itv->job_interview_id }}" title="Edit Schedule">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </button>
+
+                                    <!-- Convert to Employee Action (Opens Onboarding Modal) -->
+                                    @if(in_array(strtolower($itv->status), ['confirmed', 'selected', 'offeraccepted']) && $itv->convert_to_employee == 0)
+                                        <button type="button" class="btn btn-sm btn-outline-success px-2.5 rounded-2" data-bs-toggle="modal" data-bs-target="#convertModal{{ $itv->job_interview_id }}" title="Onboard & Convert to Active Employee">
+                                            <i class="fa-solid fa-user-plus"></i>
+                                        </button>
+                                    @endif
+
+                                    <!-- Email Candidate (Icon Only) -->
+                                    @if(!empty($itv->jobApplication?->email))
+                                        <a href="mailto:{{ $itv->jobApplication->email }}" class="btn btn-sm btn-outline-info px-2.5 rounded-2" title="Email Candidate: {{ $itv->jobApplication->email }}">
+                                            <i class="fa-solid fa-envelope"></i>
+                                        </a>
+                                    @endif
+
+                                    <!-- Status Change Dropdown (Icon Only) -->
+                                    <div class="dropdown d-inline">
+                                        <button class="btn btn-sm btn-outline-secondary px-2.5 rounded-2 dropdown-toggle" type="button" data-bs-toggle="dropdown" title="Change Status / Next Round">
+                                            <i class="fa-solid fa-sliders"></i>
+                                        </button>
+                                        <ul class="dropdown-menu fs-8 shadow-sm border-subtle py-2 bg-body">
+                                            <li><h6 class="dropdown-header text-uppercase fs-9 fw-bold text-body-secondary px-3 py-1 mb-0">Change Status</h6></li>
+                                            <li>
+                                                <button type="button" class="dropdown-item py-1.5 px-3 text-success" data-bs-toggle="modal" data-bs-target="#statusModal_{{ $itv->job_interview_id }}_confirmed">
+                                                    <i class="fa-solid fa-check-circle me-2 text-success"></i> Mark Confirmed...
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button type="button" class="dropdown-item py-1.5 px-3 text-primary" data-bs-toggle="modal" data-bs-target="#statusModal_{{ $itv->job_interview_id }}_selected">
+                                                    <i class="fa-solid fa-user-check me-2 text-primary"></i> Mark Selected...
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button type="button" class="dropdown-item py-1.5 px-3 text-info" data-bs-toggle="modal" data-bs-target="#nextRoundModal{{ $itv->job_interview_id }}">
+                                                    <i class="fa-solid fa-forward me-2 text-info"></i> Schedule Next Round...
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button type="button" class="dropdown-item py-1.5 px-3 text-warning" data-bs-toggle="modal" data-bs-target="#statusModal_{{ $itv->job_interview_id }}_onhold">
+                                                    <i class="fa-solid fa-pause-circle me-2 text-warning"></i> Mark On Hold...
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button type="button" class="dropdown-item py-1.5 px-3 text-danger" data-bs-toggle="modal" data-bs-target="#statusModal_{{ $itv->job_interview_id }}_rejected">
+                                                    <i class="fa-solid fa-ban me-2 text-danger"></i> Mark Rejected...
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="fw-bold text-body-emphasis">{{ $itv->jobApplication->candidate_name ?? 'Candidate' }}</div>
+                                <div class="fs-9 text-body-secondary">{{ $itv->jobApplication->email ?? '' }}</div>
+                            </td>
+                            <td>
+                                <span class="fw-medium text-body-emphasis">{{ $itv->formatted_interview_date }}</span>
+                                @if(!empty($itv->next_round_date))
+                                    <div class="fs-9 text-info fw-semibold mt-1">
+                                        <i class="fa-solid fa-forward me-1"></i>Next: {{ date('M d, Y', strtotime($itv->next_round_date)) }}
+                                    </div>
+                                @endif
+                                <div class="fs-9 text-body-secondary"><i class="fa-regular fa-clock me-1"></i>{{ $itv->interview_time }}</div>
+                            </td>
+                            <td>
+                                <span class="badge bg-primary-subtle text-primary text-uppercase fs-9">{{ $itv->interview_mode }}</span>
+                                <div class="fs-9 text-body-secondary">{{ $itv->interview_place ?? 'Online Meeting' }}</div>
+                            </td>
+                            <td>
+                                @php
+                                    $panelists = $itv->interviewer_list;
+                                @endphp
+                                @if($panelists->isNotEmpty())
+                                    @foreach($panelists as $pan)
+                                        <div class="mb-1">
+                                            <span class="fw-bold text-body-emphasis fs-8">{{ $pan->first_name }} {{ $pan->last_name }}</span>
+                                            @if(!empty($pan->employee_id))
+                                                <span class="badge bg-secondary-subtle text-body-secondary font-monospace fs-9">ID: {{ $pan->employee_id }}</span>
+                                            @endif
+                                        </div>
+                                    @endforeach
+                                @else
+                                    <div class="fw-bold text-body-emphasis fs-8">{{ $itv->interviewer ? ($itv->interviewer->first_name . ' ' . $itv->interviewer->last_name) : ($itv->added_by ?? 'Recruiter') }}</div>
+                                    @if(!empty($itv->interviewer?->employee_id))
+                                        <span class="badge bg-secondary-subtle text-body-secondary font-monospace fs-9">ID: {{ $itv->interviewer->employee_id }}</span>
+                                    @endif
+                                @endif
+                            </td>
+                            <td>
+                                <span class="font-monospace text-success fw-bold">{{ $itv->offered_ctc ?? '--' }}</span>
+                            </td>
+                            <td class="pe-3 text-end">
+                                <span class="badge {{ $itv->status_badge_class }}">
+                                    {{ $itv->status_label }}
+                                </span>
+                                @if($itv->convert_to_employee != 0)
+                                    <div class="mt-1"><span class="badge bg-info-subtle text-info fs-9"><i class="fa-solid fa-user-check me-1"></i>Converted</span></div>
+                                @endif
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="text-center py-5 text-body-secondary">
+                                <i class="fa-solid fa-calendar-xmark fs-2 mb-2 d-block text-body-tertiary"></i>
+                                No scheduled candidate interviews found matching criteria.
+                                <div class="mt-3">
+                                    <button type="button" class="btn btn-sm btn-primary fw-semibold px-3 py-2 rounded-2 shadow-xs" data-bs-toggle="modal" data-bs-target="#scheduleInterviewModal">
+                                        <i class="fa-solid fa-plus me-1"></i> Schedule First Interview
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
         @if($interviews->hasPages())
-            <div class="card-footer py-3 border-top">
+            <div class="card-footer py-3 border-top border-subtle bg-body">
                 {{ $interviews->withQueryString()->links('pagination::bootstrap-5') }}
             </div>
         @endif
@@ -365,9 +461,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" onclick="submitWithLoader(this)" class="btn btn-info btn-sm text-white fw-bold">Update & Schedule Next Round</button>
+                    <div class="modal-footer bg-body-tertiary border-top py-2.5">
+                        <button type="button" class="btn btn-sm btn-body border text-body-emphasis" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" onclick="submitWithLoader(this)" class="btn btn-sm btn-info text-white fw-semibold px-3">Update & Schedule Next Round</button>
                     </div>
             </form>
         </div>
@@ -533,9 +629,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" onclick="submitWithLoader(this)" class="btn {{ $stCfg['btn_class'] }} btn-sm fw-bold">{{ $stCfg['btn_label'] }}</button>
+                    <div class="modal-footer bg-body-tertiary border-top py-2.5">
+                        <button type="button" class="btn btn-sm btn-body border text-body-emphasis" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" onclick="submitWithLoader(this)" class="btn {{ $stCfg['btn_class'] }} btn-sm fw-semibold px-3">{{ $stCfg['btn_label'] }}</button>
                     </div>
                 </form>
             </div>
@@ -679,9 +775,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer bg-body-tertiary">
-                    <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" onclick="submitWithLoader(this)" class="btn btn-success btn-sm fw-bold">
+                <div class="modal-footer bg-body-tertiary border-top py-2.5">
+                    <button type="button" class="btn btn-sm btn-body border text-body-emphasis" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" onclick="submitWithLoader(this)" class="btn btn-sm btn-success fw-semibold px-3">
                         <i class="fa-solid fa-user-check me-1"></i> Onboard & Create Employee
                     </button>
                 </div>
@@ -863,9 +959,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" onclick="submitWithLoader(this)" class="btn btn-warning btn-sm text-dark fw-bold">Update Interview Details</button>
+                <div class="modal-footer bg-body-tertiary border-top py-2.5">
+                    <button type="button" class="btn btn-sm btn-body border text-body-emphasis" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" onclick="submitWithLoader(this)" class="btn btn-sm btn-warning fw-semibold px-3">Update Interview Details</button>
                 </div>
             </form>
         </div>
@@ -990,25 +1086,23 @@
                     </div>
                 </div>
 
-                <div class="modal-footer bg-body-tertiary border-top py-2">
-                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                <div class="modal-footer bg-body-tertiary border-top py-2.5">
+                    <button type="button" class="btn btn-sm btn-body border text-body-emphasis" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
     </div>
 @endforeach
-    </div>
-</div>
 
 <!-- Modal: Schedule New Interview -->
-<div class="modal fade" id="scheduleInterviewModal" tabindex="-1">
+<div class="modal fade" id="scheduleInterviewModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
-        <form method="POST" action="{{ route('recruitment-interviews.store') }}" class="modal-content">
+        <form method="POST" action="{{ route('recruitment-interviews.store') }}" class="modal-content bg-body border-0 shadow" onsubmit="submitWithLoader(this)">
             @csrf
-                <div class="modal-header">
-                    <h5 class="modal-title"><i class="fa-solid fa-plus me-2 text-primary"></i> Schedule Candidate Interview</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
+            <div class="modal-header border-bottom border-subtle">
+                <h5 class="modal-title fw-bold text-body-emphasis"><i class="fa-solid fa-calendar-plus me-2 text-primary"></i> Schedule Candidate Interview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
                 <div class="modal-body">
                     @if(session('error'))
                         <div class="alert alert-danger alert-dismissible fade show mb-3 p-3 fs-8 border-danger-subtle" role="alert">
@@ -1182,9 +1276,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" onclick="submitWithLoader(this)" class="btn btn-primary btn-sm fw-bold">Schedule Interview</button>
+                <div class="modal-footer bg-body-tertiary border-top py-2.5">
+                    <button type="button" class="btn btn-sm btn-body border text-body-emphasis" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" onclick="submitWithLoader(this)" class="btn btn-sm btn-primary fw-semibold px-3"><i class="fa-solid fa-plus me-1"></i> Schedule Interview</button>
                 </div>
         </form>
     </div>

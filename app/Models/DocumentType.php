@@ -14,7 +14,26 @@ class DocumentType extends Model
      *
      * @var string
      */
-    protected $table = 'document_types';
+    protected $table = 'xin_document_type';
+
+    /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'document_type_id';
+
+    public $timestamps = false;
+
+    public function getIdAttribute()
+    {
+        return $this->attributes['document_type_id'] ?? $this->attributes['id'] ?? null;
+    }
+
+    public function getNameAttribute(): string
+    {
+        return $this->attributes['document_type'] ?? '';
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -23,13 +42,25 @@ class DocumentType extends Model
      */
     protected $fillable = [
         'company_id',
-        'document_type'
+        'document_type',
+        'created_at'
     ];
+
 
     public function company()
     {
-        return $this->belongsTo(Company::class, 'company_id');
+        return $this->belongsTo(Company::class, 'company_id', 'company_id');
     }
+
+    /**
+     * Name with Company Accessor (Rule 9 Compliance).
+     */
+    public function getNameWithCompanyAttribute(): string
+    {
+        $comp = $this->company ? ($this->company->name ?? $this->company->trading_name ?? '') : '';
+        return $this->document_type . ($comp ? " (Company: {$comp})" : '');
+    }
+
 
     public function employeeDocuments()
     {

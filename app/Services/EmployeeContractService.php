@@ -34,9 +34,15 @@ class EmployeeContractService
     {
         $data['contract_type_id'] = $data['contract_type_id'] ?? 1;
         $data['designation_id'] = $data['designation_id'] ?? 1;
+        $data['from_date'] = $data['from_date'] ?? date('Y-m-d');
+        $data['to_date'] = $data['to_date'] ?? date('Y-m-d');
+        $data['title'] = $data['title'] ?? '';
+        $data['description'] = $data['description'] ?? '';
+        $data['created_at'] = $data['created_at'] ?? date('d-m-Y h:i:s');
 
         return $this->repository->create($data);
     }
+
 
     public function updateContract(EmployeeContract $contract, array $data): bool
     {

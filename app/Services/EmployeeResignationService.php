@@ -216,7 +216,8 @@ class EmployeeResignationService
         $fileName = $resignation->exit_form;
 
         if ($file) {
-            $uploaded = UploadHelper::upload('resignations', $file);
+            $prefix = 'Clearance_Emp' . ($resignation->employee_id ?? '0') . '_' . date('Ymd');
+            $uploaded = UploadHelper::upload($file, 'resignations', $prefix);
             if ($uploaded) {
                 $fileName = $uploaded;
             }

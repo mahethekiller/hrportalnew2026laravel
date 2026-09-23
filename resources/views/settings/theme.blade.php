@@ -27,7 +27,7 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('settings.theme.update') }}">
+    <form method="POST" action="{{ route('settings.theme.update') }}" onsubmit="if(this.font_family) { localStorage.setItem('portal_font_family', this.font_family.value); }">
         @csrf
         <div class="row g-4">
             <!-- Left Column: Global Color Profile & Typography -->
@@ -74,16 +74,17 @@
                     </div>
                     <div class="card-body">
                         <label class="form-label fs-8 fw-semibold">Select Portal Font Family</label>
-                        <select name="font_family" class="form-select form-select-sm mb-3">
+                        <select name="font_family" id="themeSettingFontFamily" class="form-select form-select-sm mb-3" onchange="PortalTheme.setFontFamily(this.value)">
                             @foreach($fontFamilies as $fKey => $font)
                                 <option value="{{ $fKey }}" {{ ($themeConfig['font_family'] ?? 'inter') === $fKey ? 'selected' : '' }}>
                                     {{ $font['name'] }}
                                 </option>
                             @endforeach
                         </select>
-                        <div class="p-3 bg-body-tertiary rounded border fs-7">
-                            <span class="fw-bold">Typography Live Sample:</span>
-                            <p class="mb-0 text-body-secondary">The quick brown fox jumps over the lazy dog. 1234567890</p>
+                        <div class="p-3 bg-body rounded border shadow-xs" id="typographyLiveSample">
+                            <div class="fw-bold mb-1 text-body-emphasis">Typography Live Sample:</div>
+                            <p class="mb-2 text-body-secondary fs-6">The quick brown fox jumps over the lazy dog. 1234567890</p>
+                            <div class="small text-body-secondary">Active Font Stack: <code class="font-preview-name text-primary fw-bold">{{ $themeConfig['font_family'] ?? 'inter' }}</code></div>
                         </div>
                     </div>
                 </div>

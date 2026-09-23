@@ -996,7 +996,14 @@ class EmployeePortalController extends Controller
         $resignationService = app(\App\Services\EmployeeResignationService::class);
         $teamResignations = $resignationService->getPaginated(['manager_id' => $managerId], 15);
 
-        return view('my_portal.team_resignations', compact('teamResignations'));
+        $stats = [
+            'total' => \App\Models\EmployeeResignation::where('manager_id', $managerId)->count(),
+            'pending' => \App\Models\EmployeeResignation::where('manager_id', $managerId)->where('manager_status', 0)->count(),
+            'accepted' => \App\Models\EmployeeResignation::where('manager_id', $managerId)->where('manager_status', 1)->count(),
+            'rejected' => \App\Models\EmployeeResignation::where('manager_id', $managerId)->where('manager_status', 2)->count(),
+        ];
+
+        return view('my_portal.team_resignations', compact('teamResignations', 'stats'));
     }
 
     /**

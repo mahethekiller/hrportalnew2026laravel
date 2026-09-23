@@ -15,7 +15,7 @@ class EmployeeRepository
      */
     public function getPaginated(array $filters = [], int $perPage = 15): LengthAwarePaginator
     {
-        $query = Employee::with(['user', 'department', 'designation', 'company']);
+        $query = Employee::with(['user', 'department', 'designation', 'company', 'manager']);
 
         if (!empty($filters['search'])) {
             $search = $filters['search'];

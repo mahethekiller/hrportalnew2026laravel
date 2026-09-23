@@ -342,21 +342,57 @@
                             <label class="label-sm mb-1">Personal Email Address</label>
                             <input type="email" name="email_personal" class="form-control" value="{{ old('email_personal') }}" placeholder="personal@gmail.com">
                         </div>
+                        <!-- Permanent Address Subheader -->
+                        <div class="col-12 mt-3 pt-2 border-top border-subtle">
+                            <h6 class="fs-7 fw-bold text-body-emphasis mb-0"><i class="fa-solid fa-house-chimney text-primary me-1"></i> Permanent Address</h6>
+                        </div>
                         <div class="col-md-6">
-                            <label class="label-sm mb-1">Street Address</label>
-                            <input type="text" name="address" class="form-control" value="{{ old('address') }}" placeholder="123 Corporate Way, Suite 400">
+                            <label class="label-sm mb-1">Permanent Street Address</label>
+                            <input type="text" name="address" id="create_perm_address" class="form-control" value="{{ old('address') }}" placeholder="123 Corporate Way, Suite 400">
                         </div>
                         <div class="col-md-2">
                             <label class="label-sm mb-1">City</label>
-                            <input type="text" name="city" class="form-control" value="{{ old('city') }}">
+                            <input type="text" name="city" id="create_perm_city" class="form-control" value="{{ old('city') }}">
                         </div>
                         <div class="col-md-2">
                             <label class="label-sm mb-1">State / Province</label>
-                            <input type="text" name="state" class="form-control" value="{{ old('state') }}">
+                            <input type="text" name="state" id="create_perm_state" class="form-control" value="{{ old('state') }}">
                         </div>
                         <div class="col-md-2">
                             <label class="label-sm mb-1">Pincode / Zip</label>
-                            <input type="text" name="pincode" class="form-control" value="{{ old('pincode') }}">
+                            <input type="text" name="pincode" id="create_perm_pincode" class="form-control" value="{{ old('pincode') }}">
+                        </div>
+
+                        <!-- Communication Address Subheader -->
+                        <div class="col-12 mt-3 pt-2 border-top border-subtle d-flex align-items-center justify-content-between flex-wrap gap-2">
+                            <h6 class="fs-7 fw-bold text-body-emphasis mb-0"><i class="fa-solid fa-house-laptop text-info me-1"></i> Communication / Current Address</h6>
+                            <div class="form-check form-check-sm mb-0">
+                                <input class="form-check-input" type="checkbox" id="createSameAsPermanent" onchange="copyCreatePermanentAddress(this)">
+                                <label class="form-check-label fs-8 text-body-secondary fw-semibold" for="createSameAsPermanent">
+                                    Same as Permanent Address
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="label-sm mb-1">Communication Street Address</label>
+                            <input type="text" name="address_com" id="create_com_address" class="form-control" value="{{ old('address_com') }}" placeholder="Flat, Apartment, Current Street Address">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="label-sm mb-1">City</label>
+                            <input type="text" name="city_temp" id="create_com_city" class="form-control" value="{{ old('city_temp') }}">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="label-sm mb-1">State / Province</label>
+                            <input type="text" name="state_temp" id="create_com_state" class="form-control" value="{{ old('state_temp') }}">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="label-sm mb-1">Postal Code / Zip</label>
+                            <input type="text" name="pin_temp" id="create_com_pincode" class="form-control" value="{{ old('pin_temp') }}">
+                        </div>
+
+                        <!-- Social Profiles Subheader -->
+                        <div class="col-12 mt-3 pt-2 border-top border-subtle">
+                            <h6 class="fs-7 fw-bold text-body-emphasis mb-0"><i class="fa-solid fa-share-nodes text-danger me-1"></i> Social Profiles</h6>
                         </div>
                         <div class="col-md-3">
                             <label class="label-sm mb-1">Skype ID</label>
@@ -385,4 +421,17 @@
         <button type="submit" class="btn btn-primary btn-sm submit-loader"><i class="fa-solid fa-floppy-disk me-1"></i>Save Full Employee Record</button>
     </div>
 </form>
+
+@push('scripts')
+<script>
+    function copyCreatePermanentAddress(checkbox) {
+        if (checkbox.checked) {
+            document.getElementById('create_com_address').value = document.getElementById('create_perm_address').value;
+            document.getElementById('create_com_city').value = document.getElementById('create_perm_city').value;
+            document.getElementById('create_com_state').value = document.getElementById('create_perm_state').value;
+            document.getElementById('create_com_pincode').value = document.getElementById('create_perm_pincode').value;
+        }
+    }
+</script>
+@endpush
 @endsection

@@ -108,8 +108,8 @@ class ThemeService
     {
         return [
             'inter' => [
-                'name' => 'Inter / Executive Clean',
-                'family' => '-apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif',
+                'name' => 'Inter / Executive Clean (Default)',
+                'family' => '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
             ],
             'outfit' => [
                 'name' => 'Outfit / Geometric Premium',
@@ -117,11 +117,39 @@ class ThemeService
             ],
             'roboto' => [
                 'name' => 'Roboto / Precision Technical',
-                'family' => '"Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+                'family' => '"Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif',
             ],
             'plus_jakarta' => [
                 'name' => 'Plus Jakarta Sans / Friendly Modern',
-                'family' => '"Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+                'family' => '"Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+            ],
+            'syne_mono' => [
+                'name' => 'Syne Mono / Quirky Editorial Art',
+                'family' => '"Syne Mono", monospace, sans-serif',
+            ],
+            'comfortaa' => [
+                'name' => 'Comfortaa / Smooth Bubbly Rounded',
+                'family' => '"Comfortaa", -apple-system, BlinkMacSystemFont, "Segoe UI", cursive, sans-serif',
+            ],
+            'fredoka' => [
+                'name' => 'Fredoka / Casual Game UI (Roblox & Mobile)',
+                'family' => '"Fredoka", -apple-system, BlinkMacSystemFont, "Segoe UI", cursive, sans-serif',
+            ],
+            'sniglet' => [
+                'name' => 'Sniglet / Cozy Craft & Farming Sim',
+                'family' => '"Sniglet", "Comic Sans MS", cursive, sans-serif',
+            ],
+            'luckiest_guy' => [
+                'name' => 'Luckiest Guy / 50s Comic & Arcade Victory',
+                'family' => '"Luckiest Guy", cursive, fantasy, sans-serif',
+            ],
+            'chewy' => [
+                'name' => 'Chewy / Bouncy Cartoon Game',
+                'family' => '"Chewy", cursive, sans-serif',
+            ],
+            'silkscreen' => [
+                'name' => 'Silkscreen / 8-Bit Pixel Retro Arcade',
+                'family' => '"Silkscreen", monospace, sans-serif',
             ],
         ];
     }

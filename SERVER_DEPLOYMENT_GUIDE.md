@@ -14,6 +14,7 @@ SSH into your server, navigate to the portal root directory, and pull the latest
 ```bash
 cd /path/to/your/portal
 git pull origin main
+composer install --no-dev --optimize-autoloader
 ```
 
 ---

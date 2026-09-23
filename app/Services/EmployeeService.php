@@ -173,6 +173,34 @@ class EmployeeService
                 $file->move(public_path('uploads/profile'), $filename);
                 $data['profile_picture'] = $filename;
             }
+
+            // Handle KRA document upload (Rule 4 descriptive naming)
+            if (isset($data['kra_doc']) && $data['kra_doc'] instanceof \Illuminate\Http\UploadedFile) {
+                $file = $data['kra_doc'];
+                $dir = public_path('uploads/kra');
+                if (!\Illuminate\Support\Facades\File::isDirectory($dir)) {
+                    \Illuminate\Support\Facades\File::makeDirectory($dir, 0755, true, true);
+                }
+                $cleanName = preg_replace('/[^A-Za-z0-9_]/', '', str_replace(' ', '_', $employee->first_name . '_' . $employee->last_name));
+                $empCode = preg_replace('/[^A-Za-z0-9_]/', '', (string)($employee->employee_id ?: $employee->id));
+                $filename = 'KRA_' . $empCode . '_' . $cleanName . '_' . date('Ymd_His') . '.' . $file->getClientOriginalExtension();
+                $file->move($dir, $filename);
+                $data['kra_doc'] = $filename;
+            }
+
+            // Handle KPI document upload (Rule 4 descriptive naming)
+            if (isset($data['kpi_doc']) && $data['kpi_doc'] instanceof \Illuminate\Http\UploadedFile) {
+                $file = $data['kpi_doc'];
+                $dir = public_path('uploads/kpi');
+                if (!\Illuminate\Support\Facades\File::isDirectory($dir)) {
+                    \Illuminate\Support\Facades\File::makeDirectory($dir, 0755, true, true);
+                }
+                $cleanName = preg_replace('/[^A-Za-z0-9_]/', '', str_replace(' ', '_', $employee->first_name . '_' . $employee->last_name));
+                $empCode = preg_replace('/[^A-Za-z0-9_]/', '', (string)($employee->employee_id ?: $employee->id));
+                $filename = 'KPI_' . $empCode . '_' . $cleanName . '_' . date('Ymd_His') . '.' . $file->getClientOriginalExtension();
+                $file->move($dir, $filename);
+                $data['kpi_doc'] = $filename;
+            }
             if (!empty($data['password'])) {
                 $data['password'] = Hash::make($data['password']);
                 if ($employee->user) {
@@ -201,6 +229,61 @@ class EmployeeService
                 if (!empty($userUpdates)) {
                     $employee->user->update($userUpdates);
                 }
+            }
+
+            // Handle User Role Synchronization (Spatie & Legacy)
+            if (array_key_exists('user_role_id', $data) || array_key_exists('role_id', $data) || array_key_exists('role', $data)) {
+                $roleId = $data['user_role_id'] ?? $data['role_id'] ?? null;
+                $roleInput = $data['role'] ?? null;
+
+                $portalRole = null;
+                if ($roleId) {
+                    $portalRole = \App\Models\UserRole::find($roleId);
+                } elseif ($roleInput) {
+                    $portalRole = \App\Models\UserRole::where('role_name', $roleInput)->first();
+                }
+
+                if (!$portalRole && $roleId) {
+                    $spatieRole = \Spatie\Permission\Models\Role::find($roleId);
+                    if ($spatieRole) {
+                        $portalRole = \App\Models\UserRole::where('role_name', $spatieRole->name)->first();
+                    }
+                }
+
+                if ($portalRole) {
+                    $data['user_role_id'] = (int) $portalRole->id;
+                    $roleName = $portalRole->role_name;
+
+                    try {
+                        $spatieRole = \Spatie\Permission\Models\Role::where('name', $roleName)->first();
+                        if (!$spatieRole) {
+                            if ($roleName === 'HR' || str_contains($roleName, 'HR')) {
+                                $spatieRole = \Spatie\Permission\Models\Role::where('name', 'HR Manager')->first();
+                            } elseif ($roleName === 'Super Admin') {
+                                $spatieRole = \Spatie\Permission\Models\Role::where('name', 'Super Admin')->first() 
+                                    ?: \Spatie\Permission\Models\Role::where('name', 'super-admin')->first();
+                            }
+                        }
+                        if (!$spatieRole) {
+                            $spatieRole = \Spatie\Permission\Models\Role::findOrCreate($roleName, 'web');
+                        }
+
+                        if ($spatieRole) {
+                            $employee->syncRoles([$spatieRole->name]);
+                            if ($employee->user) {
+                                $employee->user->syncRoles([$spatieRole->name]);
+                            }
+                        }
+                    } catch (\Throwable $e) {
+                        \Illuminate\Support\Facades\Log::warning("Employee role Spatie sync failed: " . $e->getMessage());
+                    }
+
+                    if ($employee->user) {
+                        $employee->user->update(['user_role' => $portalRole->id]);
+                    }
+                }
+
+                unset($data['role_id'], $data['role']);
             }
 
             if (array_key_exists('manager_id', $data)) {
@@ -248,5 +331,43 @@ class EmployeeService
     public function deleteEmployee(Employee $employee): bool
     {
         return $this->repository->delete($employee);
+    }
+
+    /**
+     * Direct upload of employee KRA document.
+     */
+    public function uploadKraDocument(Employee $employee, \Illuminate\Http\UploadedFile $file): string
+    {
+        $dir = public_path('uploads/kra');
+        if (!\Illuminate\Support\Facades\File::isDirectory($dir)) {
+            \Illuminate\Support\Facades\File::makeDirectory($dir, 0755, true, true);
+        }
+
+        $cleanName = preg_replace('/[^A-Za-z0-9_]/', '', str_replace(' ', '_', $employee->first_name . '_' . $employee->last_name));
+        $empCode = preg_replace('/[^A-Za-z0-9_]/', '', (string)($employee->employee_id ?: $employee->id));
+        $filename = 'KRA_' . $empCode . '_' . $cleanName . '_' . date('Ymd_His') . '.' . $file->getClientOriginalExtension();
+        $file->move($dir, $filename);
+
+        $employee->update(['kra_doc' => $filename]);
+        return $filename;
+    }
+
+    /**
+     * Direct upload of employee KPI document.
+     */
+    public function uploadKpiDocument(Employee $employee, \Illuminate\Http\UploadedFile $file): string
+    {
+        $dir = public_path('uploads/kpi');
+        if (!\Illuminate\Support\Facades\File::isDirectory($dir)) {
+            \Illuminate\Support\Facades\File::makeDirectory($dir, 0755, true, true);
+        }
+
+        $cleanName = preg_replace('/[^A-Za-z0-9_]/', '', str_replace(' ', '_', $employee->first_name . '_' . $employee->last_name));
+        $empCode = preg_replace('/[^A-Za-z0-9_]/', '', (string)($employee->employee_id ?: $employee->id));
+        $filename = 'KPI_' . $empCode . '_' . $cleanName . '_' . date('Ymd_His') . '.' . $file->getClientOriginalExtension();
+        $file->move($dir, $filename);
+
+        $employee->update(['kpi_doc' => $filename]);
+        return $filename;
     }
 }

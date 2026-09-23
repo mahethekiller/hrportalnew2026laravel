@@ -22,7 +22,7 @@ class JobInterviewController extends Controller
 
     public function index(Request $request): View
     {
-        $filters = $request->only(['search']);
+        $filters = $request->only(['search', 'status']);
         $interviews = $this->recruitmentService->getInterviewsPaginated($filters);
         $applications = $this->recruitmentService->getApplicationsPaginated([], 200);
         $interviewers = $this->employeeService->getActiveEmployees();

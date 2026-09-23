@@ -26,6 +26,9 @@ class UpdateEmployeeRequest extends FormRequest
             'username' => ['nullable', 'string', 'max:50', Rule::unique('xin_employees', 'username')->ignore($employeeId, 'user_id')],
             'email' => ['required', 'email', 'max:150', Rule::unique('xin_employees', 'email')->ignore($employeeId, 'user_id')],
             'password' => ['nullable', 'string', 'min:6'],
+            'user_role_id' => ['nullable', 'integer'],
+            'role_id' => ['nullable', 'integer'],
+            'role' => ['nullable', 'string', 'max:100'],
 
             // Personal & Demographics
             'first_name' => ['required', 'string', 'max:100'],
@@ -73,13 +76,19 @@ class UpdateEmployeeRequest extends FormRequest
             'city' => ['nullable', 'string', 'max:100'],
             'state' => ['nullable', 'string', 'max:100'],
             'pincode' => ['nullable', 'string', 'max:20'],
+            'address_com' => ['nullable', 'string', 'max:500'],
+            'city_temp' => ['nullable', 'string', 'max:100'],
+            'state_temp' => ['nullable', 'string', 'max:100'],
+            'pin_temp' => ['nullable', 'string', 'max:20'],
             'skype_id' => ['nullable', 'string', 'max:100'],
             'linkdedin_link' => ['nullable', 'string', 'max:255'],
             'twitter_link' => ['nullable', 'string', 'max:255'],
             'facebook_link' => ['nullable', 'string', 'max:255'],
 
-            // Photo Upload
+            // Photo & Document Uploads
             'profile_picture' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
+            'kra_doc' => ['nullable', 'file', 'mimes:pdf,doc,docx,jpg,png,webp', 'max:10240'],
+            'kpi_doc' => ['nullable', 'file', 'mimes:pdf,doc,docx,jpg,png,webp', 'max:10240'],
             'is_active' => ['nullable'],
         ];
     }

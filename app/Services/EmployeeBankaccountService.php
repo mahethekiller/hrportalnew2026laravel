@@ -35,9 +35,11 @@ class EmployeeBankaccountService
         $data['is_primary'] = $data['is_primary'] ?? 1;
         $data['bank_code'] = $data['bank_code'] ?? '';
         $data['bank_branch'] = $data['bank_branch'] ?? '';
+        $data['created_at'] = $data['created_at'] ?? date('d-m-Y h:i:s');
 
         return $this->repository->create($data);
     }
+
 
     public function updateBankaccount(EmployeeBankaccount $bankAccount, array $data): bool
     {

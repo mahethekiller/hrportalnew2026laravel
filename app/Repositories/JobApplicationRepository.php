@@ -32,6 +32,14 @@ class JobApplicationRepository
             $query->where('application_status', $filters['status']);
         }
 
+        if (!empty($filters['job_id'])) {
+            $query->where('job_id', (int) $filters['job_id']);
+        }
+
+        if (!empty($filters['department_id'])) {
+            $query->where('department_id', (int) $filters['department_id']);
+        }
+
         return $query->orderBy('application_id', 'desc')->paginate($perPage);
     }
 
@@ -111,12 +119,14 @@ class JobApplicationRepository
         $shortlisted = $all->filter(fn($item) => strtolower($item->application_status ?? '') === 'shortlisted')->count();
         $interviews = $all->filter(fn($item) => str_contains(strtolower($item->application_status ?? ''), 'interview'))->count();
         $hired = $all->filter(fn($item) => in_array(strtolower($item->application_status ?? ''), ['hired', 'offered']))->count();
+        $rejected = $all->filter(fn($item) => in_array(strtolower($item->application_status ?? ''), ['rejected', 'declined']))->count();
 
         return [
             'total_applicants' => $total,
             'shortlisted_count' => $shortlisted,
             'interview_count' => $interviews,
             'hired_count' => $hired,
+            'rejected_count' => $rejected,
         ];
     }
 }

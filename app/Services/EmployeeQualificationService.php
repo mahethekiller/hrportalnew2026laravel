@@ -32,6 +32,7 @@ class EmployeeQualificationService
 
     public function createQualification(array $data): EmployeeQualification
     {
+        $data['name'] = $data['name'] ?? '';
         $data['interview_id'] = $data['interview_id'] ?? 0;
         $data['education_level_id'] = $data['education_level_id'] ?? 1;
         $data['language_id'] = $data['language_id'] ?? 1;
@@ -40,9 +41,11 @@ class EmployeeQualificationService
         $data['from_year'] = $data['from_year'] ?? '';
         $data['to_year'] = $data['to_year'] ?? '';
         $data['description'] = $data['description'] ?? '';
+        $data['created_at'] = $data['created_at'] ?? date('d-m-Y h:i:s');
 
         return $this->repository->create($data);
     }
+
 
     public function updateQualification(EmployeeQualification $qualification, array $data): bool
     {

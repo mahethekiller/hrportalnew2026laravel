@@ -26,6 +26,18 @@ class EmployeeWorkExperience extends Model
     public $timestamps = false;
 
     /**
+     * Default model attributes for MySQL legacy non-null columns.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'interview_id' => 0,
+        'company_name' => '',
+        'post' => '',
+        'description' => '',
+    ];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
@@ -37,11 +49,24 @@ class EmployeeWorkExperience extends Model
         'from_date',
         'to_date',
         'post',
-        'description'
+        'description',
+        'created_at',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->created_at)) {
+                $model->created_at = date('d-m-Y h:i:s');
+            }
+        });
+    }
 
     public function employee()
     {
         return $this->belongsTo(Employee::class, 'employee_id');
     }
 }
+

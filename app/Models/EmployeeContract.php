@@ -26,6 +26,18 @@ class EmployeeContract extends Model
     public $timestamps = false;
 
     /**
+     * Default model attributes for MySQL legacy non-null columns.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'contract_type_id' => 1,
+        'designation_id' => 1,
+        'title' => '',
+        'description' => '',
+    ];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
@@ -37,11 +49,24 @@ class EmployeeContract extends Model
         'designation_id',
         'title',
         'to_date',
-        'description'
+        'description',
+        'created_at',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->created_at)) {
+                $model->created_at = date('d-m-Y h:i:s');
+            }
+        });
+    }
 
     public function employee()
     {
+
         return $this->belongsTo(Employee::class, 'employee_id');
     }
 

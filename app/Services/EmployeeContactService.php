@@ -48,9 +48,11 @@ class EmployeeContactService
         $data['age'] = $data['age'] ?? '';
         $data['occupation'] = $data['occupation'] ?? '';
         $data['qualification'] = $data['qualification'] ?? '';
+        $data['created_at'] = $data['created_at'] ?? date('d-m-Y h:i:s');
 
         return $this->repository->create($data);
     }
+
 
     public function updateContact(EmployeeContact $contact, array $data): bool
     {

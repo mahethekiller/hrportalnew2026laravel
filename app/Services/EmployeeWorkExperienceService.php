@@ -33,11 +33,16 @@ class EmployeeWorkExperienceService
     public function createExperience(array $data): EmployeeWorkExperience
     {
         $data['interview_id'] = $data['interview_id'] ?? 0;
+        $data['company_name'] = $data['company_name'] ?? '';
+        $data['from_date'] = $data['from_date'] ?? date('Y-m-d');
         $data['to_date'] = $data['to_date'] ?? date('Y-m-d');
+        $data['post'] = $data['post'] ?? '';
         $data['description'] = $data['description'] ?? '';
+        $data['created_at'] = $data['created_at'] ?? date('d-m-Y h:i:s');
 
         return $this->repository->create($data);
     }
+
 
     public function updateExperience(EmployeeWorkExperience $experience, array $data): bool
     {

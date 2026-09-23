@@ -24,6 +24,12 @@
     @stack('css')
 
     <!-- Pre-load Dark Theme & Color Profile Engine -->
+    @php
+        $systemThemeConfig = app(\App\Services\ThemeService::class)->getThemeConfig();
+    @endphp
+    <script>
+        window.SYSTEM_THEME_CONFIG = @json($systemThemeConfig);
+    </script>
     <script src="{{ asset('assets/js/theme-engine.js') }}?v={{ @filemtime(public_path('assets/js/theme-engine.js')) }}"></script>
 
     <!-- Global Form Submit Helper & Smart Multi-Tab/Hidden Validation Engine -->

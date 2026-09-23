@@ -41,41 +41,26 @@ class DashboardController extends Controller
 
         $upcomingBirthdays = $allEmployees->filter(function ($emp) {
             if (empty($emp->date_of_birth)) return false;
-            $dob = Carbon::parse($emp->date_of_birth);
-            $birthdayThisYear = $dob->copy()->year((int) date('Y'));
-            $birthdayNextYear = $dob->copy()->year((int) date('Y') + 1);
-
-            $diff1 = today()->diffInDays($birthdayThisYear, false);
-            $diff2 = today()->diffInDays($birthdayNextYear, false);
-
-            return ($diff1 >= 0 && $diff1 <= 30) || ($diff2 >= 0 && $diff2 <= 30);
+            return Carbon::parse($emp->date_of_birth)->month === today()->month;
         })->sortBy(function ($emp) {
             $dob = Carbon::parse($emp->date_of_birth);
-            $birthdayThisYear = $dob->copy()->year((int) date('Y'));
-            if ($birthdayThisYear->isPast() && !$birthdayThisYear->isToday()) {
-                $birthdayThisYear->addYear();
-            }
-            return $birthdayThisYear;
-        })->take(5);
+            $day = $dob->day;
+            $todayDay = today()->day;
+            // Prioritize today and future dates of current month (order 0), then past dates of current month (order 1)
+            $order = $day >= $todayDay ? 0 : 1;
+            return sprintf('%d_%02d', $order, $day);
+        })->values();
 
         $upcomingAnniversaries = $allEmployees->filter(function ($emp) {
             if (empty($emp->date_of_joining)) return false;
-            $doj = Carbon::parse($emp->date_of_joining);
-            $anniversaryThisYear = $doj->copy()->year((int) date('Y'));
-            $anniversaryNextYear = $doj->copy()->year((int) date('Y') + 1);
-
-            $diff1 = today()->diffInDays($anniversaryThisYear, false);
-            $diff2 = today()->diffInDays($anniversaryNextYear, false);
-
-            return ($diff1 >= 0 && $diff1 <= 30) || ($diff2 >= 0 && $diff2 <= 30);
+            return Carbon::parse($emp->date_of_joining)->month === today()->month;
         })->sortBy(function ($emp) {
             $doj = Carbon::parse($emp->date_of_joining);
-            $anniversaryThisYear = $doj->copy()->year((int) date('Y'));
-            if ($anniversaryThisYear->isPast() && !$anniversaryThisYear->isToday()) {
-                $anniversaryThisYear->addYear();
-            }
-            return $anniversaryThisYear;
-        })->take(5);
+            $day = $doj->day;
+            $todayDay = today()->day;
+            $order = $day >= $todayDay ? 0 : 1;
+            return sprintf('%d_%02d', $order, $day);
+        })->values();
 
         // Interactive clock-in stats
         $activeWfh = null;

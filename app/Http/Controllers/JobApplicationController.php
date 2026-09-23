@@ -22,7 +22,7 @@ class JobApplicationController extends Controller
 
     public function index(Request $request): View
     {
-        $filters = $request->only(['search', 'status']);
+        $filters = $request->only(['search', 'status', 'job_id', 'department_id']);
         $applications = $this->recruitmentService->getApplicationsPaginated($filters);
         $summary = $this->recruitmentService->getSummaryStats();
         $departments = Department::with('company')->orderBy('department_name')->get();

@@ -26,6 +26,31 @@ class EmployeeContact extends Model
     public $timestamps = false;
 
     /**
+     * Default model attributes for MySQL legacy non-null columns.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'is_primary' => 0,
+        'is_dependent' => 0,
+        'country' => 1,
+        'work_phone' => '',
+        'work_phone_extension' => '',
+        'mobile_phone' => '',
+        'home_phone' => '',
+        'work_email' => '',
+        'personal_email' => '',
+        'address_1' => '',
+        'address_2' => '',
+        'city' => '',
+        'state' => '',
+        'zipcode' => '',
+        'age' => '',
+        'occupation' => '',
+        'qualification' => '',
+    ];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
@@ -50,11 +75,24 @@ class EmployeeContact extends Model
         'country',
         'age',
         'occupation',
-        'qualification'
+        'qualification',
+        'created_at',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->created_at)) {
+                $model->created_at = date('d-m-Y h:i:s');
+            }
+        });
+    }
 
     public function employee()
     {
         return $this->belongsTo(Employee::class, 'employee_id');
     }
 }
+

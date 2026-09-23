@@ -21,6 +21,10 @@ class JobInterviewRepository
             });
         }
 
+        if (isset($filters['status']) && $filters['status'] !== '') {
+            $query->where('status', $filters['status']);
+        }
+
         return $query->orderBy('job_interview_id', 'desc')->paginate($perPage);
     }
 

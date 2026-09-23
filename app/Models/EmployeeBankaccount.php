@@ -26,6 +26,20 @@ class EmployeeBankaccount extends Model
     public $timestamps = false;
 
     /**
+     * Default model attributes for MySQL legacy non-null columns.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'is_primary' => 1,
+        'account_title' => '',
+        'account_number' => '',
+        'bank_name' => '',
+        'bank_code' => '',
+        'bank_branch' => '',
+    ];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
@@ -37,11 +51,24 @@ class EmployeeBankaccount extends Model
         'account_number',
         'bank_name',
         'bank_code',
-        'bank_branch'
+        'bank_branch',
+        'created_at',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->created_at)) {
+                $model->created_at = date('d-m-Y h:i:s');
+            }
+        });
+    }
 
     public function employee()
     {
         return $this->belongsTo(Employee::class, 'employee_id');
     }
 }
+

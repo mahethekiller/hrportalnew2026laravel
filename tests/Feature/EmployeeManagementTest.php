@@ -36,7 +36,9 @@ class EmployeeManagementTest extends TestCase
             'password' => 'password123',
             'is_active' => 1,
         ]);
-        $this->user = $this->employee->user;
+        $this->user = $this->employee->user ?? User::factory()->create([
+            'email' => $this->employee->email,
+        ]);
     }
 
     public function test_employee_directory_index_can_be_rendered(): void

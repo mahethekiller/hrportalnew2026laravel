@@ -154,9 +154,15 @@ table, .table, .tabular-nums {
     color: var(--clay);
 }
 
-/* Base Typography Specs (Compact High-Density Metrics - Ultra-Crisp Native System UI) */
+/* Base Typography Specs - Dynamic Portal Typography Engine */
+:root {
+    --portal-font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --bs-body-font-family: var(--portal-font-family);
+    --bs-font-sans-serif: var(--portal-font-family);
+}
+
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+    font-family: var(--portal-font-family, var(--bs-body-font-family, 'Inter', sans-serif)) !important;
     font-size: 0.85rem;
     line-height: 1.45;
     background-color: var(--bg-color) !important;
@@ -164,10 +170,17 @@ body {
     letter-spacing: -0.005em;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+h1, h2, h3, h4, h5, h6, button, input, select, textarea, .card, .table, .navbar, .sidebar {
+    font-family: var(--portal-font-family, var(--bs-body-font-family, inherit));
     color: var(--text-main);
     font-weight: 600;
+}
+
+.fa, .fas, .far, .fal, .fad, .fa-solid, .fa-regular {
+    font-family: var(--fa-style-family, "Font Awesome 6 Free") !important;
+}
+.fa-brands, .fab {
+    font-family: var(--fa-style-family-brands, "Font Awesome 6 Brands") !important;
 }
 
 h1, .display-lg {
@@ -2858,3 +2871,152 @@ div.tab-content > .tab-pane.show.active {
 :is(.tabs > .tab:checked, .tabs > .tab:is(label:has(:checked)), .tabs > .tab.tab-active, .tabs > .tab[aria-selected="true"]) + .tab-content {
     display: block !important;
 }
+
+/* ==========================================================================
+   Executive In-Modal Alerts & Status Banners (Rule 10 & 13 Compliance)
+   ========================================================================== */
+.modal-validation-banner {
+    background: #FEF2F2;
+    border: 1px solid #FECACA;
+    border-radius: 12px;
+    padding: 13px 15px;
+    box-shadow: 0 2px 6px rgba(220, 38, 38, 0.05);
+}
+
+[data-bs-theme="dark"] .modal-validation-banner,
+[data-theme="portal-dark"] .modal-validation-banner {
+    background: rgba(239, 68, 68, 0.12) !important;
+    border: 1px solid rgba(248, 113, 113, 0.35) !important;
+    box-shadow: 0 4px 16px -2px rgba(239, 68, 68, 0.22) !important;
+}
+
+.modal-err-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: #FEE2E2;
+    color: #DC2626;
+    border: 1px solid #FCA5A5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+[data-bs-theme="dark"] .modal-err-icon,
+[data-theme="portal-dark"] .modal-err-icon {
+    background: rgba(239, 68, 68, 0.25) !important;
+    color: #F87171 !important;
+    border: 1px solid rgba(248, 113, 113, 0.45) !important;
+}
+
+.modal-err-title {
+    color: #991B1B;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+[data-bs-theme="dark"] .modal-err-title,
+[data-theme="portal-dark"] .modal-err-title {
+    color: #FCA5A5 !important;
+}
+
+.modal-err-badge {
+    background: #FEE2E2;
+    color: #991B1B;
+    border: 1px solid #FCA5A5;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    letter-spacing: 0.02em;
+}
+
+[data-bs-theme="dark"] .modal-err-badge,
+[data-theme="portal-dark"] .modal-err-badge {
+    background: rgba(239, 68, 68, 0.3) !important;
+    color: #FECDD3 !important;
+    border: 1px solid rgba(248, 113, 113, 0.45) !important;
+}
+
+.modal-err-list {
+    margin-top: 8px;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.modal-err-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.45;
+}
+
+.modal-err-dot {
+    color: #EF4444;
+    font-size: 5px;
+    flex-shrink: 0;
+    margin-top: 6px;
+}
+
+[data-bs-theme="dark"] .modal-err-dot,
+[data-theme="portal-dark"] .modal-err-dot {
+    color: #F87171 !important;
+    filter: drop-shadow(0 0 4px rgba(248, 113, 113, 0.6));
+}
+
+.modal-err-text {
+    font-size: 0.775rem;
+    font-weight: 500;
+    color: #7F1D1D;
+}
+
+[data-bs-theme="dark"] .modal-err-text,
+[data-theme="portal-dark"] .modal-err-text {
+    color: #FEE2E2 !important;
+}
+
+/* Modal daisyUI alert fallbacks (ensuring any daisyUI alert looks premium) */
+.modal .alert.alert-error,
+dialog.modal .alert.alert-error {
+    background: #FEF2F2 !important;
+    border: 1px solid #FECACA !important;
+    color: #991B1B !important;
+    border-radius: 12px !important;
+}
+
+[data-bs-theme="dark"] .modal .alert.alert-error,
+[data-bs-theme="dark"] dialog.modal .alert.alert-error,
+[data-theme="portal-dark"] .modal .alert.alert-error,
+[data-theme="portal-dark"] dialog.modal .alert.alert-error {
+    background: rgba(239, 68, 68, 0.14) !important;
+    border: 1px solid rgba(248, 113, 113, 0.35) !important;
+    color: #FEE2E2 !important;
+}
+
+/* ==========================================================================
+   Global High-Contrast Light Mode Warning Fix (WCAG AA Contrast)
+   ========================================================================== */
+[data-bs-theme="light"] .bg-warning-subtle.text-warning,
+[data-bs-theme="light"] .bg-warning-subtle .text-warning:not(.btn):not(i):not(.badge),
+[data-bs-theme="light"] .badge.bg-warning-subtle.text-warning,
+[data-bs-theme="light"] .alert-warning:not(.text-body):not(.text-body-emphasis) {
+    color: #854D0E !important; /* Rich dark amber / brown for high-contrast legibility */
+}
+
+[data-bs-theme="light"] .bg-warning-subtle strong,
+[data-bs-theme="light"] .bg-warning-subtle b,
+[data-bs-theme="light"] .text-warning-emphasis {
+    color: #713F12 !important; /* Deep dark amber */
+}
+
+[data-bs-theme="light"] .bg-warning-subtle i.text-warning,
+[data-bs-theme="light"] .bg-warning-subtle .fa-triangle-exclamation {
+    color: #D97706 !important; /* Crisp medium amber for the icon */
+}
+
+

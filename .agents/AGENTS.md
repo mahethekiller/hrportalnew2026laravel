@@ -90,4 +90,63 @@ These rules represent the absolute constraints of the project. Any deviation fro
 - All form submissions across all Blade views and modal dialogs must automatically disable the primary submit button (`disabled="disabled"`) and display a visual loading spinner indicator (`<i class="fa-solid fa-circle-notch fa-spin me-1"></i> Processing...`).
 - Enforced globally via `<head>` helper `onclick="submitWithLoader(this)"` or by adding `class="btn-loader"` / `class="submit-loader"` to submit buttons, preventing duplicate form submissions and double API calls.
 
+## 🎨 Rule 13: Portal View Benchmark & Unified Button Styling Language (`/recruitment-applications` Benchmark)
+All index, roster, listing, and dashboard views across the portal must strictly adhere to the visual hierarchy, layout architecture, metric card design, and standardized button color palette established in `/recruitment-applications` (`resources/views/recruitment/index.blade.php`):
 
+### 1. Page Header Blueprint
+- **Badge Pill**: Top-left category identifier `<span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-1 font-monospace small"><i class="fa-solid fa-... me-1"></i> Subtitle</span>`.
+- **Title & Subtitle**: `h4 class="fw-bold mb-1 text-body-emphasis"` paired with descriptive subtitle `p class="text-body-secondary small mb-0"`.
+- **Header Action Buttons**:
+  - **Secondary Navigation / Links**: `btn btn-sm btn-body border text-body-emphasis shadow-xs fw-semibold px-3 py-2 rounded-2`.
+  - **Primary Action CTA**: `btn btn-sm btn-primary fw-semibold px-3 py-2 rounded-2 shadow-xs`.
+
+### 2. Telemetry / KPI Metric Cards Blueprint
+- Encased in responsive 4-column grid (`col-sm-6 col-xl-3`).
+- **Card Container**: `card border-0 shadow-sm rounded-3 p-3 bg-body-tertiary h-100 position-relative overflow-hidden`.
+- **Bottom Accent Border**: `<div class="position-absolute bottom-0 start-0 end-0 bg-{variant}" style="height: 3px;"></div>` where `{variant}` matches metric context (`primary`, `info`, `warning`, `success`, `danger`).
+- **Metric Header**: Contextual pill `<span class="badge bg-{variant}-subtle text-{variant} border border-{variant}-subtle rounded-pill px-2 py-0.5 small">{Label}</span>`.
+- **Metric Value**: Bold number `<h3 class="fw-bold mb-0 text-body-emphasis">{{ $metric }}</h3>`.
+- **Icon Square**: `<div class="rounded-3 bg-{variant}-subtle text-{variant} d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;"><i class="fa-solid fa-... fa-lg"></i></div>`.
+
+### 3. Filter Toolbar Blueprint
+- Encased in `card border-0 shadow-sm rounded-3 bg-body-tertiary mb-4`.
+- Input fields use semantic theme classes: `form-control form-control-sm bg-body text-body` / `form-select form-select-sm bg-body text-body`.
+- **Filter Action Buttons**:
+  - **Apply / Filter**: `btn btn-sm btn-primary fw-semibold px-3`.
+  - **Reset**: `btn btn-sm btn-outline-secondary px-3`.
+
+### 4. Standardized Button Styling & Color Palette Across the Portal
+- **Column 1 Table Action Buttons (Rule 8 Compliance)**:
+  - Container: Always wrapped in `<div class="d-inline-flex align-items-center" style="gap: 6px;">`.
+  - Buttons: Clean icon-only buttons with `px-2.5 rounded-2` (never plain text, never `btn-light-*` or un-bordered light buttons):
+    - **View / Details**: `btn btn-sm btn-outline-primary px-2.5 rounded-2` (Blue)
+    - **Edit / Re-schedule / Action**: `btn btn-sm btn-outline-warning px-2.5 rounded-2` (Amber/Orange)
+    - **Status / History / Notes / Codes**: `btn btn-sm btn-outline-info px-2.5 rounded-2` (Cyan/Sky)
+    - **Download / Export / Secondary**: `btn btn-sm btn-outline-secondary px-2.5 rounded-2` (Slate/Gray)
+    - **Approve / Hire / Confirm**: `btn btn-sm btn-outline-success px-2.5 rounded-2` (Emerald/Green)
+    - **Reject / Delete / Cancel**: `btn btn-sm btn-outline-danger px-2.5 rounded-2` (Rose/Red)
+- **Modal Dialog Action Buttons**:
+  - **Cancel / Close**: `btn btn-sm btn-body border text-body-emphasis`
+  - **Save / Create**: `btn btn-sm btn-primary fw-semibold px-3`
+  - **Update / Modify**: `btn btn-sm btn-warning fw-semibold px-3`
+  - **Delete / Destroy**: `btn btn-sm btn-danger fw-semibold px-3`
+  - Always enforce Rule 12 submit loader (`onclick="submitWithLoader(this)"` or `class="btn-loader"`).
+
+## 🏷️ Rule 14: Compact, Concise Table Headings & Standardized Typography
+Across all Blade data tables, rosters, and listings portal-wide:
+- **Concise Headings (No Long/Verbose Labels)**: Table column titles must be short, clear, and punchy. Never use unnecessarily verbose labels:
+  - Use `ID` or `Emp ID` (instead of `Employee ID`)
+  - Use `Employee` or `Name` (instead of `Employee Name` / `Staff Full Name`)
+  - Use `Dept / Role` (instead of `Department & Designation`)
+  - Use `Manager` (instead of `Reporting Manager`)
+  - Use `Email` (instead of `Official Email` / `Email Address`)
+  - Use `Company` (instead of `Company Name` / `Corporate Legal Entity`)
+  - Use `Status` (instead of `Current Employment Status`)
+  - Use `Actions` (instead of `Quick Action Buttons`)
+- **Standardized `<thead class="...">` Hierarchy**:
+  - Always style table headers with: `<thead class="bg-body-secondary text-body-secondary border-bottom text-uppercase fs-9 fw-bold tracking-wider">`.
+  - Never use raw `<thead class="table-light">` without theme overrides.
+  - Apply `class="text-nowrap"` to header cells (`<th>`) to eliminate awkward multi-line text wrapping.
+- **Table Container & Typography**:
+  - Add `fs-8` to the table: `<table class="table table-hover align-middle mb-0 fs-8 border-top">`.
+  - Wrap tables inside `<div class="table-responsive">` to ensure smooth horizontal scroll resilience across devices.

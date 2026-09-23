@@ -9,7 +9,10 @@ use App\Http\Requests\UpdateEmployeeRequest;
 use App\Models\Company;
 use App\Models\Department;
 use App\Models\Designation;
+use App\Models\DocumentType;
 use App\Models\Employee;
+use App\Models\UserRole;
+
 use App\Services\EmployeeService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -82,7 +85,9 @@ class EmployeeController extends Controller
             'company',
             'officeShift',
             'documents',
+            'employeeDocuments.documentType.company',
             'employeeContacts',
+
             'employeeBankaccounts',
             'employeeQualifications',
             'employeeWorkExperiences',
@@ -92,8 +97,16 @@ class EmployeeController extends Controller
             'subManager',
         ]);
 
-        return view('employees.show', compact('employee'));
+        $empCompanyId = (int) ($employee->company_id ?? 0);
+        $documentTypes = DocumentType::with('company')
+            ->orderByRaw("CASE WHEN company_id = {$empCompanyId} THEN 0 ELSE 1 END")
+            ->orderBy('document_type', 'asc')
+            ->get();
+
+        return view('employees.show', compact('employee', 'documentTypes'));
     }
+
+
 
     /**
      * Show the form for editing the specified employee.
@@ -110,8 +123,11 @@ class EmployeeController extends Controller
         $designations = Designation::all();
         $companies = Company::all();
         $managers = Employee::where('is_active', 1)->orderBy('first_name', 'asc')->get();
+        $roles = UserRole::orderBy('id', 'asc')->get();
+        $currentUser = auth()->user();
+        $canChangeRole = $currentUser->can('edit.employees') && (!$isSelf || $currentUser->hasRole(['Super Admin', 'super-admin']));
 
-        return view('employees.edit', compact('employee', 'departments', 'designations', 'companies', 'managers'));
+        return view('employees.edit', compact('employee', 'departments', 'designations', 'companies', 'managers', 'roles', 'canChangeRole'));
     }
 
     /**
@@ -125,7 +141,15 @@ class EmployeeController extends Controller
             abort(403, 'You are not authorized to update other employee profiles.');
         }
 
-        $this->employeeService->updateEmployee($employee, $request->validated());
+        $data = $request->validated();
+        $currentUser = auth()->user();
+        $canChangeRole = $currentUser->can('edit.employees') && (!$isSelf || $currentUser->hasRole(['Super Admin', 'super-admin']));
+
+        if (!$canChangeRole) {
+            unset($data['user_role_id'], $data['role_id'], $data['role']);
+        }
+
+        $this->employeeService->updateEmployee($employee, $data);
 
         return redirect()->route('employees.index')
             ->with('success', 'Employee updated successfully.');
@@ -140,5 +164,45 @@ class EmployeeController extends Controller
 
         return redirect()->route('employees.index')
             ->with('success', 'Employee record deleted successfully.');
+    }
+
+    /**
+     * Upload or update employee KRA document.
+     */
+    public function uploadKra(\Illuminate\Http\Request $request, Employee $employee): RedirectResponse
+    {
+        $isSelf = auth()->id() === (int)$employee->user_id;
+        if (!$isSelf && !auth()->user()->can('edit.employees')) {
+            abort(403, 'You are not authorized to upload KRA for other employees.');
+        }
+
+        $request->validate([
+            'kra_doc' => ['required', 'file', 'mimes:pdf,doc,docx,jpg,png,webp', 'max:10240'],
+        ]);
+
+        $this->employeeService->uploadKraDocument($employee, $request->file('kra_doc'));
+
+        return redirect()->back()
+            ->with('success', 'Key Responsibility Areas (KRA) document uploaded successfully.');
+    }
+
+    /**
+     * Upload or update employee KPI document.
+     */
+    public function uploadKpi(\Illuminate\Http\Request $request, Employee $employee): RedirectResponse
+    {
+        $isSelf = auth()->id() === (int)$employee->user_id;
+        if (!$isSelf && !auth()->user()->can('edit.employees')) {
+            abort(403, 'You are not authorized to upload KPI for other employees.');
+        }
+
+        $request->validate([
+            'kpi_doc' => ['required', 'file', 'mimes:pdf,doc,docx,jpg,png,webp', 'max:10240'],
+        ]);
+
+        $this->employeeService->uploadKpiDocument($employee, $request->file('kpi_doc'));
+
+        return redirect()->back()
+            ->with('success', 'Performance Indicators (KPI) document uploaded successfully.');
     }
 }
